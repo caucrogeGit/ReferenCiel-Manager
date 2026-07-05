@@ -1,3 +1,4 @@
+# pyright: strict
 """Registre des opt-ins de ce projet (ADR-061).
 
 Vue unique et explicite des opt-ins utilisés par ce projet. Aucun code d'opt-in
@@ -18,6 +19,11 @@ n'est copié ici : il vit dans le `.venv`. Ce fichier est géré par
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from core.http.router import Router
+
 # Backend base de données (ADR-054/060). None tant qu'aucun n'est configuré.
 BACKEND: str | None = None
 
@@ -29,7 +35,7 @@ ENABLED_OPTINS: dict[str, str] = {
 # >>> opt-in imports (gérés par forge opt-in:enable / disable)
 
 
-def register_optins(router) -> None:
+def register_optins(router: Router) -> None:
     """Branche les routes des opt-ins « route » activés dans ce projet."""
     # >>> opt-in calls (gérés par forge opt-in:enable / disable)
     return None

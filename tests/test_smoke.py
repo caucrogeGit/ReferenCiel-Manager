@@ -19,17 +19,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.mark.smoke
 def test_optins_registry_contract() -> None:
-    """`optins/registry.py` (ADR-061) expose son contrat public."""
-    import optins.registry as registry
-    from optins.registry import BACKEND, ENABLED_OPTINS
+    """`optins/registry.py` (ADR-061) expose son contrat public, typé strict."""
+    from optins.registry import BACKEND, ENABLED_OPTINS, register_optins
 
     assert BACKEND is None or isinstance(BACKEND, str)
     assert isinstance(ENABLED_OPTINS, dict)
-    # `register_optins` est vérifié via getattr : le squelette Forge le génère
-    # avec un paramètre non typé (`router`), qui exposerait un type Unknown en
-    # mode strict. Finding de banc d'essai (le squelette devrait typer
-    # `router: Router`) — on isole, on ne suppresse pas.
-    assert callable(getattr(registry, "register_optins", None))
+    assert callable(register_optins)
 
 
 @pytest.mark.smoke

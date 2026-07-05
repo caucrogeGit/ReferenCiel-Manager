@@ -29,10 +29,14 @@ est peu coûteux et évite toute dette de typage.
 2. **Strict par fichier** : chaque fichier `.py` que nous écrivons porte
    `# pyright: strict` en tête (convention Forge). `include` liste nos chemins de
    code produit ; il s'étend à chaque fichier applicatif manuel écrit.
-3. **Le squelette généré par Forge** (`app.py`, `mvc/`, `optins/`, `config.py`)
-   n'est **pas** placé sous notre cliquet strict : il relève du framework. Toute
-   lacune de typage qu'il expose est un **finding de banc d'essai** (ADR-005),
-   révélé et non contourné en silence.
+3. **Périmètre du cliquet strict** : tout fichier que nous **écrivons ou éditons à
+   la main** (hors `*_base.py` régénérables). Actuellement : `tests/`,
+   `conftest.py`, `optins/registry.py`, `mvc/routes.py`,
+   `mvc/controllers/home_controller.py`. `include` s'étend à chaque nouveau
+   fichier applicatif manuel. **Exclus** : les fichiers purement régénérables
+   (`*_base.py`) et le framework installé (`.venv`), que nous ne maintenons pas.
+   Toute lacune de typage exposée par le squelette généré est un **finding de banc
+   d'essai** (ADR-005), révélé et non contourné en silence.
 4. **`pyright` fait partie de la validation avant de livrer**, aux côtés de
    `python -m pytest`, `ruff check .`, `forge project:check`, `mkdocs build --strict`.
 5. **ruff** est aligné **exactement** sur la config de Forge (`select = ["E","F"]`,
@@ -42,10 +46,12 @@ est peu coûteux et évite toute dette de typage.
 ## Conséquences
 
 - Notre code est typé strict dès la première ligne ; aucune dette à rattraper.
-- Les frictions de typage du squelette Forge (ex. `optins/registry.py` génère
-  `register_optins(router)` **sans typer `router`**, ce qui exposerait un type
-  `Unknown` en strict) sont **isolées proprement côté test** (via `getattr`, pas de
-  suppression) et **signalées** comme retours de banc d'essai.
+- Un projet fraîchement généré par `forge new` livre `optins/registry.py` avec
+  `register_optins(router)` **non typé** ; notre cliquet strict l'a exposé. On l'a
+  **corrigé localement** (`router: Router`, import sous `TYPE_CHECKING`) et placé
+  sous strict. **Finding de banc d'essai** : le squelette Forge devrait livrer ce
+  fichier typé. À vérifier au moment d'activer un opt-in : `forge opt-in:enable`
+  **préserve-t-il** le typage manuel de ce fichier ?
 - La barre de typage est explicite et exécutable (`pyright` en CI).
 
 ## Alternatives écartées

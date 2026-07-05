@@ -12,6 +12,10 @@ venv = ".venv"
 include = [
   "conftest.py",
   "tests",
+  # Surface éditée à la main (non `*_base.py`) — sous cliquet strict.
+  "optins/registry.py",
+  "mvc/routes.py",
+  "mvc/controllers/home_controller.py",
 ]
 exclude = [
   "**/__pycache__",
