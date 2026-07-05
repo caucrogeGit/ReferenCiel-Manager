@@ -1,0 +1,76 @@
+site_name: RéférenCiel Manager
+site_description: Application métier pédagogique persistée construite avec Forge
+site_author: Roger Lequette
+repo_name: caucrogeGit/ReferenCiel-Manager
+repo_url: https://github.com/caucrogeGit/ReferenCiel-Manager
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: fr
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - content.code.copy
+    - content.tooltips
+    - search.suggest
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: light blue
+      toggle:
+        icon: material/weather-night
+        name: Passer en mode sombre
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: light blue
+      toggle:
+        icon: material/weather-sunny
+        name: Passer en mode clair
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+plugins:
+  - search
+  - glightbox
+
+nav:
+  - Accueil: index.md
+  - Cadrage:
+      - Instructions (prioritaire): cadrage/instructions.md
+      - Cadre du projet: cadrage/cadre-projet-referenciel-manager.md
+  - Décisions (ADR):
+      - ADR-001 — Adopter Forge: adr/001-adopter-forge.md
+      - ADR-002 — JSON canonique & persistance: adr/002-json-canonique-et-persistance-applicative.md
+      - ADR-003 — Architecture Forge: adr/003-architecture-applicative-forge.md
+      - ADR-004 — Backend SQLite: adr/004-backend-base-de-donnees-sqlite.md
+      - ADR-005 — Qualité, doc mkdocs & banc d'essai: adr/005-standard-qualite-documentation-mkdocs-banc-essai.md
+      - ADR-006 — Stratégie de test: adr/006-strategie-de-test.md
+      - ADR-007 — Typage Python strict: adr/007-typage-python-strict.md
+  - Trajectoire:
+      - Roadmap: roadmap/roadmap-referenciel-manager.md
+      - Tickets: tickets/README.md
+  - Spécifications:
+      - JSON canonique: specs/json-canonique/README.md
+      - Registre des sources: specs/json-canonique/sources/README.md
+      - Trace — JSON canonique CIEL 2TNE: specs/json-canonique/traces/trace-creation-json-canonique-ciel-2tne.md

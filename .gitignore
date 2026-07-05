@@ -26,3 +26,6 @@ storage/mail/*
 # Fichiers temporaires locaux
 tmp/*
 !tmp/.gitkeep
+
+# Documentation generee (mkdocs)
+site/
