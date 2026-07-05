@@ -145,10 +145,15 @@ Extrait du palier 1 (câble T568B). **Illustration, pas un manifeste complet.**
 }
 ```
 
-## 10. Hors de ce contrat
+## 10. Schéma de validation
 
-- Le **schéma JSON** `starter_welcome` (ticket suivant, sur le modèle du schéma
-  référentiel).
+Outillé par [`schemas/schema-json-canonique-starter-welcome.json`](schemas/schema-json-canonique-starter-welcome.json)
+(JSON Schema 2020-12) — porte de validation des uploads (ADR-008). Le schéma valide
+la structure ; les invariants sémantiques (ordre unique/contigu, `bonne_reponse` ∈
+`choix`, fichiers présents dans le bundle) sont validés par l'importeur.
+
+## 11. Hors de ce contrat
+
 - Le **manifeste canonique complet** du Welcome Réseau (canonicalisation, ticket
   suivant).
 - Le dictionnaire de données, les entités Forge, le SQL, l'import (tickets de
