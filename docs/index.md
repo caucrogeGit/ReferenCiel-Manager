@@ -45,7 +45,7 @@ Base de données         = vérité applicative en fonctionnement
 - **Trajectoire** : [roadmap](roadmap/roadmap-referenciel-manager.md) et
   [tickets](tickets/README.md).
 - **Sources & JSON canonique** : [spécification](specs/json-canonique/README.md),
-  [registre des sources](specs/json-canonique/sources/README.md).
+  [registre des sources](specs/json-canonique/registre-des-sources.md).
 
 ## Rôle particulier
 

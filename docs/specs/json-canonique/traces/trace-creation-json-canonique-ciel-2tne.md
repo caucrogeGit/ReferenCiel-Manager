@@ -28,7 +28,7 @@ requis pour ce niveau-classe.
 
 ## Sources retenues
 
-Voir le registre : `../sources/README.md`.
+Voir le registre : `../registre-des-sources.md`.
 
 | Source | Rôle pour CIEL 2TNE |
 | --- | --- |

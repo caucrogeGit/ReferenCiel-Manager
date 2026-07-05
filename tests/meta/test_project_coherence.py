@@ -63,7 +63,7 @@ def test_cadrage_key_documents_present() -> None:
         "roadmap/roadmap-referenciel-manager.md",
         "tickets/README.md",
         "specs/json-canonique/README.md",
-        "specs/json-canonique/sources/README.md",
+        "specs/json-canonique/registre-des-sources.md",
     ]
     missing = [rel for rel in required if not (DOCS / rel).is_file()]
     assert not missing, f"documents de cadrage manquants : {missing}"

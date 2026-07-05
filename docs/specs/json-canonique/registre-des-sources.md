@@ -10,16 +10,23 @@ canoniques métier, et trace leur provenance (instructions §4, §5, §8).
 
 ## Emplacements
 
-- `sources/` (ce dossier) — les **originaux bruts** (PDF officiels, exports CPRO
-  `.scpro`/`.odt`, etc.) et ce registre.
-- `traces/` — la **trace de création** de chaque JSON canonique (chaîne suivie,
-  décisions, écarts). Voir `traces/trace-creation-json-canonique-ciel-2tne.md`.
-- `schemas/` — les schémas JSON de validation (ticket 04).
-- `examples/` — les JSON canoniques produits (tickets 03+).
+Les **originaux bruts** vivent à la racine du dépôt (hors `docs/`, notamment à cause
+des images du starter, ~30 Mo) :
 
-> Les fichiers binaires originaux ne sont pas encore déposés dans `sources/` : ils
-> ont été fournis sous forme de texte extrait. Déposer les PDF officiels ici sous
-> les noms indiqués ci-dessous pour compléter la traçabilité.
+```text
+sources/
+  referentiels/   PDF officiels (Bac Pro CIEL, Vademecum TNE, BTS CIEL)
+  cpro/scpro/     exports CPRO .scpro (à déposer)
+  cpro/odt/       exports CPRO .odt de contrôle (à déposer)
+  starters/       parcours pédagogiques (ex. welcome-reseau/)
+```
+
+Ce registre et la chaîne de spécification vivent sous `docs/specs/json-canonique/` :
+`registre-des-sources.md` (ce fichier), `traces/`, `schemas/`, `examples/`,
+`contrat-*.md`.
+
+> Référentiels officiels : **déposés** dans `sources/referentiels/`. Exports CPRO
+> `.scpro`/`.odt` : **pas encore déposés** (à placer dans `sources/cpro/`).
 
 ## Règle de provenance
 
@@ -32,7 +39,7 @@ conserve une trace de provenance.
 
 ### SRC-REF-CIEL-BACPRO — Référentiel Bac Pro CIEL
 
-- **Fichier** : `referenciel-bac-pro-ciel.pdf`
+- **Fichier** : `sources/referentiels/referenciel-bac-pro-ciel.pdf`
 - **Nature** : référentiel officiel (Éducation nationale), diplôme de **niveau 4**.
 - **Rôle dans la chaîne** : **source principale** de l'extraction niveau-classe
   vers le JSON canonique CIEL 2TNE (cible diplôme, surtout 1ʳᵉ/Tⁿᵉ).
@@ -57,7 +64,7 @@ conserve une trace de provenance.
 
 ### SRC-REF-TNE-2NDE — Vademecum famille des métiers TNE (seconde)
 
-- **Fichier** : `referenciel-2tne.pdf`
+- **Fichier** : `sources/referentiels/referenciel-2tne.pdf`
 - **Nature** : Vademecum officiel, **classe de seconde** « famille des métiers des
   transitions numérique et énergétique » (septembre 2021).
 - **Rôle dans la chaîne** : source du **niveau-classe 2ⁿᵈᵉ**. C'est ce qui est
@@ -76,7 +83,7 @@ conserve une trace de provenance.
 
 ### SRC-REF-CIEL-BTS — Référentiel BTS CIEL
 
-- **Fichier** : `referenciel-bts-ciel.pdf`
+- **Fichier** : `sources/referentiels/referenciel-bts-ciel.pdf`
 - **Nature** : référentiel officiel, diplôme de **niveau 5**, options A
   (« Informatique et réseaux ») et B (« Électronique et réseaux »).
 - **Rôle dans la chaîne** : **source de contexte** (poursuite d'études post-Bac).
