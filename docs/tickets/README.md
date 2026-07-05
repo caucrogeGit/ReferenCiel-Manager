@@ -82,6 +82,7 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 03 | [Exemple CIEL 2TNE](../specs/json-canonique/examples/json-canonique-ciel-2tne.json) conforme (fixture d'upload et de test, validé par un test méta) | Sources | Terminé (v0.1.0, représentatif) |
 | 02b | [Contrat JSON canonique — Starter Welcome](../specs/json-canonique/contrat-starter-welcome.md) : type `starter_welcome` (paliers → dossier / QCM / activité / checklist), manifeste + bundle | Sources | Terminé |
 | 04b | [Schéma JSON — Starter Welcome](../specs/json-canonique/schemas/schema-json-canonique-starter-welcome.json) (porte de validation des uploads) | Sources | Terminé |
+| 03b | [Manifeste canonique Welcome Réseau](../specs/json-canonique/examples/json-canonique-welcome-reseau.json) (4 paliers, 80 questions, 45 sections, 33 images) — validé par test méta | Sources | Terminé |
 | 05 | Dictionnaire de données du socle scolaire (AnneeScolaire, NiveauClasse, Classe, Groupe, Eleve `user_id?`, Professeur, InscriptionEleve, AffectationProfesseurClasse) | A | À faire |
 | 06 | **ADR-003 — Architecture Forge (mvc/ vs app/, contrats, migrations, services, repositories)** — prérequis du code | — | Terminé (Accepté) |
 | 07 | Tranche verticale Bloc A (walking skeleton) : contrats d'entité → migrations Forge → accès données → vue professeur minimale listant classes/élèves (derrière l'auth Forge, sans RBAC/MFA) | A | À faire |

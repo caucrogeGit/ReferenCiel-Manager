@@ -90,6 +90,10 @@ Constatées à la transcription :
   uniformiser à la canonicalisation.
 - **Nommage** : le QCM du palier 2 renvoie à un fichier réponse `qcm-palier2.txt`
   (sans tiret) alors que les documents sont nommés `qcm-palier-2` (avec tiret).
+- **Corrigé du palier 2 à vérifier** : à la canonicalisation, les explications du
+  corrigé P2 (issu du dégroupage) semblent **décalées** par rapport aux énoncés du
+  QCM P2. Les `bonne_reponse` retenues suivent la **colonne « Réponse »** du
+  corrigé ; l'alignement énoncé ↔ explication est **à contrôler par le professeur**.
 
 ## Inventaire des images (33 PNG)
 

@@ -20,6 +20,9 @@ ROOT = Path(__file__).resolve().parents[2]
 SPEC = ROOT / "docs" / "specs" / "json-canonique"
 SCHEMA = SPEC / "schemas" / "schema-json-canonique-referentiel-niveau-classe.json"
 EXAMPLE = SPEC / "examples" / "json-canonique-ciel-2tne.json"
+STARTER_SCHEMA = SPEC / "schemas" / "schema-json-canonique-starter-welcome.json"
+STARTER_EXAMPLE = SPEC / "examples" / "json-canonique-welcome-reseau.json"
+STARTER_BUNDLE = ROOT / "sources" / "starters" / "welcome-reseau"
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -70,3 +73,27 @@ def test_exemple_invariants_semantiques() -> None:
     for ind in doc["indicateurs_reussite"]:
         if "ref" in ind:
             assert cast(str, ind["ref"]) in (ras | crs)
+
+
+def test_starter_valide_contre_le_schema() -> None:
+    """Le manifeste Welcome Réseau valide contre le schéma starter_welcome."""
+    jsonschema.validate(instance=_load(STARTER_EXAMPLE), schema=_load(STARTER_SCHEMA))
+
+
+def test_starter_invariants_semantiques() -> None:
+    """Ordre contigu, bonne_reponse ∈ choix, fichiers référencés présents dans le bundle."""
+    doc = _load(STARTER_EXAMPLE)
+    paliers: list[Any] = doc["paliers"]
+
+    ordres = [cast(int, p["ordre"]) for p in paliers]
+    assert ordres == list(range(1, len(ordres) + 1))
+
+    for p in paliers:
+        assert (STARTER_BUNDLE / cast(str, p["dossier_technique"]["fichier"])).is_file()
+        qcm = p.get("qcm")
+        if qcm is not None:
+            for question in qcm["questions"]:
+                lettres = {cast(str, c["lettre"]) for c in question["choix"]}
+                assert cast(str, question["bonne_reponse"]) in lettres
+        for image in p.get("images", []):
+            assert (STARTER_BUNDLE / cast(str, image["fichier"])).is_file()

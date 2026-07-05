@@ -1,0 +1,3119 @@
+{
+  "type": "starter_welcome",
+  "identifiant": "welcome-reseau",
+  "version": "0.1.0",
+  "sources": [
+    {
+      "source_id": "starter-welcome-reseau",
+      "source_type": "starter",
+      "source_fichier": "sources/starters/welcome-reseau/",
+      "source_note": "Parcours Welcome Réseau numérisé (4 paliers)."
+    }
+  ],
+  "provenance": {
+    "date_extraction": "2026-07-06",
+    "methode": "numerisation manuelle ; QCM fusionnes avec les corriges",
+    "point_entree": "starter"
+  },
+  "niveau_classe": {
+    "code": "2TNE",
+    "intitule": "Seconde professionnelle TNE, spécialité CIEL"
+  },
+  "titre": "Semaine réseau et virtualisation",
+  "organisation": {
+    "activite_glissante": true,
+    "ordre_impose": true
+  },
+  "paliers": [
+    {
+      "id": "palier-1",
+      "ordre": 1,
+      "titre": "Fabriquer et tester un câble Ethernet droit T568B",
+      "theme": "Câble Ethernet droit",
+      "production_attendue": "Un câble droit conforme",
+      "dossier_technique": {
+        "fichier": "palier-1/dossier-technique.md"
+      },
+      "qcm": {
+        "id": "qcm-palier-1",
+        "format_reponse": "Pour chaque question, choisir une seule réponse.",
+        "validation": {
+          "seuil": "100%"
+        },
+        "questions": [
+          {
+            "numero": 1,
+            "enonce": "À quoi sert principalement un câble Ethernet RJ45 ?",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "À installer un système d’exploitation"
+              },
+              {
+                "lettre": "B",
+                "texte": "À relier physiquement un équipement au réseau"
+              },
+              {
+                "lettre": "C",
+                "texte": "À créer une adresse IP"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 2,
+            "enonce": "Dans une salle informatique, le câble RJ45 est souvent utilisé car il est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "plus stable qu’une liaison Wi-Fi pour les postes fixes"
+              },
+              {
+                "lettre": "B",
+                "texte": "plus rapide à fabriquer qu’une clé USB"
+              },
+              {
+                "lettre": "C",
+                "texte": "obligatoire pour ouvrir une session Windows"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 3,
+            "enonce": "Un réseau local peut correspondre à :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "une salle informatique ou une entreprise"
+              },
+              {
+                "lettre": "B",
+                "texte": "uniquement Internet"
+              },
+              {
+                "lettre": "C",
+                "texte": "uniquement un ordinateur seul"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 4,
+            "enonce": "La connexion physique concerne :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "l’adresse IP et le DNS"
+              },
+              {
+                "lettre": "B",
+                "texte": "le câble, le connecteur, la carte réseau et le switch"
+              },
+              {
+                "lettre": "C",
+                "texte": "le nom de l’utilisateur"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 5,
+            "enonce": "La configuration logique concerne principalement :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "l’adresse IP, le masque, la passerelle et le DNS"
+              },
+              {
+                "lettre": "B",
+                "texte": "la couleur des fils du câble"
+              },
+              {
+                "lettre": "C",
+                "texte": "la pince à sertir"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 6,
+            "enonce": "Un câble Ethernet contient généralement :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "2 fils"
+              },
+              {
+                "lettre": "B",
+                "texte": "4 fils"
+              },
+              {
+                "lettre": "C",
+                "texte": "8 fils"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 7,
+            "enonce": "Les 8 fils d’un câble Ethernet sont organisés en :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "2 paires torsadées"
+              },
+              {
+                "lettre": "B",
+                "texte": "4 paires torsadées"
+              },
+              {
+                "lettre": "C",
+                "texte": "8 paires torsadées"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 8,
+            "enonce": "Le rôle principal des paires torsadées est de :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "réduire les perturbations électriques"
+              },
+              {
+                "lettre": "B",
+                "texte": "rendre le câble plus coloré"
+              },
+              {
+                "lettre": "C",
+                "texte": "empêcher l’installation de Windows"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 9,
+            "enonce": "Le connecteur RJ45 possède :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "4 broches"
+              },
+              {
+                "lettre": "B",
+                "texte": "6 broches"
+              },
+              {
+                "lettre": "C",
+                "texte": "8 broches"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 10,
+            "enonce": "Pourquoi faut-il respecter un ordre précis des fils dans le connecteur RJ45 ?",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Pour que le câble soit plus joli"
+              },
+              {
+                "lettre": "B",
+                "texte": "Pour que les broches correspondent correctement"
+              },
+              {
+                "lettre": "C",
+                "texte": "Pour que le câble devienne plus long"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 11,
+            "enonce": "Dans cette activité, la norme utilisée est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "T568A"
+              },
+              {
+                "lettre": "B",
+                "texte": "T568B"
+              },
+              {
+                "lettre": "C",
+                "texte": "USB-C"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 12,
+            "enonce": "En norme T568B, la broche 1 correspond au fil :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "blanc-orange"
+              },
+              {
+                "lettre": "B",
+                "texte": "bleu"
+              },
+              {
+                "lettre": "C",
+                "texte": "marron"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 13,
+            "enonce": "En norme T568B, la broche 2 correspond au fil :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "vert"
+              },
+              {
+                "lettre": "B",
+                "texte": "orange"
+              },
+              {
+                "lettre": "C",
+                "texte": "blanc-bleu"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 14,
+            "enonce": "En norme T568B, la broche 6 correspond au fil :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "vert"
+              },
+              {
+                "lettre": "B",
+                "texte": "blanc-marron"
+              },
+              {
+                "lettre": "C",
+                "texte": "bleu"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 15,
+            "enonce": "Un câble droit est un câble dont :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "les deux extrémités sont câblées de la même manière"
+              },
+              {
+                "lettre": "B",
+                "texte": "les deux extrémités utilisent forcément deux normes différentes"
+              },
+              {
+                "lettre": "C",
+                "texte": "les fils sont tous retirés de la gaine"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 16,
+            "enonce": "Pour fabriquer un câble droit en T568B, il faut câbler :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "T568A d’un côté et T568B de l’autre"
+              },
+              {
+                "lettre": "B",
+                "texte": "T568B d’un côté et T568B de l’autre"
+              },
+              {
+                "lettre": "C",
+                "texte": "aucune norme particulière"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 17,
+            "enonce": "Un câble croisé correspond généralement à :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "T568B des deux côtés"
+              },
+              {
+                "lettre": "B",
+                "texte": "T568A d’un côté et T568B de l’autre"
+              },
+              {
+                "lettre": "C",
+                "texte": "un câble sans connecteur RJ45"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 18,
+            "enonce": "À quoi sert le testeur RJ45 ?",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "À vérifier que les fils sont correctement reliés"
+              },
+              {
+                "lettre": "B",
+                "texte": "À installer un pilote réseau"
+              },
+              {
+                "lettre": "C",
+                "texte": "À donner une adresse IP au câble"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 19,
+            "enonce": "Pour un câble droit conforme, le testeur doit indiquer :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "1 vers 8, 2 vers 7, 3 vers 6"
+              },
+              {
+                "lettre": "B",
+                "texte": "1 vers 1, 2 vers 2, 3 vers 3, jusqu’à 8 vers 8"
+              },
+              {
+                "lettre": "C",
+                "texte": "uniquement la broche 1 allumée"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 20,
+            "enonce": "Si une broche ne s’allume pas au testeur, la cause possible est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "un fil coupé, mal inséré ou mal serti"
+              },
+              {
+                "lettre": "B",
+                "texte": "un mot de passe incorrect"
+              },
+              {
+                "lettre": "C",
+                "texte": "une mauvaise image ISO"
+              }
+            ],
+            "bonne_reponse": "A"
+          }
+        ]
+      },
+      "activite": {
+        "id": "activite-palier-1",
+        "fichier": "palier-1/eleve/activite-palier-1.md"
+      },
+      "checklist": {
+        "id": "checklist-palier-1",
+        "sections": [
+          {
+            "numero": 1,
+            "titre": "Validation du QCM",
+            "items": [
+              {
+                "libelle": "Le fichier de réponses du QCM du palier 1 existe"
+              },
+              {
+                "libelle": "Le format demandé est respecté"
+              },
+              {
+                "libelle": "Le QCM contient 20 réponses"
+              },
+              {
+                "libelle": "Le QCM est validé à 100 %"
+              },
+              {
+                "libelle": "L’activité a commencé uniquement après validation du QCM"
+              }
+            ]
+          },
+          {
+            "numero": 2,
+            "titre": "Préparation du poste et du matériel",
+            "items": [
+              {
+                "libelle": "Un morceau de câble Ethernet est disponible"
+              },
+              {
+                "libelle": "Deux connecteurs RJ45 sont disponibles"
+              },
+              {
+                "libelle": "Une pince à dénuder est disponible"
+              },
+              {
+                "libelle": "Une pince à sertir RJ45 est disponible"
+              },
+              {
+                "libelle": "Un testeur RJ45 est disponible"
+              },
+              {
+                "libelle": "Le dossier technique du palier 1 est accessible"
+              },
+              {
+                "libelle": "L’élève n’a pas commencé si un élément manquait"
+              }
+            ]
+          },
+          {
+            "numero": 3,
+            "titre": "Étape 1 — préparer le câble",
+            "items": [
+              {
+                "libelle": "Le câble est coupé à la longueur demandée"
+              },
+              {
+                "libelle": "La gaine extérieure est dénudée sans abîmer les fils"
+              },
+              {
+                "libelle": "L’état des fils internes a été vérifié avant de continuer"
+              }
+            ]
+          },
+          {
+            "numero": 4,
+            "titre": "Étape 2 — préparer les fils",
+            "items": [
+              {
+                "libelle": "Les paires ont été séparées"
+              },
+              {
+                "libelle": "Les fils sont rangés dans l’ordre de la norme T568B"
+              },
+              {
+                "libelle": "L’ordre des fils a été vérifié avec le dossier technique avant insertion"
+              }
+            ]
+          },
+          {
+            "numero": 5,
+            "titre": "Étape 3 — premier connecteur RJ45",
+            "items": [
+              {
+                "libelle": "Les fils sont insérés à fond dans le connecteur"
+              },
+              {
+                "libelle": "L’ordre des fils est conforme à T568B"
+              },
+              {
+                "libelle": "La gaine est bien positionnée dans le connecteur"
+              },
+              {
+                "libelle": "Le sens du connecteur a été vérifié avant sertissage"
+              },
+              {
+                "libelle": "Le connecteur est serti"
+              }
+            ]
+          },
+          {
+            "numero": 6,
+            "titre": "Étape 4 — deuxième connecteur RJ45",
+            "items": [
+              {
+                "libelle": "La deuxième extrémité respecte la norme T568B (câble droit)"
+              },
+              {
+                "libelle": "La consigne « câble droit » (même câblage aux deux bouts) est respectée"
+              },
+              {
+                "libelle": "Les vérifications avant sertissage ont été refaites"
+              },
+              {
+                "libelle": "Le connecteur est serti"
+              }
+            ]
+          },
+          {
+            "numero": 7,
+            "titre": "Étape 5 — test au testeur RJ45",
+            "items": [
+              {
+                "libelle": "Les deux extrémités sont branchées sur le testeur RJ45"
+              },
+              {
+                "libelle": "Le test a été lancé"
+              },
+              {
+                "libelle": "Le résultat a été observé"
+              },
+              {
+                "libelle": "Le résultat est comparé au résultat attendu du dossier technique (1→1, 2→2, … 8→8)"
+              }
+            ]
+          },
+          {
+            "numero": 8,
+            "titre": "Étape 6 — correction si nécessaire",
+            "items": [
+              {
+                "libelle": "En cas d’échec, l’élève n’a pas recommencé au hasard"
+              },
+              {
+                "libelle": "Le type d’erreur a été identifié à partir du testeur"
+              },
+              {
+                "libelle": "La partie « erreurs fréquentes » du dossier technique a été consultée"
+              },
+              {
+                "libelle": "Seul ce qui devait être corrigé a été repris (extrémité recoupée et re-sertie si besoin)"
+              },
+              {
+                "libelle": "Le câble a été retesté après correction"
+              }
+            ]
+          },
+          {
+            "numero": 9,
+            "titre": "Production attendue",
+            "items": [
+              {
+                "libelle": "Le câble est terminé"
+              },
+              {
+                "libelle": "Les deux connecteurs sont sertis correctement"
+              },
+              {
+                "libelle": "Le câble a été testé"
+              },
+              {
+                "libelle": "Le résultat du testeur est conforme"
+              },
+              {
+                "libelle": "Le câble est présenté au professeur pour validation"
+              }
+            ]
+          },
+          {
+            "numero": 10,
+            "titre": "Autonomie et méthode de travail",
+            "items": [
+              {
+                "libelle": "L’élève utilise le dossier technique pour chercher les informations"
+              },
+              {
+                "libelle": "L’élève ne demande pas la solution sans recherche préalable"
+              },
+              {
+                "libelle": "L’élève sait indiquer la partie du dossier technique consultée"
+              },
+              {
+                "libelle": "L’élève sait expliquer ce qu’il a fait"
+              },
+              {
+                "libelle": "L’élève sait expliquer ce qu’il a observé"
+              },
+              {
+                "libelle": "L’élève sait expliquer ce qui bloque en cas de problème"
+              }
+            ]
+          },
+          {
+            "numero": 11,
+            "titre": "Formulation d’une demande d’aide",
+            "items": [
+              {
+                "libelle": "L’élève indique l’étape concernée"
+              },
+              {
+                "libelle": "L’élève indique ce qu’il a déjà essayé"
+              },
+              {
+                "libelle": "L’élève indique ce qu’il a observé"
+              },
+              {
+                "libelle": "L’élève indique ce qui ne fonctionne pas"
+              },
+              {
+                "libelle": "L’élève indique la partie du dossier technique consultée"
+              },
+              {
+                "libelle": "L’élève formule une demande précise"
+              }
+            ]
+          },
+          {
+            "numero": 12,
+            "titre": "Validation finale du palier 1",
+            "items": [
+              {
+                "libelle": "QCM validé à 100 %"
+              },
+              {
+                "libelle": "Câble fabriqué avec les deux connecteurs sertis"
+              },
+              {
+                "libelle": "Câblage conforme à la norme T568B aux deux extrémités"
+              },
+              {
+                "libelle": "Câble testé au testeur RJ45"
+              },
+              {
+                "libelle": "Résultat du testeur conforme (1→1 … 8→8)"
+              },
+              {
+                "libelle": "Câble présenté au professeur"
+              },
+              {
+                "libelle": "L’élève sait expliquer la différence entre un câble droit et un câble croisé"
+              }
+            ]
+          }
+        ]
+      },
+      "images": [
+        {
+          "fichier": "palier-1/images/cable-droit-t568b.png",
+          "legende": "Câble droit T568B"
+        },
+        {
+          "fichier": "palier-1/images/connecteur-rj45-vue-face.png",
+          "legende": "Connecteur RJ45 vue de face"
+        },
+        {
+          "fichier": "palier-1/images/constitution-cable-ethernet.png",
+          "legende": "Constitution d’un câble Ethernet"
+        },
+        {
+          "fichier": "palier-1/images/erreurs-cablage-rj45.png",
+          "legende": "Erreurs de câblage RJ45"
+        },
+        {
+          "fichier": "palier-1/images/norme-t568b.png",
+          "legende": "Norme T568B"
+        },
+        {
+          "fichier": "palier-1/images/reseau-local.png",
+          "legende": "Réseau local"
+        },
+        {
+          "fichier": "palier-1/images/reseau-physique-logique.png",
+          "legende": "Réseau physique et logique"
+        },
+        {
+          "fichier": "palier-1/images/testeur-rj45.png",
+          "legende": "Testeur RJ45"
+        }
+      ],
+      "ressources": {
+        "eleve": [
+          "palier-1/eleve/qcm-palier-1.md",
+          "palier-1/eleve/activite-palier-1.md",
+          "palier-1/eleve/checklist-palier-1-validation.md"
+        ],
+        "professeur": [
+          "palier-1/professeur/qcm-palier-1-corrige.md"
+        ]
+      },
+      "source_ids": [
+        "starter-welcome-reseau"
+      ]
+    },
+    {
+      "id": "palier-2",
+      "ordre": 2,
+      "titre": "Installer deux machines virtuelles avec VirtualBox",
+      "theme": "Machines virtuelles",
+      "production_attendue": "Deux machines virtuelles fonctionnelles avec un instantané",
+      "dossier_technique": {
+        "fichier": "palier-2/dossier-technique.md"
+      },
+      "qcm": {
+        "id": "qcm-palier-2",
+        "format_reponse": "Fichier texte nomme qcm-palier2.txt contenant une reponse par ligne, sans espace entre le numero de la question et la lettre choisie (ex. 1a, 2b, 3c) ; les 20 questions doivent etre repondues.",
+        "validation": {
+          "seuil": "100%"
+        },
+        "questions": [
+          {
+            "numero": 1,
+            "enonce": "La virtualisation permet de :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "faire fonctionner un ordinateur simule dans un ordinateur reel"
+              },
+              {
+                "lettre": "B",
+                "texte": "fabriquer un cable Ethernet"
+              },
+              {
+                "lettre": "C",
+                "texte": "tester un connecteur RJ45"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 2,
+            "enonce": "Dans cette activite, le systeme hote est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Windows 11 Pro"
+              },
+              {
+                "lettre": "B",
+                "texte": "Debian 13"
+              },
+              {
+                "lettre": "C",
+                "texte": "Zorin OS"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 3,
+            "enonce": "La machine hote correspond a :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "l'image ISO utilisee pour installer le systeme"
+              },
+              {
+                "lettre": "B",
+                "texte": "le disque virtuel de la machine virtuelle"
+              },
+              {
+                "lettre": "C",
+                "texte": "l'ordinateur reel qui execute VirtualBox"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 4,
+            "enonce": "La machine invitee correspond a :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "l'ordinateur simule dans VirtualBox"
+              },
+              {
+                "lettre": "B",
+                "texte": "le poste physique de la salle"
+              },
+              {
+                "lettre": "C",
+                "texte": "le logiciel VirtualBox lui-meme"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 5,
+            "enonce": "VirtualBox sert a :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "remplacer Debian 13 sur le poste hote"
+              },
+              {
+                "lettre": "B",
+                "texte": "creer et gerer des machines virtuelles"
+              },
+              {
+                "lettre": "C",
+                "texte": "tester les voyants d'un switch"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 6,
+            "enonce": "Une machine virtuelle utilise :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "uniquement une connexion Wi-Fi"
+              },
+              {
+                "lettre": "B",
+                "texte": "uniquement des ressources independantes du poste reel"
+              },
+              {
+                "lettre": "C",
+                "texte": "une partie des ressources de la machine hote"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 7,
+            "enonce": "La memoire vive donnee a une machine virtuelle est prise sur :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "la memoire de la machine hote"
+              },
+              {
+                "lettre": "B",
+                "texte": "le disque virtuel"
+              },
+              {
+                "lettre": "C",
+                "texte": "l'image ISO"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 8,
+            "enonce": "Si une machine virtuelle recoit trop de memoire ou trop de processeur :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "l'image ISO devient inutilisable"
+              },
+              {
+                "lettre": "B",
+                "texte": "le poste Debian 13 peut devenir lent"
+              },
+              {
+                "lettre": "C",
+                "texte": "la machine virtuelle devient automatiquement plus securisee"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 9,
+            "enonce": "Un disque virtuel est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "une cle USB obligatoire pour demarrer VirtualBox"
+              },
+              {
+                "lettre": "B",
+                "texte": "un disque physique ajoute dans l'ordinateur reel"
+              },
+              {
+                "lettre": "C",
+                "texte": "un fichier stocke sur la machine hote qui se comporte comme un disque dur pour la machine virtuelle"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 10,
+            "enonce": "Une image ISO sert a :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "installer un systeme d'exploitation dans une machine virtuelle"
+              },
+              {
+                "lettre": "B",
+                "texte": "verifier un mot de passe"
+              },
+              {
+                "lettre": "C",
+                "texte": "tester un cable reseau"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 11,
+            "enonce": "Pour cette activite, les images ISO doivent etre recuperees :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "depuis n'importe quel site trouve par recherche Internet"
+              },
+              {
+                "lettre": "B",
+                "texte": "depuis une source fiable indiquee par le professeur"
+              },
+              {
+                "lettre": "C",
+                "texte": "depuis le testeur RJ45"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 12,
+            "enonce": "Pour cette activite, l'edition Windows a installer est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Windows 7 Starter"
+              },
+              {
+                "lettre": "B",
+                "texte": "Windows Server uniquement"
+              },
+              {
+                "lettre": "C",
+                "texte": "Windows 11 Pro"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 13,
+            "enonce": "La machine virtuelle Windows doit etre nommee :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "VM-Windows-11-Pro"
+              },
+              {
+                "lettre": "B",
+                "texte": "test"
+              },
+              {
+                "lettre": "C",
+                "texte": "nouvelle machine"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 14,
+            "enonce": "La machine virtuelle Zorin OS doit etre configuree dans VirtualBox comme :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Microsoft Windows, Windows 11 64 bits"
+              },
+              {
+                "lettre": "B",
+                "texte": "Linux, Ubuntu 64 bits"
+              },
+              {
+                "lettre": "C",
+                "texte": "Autre, systeme inconnu"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 15,
+            "enonce": "Le nom d'utilisateur commun a utiliser dans les machines virtuelles est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "professeur"
+              },
+              {
+                "lettre": "B",
+                "texte": "admin-local"
+              },
+              {
+                "lettre": "C",
+                "texte": "tne"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 16,
+            "enonce": "Le mot de passe commun a utiliser dans les machines virtuelles est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Tne2026!"
+              },
+              {
+                "lettre": "B",
+                "texte": "azerty"
+              },
+              {
+                "lettre": "C",
+                "texte": "password"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 17,
+            "enonce": "Si Windows 11 Pro impose un compte Microsoft, il faut :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "utiliser un compte personnel"
+              },
+              {
+                "lettre": "B",
+                "texte": "creer un compte local selon la procedure indiquee ou appeler le professeur"
+              },
+              {
+                "lettre": "C",
+                "texte": "supprimer la machine virtuelle"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 18,
+            "enonce": "Les additions invitees servent notamment a :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "remplacer l'image ISO Windows"
+              },
+              {
+                "lettre": "B",
+                "texte": "creer automatiquement une machine virtuelle"
+              },
+              {
+                "lettre": "C",
+                "texte": "ameliorer l'affichage, la souris et le confort d'utilisation de la machine virtuelle"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 19,
+            "enonce": "Un instantane sert a :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "revenir a un etat propre de la machine virtuelle"
+              },
+              {
+                "lettre": "B",
+                "texte": "augmenter la memoire vive du poste hote"
+              },
+              {
+                "lettre": "C",
+                "texte": "telecharger automatiquement Zorin OS"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 20,
+            "enonce": "Le palier 2 est termine lorsque :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "les images ISO sont seulement telechargees"
+              },
+              {
+                "lettre": "B",
+                "texte": "les deux machines virtuelles sont installees, accessibles, a jour, arretees proprement et sauvegardees par un instantane"
+              },
+              {
+                "lettre": "C",
+                "texte": "seule la machine Windows existe, meme si elle ne demarre pas"
+              }
+            ],
+            "bonne_reponse": "A"
+          }
+        ]
+      },
+      "activite": {
+        "id": "activite-palier-2",
+        "fichier": "palier-2/eleve/activite-palier-2.md"
+      },
+      "checklist": {
+        "id": "checklist-palier-2",
+        "sections": [
+          {
+            "numero": 1,
+            "titre": "Validation du QCM",
+            "items": [
+              {
+                "libelle": "Le fichier qcm-palier2.txt existe"
+              },
+              {
+                "libelle": "Le fichier contient 20 reponses"
+              },
+              {
+                "libelle": "Le format est respecte, par exemple 1a, 2b, 3c"
+              },
+              {
+                "libelle": "Le QCM est correct a 100 %"
+              },
+              {
+                "libelle": "L'eleve a corrige les erreurs eventuelles avant de commencer l'activite"
+              }
+            ]
+          },
+          {
+            "numero": 2,
+            "titre": "Verification generale de VirtualBox",
+            "items": [
+              {
+                "libelle": "VirtualBox demarre correctement sur le poste Debian 13"
+              },
+              {
+                "libelle": "Les deux machines virtuelles sont visibles dans VirtualBox"
+              },
+              {
+                "libelle": "Les noms des machines virtuelles sont clairs"
+              },
+              {
+                "libelle": "L'eleve n'a pas cree de machines inutiles ou mal nommees"
+              },
+              {
+                "libelle": "Windows 11 Pro est nommee VM-Windows-11-Pro"
+              },
+              {
+                "libelle": "Zorin OS est nommee VM-Zorin"
+              }
+            ]
+          },
+          {
+            "numero": 3,
+            "titre": "Verification de la machine virtuelle Windows 11 Pro",
+            "items": [
+              {
+                "libelle": "La machine virtuelle Windows existe"
+              },
+              {
+                "libelle": "Le nom est VM-Windows-11-Pro"
+              },
+              {
+                "libelle": "Le type est Microsoft Windows"
+              },
+              {
+                "libelle": "La version est Windows 11 64 bits"
+              },
+              {
+                "libelle": "L'image ISO Windows 11 a ete utilisee"
+              },
+              {
+                "libelle": "L'edition installee est Windows 11 Pro"
+              },
+              {
+                "libelle": "La memoire vive est conforme a la consigne"
+              },
+              {
+                "libelle": "Le nombre de processeurs est conforme a la consigne"
+              },
+              {
+                "libelle": "Le disque virtuel est conforme a la consigne"
+              },
+              {
+                "libelle": "Le stockage est en allocation dynamique"
+              },
+              {
+                "libelle": "Le mode reseau est laisse sur NAT pour l'installation"
+              },
+              {
+                "libelle": "EFI est active si demande"
+              },
+              {
+                "libelle": "TPM est active si disponible"
+              },
+              {
+                "libelle": "Secure Boot est active si disponible"
+              },
+              {
+                "libelle": "La machine virtuelle demarre correctement"
+              },
+              {
+                "libelle": "Le bureau Windows s'affiche"
+              },
+              {
+                "libelle": "La session s'ouvre avec le compte tne"
+              },
+              {
+                "libelle": "Le mot de passe commun fonctionne"
+              },
+              {
+                "libelle": "Aucun compte personnel n'a ete utilise"
+              },
+              {
+                "libelle": "Le compte utilise est un compte local"
+              },
+              {
+                "libelle": "Windows Update a ete lance"
+              },
+              {
+                "libelle": "Les mises a jour disponibles ont ete installees"
+              },
+              {
+                "libelle": "La machine a ete redemarree si necessaire"
+              },
+              {
+                "libelle": "Une nouvelle recherche de mises a jour a ete faite apres redemarrage"
+              },
+              {
+                "libelle": "Windows s'arrete proprement"
+              },
+              {
+                "libelle": "L'eleve ne ferme pas brutalement la fenetre de la machine virtuelle"
+              },
+              {
+                "libelle": "Les additions invitees ont ete inserees depuis le menu VirtualBox"
+              },
+              {
+                "libelle": "VBoxWindowsAdditions.exe a ete lance"
+              },
+              {
+                "libelle": "Windows a ete redemarre apres installation"
+              },
+              {
+                "libelle": "L'affichage s'adapte correctement a la fenetre"
+              },
+              {
+                "libelle": "La souris est fluide dans la machine virtuelle"
+              },
+              {
+                "libelle": "Windows est dans un etat propre avant l'instantane"
+              },
+              {
+                "libelle": "La machine virtuelle est arretee proprement avant l'instantane"
+              },
+              {
+                "libelle": "L'instantane existe"
+              },
+              {
+                "libelle": "Le nom de l'instantane est Installation propre"
+              }
+            ]
+          },
+          {
+            "numero": 4,
+            "titre": "Verification de la machine virtuelle Zorin OS",
+            "items": [
+              {
+                "libelle": "La machine virtuelle Zorin OS existe"
+              },
+              {
+                "libelle": "Le nom est VM-Zorin"
+              },
+              {
+                "libelle": "Le type est Linux"
+              },
+              {
+                "libelle": "La version est Ubuntu 64 bits"
+              },
+              {
+                "libelle": "L'image ISO Zorin OS a ete utilisee"
+              },
+              {
+                "libelle": "La memoire vive est conforme a la consigne"
+              },
+              {
+                "libelle": "Le nombre de processeurs est conforme a la consigne"
+              },
+              {
+                "libelle": "Le disque virtuel est conforme a la consigne"
+              },
+              {
+                "libelle": "Le stockage est en allocation dynamique"
+              },
+              {
+                "libelle": "Le mode reseau est laisse sur NAT pour l'installation"
+              },
+              {
+                "libelle": "La memoire video est conforme a la consigne"
+              },
+              {
+                "libelle": "Zorin OS demarre correctement"
+              },
+              {
+                "libelle": "Le bureau Zorin OS s'affiche"
+              },
+              {
+                "libelle": "Le compte utilisateur est tne"
+              },
+              {
+                "libelle": "Le mot de passe commun fonctionne"
+              },
+              {
+                "libelle": "Le nom de l'ordinateur est zorin-tne"
+              },
+              {
+                "libelle": "Aucun identifiant personnel n'a ete utilise"
+              },
+              {
+                "libelle": "Le systeme demande le mot de passe a l'ouverture de session"
+              },
+              {
+                "libelle": "La mise a jour a ete lancee"
+              },
+              {
+                "libelle": "La commande sudo apt update a ete executee"
+              },
+              {
+                "libelle": "La commande sudo apt upgrade a ete executee"
+              },
+              {
+                "libelle": "Le systeme a ete redemarre si necessaire"
+              },
+              {
+                "libelle": "Zorin OS s'arrete proprement"
+              },
+              {
+                "libelle": "L'eleve ne ferme pas brutalement la fenetre de la machine virtuelle"
+              },
+              {
+                "libelle": "Les paquets necessaires ont ete installes"
+              },
+              {
+                "libelle": "L'image CD des additions invitees a ete inseree"
+              },
+              {
+                "libelle": "Le CD des additions invitees a ete monte"
+              },
+              {
+                "libelle": "VBoxLinuxAdditions.run a ete execute"
+              },
+              {
+                "libelle": "Zorin OS a ete redemarre apres installation"
+              },
+              {
+                "libelle": "L'affichage s'adapte correctement a la fenetre"
+              },
+              {
+                "libelle": "La souris est fluide dans la machine virtuelle"
+              },
+              {
+                "libelle": "Zorin OS est dans un etat propre avant l'instantane"
+              },
+              {
+                "libelle": "La machine virtuelle est arretee proprement avant l'instantane"
+              },
+              {
+                "libelle": "L'instantane existe"
+              },
+              {
+                "libelle": "Le nom de l'instantane est Installation propre"
+              }
+            ]
+          },
+          {
+            "numero": 5,
+            "titre": "Verification de l'autonomie de l'eleve",
+            "items": [
+              {
+                "libelle": "L'eleve utilise le dossier technique pour chercher les informations"
+              },
+              {
+                "libelle": "L'eleve ne demande pas directement la solution sans recherche prealable"
+              },
+              {
+                "libelle": "L'eleve sait indiquer le chapitre consulte dans le dossier technique"
+              },
+              {
+                "libelle": "L'eleve sait expliquer ce qu'il a fait"
+              },
+              {
+                "libelle": "L'eleve sait expliquer ce qu'il a observe"
+              },
+              {
+                "libelle": "L'eleve sait expliquer ce qui bloque"
+              },
+              {
+                "libelle": "L'eleve indique l'etape concernee"
+              },
+              {
+                "libelle": "L'eleve indique la machine virtuelle concernee"
+              },
+              {
+                "libelle": "L'eleve indique ce qu'il a deja essaye"
+              },
+              {
+                "libelle": "L'eleve indique ce qu'il observe"
+              },
+              {
+                "libelle": "L'eleve indique la partie du dossier consultee"
+              },
+              {
+                "libelle": "L'eleve formule une demande precise"
+              }
+            ]
+          },
+          {
+            "numero": 6,
+            "titre": "Validation finale du palier 2",
+            "items": [
+              {
+                "libelle": "QCM valide a 100 %"
+              },
+              {
+                "libelle": "VM Windows 11 Pro installee"
+              },
+              {
+                "libelle": "VM Windows 11 Pro accessible avec le compte demande"
+              },
+              {
+                "libelle": "VM Windows 11 Pro a jour"
+              },
+              {
+                "libelle": "Additions invitees installees sur Windows 11 Pro"
+              },
+              {
+                "libelle": "Instantane Windows 11 Pro cree"
+              },
+              {
+                "libelle": "VM Zorin OS installee"
+              },
+              {
+                "libelle": "VM Zorin OS accessible avec le compte demande"
+              },
+              {
+                "libelle": "VM Zorin OS a jour"
+              },
+              {
+                "libelle": "Additions invitees installees sur Zorin OS"
+              },
+              {
+                "libelle": "Instantane Zorin OS cree"
+              },
+              {
+                "libelle": "Les deux machines virtuelles sont pretes pour le palier 3"
+              }
+            ]
+          }
+        ]
+      },
+      "images": [
+        {
+          "fichier": "palier-2/images/erreurs-virtualbox.png",
+          "legende": "Erreurs courantes rencontrees dans VirtualBox"
+        },
+        {
+          "fichier": "palier-2/images/image-iso-installation.png",
+          "legende": "Utilisation d'une image ISO pour l'installation d'un systeme"
+        },
+        {
+          "fichier": "palier-2/images/instantane-machine-virtuelle.png",
+          "legende": "Creation d'un instantane d'une machine virtuelle"
+        },
+        {
+          "fichier": "palier-2/images/machine-hote-machine-invitee.png",
+          "legende": "Distinction entre la machine hote et la machine invitee"
+        },
+        {
+          "fichier": "palier-2/images/parametres-vm-windows-zorin.png",
+          "legende": "Parametres des machines virtuelles Windows et Zorin OS"
+        },
+        {
+          "fichier": "palier-2/images/principe-virtualisation.png",
+          "legende": "Principe de la virtualisation"
+        },
+        {
+          "fichier": "palier-2/images/procedure-installation-vm.png",
+          "legende": "Procedure d'installation d'une machine virtuelle"
+        },
+        {
+          "fichier": "palier-2/images/ressources-machine-virtuelle.png",
+          "legende": "Ressources allouees a une machine virtuelle"
+        }
+      ],
+      "ressources": {
+        "eleve": [
+          "palier-2/eleve/qcm-palier-2.md",
+          "palier-2/eleve/activite-palier-2.md",
+          "palier-2/eleve/checklist-palier-2-validation.md"
+        ],
+        "professeur": [
+          "palier-2/professeur/qcm-palier-2-corrige.md"
+        ]
+      },
+      "source_ids": [
+        "starter-welcome-reseau"
+      ]
+    },
+    {
+      "id": "palier-3",
+      "ordre": 3,
+      "titre": "Relever les informations réseau et tester les modes simples VirtualBox",
+      "theme": "Modes réseau simples",
+      "production_attendue": "Un tableau de tests des deux modes",
+      "dossier_technique": {
+        "fichier": "palier-3/dossier-technique.md"
+      },
+      "qcm": {
+        "id": "qcm-palier-3",
+        "format_reponse": "Fichier texte nommé qcm-palier3.txt, une réponse par ligne au format numéro suivi de la lettre en minuscule sans espace (exemple : 1a), uniquement les lettres a, b ou c, sans phrase ni justification.",
+        "validation": {
+          "seuil": "100%"
+        },
+        "questions": [
+          {
+            "numero": 1,
+            "enonce": "Dans ce palier, la machine hôte est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Debian 13"
+              },
+              {
+                "lettre": "B",
+                "texte": "Windows 11 Pro"
+              },
+              {
+                "lettre": "C",
+                "texte": "Zorin OS"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 2,
+            "enonce": "Les machines virtuelles utilisées dans ce palier sont :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Debian 13 et VirtualBox"
+              },
+              {
+                "lettre": "B",
+                "texte": "Windows 11 Pro et Zorin OS"
+              },
+              {
+                "lettre": "C",
+                "texte": "Windows 11 Pro et Debian 13"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 3,
+            "enonce": "Une carte réseau virtuelle est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "une carte physique ajoutée dans l’ordinateur"
+              },
+              {
+                "lettre": "B",
+                "texte": "une carte Wi-Fi réelle"
+              },
+              {
+                "lettre": "C",
+                "texte": "une carte simulée par VirtualBox pour une machine virtuelle"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 4,
+            "enonce": "Une adresse IP sert principalement à :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "identifier une machine sur un réseau"
+              },
+              {
+                "lettre": "B",
+                "texte": "afficher le nom de l’utilisateur"
+              },
+              {
+                "lettre": "C",
+                "texte": "choisir le système d’exploitation"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 5,
+            "enonce": "Une adresse IPv4 est composée de :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "2 nombres séparés par des points"
+              },
+              {
+                "lettre": "B",
+                "texte": "4 nombres séparés par des points"
+              },
+              {
+                "lettre": "C",
+                "texte": "8 nombres séparés par des tirets"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 6,
+            "enonce": "Dans l’adresse `192.168.1.25`, le dernier octet est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "192"
+              },
+              {
+                "lettre": "B",
+                "texte": "168"
+              },
+              {
+                "lettre": "C",
+                "texte": "25"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 7,
+            "enonce": "Le masque réseau sert à :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "savoir quelle partie de l’adresse IP correspond au réseau"
+              },
+              {
+                "lettre": "B",
+                "texte": "cacher l’adresse IP de la machine"
+              },
+              {
+                "lettre": "C",
+                "texte": "donner un nom à la machine virtuelle"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 8,
+            "enonce": "La passerelle permet principalement de :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "supprimer une adresse IP"
+              },
+              {
+                "lettre": "B",
+                "texte": "sortir du réseau local"
+              },
+              {
+                "lettre": "C",
+                "texte": "créer une machine virtuelle"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 9,
+            "enonce": "Le DHCP permet à une machine de :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "recevoir automatiquement une adresse IP"
+              },
+              {
+                "lettre": "B",
+                "texte": "désactiver sa carte réseau"
+              },
+              {
+                "lettre": "C",
+                "texte": "changer de système d’exploitation"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 10,
+            "enonce": "Dans ce palier, les élèves doivent :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "configurer manuellement les adresses IP fixes"
+              },
+              {
+                "lettre": "B",
+                "texte": "supprimer les cartes réseau virtuelles"
+              },
+              {
+                "lettre": "C",
+                "texte": "observer les adresses IP sans les modifier manuellement"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 11,
+            "enonce": "Sous Debian 13 ou Zorin OS, la commande `hostname` permet de :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "tester l’accès à Internet"
+              },
+              {
+                "lettre": "B",
+                "texte": "afficher le nom de la machine"
+              },
+              {
+                "lettre": "C",
+                "texte": "afficher uniquement la passerelle"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 12,
+            "enonce": "Sous Debian 13 ou Zorin OS, la commande `hostname -I` permet de :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "afficher rapidement les adresses IP de la machine"
+              },
+              {
+                "lettre": "B",
+                "texte": "ouvrir VirtualBox"
+              },
+              {
+                "lettre": "C",
+                "texte": "changer le mode réseau"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 13,
+            "enonce": "Sous Windows 11 Pro, la commande qui affiche l’adresse IP, le masque et la passerelle est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "`hostname`"
+              },
+              {
+                "lettre": "B",
+                "texte": "`ping`"
+              },
+              {
+                "lettre": "C",
+                "texte": "`ipconfig`"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 14,
+            "enonce": "La commande `ping` sert à :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "tester si une machine répond sur le réseau"
+              },
+              {
+                "lettre": "B",
+                "texte": "installer une machine virtuelle"
+              },
+              {
+                "lettre": "C",
+                "texte": "modifier le masque réseau"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 15,
+            "enonce": "Sous Linux, pour envoyer seulement 4 tests ping, on utilise :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "`ping -n 4 adresse_ip`"
+              },
+              {
+                "lettre": "B",
+                "texte": "`ping -c 4 adresse_ip`"
+              },
+              {
+                "lettre": "C",
+                "texte": "`ipconfig /4 adresse_ip`"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 16,
+            "enonce": "Sous Windows 11 Pro, pour envoyer seulement 4 tests ping, on utilise :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "`ping -n 4 adresse_ip`"
+              },
+              {
+                "lettre": "B",
+                "texte": "`ping -c 4 adresse_ip`"
+              },
+              {
+                "lettre": "C",
+                "texte": "`hostname -I adresse_ip`"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 17,
+            "enonce": "En mode NAT, la machine virtuelle :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "est toujours visible directement sur le réseau réel"
+              },
+              {
+                "lettre": "B",
+                "texte": "n’a jamais d’adresse IP"
+              },
+              {
+                "lettre": "C",
+                "texte": "passe par VirtualBox et la machine hôte pour accéder au réseau"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 18,
+            "enonce": "En mode NAT, l’adresse IP de la machine virtuelle est généralement donnée par :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "le serveur DHCP de VirtualBox"
+              },
+              {
+                "lettre": "B",
+                "texte": "le testeur RJ45"
+              },
+              {
+                "lettre": "C",
+                "texte": "l’élève obligatoirement à la main"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 19,
+            "enonce": "En mode accès par pont, la machine virtuelle :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "est isolée de tout réseau"
+              },
+              {
+                "lettre": "B",
+                "texte": "est connectée au réseau réel comme une machine du réseau"
+              },
+              {
+                "lettre": "C",
+                "texte": "ne peut jamais recevoir d’adresse IP"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 20,
+            "enonce": "Si le mode accès par pont ne fonctionne pas dans la salle, la bonne attitude est de :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "modifier plusieurs paramètres au hasard"
+              },
+              {
+                "lettre": "B",
+                "texte": "désactiver la carte réseau de la machine hôte"
+              },
+              {
+                "lettre": "C",
+                "texte": "demander au professeur en expliquant le test réalisé et le résultat observé"
+              }
+            ],
+            "bonne_reponse": "C"
+          }
+        ]
+      },
+      "activite": {
+        "id": "activite-palier-3",
+        "fichier": "palier-3/eleve/activite-palier-3.md"
+      },
+      "checklist": {
+        "id": "checklist-palier-3",
+        "sections": [
+          {
+            "numero": 1,
+            "titre": "Validation du QCM",
+            "items": [
+              {
+                "libelle": "Le fichier de réponse du QCM existe"
+              },
+              {
+                "libelle": "Le format demandé est respecté"
+              },
+              {
+                "libelle": "Le QCM du palier 3 est validé à 100 %"
+              },
+              {
+                "libelle": "L’activité a commencé uniquement après validation du QCM"
+              }
+            ]
+          },
+          {
+            "numero": 2,
+            "titre": "Vérification du matériel et de l’environnement",
+            "items": [
+              {
+                "libelle": "Le poste hôte Debian 13 est disponible"
+              },
+              {
+                "libelle": "VirtualBox démarre correctement"
+              },
+              {
+                "libelle": "La VM Windows 11 Pro est présente"
+              },
+              {
+                "libelle": "La VM Zorin OS est présente"
+              },
+              {
+                "libelle": "Le dossier technique du palier 3 est accessible"
+              },
+              {
+                "libelle": "L’activité du palier 3 est accessible"
+              }
+            ]
+          },
+          {
+            "numero": 3,
+            "titre": "Fichier de résultats",
+            "items": [
+              {
+                "libelle": "Le fichier `palier3-resultats.txt` existe"
+              },
+              {
+                "libelle": "Le fichier contient les informations de Debian 13"
+              },
+              {
+                "libelle": "Le fichier contient les informations de Windows 11 Pro en mode NAT"
+              },
+              {
+                "libelle": "Le fichier contient les informations de Zorin OS en mode NAT"
+              },
+              {
+                "libelle": "Le fichier contient les résultats des tests réseau"
+              },
+              {
+                "libelle": "Le fichier contient une comparaison NAT / accès par pont"
+              },
+              {
+                "libelle": "Le fichier contient une conclusion courte"
+              }
+            ]
+          },
+          {
+            "numero": 4,
+            "titre": "Relevés réseau de la machine hôte Debian 13",
+            "items": [
+              {
+                "libelle": "Le nom de la machine hôte est relevé avec `hostname`"
+              },
+              {
+                "libelle": "L’adresse IP principale est relevée"
+              },
+              {
+                "libelle": "La passerelle est relevée avec `ip route`"
+              },
+              {
+                "libelle": "L’interface réseau utilisée est identifiée"
+              },
+              {
+                "libelle": "Les informations sont recopiées dans `palier3-resultats.txt`"
+              }
+            ]
+          },
+          {
+            "numero": 5,
+            "titre": "Configuration et relevés de Windows 11 Pro en mode NAT",
+            "items": [
+              {
+                "libelle": "La VM Windows 11 Pro est arrêtée proprement avant modification"
+              },
+              {
+                "libelle": "L’adaptateur 1 est activé"
+              },
+              {
+                "libelle": "Le mode réseau est réglé sur NAT"
+              },
+              {
+                "libelle": "La VM Windows 11 Pro démarre correctement"
+              },
+              {
+                "libelle": "Le nom de la machine est relevé avec `hostname`"
+              },
+              {
+                "libelle": "L’adresse IPv4 est relevée avec `ipconfig`"
+              },
+              {
+                "libelle": "Le masque est relevé avec `ipconfig`"
+              },
+              {
+                "libelle": "La passerelle par défaut est relevée avec `ipconfig`"
+              },
+              {
+                "libelle": "L’élève indique si l’adresse IP semble être dans le même réseau que Debian 13"
+              }
+            ]
+          },
+          {
+            "numero": 6,
+            "titre": "Test réseau de Windows 11 Pro en mode NAT",
+            "items": [
+              {
+                "libelle": "La commande `ping -n 4 8.8.8.8` est lancée"
+              },
+              {
+                "libelle": "Le nombre de paquets envoyés est relevé"
+              },
+              {
+                "libelle": "Le nombre de paquets reçus est relevé"
+              },
+              {
+                "libelle": "La perte de paquets est relevée"
+              },
+              {
+                "libelle": "Le résultat est noté dans `palier3-resultats.txt`"
+              },
+              {
+                "libelle": "L’élève sait dire si Windows reçoit une IP en mode NAT"
+              },
+              {
+                "libelle": "L’élève sait dire si Windows accède à une adresse extérieure"
+              },
+              {
+                "libelle": "L’élève sait dire que la VM n’est pas directement visible sur le réseau réel en NAT"
+              },
+              {
+                "libelle": "L’élève sait que l’adresse IP est généralement donnée par le DHCP VirtualBox en mode NAT"
+              }
+            ]
+          },
+          {
+            "numero": 7,
+            "titre": "Configuration et relevés de Zorin OS en mode NAT",
+            "items": [
+              {
+                "libelle": "La VM Zorin OS est arrêtée proprement avant modification"
+              },
+              {
+                "libelle": "L’adaptateur 1 est activé"
+              },
+              {
+                "libelle": "Le mode réseau est réglé sur NAT"
+              },
+              {
+                "libelle": "La VM Zorin OS démarre correctement"
+              },
+              {
+                "libelle": "Le nom de la machine est relevé avec `hostname`"
+              },
+              {
+                "libelle": "L’adresse IP est relevée avec `hostname -I` ou `ip a`"
+              },
+              {
+                "libelle": "La passerelle est relevée avec `ip route`"
+              },
+              {
+                "libelle": "L’interface réseau utilisée est identifiée"
+              },
+              {
+                "libelle": "L’élève indique si l’adresse IP semble être dans le même réseau que Debian 13"
+              }
+            ]
+          },
+          {
+            "numero": 8,
+            "titre": "Test réseau de Zorin OS en mode NAT",
+            "items": [
+              {
+                "libelle": "La commande `ping -c 4 8.8.8.8` est lancée"
+              },
+              {
+                "libelle": "Le nombre de paquets envoyés est relevé"
+              },
+              {
+                "libelle": "Le nombre de paquets reçus est relevé"
+              },
+              {
+                "libelle": "La perte de paquets est relevée"
+              },
+              {
+                "libelle": "Le résultat est noté dans `palier3-resultats.txt`"
+              },
+              {
+                "libelle": "L’élève sait dire si Zorin OS reçoit une IP en mode NAT"
+              },
+              {
+                "libelle": "L’élève sait dire si Zorin OS accède à une adresse extérieure"
+              },
+              {
+                "libelle": "L’élève sait expliquer l’intérêt principal du mode NAT"
+              }
+            ]
+          },
+          {
+            "numero": 9,
+            "titre": "Autorisation du mode accès par pont",
+            "items": [
+              {
+                "libelle": "L’élève a demandé l’autorisation avant d’utiliser l’accès par pont"
+              },
+              {
+                "libelle": "Le professeur a indiqué si le mode pont était autorisé"
+              },
+              {
+                "libelle": "La ou les VM à tester en mode pont sont clairement indiquées"
+              },
+              {
+                "libelle": "La carte réseau réelle à utiliser est clairement indiquée"
+              },
+              {
+                "libelle": "Si le mode pont n’est pas autorisé, l’élève l’a noté dans son fichier de résultats"
+              }
+            ]
+          },
+          {
+            "numero": 10,
+            "titre": "Test de Windows 11 Pro en mode accès par pont, si autorisé",
+            "items": [
+              {
+                "libelle": "La VM Windows 11 Pro est arrêtée proprement avant modification"
+              },
+              {
+                "libelle": "Le mode réseau est réglé sur accès par pont"
+              },
+              {
+                "libelle": "La bonne carte réseau réelle est sélectionnée"
+              },
+              {
+                "libelle": "L’adresse IPv4 est relevée avec `ipconfig`"
+              },
+              {
+                "libelle": "Le masque est relevé"
+              },
+              {
+                "libelle": "La passerelle par défaut est relevée"
+              },
+              {
+                "libelle": "Le ping vers la passerelle est réalisé"
+              },
+              {
+                "libelle": "L’élève indique si Windows est dans le même réseau que Debian 13"
+              },
+              {
+                "libelle": "L’élève indique si Windows semble intégré au réseau réel"
+              }
+            ]
+          },
+          {
+            "numero": 11,
+            "titre": "Test de Zorin OS en mode accès par pont, si autorisé",
+            "items": [
+              {
+                "libelle": "La VM Zorin OS est arrêtée proprement avant modification"
+              },
+              {
+                "libelle": "Le mode réseau est réglé sur accès par pont"
+              },
+              {
+                "libelle": "La bonne carte réseau réelle est sélectionnée"
+              },
+              {
+                "libelle": "L’adresse IP est relevée avec `hostname -I` ou `ip a`"
+              },
+              {
+                "libelle": "La passerelle est relevée avec `ip route`"
+              },
+              {
+                "libelle": "Le ping vers la passerelle est réalisé"
+              },
+              {
+                "libelle": "L’élève indique si Zorin OS est dans le même réseau que Debian 13"
+              },
+              {
+                "libelle": "L’élève indique si Zorin OS semble intégré au réseau réel"
+              }
+            ]
+          },
+          {
+            "numero": 12,
+            "titre": "Comparaison NAT et accès par pont",
+            "items": [
+              {
+                "libelle": "L’élève indique qui donne l’adresse IP en mode NAT"
+              },
+              {
+                "libelle": "L’élève indique qui donne l’adresse IP en mode accès par pont"
+              },
+              {
+                "libelle": "L’élève compare l’accès Internet dans les deux modes"
+              },
+              {
+                "libelle": "L’élève compare l’appartenance au réseau de Debian 13"
+              },
+              {
+                "libelle": "L’élève compare la visibilité de la VM sur le réseau réel"
+              },
+              {
+                "libelle": "L’élève indique que le mode pont demande l’autorisation du professeur"
+              },
+              {
+                "libelle": "La conclusion distingue clairement NAT et accès par pont"
+              }
+            ]
+          },
+          {
+            "numero": 13,
+            "titre": "Remise en état des machines virtuelles",
+            "items": [
+              {
+                "libelle": "Le mode réseau final demandé par le professeur est noté"
+              },
+              {
+                "libelle": "Windows 11 Pro est remis dans le mode réseau demandé"
+              },
+              {
+                "libelle": "Zorin OS est remis dans le mode réseau demandé"
+              },
+              {
+                "libelle": "Les machines virtuelles sont arrêtées proprement"
+              },
+              {
+                "libelle": "Les fenêtres des VM ne sont pas fermées brutalement"
+              }
+            ]
+          },
+          {
+            "numero": 14,
+            "titre": "Autonomie et méthode de travail",
+            "items": [
+              {
+                "libelle": "L’élève utilise le dossier technique pour chercher les informations"
+              },
+              {
+                "libelle": "L’élève ne demande pas directement la solution sans recherche préalable"
+              },
+              {
+                "libelle": "L’élève sait indiquer le chapitre consulté dans le dossier technique"
+              },
+              {
+                "libelle": "L’élève sait expliquer ce qu’il a fait"
+              },
+              {
+                "libelle": "L’élève sait expliquer ce qu’il a observé"
+              },
+              {
+                "libelle": "L’élève sait expliquer ce qui bloque en cas de problème"
+              }
+            ]
+          },
+          {
+            "numero": 15,
+            "titre": "Formulation d’une demande d’aide",
+            "items": [
+              {
+                "libelle": "L’élève indique l’étape concernée"
+              },
+              {
+                "libelle": "L’élève indique la machine concernée"
+              },
+              {
+                "libelle": "L’élève indique le mode réseau utilisé"
+              },
+              {
+                "libelle": "L’élève indique la commande lancée"
+              },
+              {
+                "libelle": "L’élève indique le résultat observé"
+              },
+              {
+                "libelle": "L’élève indique la partie du dossier technique consultée"
+              },
+              {
+                "libelle": "L’élève formule une demande précise"
+              }
+            ]
+          },
+          {
+            "numero": 16,
+            "titre": "Validation finale du palier 3",
+            "items": [
+              {
+                "libelle": "QCM validé à 100 %"
+              },
+              {
+                "libelle": "Fichier `palier3-resultats.txt` présent"
+              },
+              {
+                "libelle": "Relevés réseau de Debian 13 complets"
+              },
+              {
+                "libelle": "Tests Windows 11 Pro en mode NAT réalisés"
+              },
+              {
+                "libelle": "Tests Zorin OS en mode NAT réalisés"
+              },
+              {
+                "libelle": "Mode accès par pont testé ou mentionné comme non autorisé"
+              },
+              {
+                "libelle": "Comparaison NAT / accès par pont correcte"
+              },
+              {
+                "libelle": "Conclusion rédigée"
+              },
+              {
+                "libelle": "Machines virtuelles remises dans l’état demandé"
+              },
+              {
+                "libelle": "L’élève sait expliquer la différence entre NAT et accès par pont"
+              }
+            ]
+          }
+        ]
+      },
+      "images": [
+        {
+          "fichier": "palier-3/images/01-hote-et-machines-virtuelles.png",
+          "legende": "L’hôte et les machines virtuelles"
+        },
+        {
+          "fichier": "palier-3/images/02-cartes-reseau-reelle-et-virtuelles.png",
+          "legende": "Cartes réseau réelle et virtuelles"
+        },
+        {
+          "fichier": "palier-3/images/03-tests-mode-nat-et-pont.png",
+          "legende": "Tests des modes NAT et accès par pont"
+        },
+        {
+          "fichier": "palier-3/images/04-adresse-ip-masque-passerelle.png",
+          "legende": "Adresse IP, masque et passerelle"
+        },
+        {
+          "fichier": "palier-3/images/05-dhcp-adresse-ip-automatique.png",
+          "legende": "DHCP : adresse IP automatique"
+        },
+        {
+          "fichier": "palier-3/images/06-commandes-reseau-linux.png",
+          "legende": "Commandes réseau sous Linux"
+        },
+        {
+          "fichier": "palier-3/images/07-commandes-reseau-windows.png",
+          "legende": "Commandes réseau sous Windows"
+        },
+        {
+          "fichier": "palier-3/images/09-comprendre-mode-nat.png",
+          "legende": "Comprendre le mode NAT"
+        },
+        {
+          "fichier": "palier-3/images/10-tester-mode-nat-virtualbox.png",
+          "legende": "Tester le mode NAT dans VirtualBox"
+        },
+        {
+          "fichier": "palier-3/images/11-comprendre-mod-pont.png",
+          "legende": "Comprendre le mode accès par pont"
+        },
+        {
+          "fichier": "palier-3/images/13-comparaison-nat-pont.png",
+          "legende": "Comparaison NAT et accès par pont"
+        }
+      ],
+      "ressources": {
+        "eleve": [
+          "palier-3/eleve/qcm-palier-3.md",
+          "palier-3/eleve/activite-palier-3.md",
+          "palier-3/eleve/checklist-palier-3-validation.md"
+        ],
+        "professeur": [
+          "palier-3/professeur/qcm-palier-3-corrige.md"
+        ]
+      },
+      "source_ids": [
+        "starter-welcome-reseau"
+      ]
+    },
+    {
+      "id": "palier-4",
+      "ordre": 4,
+      "titre": "Configurer un réseau interne et diagnostiquer une communication",
+      "theme": "Réseau interne",
+      "production_attendue": "Un réseau interne fonctionnel et un diagnostic",
+      "dossier_technique": {
+        "fichier": "palier-4/dossier-technique.md"
+      },
+      "qcm": {
+        "id": "qcm-palier-4",
+        "format_reponse": "Une réponse par ligne dans un fichier texte nommé qcm-palier4.txt, sans espace entre le numéro et la lettre (exemple : 1a).",
+        "validation": {
+          "seuil": "100%"
+        },
+        "questions": [
+          {
+            "numero": 1,
+            "enonce": "Dans le palier 4, les machines principales à tester sont :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Windows 11 Pro et Zorin OS"
+              },
+              {
+                "lettre": "B",
+                "texte": "Debian 13 et la box Internet"
+              },
+              {
+                "lettre": "C",
+                "texte": "Debian 13 et le réseau réel de la salle"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 2,
+            "enonce": "Dans ce palier, Debian 13 sert principalement à :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "remplacer la machine virtuelle Windows"
+              },
+              {
+                "lettre": "B",
+                "texte": "lancer VirtualBox et modifier les paramètres des VM"
+              },
+              {
+                "lettre": "C",
+                "texte": "fournir automatiquement les adresses IP du réseau interne"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 3,
+            "enonce": "Le mode réseau étudié dans le palier 4 est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "NAT"
+              },
+              {
+                "lettre": "B",
+                "texte": "Accès par pont"
+              },
+              {
+                "lettre": "C",
+                "texte": "Réseau interne"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 4,
+            "enonce": "Le mode réseau interne permet principalement de :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "faire communiquer plusieurs VM dans un réseau isolé"
+              },
+              {
+                "lettre": "B",
+                "texte": "connecter directement une VM au réseau réel de la salle"
+              },
+              {
+                "lettre": "C",
+                "texte": "donner Internet automatiquement à toutes les VM"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 5,
+            "enonce": "En mode réseau interne, les machines virtuelles :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "sont toujours visibles sur le réseau réel"
+              },
+              {
+                "lettre": "B",
+                "texte": "peuvent communiquer entre elles si elles sont correctement configurées"
+              },
+              {
+                "lettre": "C",
+                "texte": "utilisent obligatoirement le Wi-Fi de la salle"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 6,
+            "enonce": "Dans ce palier, le nom du réseau interne à utiliser est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "reseau-internet"
+              },
+              {
+                "lettre": "B",
+                "texte": "reseau-windows"
+              },
+              {
+                "lettre": "C",
+                "texte": "reseau-2tne"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 7,
+            "enonce": "Si les deux VM n’utilisent pas exactement le même nom de réseau interne :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "elles ne pourront pas communiquer entre elles"
+              },
+              {
+                "lettre": "B",
+                "texte": "elles auront automatiquement accès à Internet"
+              },
+              {
+                "lettre": "C",
+                "texte": "Windows corrigera automatiquement le problème"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 8,
+            "enonce": "Pourquoi utilise-t-on des adresses IP fixes dans ce palier ?",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Parce que le mode réseau interne simple ne fournit généralement pas d’adresse automatiquement"
+              },
+              {
+                "lettre": "B",
+                "texte": "Parce que le mode NAT est encore utilisé"
+              },
+              {
+                "lettre": "C",
+                "texte": "Parce que le pare-feu Windows impose toujours une IP fixe"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 9,
+            "enonce": "L’adresse IP attendue pour Zorin OS est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "192.168.10.20"
+              },
+              {
+                "lettre": "B",
+                "texte": "192.168.10.10"
+              },
+              {
+                "lettre": "C",
+                "texte": "192.168.20.10"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 10,
+            "enonce": "L’adresse IP attendue pour Windows 11 Pro est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "192.168.10.20"
+              },
+              {
+                "lettre": "B",
+                "texte": "192.168.10.10"
+              },
+              {
+                "lettre": "C",
+                "texte": "10.0.2.15"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 11,
+            "enonce": "Le masque réseau utilisé dans ce palier est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "255.255.0.0"
+              },
+              {
+                "lettre": "B",
+                "texte": "255.0.0.0"
+              },
+              {
+                "lettre": "C",
+                "texte": "255.255.255.0"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 12,
+            "enonce": "Avec le masque `255.255.255.0`, les adresses `192.168.10.10` et `192.168.10.20` appartiennent :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "au même réseau logique"
+              },
+              {
+                "lettre": "B",
+                "texte": "à deux réseaux logiques différents"
+              },
+              {
+                "lettre": "C",
+                "texte": "à Internet directement"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 13,
+            "enonce": "Avec le masque `255.255.255.0`, les adresses `192.168.10.10` et `192.168.20.20` appartiennent :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "au même réseau logique"
+              },
+              {
+                "lettre": "B",
+                "texte": "à deux réseaux logiques différents"
+              },
+              {
+                "lettre": "C",
+                "texte": "au même poste informatique"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 14,
+            "enonce": "Depuis Zorin OS, la commande adaptée pour tester Windows 11 Pro avec 4 paquets est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "`ping -c 4 192.168.10.20`"
+              },
+              {
+                "lettre": "B",
+                "texte": "`ping -n 4 192.168.10.20`"
+              },
+              {
+                "lettre": "C",
+                "texte": "`ipconfig 192.168.10.20`"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 15,
+            "enonce": "Depuis Windows 11 Pro, la commande adaptée pour tester Zorin OS avec 4 paquets est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "`hostname -I 192.168.10.10`"
+              },
+              {
+                "lettre": "B",
+                "texte": "`ping -c 4 192.168.10.10`"
+              },
+              {
+                "lettre": "C",
+                "texte": "`ping -n 4 192.168.10.10`"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 16,
+            "enonce": "Si le ping de Zorin OS vers Windows 11 Pro échoue, alors que les IP et le réseau interne sont corrects, une cause possible est :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "le pare-feu Windows bloque les réponses au ping"
+              },
+              {
+                "lettre": "B",
+                "texte": "Zorin OS est forcément mal installé"
+              },
+              {
+                "lettre": "C",
+                "texte": "le câble RJ45 de la salle est forcément débranché"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 17,
+            "enonce": "Que faut-il faire avant de désactiver ou modifier le pare-feu Windows ?",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "Redémarrer Debian 13 sans prévenir"
+              },
+              {
+                "lettre": "B",
+                "texte": "Demander au professeur"
+              },
+              {
+                "lettre": "C",
+                "texte": "Supprimer la VM Windows"
+              }
+            ],
+            "bonne_reponse": "B"
+          },
+          {
+            "numero": 18,
+            "enonce": "Dans la méthode de diagnostic, il faut d’abord vérifier :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "que les deux VM sont démarrées et que les cartes réseau virtuelles sont activées"
+              },
+              {
+                "lettre": "B",
+                "texte": "le prix de la licence Windows"
+              },
+              {
+                "lettre": "C",
+                "texte": "la couleur du thème graphique de Zorin OS"
+              }
+            ],
+            "bonne_reponse": "A"
+          },
+          {
+            "numero": 19,
+            "enonce": "Une bonne demande d’aide doit préciser :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "seulement que ça ne marche pas"
+              },
+              {
+                "lettre": "B",
+                "texte": "uniquement le prénom de l’élève"
+              },
+              {
+                "lettre": "C",
+                "texte": "l’étape, la machine, l’adresse IP, la commande lancée et le résultat obtenu"
+              }
+            ],
+            "bonne_reponse": "C"
+          },
+          {
+            "numero": 20,
+            "enonce": "Pour convertir 192 en binaire, on utilise :",
+            "choix": [
+              {
+                "lettre": "A",
+                "texte": "128 + 32 + 16"
+              },
+              {
+                "lettre": "B",
+                "texte": "128 + 64"
+              },
+              {
+                "lettre": "C",
+                "texte": "64 + 32 + 8"
+              }
+            ],
+            "bonne_reponse": "B"
+          }
+        ]
+      },
+      "activite": {
+        "id": "activite-palier-4",
+        "fichier": "palier-4/eleve/activite-palier-4.md"
+      },
+      "checklist": {
+        "id": "checklist-palier-4",
+        "sections": [
+          {
+            "numero": 1,
+            "titre": "Validation du QCM",
+            "items": [
+              {
+                "libelle": "Le fichier `qcm-palier4.txt` existe"
+              },
+              {
+                "libelle": "Le format demandé est respecté"
+              },
+              {
+                "libelle": "Le QCM contient 20 réponses"
+              },
+              {
+                "libelle": "Le QCM est validé à 100 %"
+              },
+              {
+                "libelle": "L’élève a corrigé les erreurs éventuelles avant de commencer l’activité"
+              }
+            ]
+          },
+          {
+            "numero": 2,
+            "titre": "Préparation des machines virtuelles",
+            "items": [
+              {
+                "libelle": "La VM Windows 11 Pro est présente"
+              },
+              {
+                "libelle": "La VM Zorin OS est présente"
+              },
+              {
+                "libelle": "Les deux VM ont été arrêtées proprement avant modification réseau"
+              },
+              {
+                "libelle": "L’élève sait expliquer le rôle de la machine hôte Debian 13"
+              }
+            ]
+          },
+          {
+            "numero": 3,
+            "titre": "Configuration VirtualBox",
+            "items": [
+              {
+                "libelle": "Windows 11 Pro est configurée en réseau interne"
+              },
+              {
+                "libelle": "Zorin OS est configurée en réseau interne"
+              },
+              {
+                "libelle": "Le nom du réseau interne Windows est `reseau-2tne`"
+              },
+              {
+                "libelle": "Le nom du réseau interne Zorin OS est `reseau-2tne`"
+              },
+              {
+                "libelle": "Les deux VM utilisent exactement le même nom de réseau interne"
+              },
+              {
+                "libelle": "Les cartes réseau virtuelles sont activées"
+              }
+            ]
+          },
+          {
+            "numero": 4,
+            "titre": "Configuration IP de Zorin OS",
+            "items": [
+              {
+                "libelle": "Zorin OS utilise l’adresse IP `192.168.10.10`"
+              },
+              {
+                "libelle": "Zorin OS utilise le masque `255.255.255.0` ou `/24`"
+              },
+              {
+                "libelle": "La passerelle est vide ou non utilisée"
+              },
+              {
+                "libelle": "Le DNS est vide ou non utilisé"
+              },
+              {
+                "libelle": "L’élève sait retrouver l’adresse avec une commande Linux"
+              }
+            ]
+          },
+          {
+            "numero": 5,
+            "titre": "Configuration IP de Windows 11 Pro",
+            "items": [
+              {
+                "libelle": "Windows 11 Pro utilise l’adresse IP `192.168.10.20`"
+              },
+              {
+                "libelle": "Windows 11 Pro utilise le masque `255.255.255.0`"
+              },
+              {
+                "libelle": "La passerelle est vide ou non utilisée"
+              },
+              {
+                "libelle": "Le DNS est vide ou non utilisé"
+              },
+              {
+                "libelle": "L’élève sait retrouver l’adresse avec `ipconfig`"
+              }
+            ]
+          },
+          {
+            "numero": 6,
+            "titre": "Vérification du même réseau logique",
+            "items": [
+              {
+                "libelle": "Zorin OS appartient au réseau `192.168.10.0`"
+              },
+              {
+                "libelle": "Windows 11 Pro appartient au réseau `192.168.10.0`"
+              },
+              {
+                "libelle": "Les deux VM ont des adresses IP différentes"
+              },
+              {
+                "libelle": "L’élève sait expliquer pourquoi les deux VM sont dans le même réseau logique"
+              }
+            ]
+          },
+          {
+            "numero": 7,
+            "titre": "Tests de communication",
+            "items": [
+              {
+                "libelle": "Le test de Zorin OS vers Windows 11 Pro a été réalisé"
+              },
+              {
+                "libelle": "La commande Linux utilisée est correcte"
+              },
+              {
+                "libelle": "Le test de Windows 11 Pro vers Zorin OS a été réalisé"
+              },
+              {
+                "libelle": "La commande Windows utilisée est correcte"
+              },
+              {
+                "libelle": "Les résultats des tests sont notés"
+              },
+              {
+                "libelle": "L’élève sait expliquer le résultat obtenu"
+              }
+            ]
+          },
+          {
+            "numero": 8,
+            "titre": "Diagnostic et pare-feu Windows",
+            "items": [
+              {
+                "libelle": "L’élève ne modifie pas les paramètres au hasard"
+              },
+              {
+                "libelle": "L’élève suit l’ordre de diagnostic du dossier technique"
+              },
+              {
+                "libelle": "L’élève tient compte du pare-feu Windows si le ping vers Windows échoue"
+              },
+              {
+                "libelle": "L’élève ne désactive pas le pare-feu Windows sans consigne"
+              },
+              {
+                "libelle": "L’élève formule une demande d’aide précise si nécessaire"
+              }
+            ]
+          },
+          {
+            "numero": 9,
+            "titre": "Traces attendues",
+            "items": [
+              {
+                "libelle": "Le fichier `palier4-resultats.txt` existe"
+              },
+              {
+                "libelle": "Les relevés IP sont présents"
+              },
+              {
+                "libelle": "Les résultats des tests sont présents"
+              },
+              {
+                "libelle": "La conclusion est présente"
+              },
+              {
+                "libelle": "Les informations sont lisibles et exploitables"
+              }
+            ]
+          },
+          {
+            "numero": 10,
+            "titre": "Autonomie et méthode",
+            "items": [
+              {
+                "libelle": "L’élève utilise le dossier technique"
+              },
+              {
+                "libelle": "L’élève sait retrouver l’information utile"
+              },
+              {
+                "libelle": "L’élève sait expliquer ce qu’il a fait"
+              },
+              {
+                "libelle": "L’élève sait corriger une erreur simple"
+              },
+              {
+                "libelle": "L’élève sait présenter son résultat"
+              }
+            ]
+          },
+          {
+            "numero": 11,
+            "titre": "Validation finale",
+            "items": [
+              {
+                "libelle": "Le palier 4 est terminé"
+              },
+              {
+                "libelle": "Le travail peut être présenté"
+              },
+              {
+                "libelle": "Le palier suivant peut être commencé"
+              }
+            ]
+          }
+        ]
+      },
+      "images": [
+        {
+          "fichier": "palier-4/images/01-machines-utilisees.png",
+          "legende": "Les machines utilisées dans le palier 4"
+        },
+        {
+          "fichier": "palier-4/images/03-role-reseau-interne.png",
+          "legende": "Le rôle du mode réseau interne"
+        },
+        {
+          "fichier": "palier-4/images/05-adresse-ip-meme-reseau-logique.png",
+          "legende": "Adresses IP appartenant au même réseau logique"
+        },
+        {
+          "fichier": "palier-4/images/10-pare-feu-windows-et-ping.png",
+          "legende": "Le pare-feu Windows et le ping"
+        },
+        {
+          "fichier": "palier-4/images/14-convertir-octet-binaire.png",
+          "legende": "Convertir un octet en binaire"
+        },
+        {
+          "fichier": "palier-4/images/15-calculer-reseau-adresse-ip.png",
+          "legende": "Calculer le réseau d’une adresse IP"
+        }
+      ],
+      "ressources": {
+        "eleve": [
+          "palier-4/eleve/qcm-palier-4.md",
+          "palier-4/eleve/activite-palier-4.md",
+          "palier-4/eleve/checklist-palier-4-validation.md"
+        ],
+        "professeur": [
+          "palier-4/professeur/qcm-palier-4-corrige.md"
+        ]
+      },
+      "source_ids": [
+        "starter-welcome-reseau"
+      ]
+    }
+  ]
+}
