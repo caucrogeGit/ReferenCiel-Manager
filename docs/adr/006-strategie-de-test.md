@@ -46,7 +46,7 @@ runtime reste 100% Forge, ADR-003).
   numérotation ADR contiguë). Ils **dogfoodent la discipline** documentaire.
 - `tests/` (racine) — tests de fumée (registre d'opt-ins, `forge project:check`).
 - `tests/**/` par domaine métier au fil des tickets (avec `FakeRequest` pour les
-  contrôleurs, backend SQLite pour les tests `db`).
+  contrôleurs, une vraie MariaDB pour les tests `db`).
 
 ### Politique
 
@@ -54,8 +54,9 @@ runtime reste 100% Forge, ADR-003).
   **`forge project:check`** font partie de la validation **avant de livrer**.
 - Un nouveau comportement métier **arrive avec ses tests** (charte Forge : tester
   avant d'élargir).
-- Les tests `db` valident la persistance réelle (SQLite) dès qu'elle existe ; ils
-  ne sont pas simulés.
+- Les tests `db` valident la persistance réelle (MariaDB) dès qu'elle existe ; ils
+  exigent un serveur (sautés en local sans base, requis en CI via
+  `FORGE_REQUIRE_DB=1`, modèle Forge) et ne sont pas simulés.
 
 ## Conséquences
 
@@ -75,4 +76,4 @@ runtime reste 100% Forge, ADR-003).
 
 - Épingler/installer `forge-mvc-testing` (dev) ; toute friction d'installation est
   **révélée** (rôle de banc d'essai) plutôt que contournée.
-- Ajouter les tests `db` à l'arrivée du backend SQLite (ADR-004 → ticket 07).
+- Ajouter les tests `db` à l'arrivée du backend MariaDB (ADR-004 → ticket 07).

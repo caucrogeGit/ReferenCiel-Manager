@@ -63,7 +63,7 @@ nav:
       - ADR-001 — Adopter Forge: adr/001-adopter-forge.md
       - ADR-002 — JSON canonique & persistance: adr/002-json-canonique-et-persistance-applicative.md
       - ADR-003 — Architecture Forge: adr/003-architecture-applicative-forge.md
-      - ADR-004 — Backend SQLite: adr/004-backend-base-de-donnees-sqlite.md
+      - ADR-004 — Backend MariaDB: adr/004-backend-base-de-donnees-mariadb.md
       - ADR-005 — Qualité, doc mkdocs & banc d'essai: adr/005-standard-qualite-documentation-mkdocs-banc-essai.md
       - ADR-006 — Stratégie de test: adr/006-strategie-de-test.md
       - ADR-007 — Typage Python strict: adr/007-typage-python-strict.md

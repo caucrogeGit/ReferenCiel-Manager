@@ -40,8 +40,8 @@ Base de données         = vérité applicative en fonctionnement
 
 - **Framework** : 100% Forge (structure `mvc/`, CLI `forge`, contrats d'entité,
   opt-ins). Voir [ADR-003](adr/003-architecture-applicative-forge.md).
-- **Base de données** : SQLite (proposé). Voir
-  [ADR-004](adr/004-backend-base-de-donnees-sqlite.md).
+- **Base de données** : MariaDB (opt-in installé par le porteur le moment venu).
+  Voir [ADR-004](adr/004-backend-base-de-donnees-mariadb.md).
 - **Trajectoire** : [roadmap](roadmap/roadmap-referenciel-manager.md) et
   [tickets](tickets/README.md).
 - **Sources & JSON canonique** : [spécification](specs/json-canonique/README.md),

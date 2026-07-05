@@ -23,7 +23,7 @@ python -m pytest -m db      # intégration BDD (nécessite un backend installé)
 - `tests/meta/` — tests méta (ex. toute page doc est dans la nav mkdocs).
 - `tests/` — tests de fumée (registre d'opt-ins, `forge project:check`).
 - Tests métier par domaine à venir (avec `FakeRequest` de `forge-mvc-testing`
-  pour les contrôleurs, SQLite pour les tests `db`).
+  pour les contrôleurs, une vraie MariaDB pour les tests `db`).
 
 ## Validation avant de livrer
 
