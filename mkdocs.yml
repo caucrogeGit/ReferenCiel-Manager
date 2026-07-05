@@ -67,6 +67,7 @@ nav:
       - ADR-005 — Qualité, doc mkdocs & banc d'essai: adr/005-standard-qualite-documentation-mkdocs-banc-essai.md
       - ADR-006 — Stratégie de test: adr/006-strategie-de-test.md
       - ADR-007 — Typage Python strict: adr/007-typage-python-strict.md
+      - ADR-008 — Import JSON canonique par upload admin: adr/008-import-json-canonique-par-upload-admin.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
