@@ -1,0 +1,17 @@
+# Dépendances de développement du projet.
+# Standard aligné sur Forge (ADR-005/006). Runtime de l'app = requirements.txt (100% Forge).
+-r requirements.txt
+-r requirements-docs.txt
+
+# Tests & qualité
+pytest>=8.0
+ruff>=0.4
+pyright>=1.1.400
+types-PyYAML>=6.0  # stubs pour le typage strict des tests méta (lecture mkdocs.yml)
+pip-audit>=2.0
+bandit>=1.7
+
+# Infrastructure de test partagée Forge (ADR-041) : FakeRequest + plugin pytest.
+# Épinglée au MÊME commit que forge-mvc (voir requirements.txt) pour garantir la
+# compatibilité de version. Outil de développement — jamais importé à l'exécution.
+forge-mvc-testing @ git+https://github.com/caucrogeGit/Forge.git@49c636ea91abe3391d8397773a07316b113d5ebb#subdirectory=packages/forge-mvc-testing
