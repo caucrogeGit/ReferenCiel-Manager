@@ -86,7 +86,7 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 05 | Dictionnaire de données du socle scolaire (AnneeScolaire, NiveauClasse, Classe, Groupe, Eleve `user_id?`, Professeur, InscriptionEleve, AffectationProfesseurClasse) | A | À faire |
 | 06 | **ADR-003 — Architecture Forge (mvc/ vs app/, contrats, migrations, services, repositories)** — prérequis du code | — | Terminé (Accepté) |
 | 07 | Tranche verticale Bloc A (walking skeleton) : contrats d'entité → migrations Forge → accès données → vue professeur minimale listant classes/élèves (derrière l'auth Forge, sans RBAC/MFA) | A | À faire |
-| 08 | Dictionnaire de données Référentiel (PôleActivité, ActivitéProfessionnelle, TâcheProfessionnelle, RésultatAttendu, Compétence, CritèreObservable, IndicateurRéussite) | Référentiel | À faire |
+| 08 | [Dictionnaire de données Référentiel](../specs/data-dictionary/dictionnaire-referentiel-niveau-classe.md) (Formation, NiveauClasse, PôleActivité, ActivitéProfessionnelle + tâches/résultats, Compétence + connaissances/critères, Indicateur, FamilleCompétence, Source, relations, règles) | Référentiel | Terminé |
 | 09 | Modèle relationnel + contrats d'entité référentiel | Référentiel | À faire |
 | 10 | Migrations référentiel (via `forge`) | Référentiel | À faire |
 | 11 | Importeur JSON canonique → base référentielle | Référentiel | À faire |
