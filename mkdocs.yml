@@ -70,6 +70,7 @@ nav:
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
+      - Ticket 02 — Contrat JSON canonique: tickets/ticket-02-contrat-json-canonique.md
   - Spécifications:
       - JSON canonique: specs/json-canonique/README.md
       - Registre des sources: specs/json-canonique/sources/README.md
