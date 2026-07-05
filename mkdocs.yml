@@ -73,6 +73,7 @@ nav:
       - Ticket 02 — Contrat JSON canonique: tickets/ticket-02-contrat-json-canonique.md
   - Spécifications:
       - JSON canonique: specs/json-canonique/README.md
+      - Contrat — référentiel niveau-classe: specs/json-canonique/contrat-referentiel-niveau-classe.md
       - Registre des sources: specs/json-canonique/sources/README.md
       - Trace — JSON canonique CIEL 2TNE: specs/json-canonique/traces/trace-creation-json-canonique-ciel-2tne.md
       - Capitalisation — fichier .scpro CPRO: specs/json-canonique/traces/capitalisation-fichier-scpro-cpro.md
