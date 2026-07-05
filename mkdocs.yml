@@ -74,6 +74,7 @@ nav:
       - JSON canonique: specs/json-canonique/README.md
       - Registre des sources: specs/json-canonique/sources/README.md
       - Trace — JSON canonique CIEL 2TNE: specs/json-canonique/traces/trace-creation-json-canonique-ciel-2tne.md
+      - Capitalisation — fichier .scpro CPRO: specs/json-canonique/traces/capitalisation-fichier-scpro-cpro.md
   - Banc d'essai (retours Forge):
       - Vue d'ensemble: banc-essai/README.md
       - Retour 001 — Conformité du squelette: banc-essai/retour-001-conformite-squelette.md
