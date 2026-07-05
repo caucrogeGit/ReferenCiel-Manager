@@ -105,6 +105,21 @@ avec mkdocs (Material) et que la validation projet mentionne `mkdocs build
 `mkdocs.yml` (Material, fr), `requirements-docs.txt` et un `docs/index.md`, pour
 démarrer une doc au standard sans l'imposer.
 
+### F7 — Suggestion (traçabilité) : intégrer les ADR nécessaires au squelette
+
+Le squelette livre déjà `docs/adr/001-adopter-forge.md` (via `forge agents:init`).
+Puisqu'il incarne des standards (typage strict, config qualité, tests, doc), il
+devrait aussi livrer les **décisions qui les fondent** — soit des **ADR de
+squelette** prêts à l'emploi (typage strict, stratégie de test, documentation,
+config qualité), soit des **pointeurs explicites vers les ADR de Forge**
+correspondants : ADR-024 (projet nu), ADR-036 (typage strict), ADR-041 (test
+partagé), ADR-054/060 (backend), ADR-061 (registre opt-ins).
+
+**But** — un projet démarre avec le *pourquoi* à côté du *quoi*, cohérent avec la
+discipline ADR de Forge, au lieu que chaque projet réécrive ces ADR à la main.
+C'est précisément ce que RéférenCiel Manager a dû faire (ADR-003 à 007) : une
+partie de ces décisions est récurrente et gagnerait à être livrée avec le squelette.
+
 ### F6 — À vérifier : `forge opt-in:enable` préserve-t-il le typage manuel ?
 
 `optins/registry.py` est géré par `forge opt-in:enable`/`disable` (marqueurs
