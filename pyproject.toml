@@ -1,0 +1,34 @@
+# Configuration d'outillage du projet (pas un paquet distribuable).
+# Standard aligné sur Forge : typage statique strict (ADR-007 / Forge ADR-036).
+
+[tool.pyright]
+# Le code que NOUS produisons est typé strict, par fichier (`# pyright: strict`),
+# comme dans Forge. Le squelette généré par Forge (app.py, mvc/, optins/) n'est
+# pas inclus ici : il relève du framework (banc d'essai), pas de notre code.
+# `include` s'étend au fil des tickets à chaque fichier applicatif manuel écrit.
+pythonVersion = "3.12"
+venvPath = "."
+venv = ".venv"
+include = [
+  "conftest.py",
+  "tests",
+]
+exclude = [
+  "**/__pycache__",
+  ".venv",
+  "site",
+]
+
+[tool.ruff]
+# Aligné sur la config ruff de Forge (même standard, y compris pour le squelette généré).
+target-version = "py312"
+line-length = 120
+exclude = [".venv", "site"]
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = [
+  "E501",  # line-too-long — géré séparément
+  "E741",  # ambiguous-variable-name — intentionnel
+  "E402",  # module-import-not-at-top — intentionnel dans app.py / scripts générés
+]
