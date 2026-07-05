@@ -10,6 +10,16 @@ Accepté (2026-07-05).
 > structure *physique* étant le `mvc/` de Forge. C'est le prérequis architectural
 > de tout code métier (ticket de tranche verticale Bloc A et suite du tunnel).
 
+## Règle absolue : 100% Forge
+
+RéférenCiel Manager part d'un **squelette généré par Forge** (dépôt
+`git@github.com:caucrogeGit/ReferenCiel-Manager.git`). **Tout** le développement
+applicatif reste **100% dans le framework Forge** : rien ne se fait en dehors de la
+CLI `forge`, des contrats d'entité, des conventions `mvc/` et des opt-ins
+`forge-mvc-*`. Aucune couche, dépendance ou pattern externe ne vient doubler ce que
+Forge fournit. Toute exception à cette règle est une **décision structurante** qui
+exige un nouvel ADR ; elle n'est jamais prise par dérive.
+
 ## Date
 
 2026-07-05
