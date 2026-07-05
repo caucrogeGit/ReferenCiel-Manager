@@ -153,3 +153,18 @@ maintenance de produits électroniques », activité **E1**, compétences
 - Le contrat du type **`starter_welcome`** (ticket dédié) — seule l'enveloppe
   commune (§2-§3) est posée pour l'accueillir.
 - Le dictionnaire de données, les entités Forge, le SQL (tickets ultérieurs).
+
+## 9. Schéma de validation (ticket 04)
+
+Ce contrat est outillé par un schéma JSON (JSON Schema 2020-12) :
+[`schemas/schema-json-canonique-referentiel-niveau-classe.json`](schemas/schema-json-canonique-referentiel-niveau-classe.json).
+
+C'est la **porte de validation des uploads** (ADR-008). Répartition :
+
+- **Validé par le schéma** : présence des familles obligatoires, types, énumérations
+  (`type`, `source_type`, `point_entree`, `origine`), motifs des codes
+  (`E1`/`R2`/`D3`, `C0x`, `CCx`), semver, niveaux taxonomiques 1–4. Les champs
+  additionnels sont tolérés (« peut être plus riche »).
+- **Validé par l'importeur** (hors schéma) : **unicité** des `id`/`code` dans chaque
+  collection et **résolution** des références de `relations` vers des éléments
+  existants — invariants sémantiques non exprimables en JSON Schema pur.

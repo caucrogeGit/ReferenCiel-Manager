@@ -78,8 +78,8 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 00 | Installer le cadre projet dans le squelette Forge | — | Terminé |
 | 01 | Installer l'arborescence des sources et la traçabilité (registre + trace de provenance ; référentiels officiels Bac Pro CIEL, Vademecum TNE 2ⁿᵈᵉ, BTS CIEL enregistrés) | Sources | En cours |
 | 02 | [Contrat du JSON canonique](ticket-02-contrat-json-canonique.md) → [spécification](../specs/json-canonique/contrat-referentiel-niveau-classe.md) : enveloppe commune + référentiel niveau-classe **à deux couches** (famille TNE CC1–CC9 + cible CIEL C01–C11 + mapping) | Sources | Terminé |
-| 03 | Produire le JSON canonique CIEL 2TNE minimal | Sources | À faire |
-| 04 | Définir le schéma JSON du référentiel niveau-classe (`docs/specs/json-canonique/schemas/`) | Sources | À faire |
+| 04 | [Schéma JSON](../specs/json-canonique/schemas/schema-json-canonique-referentiel-niveau-classe.json) du référentiel niveau-classe (porte de validation des uploads, ADR-008) | Sources | Terminé |
+| 03 | Produire un **exemple** CIEL 2TNE conforme (fixture d'upload et de test, ADR-008) | Sources | À faire |
 | 05 | Dictionnaire de données du socle scolaire (AnneeScolaire, NiveauClasse, Classe, Groupe, Eleve `user_id?`, Professeur, InscriptionEleve, AffectationProfesseurClasse) | A | À faire |
 | 06 | **ADR-003 — Architecture Forge (mvc/ vs app/, contrats, migrations, services, repositories)** — prérequis du code | — | Terminé (Accepté) |
 | 07 | Tranche verticale Bloc A (walking skeleton) : contrats d'entité → migrations Forge → accès données → vue professeur minimale listant classes/élèves (derrière l'auth Forge, sans RBAC/MFA) | A | À faire |

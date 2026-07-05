@@ -2,11 +2,11 @@
 
 ## Statut
 
-Proposé.
+Accepté (2026-07-06).
 
-> Décision structurante en attente de validation. Elle fixe **comment un niveau-classe
-> entre dans l'application** : par upload d'un JSON canonique dans l'espace admin,
-> pas en dur dans le dépôt.
+> Décision validée par le porteur : **un niveau-classe entre dans l'application par
+> upload d'un JSON canonique dans l'espace admin** (importeur générique), pas en dur
+> dans le dépôt. Élève le schéma (ticket 04) au rang de priorité.
 
 ## Date
 
