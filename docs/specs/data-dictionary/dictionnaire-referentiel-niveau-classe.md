@@ -185,8 +185,9 @@ Provenance d'un référentiel (modèle §8 de la capitalisation).
 
 ## Portée
 
-Ce dictionnaire couvre le **domaine référentiel niveau-classe**. À venir (mêmes
-principes) : le dictionnaire du **socle scolaire** (AnneeScolaire, Classe, Eleve,
-Professeur, InscriptionEleve…) et celui du **Starter Welcome** (Parcours, Palier,
+Ce dictionnaire couvre le **domaine référentiel niveau-classe**. Voir aussi, mêmes
+principes : le [dictionnaire du **socle scolaire**](dictionnaire-socle-scolaire.md)
+(AnneeScolaire, Classe, Eleve, Professeur, InscriptionEleve…) et celui du
+[**Starter Welcome**](dictionnaire-starter-welcome.md) (StarterWelcome, Palier,
 QCM, Checklist…). Les contrats d'entité Forge et migrations en découlent (tickets de
 programmation, à faire ensemble).

@@ -92,6 +92,7 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 11 | Importeur JSON canonique → base référentielle | Référentiel | À faire |
 | 12 | Dictionnaire de données `Scenario` | Scénario | À faire |
 | 13 | Chaîne `Scenario` (contrat, migration, service, interface prof minimale, tests de persistance) | Scénario | À faire |
+| 13b | [Dictionnaire de données Starter Welcome](../specs/data-dictionary/dictionnaire-starter-welcome.md) (StarterWelcome, Palier, QCM/Question/Choix, Activite, Checklist/Section/Item, Image, Ressource ; contenu par référence ; lien `Palier ↔ Competence` optionnel) | Starter | Terminé |
 | 14 | `StarterWelcome` (+ `VersionStarter`) | Starter | À faire |
 | 15 | `Parcours` + `VersionParcours` | Parcours | À faire |
 | 16 | `Palier` (découpage du parcours) — ticket explicite | Parcours | À faire |
