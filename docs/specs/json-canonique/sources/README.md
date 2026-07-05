@@ -101,8 +101,8 @@ conserve une trace de provenance.
   natif ; QCM/activité/checklist/corrigé des paliers 1-2 **transcrits des PDF**
   (originaux conservés) ; 33 images inventoriées.
 - **Anomalies signalées** (voir MANIFESTE) : corrigés P1+P2 groupés dans le PDF
-  (dégroupés côté markdown) ; palier 1 sans checklist (seul manque réel restant) ;
-  format de checklist divergent P2 vs P3.
+  (dégroupés côté markdown) ; checklist du palier 1 absente de la source →
+  **générée** (contenu à valider, ≠ source) ; format de checklist divergent P2 vs P3.
 
 ## Vocabulaire (confirmé par les sources)
 

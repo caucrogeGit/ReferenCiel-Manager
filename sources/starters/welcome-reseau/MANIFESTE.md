@@ -65,11 +65,12 @@ de progression** (gate QCM 100 %, ordre, validation professeur).
 | Dossier technique (.md natif) | ✅ | ✅ | ✅ | ✅ |
 | QCM | 🆕 transcrit | 🆕 transcrit | ✅ .md | ✅ .md |
 | Activité | 🆕 transcrit | 🆕 transcrit | ✅ .md | ✅ .md |
-| Checklist validation | ❌ **absente** | 🆕 transcrit | ✅ .md | ✅ .md |
+| Checklist validation | ✍️ générée | 🆕 transcrit | ✅ .md | ✅ .md |
 | Corrigé QCM (professeur) | 🆕 transcrit | ✅ dégroupé | ✅ .md | ✅ .md |
 
-- ✅ déjà en markdown · 🆕 transcrit du PDF (paliers 1-2) · les PDF originaux sont
-  **conservés** à côté des `.md` (traçabilité).
+- ✅ déjà en markdown · 🆕 transcrit du PDF (paliers 1-2) · ✍️ **contenu généré**
+  (≠ source, à valider par le professeur) · les PDF originaux sont **conservés** à
+  côté des `.md` (traçabilité).
 
 ### Anomalies de source à signaler (retour au professeur)
 
@@ -80,8 +81,10 @@ Constatées à la transcription :
   `palier-1/professeur/qcm-palier-1-corrige.md` (P1) et
   `palier-2/professeur/qcm-palier-2-corrige.md` (P2). Le PDF original reste groupé
   (conservé fidèlement côté palier 1).
-- **Palier 1** : pas de **checklist de validation** (paliers 2-3-4 en ont une) —
-  **seul manque réel restant** dans la source.
+- **Palier 1** : checklist de validation **absente de la source d'origine** →
+  **générée** (`checklist-palier-1-validation.md`, colonnes Élève/Professeur,
+  marquée « à valider ») sur le modèle des paliers 2-3-4 et à partir de l'activité
+  du palier 1. Contenu produit, pas source : à relire par le professeur.
 - **Format de checklist divergent** : le palier 2 utilise des colonnes
   « Oui / Non / Observation », le palier 3 des colonnes « Élève / Professeur ». À
   uniformiser à la canonicalisation.
