@@ -86,6 +86,23 @@ conserve une trace de provenance.
   R1–R5 / D1–D5, compétences C01–C11 (dépendantes de l'option), niveaux
   taxonomiques 1–4.
 
+### SRC-STARTER-WELCOME-RESEAU — Starter « Welcome Réseau » (2TNE CIEL)
+
+- **Emplacement** : `sources/starters/welcome-reseau/` (racine du dépôt, hors
+  `docs/` en raison des ~30 Mo d'images). Voir son `MANIFESTE.md`.
+- **Nature** : source **pédagogique interne** (instructions §4) — un parcours créé
+  et éprouvé en classe par le professeur.
+- **Rôle dans la chaîne** : **2ᵉ exemple canonique** (type *Starter Welcome*),
+  complémentaire du référentiel niveau-classe. Il **façonne le contrat du JSON
+  canonique** (ticket 02) et fournit une instance complète de la chaîne
+  « définition » (parcours → paliers → dossier technique / QCM / activité /
+  checklist / corrigé).
+- **État** : numérisé — 4 paliers ; dossiers techniques + paliers 3-4 en markdown
+  natif ; QCM/activité/checklist/corrigé des paliers 1-2 **transcrits des PDF**
+  (originaux conservés) ; 33 images inventoriées.
+- **Anomalies signalées** (voir MANIFESTE) : corrigés P1+P2 groupés dans un seul
+  fichier ; palier 1 sans checklist ; format de checklist divergent P2 vs P3.
+
 ## Vocabulaire (confirmé par les sources)
 
 - On parle de **pôles d'activités**, pas de *rôles* (instructions §6). Le terme

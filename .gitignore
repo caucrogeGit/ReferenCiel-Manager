@@ -29,3 +29,6 @@ tmp/*
 
 # Documentation generee (mkdocs)
 site/
+
+# Caches d'outils
+.ruff_cache/
