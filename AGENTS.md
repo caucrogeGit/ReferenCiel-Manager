@@ -1,3 +1,35 @@
+<!-- PRIORITÉ REFERENCIEL-MANAGER -->
+# Priorité projet — RéférenCiel Manager
+
+> Ce bloc a la **priorité** sur le briefing Forge ci-dessous en cas de tension.
+> Il ne le remplace pas : le briefing Forge reste en vigueur.
+
+RéférenCiel Manager est une **application métier pédagogique persistée** construite
+avec Forge. Trois niveaux, aux rôles distincts :
+
+```text
+JSON canonique          = référence structurée de construction ou d'import
+Dictionnaire de données = documentation métier enrichie et canonique
+Base de données         = vérité applicative en fonctionnement
+```
+
+- Le **JSON canonique** sert à analyser, importer, générer la documentation,
+  valider et construire les objets métier. Ce n'est **pas** un fichier de
+  sauvegarde, ni la vérité de l'application en marche.
+- Le **dictionnaire de données** est généré/prérempli depuis les JSON canoniques,
+  puis enrichi des règles métier. Il n'est pas purement manuel.
+- La **base de données** est la **vérité applicative en fonctionnement** : tout
+  objet métier utilisé, publié, affecté, évalué ou suivi y est persisté.
+- **Pas de V0 fichier** : aucun `path.yml`, `palier.yml`, `qcm.yml` ou
+  `checklist.yml` comme base principale.
+
+Documents de cadrage : `docs/cadrage/instructions.md`,
+`docs/cadrage/cadre-projet-referenciel-manager.md`,
+`docs/adr/002-json-canonique-et-persistance-applicative.md`,
+`docs/specs/json-canonique/README.md`,
+`docs/roadmap/roadmap-referenciel-manager.md`, `docs/tickets/README.md`.
+<!-- FIN PRIORITÉ REFERENCIEL-MANAGER -->
+
 # Forge — briefing agent (application)
 
 Tu travailles sur une **application** construite avec le framework Python Forge.
