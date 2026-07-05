@@ -76,8 +76,8 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | # | Ticket | Bloc | Statut |
 | --- | --- | --- | --- |
 | 00 | Installer le cadre projet dans le squelette Forge | — | Terminé |
-| 01 | Installer l'arborescence des sources et la traçabilité | Sources | À faire |
-| 02 | Définir le contrat du JSON canonique référentiel niveau-classe | Sources | À faire |
+| 01 | Installer l'arborescence des sources et la traçabilité (registre + trace de provenance ; référentiels officiels Bac Pro CIEL, Vademecum TNE 2ⁿᵈᵉ, BTS CIEL enregistrés) | Sources | En cours |
+| 02 | Définir le contrat du JSON canonique référentiel niveau-classe — **extraction à deux couches** : famille TNE (CC1–CC9) + cible CIEL (C01–C11) + mapping | Sources | À faire |
 | 03 | Produire le JSON canonique CIEL 2TNE minimal | Sources | À faire |
 | 04 | Définir le schéma JSON du référentiel niveau-classe (`docs/specs/json-canonique/schemas/`) | Sources | À faire |
 | 05 | Dictionnaire de données du socle scolaire (AnneeScolaire, NiveauClasse, Classe, Groupe, Eleve `user_id?`, Professeur, InscriptionEleve, AffectationProfesseurClasse) | A | À faire |
