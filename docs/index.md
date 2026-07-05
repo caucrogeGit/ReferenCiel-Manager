@@ -8,6 +8,19 @@ officiels, de JSON canoniques métier et de starters réutilisables.
 > Ce site documente le projet **au fil de sa progression**. Il est généré avec
 > mkdocs (voir [ADR-005](adr/005-standard-qualite-documentation-mkdocs-banc-essai.md)).
 
+## Mise en route (développeur)
+
+Prêt à développer en une commande (le squelette est déjà au standard Forge :
+config `pyproject`, `pytest.ini`, `mkdocs.yml` committées) :
+
+```bash
+make setup   # installe tout : runtime (Forge) + dev + doc + tests + outils typage
+make check   # les 5 portes de qualité : pyright, ruff, pytest, mkdocs --strict, project:check
+```
+
+`make help` liste les cibles. Aucun besoin de reconstruire l'environnement à
+chaque fois : tout est capturé dans le dépôt.
+
 ## Principes de lecture
 
 - **Instructions prioritaires** : [cadrage/instructions.md](cadrage/instructions.md)
