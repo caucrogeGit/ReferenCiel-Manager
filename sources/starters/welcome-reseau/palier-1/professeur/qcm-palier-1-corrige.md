@@ -1,6 +1,10 @@
-# Correction détaillée des QCM
+# Corrigé du QCM du palier 1 : câble Ethernet droit T568B
 
-## Palier 1 : câble Ethernet droit T568B
+> Numérisation — dégroupage : le PDF source `qcm-palier-1-corrige.pdf` (conservé à
+> côté) regroupait les corrigés des paliers 1 et 2. Ce fichier isole le corrigé du
+> **palier 1** ; celui du palier 2 est dans `palier-2/professeur/`.
+
+## Correction détaillée
 
 | Question | Réponse | Explication courte |
 | --- | --- | --- |
@@ -24,31 +28,6 @@
 | 18 | A | Le testeur RJ45 vérifie que les fils sont correctement reliés. |
 | 19 | B | Un câble droit conforme donne 1 vers 1, 2 vers 2, jusqu'à 8 vers 8. |
 | 20 | A | Une broche éteinte peut indiquer un fil coupé, mal inséré ou mal serti. |
-
-## Palier 2 : installer deux machines virtuelles avec VirtualBox
-
-| Question | Réponse | Explication courte |
-| --- | --- | --- |
-| 1 | A | La virtualisation permet de faire fonctionner un ordinateur simulé dans un ordinateur réel. |
-| 2 | B | Le système hôte de l'activité est Debian 13. |
-| 3 | A | La machine hôte est l'ordinateur réel qui exécute VirtualBox. |
-| 4 | A | La machine invitée est l'ordinateur simulé dans VirtualBox. |
-| 5 | A | VirtualBox sert à créer et gérer des machines virtuelles. |
-| 6 | A | Une machine virtuelle utilise une partie des ressources de la machine hôte. |
-| 7 | A | La mémoire vive attribuée à la VM est prise sur la mémoire de la machine hôte. |
-| 8 | A | Si une VM reçoit trop de mémoire, la machine hôte peut ralentir. |
-| 9 | A | Le disque virtuel est un fichier qui se comporte comme un disque dur pour la VM. |
-| 10 | A | Une image ISO sert à installer un système d'exploitation. |
-| 11 | B | Les ISO doivent être fournies ou indiquées par le professeur. |
-| 12 | A | Les machines virtuelles de classe doivent utiliser les identifiants communs demandés. |
-| 13 | A | Les identifiants communs permettent au professeur de vérifier rapidement la VM. |
-| 14 | B | Le nom d'utilisateur demandé est tne. |
-| 15 | A | Le mot de passe demandé est Tne2026! |
-| 16 | B | Si Windows impose un compte Microsoft, il faut appeler le professeur. |
-| 17 | A | Un instantané permet de revenir à un état précédent de la VM. |
-| 18 | A | L'instantané doit être créé après une installation propre et stable. |
-| 19 | A | Une VM doit être arrêtée proprement avec la procédure normale du système. |
-| 20 | A | Le palier est terminé lorsque les deux VM sont installées, accessibles et sauvegardées par un instantané. |
 
 ## Barème
 

@@ -100,8 +100,9 @@ conserve une trace de provenance.
 - **État** : numérisé — 4 paliers ; dossiers techniques + paliers 3-4 en markdown
   natif ; QCM/activité/checklist/corrigé des paliers 1-2 **transcrits des PDF**
   (originaux conservés) ; 33 images inventoriées.
-- **Anomalies signalées** (voir MANIFESTE) : corrigés P1+P2 groupés dans un seul
-  fichier ; palier 1 sans checklist ; format de checklist divergent P2 vs P3.
+- **Anomalies signalées** (voir MANIFESTE) : corrigés P1+P2 groupés dans le PDF
+  (dégroupés côté markdown) ; palier 1 sans checklist (seul manque réel restant) ;
+  format de checklist divergent P2 vs P3.
 
 ## Vocabulaire (confirmé par les sources)
 

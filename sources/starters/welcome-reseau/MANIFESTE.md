@@ -66,7 +66,7 @@ de progression** (gate QCM 100 %, ordre, validation professeur).
 | QCM | 🆕 transcrit | 🆕 transcrit | ✅ .md | ✅ .md |
 | Activité | 🆕 transcrit | 🆕 transcrit | ✅ .md | ✅ .md |
 | Checklist validation | ❌ **absente** | 🆕 transcrit | ✅ .md | ✅ .md |
-| Corrigé QCM (professeur) | 🆕 transcrit | ⚠ groupé dans P1 | ✅ .md | ✅ .md |
+| Corrigé QCM (professeur) | 🆕 transcrit | ✅ dégroupé | ✅ .md | ✅ .md |
 
 - ✅ déjà en markdown · 🆕 transcrit du PDF (paliers 1-2) · les PDF originaux sont
   **conservés** à côté des `.md` (traçabilité).
@@ -75,11 +75,13 @@ de progression** (gate QCM 100 %, ordre, validation professeur).
 
 Constatées à la transcription :
 
-- **Corrigés groupés** : `palier-1/professeur/qcm-palier-1-corrige` contient en fait
-  les corrigés des **paliers 1 ET 2** (40 questions). Le corrigé du palier 2 existe
-  donc, mais mal placé (pas de `palier-2/professeur/`). À dégrouper à la
-  canonicalisation.
-- **Palier 1** : pas de **checklist de validation** (paliers 2-3-4 en ont une).
+- **Corrigés groupés → dégroupés** : le PDF `qcm-palier-1-corrige.pdf` regroupe les
+  corrigés des paliers 1 ET 2 (40 questions). Les markdown ont été **dégroupés** :
+  `palier-1/professeur/qcm-palier-1-corrige.md` (P1) et
+  `palier-2/professeur/qcm-palier-2-corrige.md` (P2). Le PDF original reste groupé
+  (conservé fidèlement côté palier 1).
+- **Palier 1** : pas de **checklist de validation** (paliers 2-3-4 en ont une) —
+  **seul manque réel restant** dans la source.
 - **Format de checklist divergent** : le palier 2 utilise des colonnes
   « Oui / Non / Observation », le palier 3 des colonnes « Élève / Professeur ». À
   uniformiser à la canonicalisation.
