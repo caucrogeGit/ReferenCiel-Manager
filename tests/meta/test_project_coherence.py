@@ -49,7 +49,8 @@ def test_every_doc_page_is_in_mkdocs_nav() -> None:
 def test_adr_numbering_is_contiguous() -> None:
     """Les ADR sont numérotés 001, 002, … sans trou (discipline Forge)."""
     adrs = sorted((DOCS / "adr").glob("[0-9][0-9][0-9]-*.md"))
-    nums = [int(p.name[:3]) for p in adrs]
+    # 000-template.md est le gabarit livré par Forge, pas une décision.
+    nums = [n for n in (int(p.name[:3]) for p in adrs) if n != 0]
     assert nums, "aucun ADR trouvé"
     assert nums == list(range(1, len(nums) + 1)), f"numérotation ADR non contiguë : {nums}"
 

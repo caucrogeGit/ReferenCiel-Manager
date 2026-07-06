@@ -2,20 +2,18 @@
 # Standard aligné sur Forge : typage statique strict (ADR-007 / Forge ADR-036).
 
 [tool.pyright]
-# Le code que NOUS produisons est typé strict, par fichier (`# pyright: strict`),
-# comme dans Forge. Le squelette généré par Forge (app.py, mvc/, optins/) n'est
-# pas inclus ici : il relève du framework (banc d'essai), pas de notre code.
-# `include` s'étend au fil des tickets à chaque fichier applicatif manuel écrit.
+# Typage vérifié sur le code éditable du projet (mvc, optins) et les tests. Le
+# mode strict est activé fichier par fichier via le marqueur `# pyright: strict`
+# en tête, comme le fait le cœur de Forge : éditeur, ligne de commande et CI
+# vérifient exactement la même chose.
 pythonVersion = "3.12"
 venvPath = "."
 venv = ".venv"
 include = [
+  "mvc",
+  "optins",
   "conftest.py",
   "tests",
-  # Surface éditée à la main (non `*_base.py`) — sous cliquet strict.
-  "optins/registry.py",
-  "mvc/routes.py",
-  "mvc/controllers/home_controller.py",
 ]
 exclude = [
   "**/__pycache__",
