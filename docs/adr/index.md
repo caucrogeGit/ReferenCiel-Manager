@@ -27,6 +27,8 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   code produit.
 - `008-import-json-canonique-par-upload-admin.md` : import du JSON canonique par
   upload admin (validation puis persistance).
+- `009-montee-squelette-forge-en-place.md` : montée du squelette Forge en place
+  (manifeste de propriété ; ni déplacement de dossier, ni force-push).
 
-Numérotez les décisions suivantes `009`, `010`, etc., et ajoutez-les à ce
+Numérotez les décisions suivantes `010`, `011`, etc., et ajoutez-les à ce
 journal. Le gabarit `000-template.md` n'est pas une décision : c'est la trame.

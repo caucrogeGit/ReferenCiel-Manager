@@ -70,6 +70,7 @@ nav:
       - ADR-006 — Stratégie de test: adr/006-strategie-de-test.md
       - ADR-007 — Typage Python strict: adr/007-typage-python-strict.md
       - ADR-008 — Import JSON canonique par upload admin: adr/008-import-json-canonique-par-upload-admin.md
+      - ADR-009 — Montée de squelette Forge en place: adr/009-montee-squelette-forge-en-place.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
@@ -84,6 +85,9 @@ nav:
       - Registre des sources: specs/json-canonique/registre-des-sources.md
       - Trace — JSON canonique CIEL 2TNE: specs/json-canonique/traces/trace-creation-json-canonique-ciel-2tne.md
       - Capitalisation — fichier .scpro CPRO: specs/json-canonique/traces/capitalisation-fichier-scpro-cpro.md
+  - Procédures:
+      - Montée de squelette Forge: procedures/montee-squelette-forge.md
   - Banc d'essai (retours Forge):
       - Vue d'ensemble: banc-essai/README.md
       - Retour 001 — Conformité du squelette: banc-essai/retour-001-conformite-squelette.md
+      - Retour 002 — Commande skeleton:upgrade: banc-essai/retour-002-commande-skeleton-upgrade.md
