@@ -1,0 +1,30 @@
+# Manifeste de propriété — fichiers appartenant au SQUELETTE Forge (ADR-009).
+#
+# Ces chemins sont rafraîchissables depuis un `forge new` neuf lors d'une montée
+# de squelette. Ce qui n'est PAS listé ici appartient au projet et ne doit jamais
+# être écrasé (docs métier, sources, tests méta, Makefile, mkdocs, pyproject…).
+# Voir docs/procedures/montee-squelette-forge.md.
+#
+# `make skeleton-check REF=<squelette-neuf>` compare ces chemins à une référence.
+# Un test méta (tests/meta/test_skeleton_manifest.py) vérifie qu'ils existent tous.
+#
+# Note : `optins/` est du squelette mais `optins/registry.py` est éditable à la
+# main (ADR-061) — un écart y est normal (valeur BACKEND, opt-ins activés).
+
+app.py
+config.py
+mvc
+optins
+schemas
+.vscode
+.github
+package.json
+package-lock.json
+.npmrc
+.nvmrc
+.editorconfig
+CHANGELOG.md
+docs/adr/000-template.md
+docs/adr/001-adopter-forge.md
+tests/test_smoke_001.py
+tests/conftest.py

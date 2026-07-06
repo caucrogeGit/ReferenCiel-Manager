@@ -79,11 +79,22 @@ Qui possède quoi — ce qui rend l'opération sûre.
    (pas de force-push).
 8. **Nettoyer** : le squelette `../Test` peut être supprimé.
 
-## À automatiser (à venir)
+## Outillage local (disponible)
 
-- `make forge-upgrade` : niveau *framework* (bump pin + réinstall forcée + check).
-- `make skeleton-check` : génère un squelette neuf et **liste les écarts** sur les
-  fichiers *squelette* (revue, pas écrasement aveugle).
+Le manifeste ci-dessus est **exécutable** (`tools/skeleton-manifest.txt`), et deux
+cibles Make couvrent les deux niveaux :
+
+- **`make forge-upgrade COMMIT=<sha>`** — niveau *framework* : bump du pin dans
+  `requirements.txt` + `requirements-dev.txt`, réinstallation forcée de
+  `forge-mvc`/`forge-mvc-testing` au commit, puis `make check`. (script
+  `tools/forge-upgrade.sh`)
+- **`make skeleton-check REF=<squelette-neuf>`** — niveau *squelette* : liste les
+  écarts sur les fichiers du manifeste vs une référence `forge new` neuve (revue,
+  **aucun écrasement**). (script `tools/skeleton-check.sh`)
+
+Un test méta (`tests/meta/test_skeleton_manifest.py`) vérifie que le manifeste ne
+référence que des chemins réels. L'étape *overlay* (2) et les *fusions
+idempotentes* (5) restent manuelles — c'est là que le jugement est nécessaire.
 
 Le *bon* endroit à terme est le framework : voir
 [retour-002](../banc-essai/retour-002-commande-skeleton-upgrade.md)

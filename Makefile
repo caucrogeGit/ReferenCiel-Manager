@@ -4,17 +4,19 @@
 
 VENV := .venv/bin
 
-.PHONY: help setup check type lint test docs docs-serve run
+.PHONY: help setup check type lint test docs docs-serve run forge-upgrade skeleton-check
 
 help:
-	@echo "make setup       — installe toutes les dépendances (prêt au dev)"
-	@echo "make check       — les 5 portes de qualité (type, lint, test, docs, project:check)"
-	@echo "make type        — typage strict (pyright)"
-	@echo "make lint        — style (ruff, aligné Forge)"
-	@echo "make test        — tests (pytest)"
-	@echo "make docs        — build documentation (mkdocs --strict)"
-	@echo "make docs-serve  — documentation en local (mkdocs serve)"
-	@echo "make run         — lance l'application (forge run)"
+	@echo "make setup                      — installe toutes les dépendances (prêt au dev)"
+	@echo "make check                      — les 5 portes de qualité (type, lint, test, docs, project:check)"
+	@echo "make type                       — typage strict (pyright)"
+	@echo "make lint                       — style (ruff, aligné Forge)"
+	@echo "make test                       — tests (pytest)"
+	@echo "make docs                       — build documentation (mkdocs --strict)"
+	@echo "make docs-serve                 — documentation en local (mkdocs serve)"
+	@echo "make run                        — lance l'application (forge run)"
+	@echo "make forge-upgrade COMMIT=<sha> — monte forge-mvc au commit cible + check (ADR-009)"
+	@echo "make skeleton-check REF=<dir>   — liste les écarts squelette vs un forge new neuf (ADR-009)"
 
 setup:
 	$(VENV)/pip install -r requirements-dev.txt
@@ -39,3 +41,14 @@ docs-serve:
 
 run:
 	$(VENV)/forge run
+
+# --- Montée de squelette Forge (ADR-009) ---
+
+forge-upgrade:
+	@test -n "$(COMMIT)" || { echo "usage: make forge-upgrade COMMIT=<commit-git-forge>"; exit 2; }
+	bash tools/forge-upgrade.sh $(COMMIT)
+	$(MAKE) check
+
+skeleton-check:
+	@test -n "$(REF)" || { echo "usage: make skeleton-check REF=<chemin-squelette-neuf>"; exit 2; }
+	bash tools/skeleton-check.sh $(REF)
