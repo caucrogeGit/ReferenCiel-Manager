@@ -24,3 +24,4 @@ silence, on documente et on remonte.
 | [003](retour-003-forge-migrations-provisioning-manuel.md) | `forge_migrations` absente après provisioning manuel de `db:init` (message trompeur) | À remonter |
 | [004](retour-004-code-genere-non-conforme-portes-qualite.md) | Le code généré ne passe pas les portes qualité (pyright strict, ruff) | À remonter |
 | [005](retour-005-make-crud-code-casse-et-non-conforme.md) | `make:crud` génère du code cassé (helper flash manquant) et non conforme (modèle non typé) | À remonter |
+| [006](retour-006-db-apply-ignore-models-sql-et-socle-auth-rbac.md) | `db:apply` ignore `mvc/models/sql/` ; `auth:init` génère un socle à dépendances RBAC/MFA non satisfaites | À remonter |
