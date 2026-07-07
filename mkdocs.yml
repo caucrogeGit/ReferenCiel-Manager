@@ -96,3 +96,4 @@ nav:
       - Retour 004 — Code généré & portes qualité: banc-essai/retour-004-code-genere-non-conforme-portes-qualite.md
       - Retour 005 — make:crud cassé & non conforme: banc-essai/retour-005-make-crud-code-casse-et-non-conforme.md
       - Retour 006 — db:apply & socle auth: banc-essai/retour-006-db-apply-ignore-models-sql-et-socle-auth-rbac.md
+      - Retour 007 — pas de page de login: banc-essai/retour-007-aucune-page-login-scaffoldee.md

@@ -88,6 +88,23 @@ forge auth:init ; forge auth:user:create
   « ponts opt-in »), pour que le socle de base soit applicable d'un bloc.
 - Détail : `retour-006` (F15).
 
+### FORGE-5 · Aucune page de login fournie ni scaffoldée, alors que le cœur redirige vers `/login`
+
+- **Symptôme** : après `auth:init` + routes protégées (défaut de `make:crud`),
+  **aucune route protégée n'est atteignable** : le cœur redirige (302) vers `/login`,
+  mais **rien ne sert `/login`** → 404. Impossible de se connecter.
+- **Preuve** : `core/security/decorators.py:34` et `:72` →
+  `Response(302, headers={"Location": "/login"})` ; `core/security/middleware.py:28` →
+  `AuthMiddleware(login_url="/login")`. Le cœur fournit le **backend**
+  (`core.auth.session.login_user`, `AuthUser` — OK dans `auth:doctor`) mais **ni
+  route, ni contrôleur, ni vue** de login, et **aucune commande** ne les scaffolde
+  (`auth:*` gère les comptes, pas l'UI ; pas de `make:auth`).
+- **Correctif proposé** : scaffolder optionnel `forge make:auth` (contrôleur + route
+  `/login` GET/POST câblée sur `login_user` + vue + `/logout`, write-if-new, style de
+  l'app). À défaut, **documenter** le câblage attendu et rendre cohérente la
+  redirection `/login` codée en dur avec `AuthMiddleware(login_url=...)`.
+- Détail : `retour-007`.
+
 ---
 
 ## P2 — Qualité (le code généré ne passe pas les portes que Forge prône)
@@ -96,7 +113,7 @@ forge auth:init ; forge auth:user:create
 > code généré** ne les passe pas. Un projet tenu au même standard doit contourner
 > (exclusions pyright, per-file-ignores ruff) — voir `pyproject.toml` du projet.
 
-### FORGE-5 · `make:entity` : `_base.py` `from_dict` non strict-clean
+### FORGE-6 · `make:entity` : `_base.py` `from_dict` non strict-clean
 
 - **Preuve** : `<entite>_base.py` — `from_dict(cls, data: dict)` : `data.get("active")`
   vaut `Unknown | None`, passé au paramètre `active: bool` →
@@ -104,13 +121,13 @@ forge auth:init ; forge auth:user:create
 - **Correctif** : typer `data: dict[str, object]` (ou `TypedDict`) et coercer/caster
   les valeurs vers le type du champ. Détail : `retour-004` (F10a).
 
-### FORGE-6 · Générateurs : `__init__.py` de ré-export → ruff F401
+### FORGE-7 · Générateurs : `__init__.py` de ré-export → ruff F401
 
 - **Preuve** : `<entite>/__init__.py` : `from .x import X` sans re-export explicite →
   `F401 imported but unused`.
 - **Correctif** : `from .x import X as X` (ou `__all__`). Détail : `retour-004` (F10b).
 
-### FORGE-7 · `make:crud` : modèle généré non typé + import inutile
+### FORGE-8 · `make:crud` : modèle généré non typé + import inutile
 
 - **Preuve** : `<entite>_model.py` a des signatures **sans annotations**
   (`def find_..._paginated(q=None, sort=None, ...)`) et `_ALLOWED_SORT.get(sort, ...)`
@@ -124,7 +141,7 @@ forge auth:init ; forge auth:user:create
 
 ## P3 — Cycle de vie / DX (suggestions)
 
-### FORGE-8 · Pas de commande de montée de squelette d'un projet existant
+### FORGE-9 · Pas de commande de montée de squelette d'un projet existant
 
 - `forge new` crée, mais rien ne **met à jour** le squelette d'un projet existant
   quand Forge évolue. Piège vérifié : un pin git à version inchangée (`1.0.0rc2`)
@@ -142,10 +159,12 @@ forge auth:init ; forge auth:user:create
 ## Note transversale
 
 Le fil rouge P1-P2 : **les générateurs Forge produisent du code que Forge lui-même
-ne passe pas** (import cassé, typage, lint), et **les chemins base de données**
-(`db:init` manuel, `db:apply`, socle `auth:init`) ont des angles morts qui bloquent
-un projet réel. Corriger à la source rendrait la chaîne
-`make:entity → migration → make:crud → auth` **fonctionnelle et conforme d'emblée**.
+ne passe pas** (import cassé, typage, lint) ; **les chemins base de données**
+(`db:init` manuel, `db:apply`, socle `auth:init`) ont des angles morts ; et le
+**flux d'authentification** est incomplet (le cœur redirige vers `/login` sans que
+rien ne fournisse cette page). Corriger à la source rendrait la chaîne
+`make:entity → migration → make:crud → auth → login` **fonctionnelle et conforme
+d'emblée**.
 
 ## Références (retours détaillés, avec preuves et contournements)
 
@@ -153,5 +172,6 @@ un projet réel. Corriger à la source rendrait la chaîne
 - `retour-004` — code généré vs portes qualité (`make:entity`).
 - `retour-005` — `make:crud` cassé & non conforme.
 - `retour-006` — `db:apply` & socle auth.
+- `retour-007` — aucune page de login scaffoldée.
 - `retour-002` — commande `skeleton:upgrade`.
 - `retour-001` — conformité du squelette (résolu).
