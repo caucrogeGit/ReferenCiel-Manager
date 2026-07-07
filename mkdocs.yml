@@ -91,3 +91,5 @@ nav:
       - Vue d'ensemble: banc-essai/README.md
       - Retour 001 — Conformité du squelette: banc-essai/retour-001-conformite-squelette.md
       - Retour 002 — Commande skeleton:upgrade: banc-essai/retour-002-commande-skeleton-upgrade.md
+      - Retour 003 — forge_migrations & provisioning manuel: banc-essai/retour-003-forge-migrations-provisioning-manuel.md
+      - Retour 004 — Code généré & portes qualité: banc-essai/retour-004-code-genere-non-conforme-portes-qualite.md
