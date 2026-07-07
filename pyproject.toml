@@ -19,6 +19,11 @@ exclude = [
   "**/__pycache__",
   ".venv",
   "site",
+  # *_base.py : générés/régénérables par Forge (règle d'or CLAUDE.md). Ce n'est
+  # pas notre code, on ne l'édite pas → hors cliquet strict (ADR-007 : strict sur
+  # le code que NOUS produisons). Le jumeau manuel (ex. annee_scolaire.py) reste
+  # inclus. Voir banc-essai/retour-004 (code généré non strict-clean).
+  "**/*_base.py",
 ]
 
 [tool.ruff]
@@ -34,3 +39,9 @@ ignore = [
   "E741",  # ambiguous-variable-name — intentionnel
   "E402",  # module-import-not-at-top — intentionnel dans app.py / scripts générés
 ]
+
+[tool.ruff.lint.per-file-ignores]
+# Les __init__.py ré-exportent l'API du paquet (dont ceux générés par Forge pour
+# les entités). Le F401 « imported but unused » y est un faux positif attendu.
+# Voir banc-essai/retour-004 (code généré non conforme aux portes qualité).
+"**/__init__.py" = ["F401"]

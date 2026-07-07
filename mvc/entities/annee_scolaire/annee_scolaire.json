@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "name": "AnneeScolaire",
+  "table": "annee_scolaire",
+  "fields": [
+    {
+      "name": "libelle",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": true
+    },
+    {
+      "name": "date_debut",
+      "type": "date",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "date_fin",
+      "type": "date",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false,
+      "default": false
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}
