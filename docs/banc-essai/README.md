@@ -23,3 +23,4 @@ silence, on documente et on remonte.
 | [002](retour-002-commande-skeleton-upgrade.md) | Commande de montée de squelette d'un projet existant (`forge skeleton:upgrade`) | À remonter |
 | [003](retour-003-forge-migrations-provisioning-manuel.md) | `forge_migrations` absente après provisioning manuel de `db:init` (message trompeur) | À remonter |
 | [004](retour-004-code-genere-non-conforme-portes-qualite.md) | Le code généré ne passe pas les portes qualité (pyright strict, ruff) | À remonter |
+| [005](retour-005-make-crud-code-casse-et-non-conforme.md) | `make:crud` génère du code cassé (helper flash manquant) et non conforme (modèle non typé) | À remonter |

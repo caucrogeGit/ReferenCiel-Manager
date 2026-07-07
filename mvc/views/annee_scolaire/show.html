@@ -1,0 +1,46 @@
+{% extends "layouts/app.html" %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail annee_scolaire</h1>
+    <div class="space-x-2">
+        {% with href='/annee_scolaire/edit/{{ annee_scolaire.Id }}', variant='primary', label=trans('crud.edit') %}
+        {% include "components/button.html" %}
+        {% endwith %}
+        <a href="/annee_scolaire" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Libelle</p>
+        <p class="text-gray-800">{{ annee_scolaire.Libelle }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Date debut</p>
+        <p class="text-gray-800">{{ annee_scolaire.DateDebut }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Date fin</p>
+        <p class="text-gray-800">{{ annee_scolaire.DateFin }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Active</p>
+        <p class="text-gray-800">{{ annee_scolaire.Active }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Created at</p>
+        <p class="text-gray-800">{{ annee_scolaire.CreatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Updated at</p>
+        <p class="text-gray-800">{{ annee_scolaire.UpdatedAt }}</p>
+    </div>
+</div>
+
+<form method="post" action="/annee_scolaire/destroy/{{ annee_scolaire.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {% with type='submit', variant='danger', label=trans('crud.delete') %}
+    {% include "components/button.html" %}
+    {% endwith %}
+</form>
+{% endblock %}
