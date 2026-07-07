@@ -32,3 +32,6 @@ site/
 
 # Caches d'outils
 .ruff_cache/
+
+# Fichiers scratch SQLTools (requetes de session, hors depot)
+*.session.sql
