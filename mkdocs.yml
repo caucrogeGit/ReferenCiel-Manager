@@ -56,6 +56,7 @@ plugins:
 
 nav:
   - Accueil: index.md
+  - Journal de progression: journal-de-progression.md
   - Cadrage:
       - Instructions (prioritaire): cadrage/instructions.md
       - Cadre du projet: cadrage/cadre-projet-referenciel-manager.md
