@@ -13,6 +13,7 @@ from core.http.router import Router
 from mvc.controllers.home_controller import HomeController
 from mvc.routes.annee_scolaire_routes import register_annee_scolaire_routes
 from mvc.routes.auth_routes import register_auth_routes
+from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 from optins.registry import register_optins
 
 router = Router()
@@ -20,11 +21,14 @@ router = Router()
 with router.group("", public=True) as public:
     public.add("GET", "/", HomeController.index, name="home-index")
 
-# Bloc A — socle scolaire. Routes protégées (auth Forge, ticket 07).
+# Routes appliquées pour : annee_scolaire_controller
 register_annee_scolaire_routes(router)
 
-# Authentification (login public, logout protégé).
+# Routes appliquées pour : niveau_classe_controller
+register_niveau_classe_routes(router)
+
+# Routes appliquées pour : auth_controller
 register_auth_routes(router)
 
-# Routes des opt-ins « route » activés (ADR-061).
+# Routes des opt-ins activés (ADR-061).
 register_optins(router)

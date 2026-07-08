@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS niveau_classe (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    Code VARCHAR(20) NOT NULL,
+    UNIQUE KEY uk_niveau_classe_code (Code),
+    Intitule VARCHAR(150) NOT NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

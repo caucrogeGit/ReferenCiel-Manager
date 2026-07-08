@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "name": "NiveauClasse",
+  "table": "niveau_classe",
+  "fields": [
+    {
+      "name": "code",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": true
+    },
+    {
+      "name": "intitule",
+      "type": "string",
+      "max_length": 150,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

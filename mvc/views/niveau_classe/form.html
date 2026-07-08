@@ -1,0 +1,71 @@
+{% extends "layouts/app.html" %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
+    <a href="/niveau_classe" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+</div>
+
+{% include "partials/form_errors.html" %}
+
+<div class="bg-white shadow rounded p-6">
+    <form method="post" action="{{ action }}" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Code</label>
+            <input
+                type="text"
+                name="code"
+                value="{{ form.value('code') }}"
+                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            {% if form.has_error('code') %}
+            <p class="text-red-600 text-sm mt-1">{{ form.error('code') }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Intitule</label>
+            <input
+                type="text"
+                name="intitule"
+                value="{{ form.value('intitule') }}"
+                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            {% if form.has_error('intitule') %}
+            <p class="text-red-600 text-sm mt-1">{{ form.error('intitule') }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Created at</label>
+            <input
+                type="datetime-local"
+                name="created_at"
+                value="{{ form.value('created_at') }}"
+                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            {% if form.has_error('created_at') %}
+            <p class="text-red-600 text-sm mt-1">{{ form.error('created_at') }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Updated at</label>
+            <input
+                type="datetime-local"
+                name="updated_at"
+                value="{{ form.value('updated_at') }}"
+                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            {% if form.has_error('updated_at') %}
+            <p class="text-red-600 text-sm mt-1">{{ form.error('updated_at') }}</p>
+            {% endif %}
+        </div>
+        <div class="flex gap-4 pt-2">
+            {% with type='submit', variant='primary', label=trans('common.save') %}
+            {% include "components/button.html" %}
+            {% endwith %}
+            {% with href='/niveau_classe', variant='secondary', label=trans('common.cancel') %}
+            {% include "components/button.html" %}
+            {% endwith %}
+        </div>
+    </form>
+</div>
+{% endblock %}
