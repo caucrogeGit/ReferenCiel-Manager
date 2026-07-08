@@ -7,6 +7,28 @@ réelle** (entité → migration → CRUD → auth) sur Forge. Chaque point est 
 une preuve reproductible** (fichier:ligne, commande, sortie) avec un **correctif
 proposé**.
 
+> ## ✅ Résolu — forge-mvc `f38d5159` (2026-07-08)
+>
+> **Les 9 items ont été corrigés** côté framework et **vérifiés sur le banc d'essai**
+> (montée du projet sur `f38d5159`, `make check` vert). Les correctifs sont taggés
+> dans le code Forge avec les IDs de ce ticket :
+>
+> | Item | Correctif (Forge) | Vérif |
+> |---|---|---|
+> | FORGE-1 | `crud/controller_builder.py` — flash via `get_flash`/`redirect_with_flash` (plus d'import cassé) | ✅ |
+> | FORGE-2 | `db:init` affiche `CREATE TABLE forge_migrations` | ✅ |
+> | FORGE-3 | `entities/db_apply.py:76` — applique `mvc/models/sql/*.sql` | ✅ |
+> | FORGE-4 | `security/auth.py:287` — ponts opt-in émis seulement si l'opt-in installé | ✅ |
+> | FORGE-5 | `security/make_auth.py` — `forge make:auth` (login) | ✅ |
+> | FORGE-6 | `make_entity.py:584` — `from_dict` sans `reportArgumentType` | ✅ |
+> | FORGE-7 | `make_entity.py:673` — pas de F401 dans `__init__.py` | ✅ |
+> | FORGE-8 | `crud/model_builder.py` — signatures de modèle typées | ✅ |
+> | FORGE-9 | `commands/skeleton_upgrade.py` — `forge skeleton:upgrade` | ✅ |
+>
+> Bonus : évolution `mvc/routes.py` → package `mvc/routes/` (ADR-068). Le détail
+> ci-dessous est conservé pour la trace ; les statuts des retours 001-007 sont passés
+> à « Résolu ».
+
 ## Environnement
 
 - `forge-mvc` épinglé au commit **`e3197866fcf780c6d5d10cd317e3f4f671668749`**.

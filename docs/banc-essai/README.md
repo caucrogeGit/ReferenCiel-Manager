@@ -19,10 +19,10 @@ silence, on documente et on remonte.
 
 | # | Sujet | Statut |
 | --- | --- | --- |
-| [001](retour-001-conformite-squelette.md) | Conformité du squelette `forge new` aux standards Forge (typage strict, config qualité, doc, tests) | À remonter |
-| [002](retour-002-commande-skeleton-upgrade.md) | Commande de montée de squelette d'un projet existant (`forge skeleton:upgrade`) | À remonter |
-| [003](retour-003-forge-migrations-provisioning-manuel.md) | `forge_migrations` absente après provisioning manuel de `db:init` (message trompeur) | À remonter |
-| [004](retour-004-code-genere-non-conforme-portes-qualite.md) | Le code généré ne passe pas les portes qualité (pyright strict, ruff) | À remonter |
-| [005](retour-005-make-crud-code-casse-et-non-conforme.md) | `make:crud` génère du code cassé (helper flash manquant) et non conforme (modèle non typé) | À remonter |
-| [006](retour-006-db-apply-ignore-models-sql-et-socle-auth-rbac.md) | `db:apply` ignore `mvc/models/sql/` ; `auth:init` génère un socle à dépendances RBAC/MFA non satisfaites | À remonter |
-| [007](retour-007-aucune-page-login-scaffoldee.md) | Aucune page de login fournie ni scaffoldée, alors que le cœur redirige vers `/login` | À remonter |
+| [001](retour-001-conformite-squelette.md) | Conformité du squelette `forge new` aux standards Forge (typage strict, config qualité, doc, tests) | ✅ Résolu (f38d5159) |
+| [002](retour-002-commande-skeleton-upgrade.md) | Commande de montée de squelette d'un projet existant (`forge skeleton:upgrade`) | ✅ Résolu (f38d5159) |
+| [003](retour-003-forge-migrations-provisioning-manuel.md) | `forge_migrations` absente après provisioning manuel de `db:init` (message trompeur) | ✅ Résolu (f38d5159) |
+| [004](retour-004-code-genere-non-conforme-portes-qualite.md) | Le code généré ne passe pas les portes qualité (pyright strict, ruff) | ✅ Résolu (f38d5159) |
+| [005](retour-005-make-crud-code-casse-et-non-conforme.md) | `make:crud` génère du code cassé (helper flash manquant) et non conforme (modèle non typé) | ✅ Résolu (f38d5159) |
+| [006](retour-006-db-apply-ignore-models-sql-et-socle-auth-rbac.md) | `db:apply` ignore `mvc/models/sql/` ; `auth:init` génère un socle à dépendances RBAC/MFA non satisfaites | ✅ Résolu (f38d5159) |
+| [007](retour-007-aucune-page-login-scaffoldee.md) | Aucune page de login fournie ni scaffoldée, alors que le cœur redirige vers `/login` | ✅ Résolu (f38d5159) |
