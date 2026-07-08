@@ -12,6 +12,7 @@ par contrôleur, cette racine se contentant de les brancher explicitement.
 from core.http.router import Router
 from mvc.controllers.home_controller import HomeController
 from mvc.routes.annee_scolaire_routes import register_annee_scolaire_routes
+from mvc.routes.auth_routes import register_auth_routes
 from optins.registry import register_optins
 
 router = Router()
@@ -21,6 +22,9 @@ with router.group("", public=True) as public:
 
 # Bloc A — socle scolaire. Routes protégées (auth Forge, ticket 07).
 register_annee_scolaire_routes(router)
+
+# Authentification (login public, logout protégé).
+register_auth_routes(router)
 
 # Routes des opt-ins « route » activés (ADR-061).
 register_optins(router)
