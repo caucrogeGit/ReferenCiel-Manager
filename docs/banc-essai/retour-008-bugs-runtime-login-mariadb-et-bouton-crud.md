@@ -2,7 +2,7 @@
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
 **Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
-**Statut :** à remonter.
+**Statut :** ⚠️ Partiellement résolu — F17 (is_active) corrigé dans forge-mvc 809d224f (normalize_auth_user accepte un int 0/1) ; F18 (button.html manquant) toujours en attente.
 
 ## Environnement
 
