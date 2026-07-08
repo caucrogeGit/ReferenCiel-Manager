@@ -130,6 +130,50 @@ forge make:crud <Nom>                                     # 4. contrôleur/modè
 make check                                                # 6. 5 portes vertes
 ```
 
+#### Le dérouler des questions (commandes interactives)
+
+> **Astuce prompts** : dans `[O/n]` / `[o/N]`, la **majuscule est le défaut** ;
+> une valeur entre crochets `[valeur]` est le défaut. Dans les deux cas, **Entrée
+> accepte le défaut**.
+
+**`forge make:entity`** — nom de table, puis une **boucle par champ**, puis les options :
+
+```text
+Nom de la table (Entrée = convention par défaut) :        → Entrée (ex. classe)
+── boucle par champ ───────────────────────────────────
+Nom du champ :                                            → ex. code
+Type Forge [string, text, integer, big_integer, …] :     → ex. string
+max_length [vide = aucun] :                               → ex. 20 (types texte)
+Champ requis ? [O/n] :                                    → o / n
+Autoriser NULL ? [o/N] :                                  → o / n
+Champ unique ? [o/N] :                                    → o / n
+Ajouter un autre champ ? [o/N] :                          → o (autre champ) / n (finir)
+───────────────────────────────────────────────────────
+Activer timestamps (created_at / updated_at) ? [O/n] :    → o
+Activer soft_delete (deleted_at) ? [o/N] :                → n
+Confirmer l'écriture des fichiers ? [O/n] :               → o
+```
+
+**`forge make:relation`** — une **relation par exécution** (relancer pour chaque FK) :
+
+```text
+Type de relation (many_to_many, many_to_one) [many_to_one] :  → Entrée
+Entité source (porte la FK) :                                 → ex. Classe
+Entité cible (porte la PK visée) :                            → ex. AnneeScolaire
+Nom de la relation [annee_scolaire] :                         → Entrée
+Nom inverse (côté cible, optionnel) :                         → ex. classes
+Colonne clé étrangère [annee_scolaire_id] :                   → Entrée
+FK nullable ? [O/n] :                                         → n
+Politique ON DELETE (cascade, no_action, restrict, set_null) [restrict] : → Entrée
+Créer un index sur la FK ? [O/n] :                            → o
+Confirmer l'écriture de mvc/entities/relations.json ? [O/n] : → o
+```
+puis `forge sync:relations` régénère `mvc/entities/relations.sql`.
+
+**`forge make:crud <Nom>`** — **non interactif** : génère contrôleur / modèle /
+formulaire / vues + `mvc/routes/<x>_routes.py`, et **affiche** la ligne de
+branchement à coller dans `mvc/routes/__init__.py` (étape 5).
+
 > **Deux fichiers Python par entité** : `<x>_base.py` (généré, régénéré, **jamais
 > édité**) et `<x>.py` (manuel, jumeau, **jamais écrasé** — ta logique métier va ici).
 
