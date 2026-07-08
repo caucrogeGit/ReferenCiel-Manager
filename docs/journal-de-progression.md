@@ -210,7 +210,57 @@ attendant le correctif Forge, puis on reprendra (migration → table → CRUD).
 
 ---
 
-## 6. Rôle de banc d'essai — retours & tickets
+## 6. Catalogue des entités (propriétés)
+
+> Récapitulatif des **champs métier** de chaque entité. Sont **implicites** (gérés
+> par Forge, non listés) : `id` (`BIGINT UNSIGNED`, clé primaire auto-incrémentée)
+> et, si l'option timestamps est active, `created_at` / `updated_at` (`DATETIME`).
+> Rappel : les **colonnes SQL sont en PascalCase** (`Libelle`, `CreatedAt`…).
+
+### `AnneeScolaire` — table `annee_scolaire` ✅
+
+| Champ | Type | Contraintes | Notes |
+|---|---|---|---|
+| `libelle` | string(20) | **requis**, **unique** | ex. `2025-2026` |
+| `date_debut` | date | nullable | début d'année |
+| `date_fin` | date | nullable | fin d'année |
+| `active` | boolean | **requis**, défaut `false` | règle : une seule année active |
+
+*Options : timestamps. Table créée (migration `create_annee_scolaire`).*
+
+### `NiveauClasse` — table `niveau_classe` ✅
+
+| Champ | Type | Contraintes | Notes |
+|---|---|---|---|
+| `code` | string(20) | **requis**, **unique** | ex. `2TNE` |
+| `intitule` | string(150) | **requis** | libellé du niveau |
+
+*Options : timestamps. Table créée (migration `create_niveau_classe`). Entité
+**partagée** avec le domaine référentiel.*
+
+### `Classe` — table `classe` ⏸️ (relations en pause — [retour-009](banc-essai/retour-009-flux-relation-many-to-one-casse-mariadb.md))
+
+| Champ | Type | Contraintes | Notes |
+|---|---|---|---|
+| `code` | string(20) | **requis** | unique **dans l'année** (composite `(année, code)`, à venir) |
+| `libelle` | string(150) | nullable | libellé lisible |
+
+**Relations déclarées** (`mvc/entities/relations.json`, non encore appliquées) :
+
+| Relation | Type | Clé étrangère | Politique |
+|---|---|---|---|
+| `Classe → AnneeScolaire` | many_to_one | `annee_scolaire_id` | `on_delete restrict`, indexée |
+| `Classe → NiveauClasse` | many_to_one | `niveau_classe_id` | `on_delete restrict`, indexée |
+
+*Options : timestamps. ⚠️ **Table pas encore créée** (bloqué par le flux relation).*
+
+> **Socle Auth/User** (`users`, `auth_tokens`, `auth_audit_log`,
+> `auth_rate_limit_attempts`) : fourni par Forge (`auth:init`), non listé ici — ce
+> ne sont pas des entités métier du projet.
+
+---
+
+## 7. Rôle de banc d'essai — retours & tickets
 
 L'application **exerce Forge en réel** et remonte chaque friction. Voir la
 [vue d'ensemble du banc d'essai](banc-essai/README.md).
@@ -228,7 +278,7 @@ L'application **exerce Forge en réel** et remonte chaque friction. Voir la
 
 ---
 
-## 7. Décisions prises (réponses aux questions)
+## 8. Décisions prises (réponses aux questions)
 
 Trace des arbitrages structurants (le *pourquoi*) :
 
@@ -245,7 +295,7 @@ Trace des arbitrages structurants (le *pourquoi*) :
 
 ---
 
-## 8. État courant (au fil de l'eau)
+## 9. État courant (au fil de l'eau)
 
 | Élément | État |
 |---|---|
@@ -262,7 +312,7 @@ Trace des arbitrages structurants (le *pourquoi*) :
 
 ---
 
-## 9. Commandes de référence
+## 10. Commandes de référence
 
 ```bash
 make setup            # installe tout (prêt au dev)
