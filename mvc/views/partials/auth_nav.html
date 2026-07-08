@@ -1,0 +1,11 @@
+{# Bouton Connexion / Déconnexion pour la barre de navigation.
+   `is_authenticated` est injecté dans tout template par BaseController.render. #}
+{% from "components/ui.html" import button %}
+{% if is_authenticated %}
+<form method="post" action="/logout">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button("Déconnexion", variant="secondary", type="submit") }}
+</form>
+{% else %}
+{{ button("Connexion", variant="primary", href="/login") }}
+{% endif %}
