@@ -388,7 +388,9 @@ Trace des arbitrages structurants (le *pourquoi*) :
 
 ---
 
-## 10. Commandes de référence
+## 10. Commandes
+
+### 10.1 Par usage (référence)
 
 ```bash
 make setup            # installe tout (prêt au dev)
@@ -401,4 +403,76 @@ make skeleton-check REF=../Test   # écarts squelette
 
 # inspecter la base (compte admin, TCP)
 mysql -h 127.0.0.1 -u app_admin -papp_password ReferenCiel_Manager -e "SHOW TABLES;"
+```
+
+### 10.2 Historique chronologique (carnet de bord)
+
+> Séquence **réelle** des commandes qui ont construit le projet, dans l'ordre.
+> Entre chaque incrément : `make check`, puis `git add <chemins> && git commit`/`push`
+> (staging explicite, commit gaté).
+
+**① Base de données (MariaDB)**
+
+```bash
+forge db:init                      # affiche le SQL de provisioning → exécuté via `sudo mariadb`
+# contournement retour-003 : création manuelle de la table forge_migrations
+forge doctor                       # diagnostic projet
+```
+
+**② Entité AnneeScolaire + CRUD**
+
+```bash
+forge make:entity AnneeScolaire    # champs : libelle, date_debut, date_fin, active
+#   → édition du contrat : "default": false sur active
+forge entity:validate
+forge sync:entity AnneeScolaire    # régénère le .sql (Active … DEFAULT 0)
+forge migration:make create_annee_scolaire --from-entity AnneeScolaire
+forge migration:apply              # → table annee_scolaire
+forge make:crud AnneeScolaire      # CRUD (+ correctifs manuels : helper flash, typage…)
+#   → branchement de la route dans mvc/routes/__init__.py
+```
+
+**③ Authentification & login**
+
+```bash
+forge auth:init                    # SQL du socle Auth/User (mvc/models/sql/)
+forge migration:make create_auth_socle   # rempli à la main : users, tokens, audit, rate-limit
+forge migration:apply
+forge auth:user:create --email prof@referenciel.local --password-prompt
+forge make:auth                    # login : contrôleur + vue + auth_routes.py
+#   → seed d'une année :
+mysql -h 127.0.0.1 -u app_admin -papp_password ReferenCiel_Manager \
+  -e "INSERT INTO annee_scolaire (Libelle, Active, CreatedAt, UpdatedAt) VALUES ('2025-2026', 1, NOW(), NOW());"
+forge run                          # https://127.0.0.1:8000
+forge auth:user:password --email prof@referenciel.local --password prof1234
+```
+
+**④ Montée de squelette (forge-mvc → f38d5159)**
+
+```bash
+make skeleton-check REF=../Test
+make forge-upgrade COMMIT=f38d5159294ab246b1fd77a2615b4c96a3b64db1
+#   → migration des routes vers le package mvc/routes/ (ADR-068)
+forge make:crud AnneeScolaire      # régénère annee_scolaire_routes.py (nouvelle structure)
+```
+
+**⑤ Entité NiveauClasse**
+
+```bash
+forge make:entity NiveauClasse     # champs : code (unique), intitule
+forge migration:make create_niveau_classe --from-entity NiveauClasse
+forge migration:apply
+forge make:crud NiveauClasse
+#   → branchement de la route
+```
+
+**⑥ Entité Classe + relations (⏸️ bloqué — retour-009)**
+
+```bash
+forge make:entity Classe           # champs : code, libelle
+forge make:relation                # Classe → AnneeScolaire (FK annee_scolaire_id)
+forge make:relation                # Classe → NiveauClasse  (FK niveau_classe_id)
+forge sync:relations               # → relations.sql (contraintes)
+forge sync:entity Classe
+#   → blocage : colonne FK non générée / nom Pascal vs snake / BIGINT vs UNSIGNED
 ```
