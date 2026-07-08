@@ -12,38 +12,6 @@
 
 ---
 
-## Vue d'ensemble — le tunnel de progression
-
-> Le projet avance par un **tunnel** de phases (détail : [tickets](tickets/README.md)).
-> Deux blocs métier à ne pas mélanger : **Bloc A** (structure scolaire — *qui est où,
-> quelle année, quel niveau*) et **Bloc B** (exécution pédagogique de l'élève).
-> Statut : ✅ fait · ⏸️ en pause · ⬜ à faire.
-
-```mermaid
-flowchart TD
-    A["① Cadrage projet ✅"]
-    B["② Sources et JSON canonique ✅<br/>(tickets 01–04, 02b–04b)"]
-    C["③ Dictionnaires de données ✅<br/>(05 socle · 08 référentiel · 13b starter)"]
-    D["④ BLOC A · Socle scolaire ◀ ICI — ticket 07<br/>AnneeScolaire ✅ · NiveauClasse ✅ · Classe ⏸️<br/>⬜ Groupe · Eleve · Professeur · Inscription · Affectation"]
-    E["⑤ Référentiel ⬜ (09–11)"]
-    F["⑥ Scénario ⬜ (12–13)"]
-    G["⑦ Starter ⬜ (14)"]
-    H["⑧ Parcours ⬜ (15–16)"]
-    I["⑨ BLOC B · Exécution pédagogique élève ⬜ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Suivi prof → Évaluation et bilan"]
-    A --> B --> C --> D --> E --> F --> G --> H --> I
-    classDef done fill:#e6f4ea,stroke:#34a853;
-    classDef current fill:#fff4e5,stroke:#f9a825,stroke-width:3px;
-    classDef todo fill:#f1f3f4,stroke:#9aa0a6;
-    class A,B,C done
-    class D current
-    class E,F,G,H,I todo
-```
-
-> **Où on en est** : phases ①–③ faites, **④ Bloc A en cours** (2 entités sur 8,
-> `Classe` en pause sur le flux relation). Les phases ⑤–⑨ suivront.
-
----
-
 ## 1. Fondations documentaires
 
 Avant tout code métier, le projet a posé sa **chaîne documentaire** :
@@ -476,3 +444,35 @@ forge sync:relations               # → relations.sql (contraintes)
 forge sync:entity Classe
 #   → blocage : colonne FK non générée / nom Pascal vs snake / BIGINT vs UNSIGNED
 ```
+
+---
+
+## 11. Vue d'ensemble — le tunnel de progression
+
+> Le projet avance par un **tunnel** de phases (détail : [tickets](tickets/README.md)).
+> Deux blocs métier à ne pas mélanger : **Bloc A** (structure scolaire — *qui est où,
+> quelle année, quel niveau*) et **Bloc B** (exécution pédagogique de l'élève).
+> Statut : ✅ fait · ⏸️ en pause · ⬜ à faire.
+
+```mermaid
+flowchart TD
+    A["① Cadrage projet ✅"]
+    B["② Sources et JSON canonique ✅<br/>(tickets 01–04, 02b–04b)"]
+    C["③ Dictionnaires de données ✅<br/>(05 socle · 08 référentiel · 13b starter)"]
+    D["④ BLOC A · Socle scolaire ◀ ICI — ticket 07<br/>AnneeScolaire ✅ · NiveauClasse ✅ · Classe ⏸️<br/>⬜ Groupe · Eleve · Professeur · Inscription · Affectation"]
+    E["⑤ Référentiel ⬜ (09–11)"]
+    F["⑥ Scénario ⬜ (12–13)"]
+    G["⑦ Starter ⬜ (14)"]
+    H["⑧ Parcours ⬜ (15–16)"]
+    I["⑨ BLOC B · Exécution pédagogique élève ⬜ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Suivi prof → Évaluation et bilan"]
+    A --> B --> C --> D --> E --> F --> G --> H --> I
+    classDef done fill:#e6f4ea,stroke:#34a853;
+    classDef current fill:#fff4e5,stroke:#f9a825,stroke-width:3px;
+    classDef todo fill:#f1f3f4,stroke:#9aa0a6;
+    class A,B,C done
+    class D current
+    class E,F,G,H,I todo
+```
+
+> **Où on en est** : phases ①–③ faites, **④ Bloc A en cours** (2 entités sur 8,
+> `Classe` en pause sur le flux relation). Les phases ⑤–⑨ suivront.
