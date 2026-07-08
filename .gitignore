@@ -35,3 +35,6 @@ site/
 
 # Fichiers scratch SQLTools (requetes de session, hors depot)
 *.session.sql
+
+# Exports PDF de la doc (markdown-pdf) — non versionnés
+docs/*.pdf

@@ -2,7 +2,7 @@
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
 **Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
-**Statut :** à remonter.
+**Statut :** ✅ Résolu dans forge-mvc 809d224f (2026-07-08) — vérifié sur le banc d'essai (table classe + FK créées).
 
 ## Environnement
 

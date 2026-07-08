@@ -6,6 +6,19 @@
 sur MariaDB — découvert en construisant l'entité `Classe` (FK vers `AnneeScolaire`
 et `NiveauClasse`).
 
+> ## ✅ Résolu — forge-mvc `809d224f` (2026-07-08)
+>
+> **FORGE-12/13/14 corrigés** et **vérifiés sur le banc d'essai** : `sync:relations`
+> génère désormais `ADD COLUMN <fk> BIGINT UNSIGNED NOT NULL` (colonne présente,
+> type = PK), un nom de FK **snake_case cohérent**, la contrainte et l'index. Table
+> `classe` créée avec ses 2 clés étrangères ; jointure `classe ↔ annee ↔ niveau`
+> vérifiée en base.
+>
+> **Restes (non bloquants, pistes d'amélioration)** : `migration:make` n'intègre pas
+> `relations.sql` (SQL des relations ajouté à la main dans la migration) ; le CRUD
+> généré ne gère pas encore les champs FK (formulaire sans sélection de l'entité
+> liée). Le détail ci-dessous est conservé pour la trace.
+
 ## Environnement
 
 - `forge-mvc` **`f38d5159294ab246b1fd77a2615b4c96a3b64db1`**, `forge-mvc-mariadb`.

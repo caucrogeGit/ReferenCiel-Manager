@@ -233,24 +233,41 @@ preuve terrain que les correctifs Forge tiennent.
 
 - Champs : `code` (string, unique), `intitule` (string), timestamps.
 
-### 5.5 Entité `Classe` — relations (⏸️ en pause)
+### 5.5 Entité `Classe` — relations ✅
 
-`Classe` référence `AnneeScolaire` et `NiveauClasse` (deux `many_to_one`).
+`Classe` référence `AnneeScolaire` et `NiveauClasse` (deux `many_to_one`). C'est
+la première entité **avec relations**.
 
 ```bash
 forge make:entity Classe        # champs propres : code, libelle
 forge make:relation             # interactif ×2 :
-#   Classe -> AnneeScolaire  (FK annee_scolaire_id, on_delete restrict, index)
-#   Classe -> NiveauClasse   (FK niveau_classe_id,  on_delete restrict, index)
-forge sync:relations            # régénère mvc/entities/relations.sql (contraintes)
+#   Classe → AnneeScolaire  (FK annee_scolaire_id, on_delete restrict, index)
+#   Classe → NiveauClasse   (FK niveau_classe_id,  on_delete restrict, index)
+forge sync:relations            # régénère mvc/entities/relations.sql
 ```
 
-**Blocage** : le flux relation ne produit pas de schéma applicable sur MariaDB
-(colonne FK non générée ; nom `AnneeScolaireId` PascalCase vs contrainte
-`annee_scolaire_id` snake ; type `BIGINT` vs `BIGINT UNSIGNED`). →
+**Blocage initial puis correctif Forge.** Avec `forge-mvc f38d5159`, le flux
+relation ne produisait pas de schéma applicable sur MariaDB (colonne FK non
+générée ; nom Pascal vs snake ; type `BIGINT` vs `BIGINT UNSIGNED`) →
 [retour-009](banc-essai/retour-009-flux-relation-many-to-one-casse-mariadb.md).
-**`Classe` est en pause** (entité décrite, relations déclarées, **pas de table**) en
-attendant le correctif Forge, puis on reprendra (migration → table → CRUD).
+**Corrigé dans `809d224f`** : `sync:relations` génère désormais
+`ADD COLUMN <fk> BIGINT UNSIGNED NOT NULL` + contrainte + index, nommage cohérent.
+
+Migration (le SQL des relations est ajouté à la migration, `migration:make` ne
+l'intègre pas) :
+
+```bash
+forge migration:make create_classe --from-entity Classe   # CREATE TABLE classe
+#   → on ajoute à la migration le SQL de relations.sql (ADD COLUMN + FK + index)
+forge migration:apply                                     # → table classe + 2 FK
+forge make:crud Classe                                    # CRUD (routes branchées)
+```
+
+Vérifié en base — la jointure tient : `classe 2TNE-A → annee 2025-2026 → niveau 2TNE`.
+
+> **Limite connue** : le CRUD généré (depuis `classe.json`) ne gère pas les champs
+> FK → le formulaire ne propose pas encore de choisir l'année/le niveau. Piste
+> d'amélioration côté Forge (CRUD conscient des relations).
 
 ---
 
@@ -282,21 +299,23 @@ attendant le correctif Forge, puis on reprendra (migration → table → CRUD).
 *Options : timestamps. Table créée (migration `create_niveau_classe`). Entité
 **partagée** avec le domaine référentiel.*
 
-### `Classe` — table `classe` ⏸️ (relations en pause — [retour-009](banc-essai/retour-009-flux-relation-many-to-one-casse-mariadb.md))
+### `Classe` — table `classe` ✅
 
 | Champ | Type | Contraintes | Notes |
 |---|---|---|---|
 | `code` | string(20) | **requis** | unique **dans l'année** (composite `(année, code)`, à venir) |
 | `libelle` | string(150) | nullable | libellé lisible |
+| `annee_scolaire_id` | big_integer (FK) | **requis** | → `AnneeScolaire` (many_to_one) |
+| `niveau_classe_id` | big_integer (FK) | **requis** | → `NiveauClasse` (many_to_one) |
 
-**Relations déclarées** (`mvc/entities/relations.json`, non encore appliquées) :
+**Relations** (`mvc/entities/relations.json` → colonnes FK + contraintes appliquées) :
 
 | Relation | Type | Clé étrangère | Politique |
 |---|---|---|---|
-| `Classe → AnneeScolaire` | many_to_one | `annee_scolaire_id` | `on_delete restrict`, indexée |
-| `Classe → NiveauClasse` | many_to_one | `niveau_classe_id` | `on_delete restrict`, indexée |
+| `Classe → AnneeScolaire` | many_to_one | `annee_scolaire_id` (`BIGINT UNSIGNED`) | `on_delete restrict`, indexée |
+| `Classe → NiveauClasse` | many_to_one | `niveau_classe_id` (`BIGINT UNSIGNED`) | `on_delete restrict`, indexée |
 
-*Options : timestamps. ⚠️ **Table pas encore créée** (bloqué par le flux relation).*
+*Options : timestamps. Table créée (migration `create_classe`, FK incluses).*
 
 > **Socle Auth/User** (`users`, `auth_tokens`, `auth_audit_log`,
 > `auth_rate_limit_attempts`) : fourni par Forge (`auth:init`), non listé ici — ce
@@ -343,16 +362,15 @@ Trace des arbitrages structurants (le *pourquoi*) :
 
 | Élément | État |
 |---|---|
-| `forge-mvc` | `f38d5159` (correctifs retours 001-008) |
-| Tables en base | `annee_scolaire`, `niveau_classe`, `users`, `auth_tokens`, `auth_audit_log`, `auth_rate_limit_attempts`, `forge_migrations` |
-| Entités terminées | `AnneeScolaire`, `NiveauClasse` |
-| En pause | `Classe` (relations — retour-009) |
+| `forge-mvc` | `809d224f` (correctifs retours 001-009) |
+| Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `users`, `auth_tokens`, `auth_audit_log`, `auth_rate_limit_attempts`, `forge_migrations` |
+| Entités terminées | `AnneeScolaire`, `NiveauClasse`, `Classe` (avec relations) |
+| Reste Bloc A | `Groupe`, `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse` |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
 | Qualité | `make check` vert (5 portes, 12 tests) |
 
-> Reprise prévue : dès le correctif Forge du flux relation, refaire `Classe`
-> (make:relation → migration → table `classe` avec FK → CRUD) et marquer retour-009
-> résolu.
+> Prochaine étape : poursuivre le Bloc A (`Eleve`, `Groupe`…). Pistes Forge issues de
+> `Classe` : intégrer les FK au CRUD (sélection de l'entité liée) et à `migration:make`.
 
 ---
 
@@ -434,15 +452,25 @@ forge make:crud NiveauClasse
 #   → branchement de la route
 ```
 
-**⑥ Entité Classe + relations (⏸️ bloqué — retour-009)**
+**⑥ Montée forge-mvc → 809d224f (correctif du flux relation, retour-009)**
+
+```bash
+make skeleton-check REF=../Test
+make forge-upgrade COMMIT=809d224fa4b77daffab5ac5edbe6d326ec085c67
+```
+
+**⑦ Entité Classe + relations ✅**
 
 ```bash
 forge make:entity Classe           # champs : code, libelle
 forge make:relation                # Classe → AnneeScolaire (FK annee_scolaire_id)
 forge make:relation                # Classe → NiveauClasse  (FK niveau_classe_id)
-forge sync:relations               # → relations.sql (contraintes)
-forge sync:entity Classe
-#   → blocage : colonne FK non générée / nom Pascal vs snake / BIGINT vs UNSIGNED
+forge sync:relations               # → relations.sql : ADD COLUMN <fk> BIGINT UNSIGNED + FK + index
+forge migration:make create_classe --from-entity Classe
+#   → on ajoute à la migration le SQL de relations.sql (ADD COLUMN + FK + index)
+forge migration:apply              # → table classe + 2 FK
+forge make:crud Classe             # CRUD (routes branchées)
+#   seed de vérif : niveau 2TNE + classe 2TNE-A (année=1, niveau=1)
 ```
 
 ---
@@ -459,7 +487,7 @@ flowchart TD
     A["① Cadrage projet ✅"]
     B["② Sources et JSON canonique ✅<br/>(tickets 01–04, 02b–04b)"]
     C["③ Dictionnaires de données ✅<br/>(05 socle · 08 référentiel · 13b starter)"]
-    D["④ BLOC A · Socle scolaire ◀ ICI — ticket 07<br/>AnneeScolaire ✅ · NiveauClasse ✅ · Classe ⏸️<br/>⬜ Groupe · Eleve · Professeur · Inscription · Affectation"]
+    D["④ BLOC A · Socle scolaire ◀ ICI — ticket 07<br/>AnneeScolaire ✅ · NiveauClasse ✅ · Classe ✅ (relations)<br/>⬜ Groupe · Eleve · Professeur · Inscription · Affectation"]
     E["⑤ Référentiel ⬜ (09–11)"]
     F["⑥ Scénario ⬜ (12–13)"]
     G["⑦ Starter ⬜ (14)"]
@@ -474,5 +502,6 @@ flowchart TD
     class E,F,G,H,I todo
 ```
 
-> **Où on en est** : phases ①–③ faites, **④ Bloc A en cours** (2 entités sur 8,
-> `Classe` en pause sur le flux relation). Les phases ⑤–⑨ suivront.
+> **Où on en est** : phases ①–③ faites, **④ Bloc A en cours** (3 entités sur 8 :
+> `AnneeScolaire`, `NiveauClasse`, `Classe` avec relations). Restent `Groupe`,
+> `Eleve`, `Professeur`, `Inscription`, `Affectation`, puis les phases ⑤–⑨.

@@ -27,4 +27,4 @@ silence, on documente et on remonte.
 | [006](retour-006-db-apply-ignore-models-sql-et-socle-auth-rbac.md) | `db:apply` ignore `mvc/models/sql/` ; `auth:init` génère un socle à dépendances RBAC/MFA non satisfaites | ✅ Résolu (f38d5159) |
 | [007](retour-007-aucune-page-login-scaffoldee.md) | Aucune page de login fournie ni scaffoldée, alors que le cœur redirige vers `/login` | ✅ Résolu (f38d5159) |
 | [008](retour-008-bugs-runtime-login-mariadb-et-bouton-crud.md) | Deux bugs runtime du code généré (login MariaDB `is_active`, composant bouton CRUD manquant) | À remonter |
-| [009](retour-009-flux-relation-many-to-one-casse-mariadb.md) | Flux `make:relation` (many_to_one) inapplicable sur MariaDB (colonne FK non générée, nom Pascal/snake, type `BIGINT` vs `UNSIGNED`) | À remonter |
+| [009](retour-009-flux-relation-many-to-one-casse-mariadb.md) | Flux `make:relation` (many_to_one) inapplicable sur MariaDB (colonne FK non générée, nom Pascal/snake, type `BIGINT` vs `UNSIGNED`) | ✅ Résolu (809d224f) |
