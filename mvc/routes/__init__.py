@@ -13,6 +13,7 @@ from core.http.router import Router
 from mvc.controllers.home_controller import HomeController
 from mvc.routes.annee_scolaire_routes import register_annee_scolaire_routes
 from mvc.routes.auth_routes import register_auth_routes
+from mvc.routes.classe_routes import register_classe_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 from optins.registry import register_optins
 
@@ -26,6 +27,9 @@ register_annee_scolaire_routes(router)
 
 # Routes appliquées pour : niveau_classe_controller
 register_niveau_classe_routes(router)
+
+# Routes appliquées pour : classe_controller
+register_classe_routes(router)
 
 # Routes appliquées pour : auth_controller
 register_auth_routes(router)
