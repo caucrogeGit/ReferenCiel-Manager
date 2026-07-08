@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "name": "Classe",
+  "table": "classe",
+  "fields": [
+    {
+      "name": "code",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "libelle",
+      "type": "string",
+      "max_length": 150,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

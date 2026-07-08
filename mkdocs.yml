@@ -91,6 +91,7 @@ nav:
       - Vue d'ensemble: banc-essai/README.md
       - Ticket Forge — retours terrain: banc-essai/ticket-forge-01-retours-terrain-ciel-2tne.md
       - Ticket Forge 02 — bugs runtime tranche verticale: banc-essai/ticket-forge-02-bugs-runtime-tranche-verticale.md
+      - Ticket Forge 03 — flux relation many_to_one: banc-essai/ticket-forge-03-flux-relation-many-to-one.md
       - Retour 001 — Conformité du squelette: banc-essai/retour-001-conformite-squelette.md
       - Retour 002 — Commande skeleton:upgrade: banc-essai/retour-002-commande-skeleton-upgrade.md
       - Retour 003 — forge_migrations & provisioning manuel: banc-essai/retour-003-forge-migrations-provisioning-manuel.md
@@ -99,3 +100,4 @@ nav:
       - Retour 006 — db:apply & socle auth: banc-essai/retour-006-db-apply-ignore-models-sql-et-socle-auth-rbac.md
       - Retour 007 — pas de page de login: banc-essai/retour-007-aucune-page-login-scaffoldee.md
       - Retour 008 — bugs runtime login & bouton: banc-essai/retour-008-bugs-runtime-login-mariadb-et-bouton-crud.md
+      - Retour 009 — flux relation many_to_one: banc-essai/retour-009-flux-relation-many-to-one-casse-mariadb.md

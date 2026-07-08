@@ -1,4 +1,27 @@
 {
   "schema_version": "1.0",
-  "relations": []
+  "relations": [
+    {
+      "type": "many_to_one",
+      "from": "Classe",
+      "to": "AnneeScolaire",
+      "name": "annee_scolaire",
+      "inverse_name": "classes",
+      "foreign_key": "annee_scolaire_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "Classe",
+      "to": "NiveauClasse",
+      "name": "niveau_classe",
+      "inverse_name": "classes",
+      "foreign_key": "niveau_classe_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    }
+  ]
 }
