@@ -16,10 +16,16 @@ from core.sessions.manager import get_session_store
 
 def load_user_by_email(email: str):
     """Charge un utilisateur du socle `users` par email (loader d'authenticate_user)."""
-    return fetch_one(
+    row = fetch_one(
         "SELECT id, email, password_hash, is_active FROM users WHERE email = ?",
         (email,),
     )
+    if row is not None:
+        # MariaDB renvoie BOOLEAN (tinyint) comme entier (0/1), or normalize_auth_user
+        # exige un bool strict (isinstance). Sans ce cast, TOUT login échoue.
+        # Voir banc-essai/retour-008.
+        row["is_active"] = bool(row["is_active"])
+    return row
 
 
 class AuthController(BaseController):

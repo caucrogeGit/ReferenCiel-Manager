@@ -1,0 +1,16 @@
+{# Composant bouton.
+
+   Comble un manque des générateurs : les vues de `make:crud` font
+   `{% include "components/button.html" %}`, mais Forge fournit le bouton comme
+   MACRO dans `components/ui.html`, pas comme fichier `button.html` — d'où un
+   `TemplateNotFound` (500) au premier rendu. On délègue à la macro.
+
+   Contexte attendu (passé via `{% with %}`) :
+     - label   : texte du bouton (requis)
+     - variant : primary | secondary | danger | ghost (défaut: primary)
+     - href    : si présent -> lien <a> ; sinon <button>
+     - type    : type du <button> (défaut: button ; ex. submit)
+
+   Voir docs/banc-essai/retour-008. #}
+{% from "components/ui.html" import button %}
+{{ button(label, variant=(variant | default('primary')), href=(href | default(none)), type=(type | default('button'))) }}
