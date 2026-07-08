@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from core.http.router import Router
 
 # Backend base de données (ADR-054/060). None tant qu'aucun n'est configuré.
-BACKEND: str | None = None
+BACKEND: str | None = "mariadb"
 
 # Opt-ins utilisés par ce projet : nom vers catégorie d'intégration.
 ENABLED_OPTINS: dict[str, str] = {
