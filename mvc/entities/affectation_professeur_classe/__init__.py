@@ -1,0 +1,1 @@
+from .affectation_professeur_classe import AffectationProfesseurClasse as AffectationProfesseurClasse

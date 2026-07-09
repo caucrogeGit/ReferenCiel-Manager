@@ -38,3 +38,24 @@ ALTER TABLE inscription_eleve
     REFERENCES annee_scolaire (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE affectation_professeur_classe
+    ADD CONSTRAINT fk_affectation_professeur_classe_professeur_id
+    FOREIGN KEY (professeur_id)
+    REFERENCES professeur (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE affectation_professeur_classe
+    ADD CONSTRAINT fk_affectation_professeur_classe_classe_id
+    FOREIGN KEY (classe_id)
+    REFERENCES classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE affectation_professeur_classe
+    ADD CONSTRAINT fk_affectation_professeur_classe_annee_scolaire_id
+    FOREIGN KEY (annee_scolaire_id)
+    REFERENCES annee_scolaire (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;

@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "name": "AffectationProfesseurClasse",
+  "table": "affectation_professeur_classe",
+  "fields": [
+    {
+      "name": "role",
+      "type": "string",
+      "max_length": 100,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "professeur_id",
+      "type": "foreign_key",
+      "references": "Professeur",
+      "required": true
+    },
+    {
+      "name": "classe_id",
+      "type": "foreign_key",
+      "references": "Classe",
+      "required": true
+    },
+    {
+      "name": "annee_scolaire_id",
+      "type": "foreign_key",
+      "references": "AnneeScolaire",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

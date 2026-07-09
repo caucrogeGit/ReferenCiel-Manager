@@ -55,6 +55,39 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "AffectationProfesseurClasse",
+      "to": "Professeur",
+      "name": "professeur",
+      "inverse_name": "affectations",
+      "foreign_key": "professeur_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "AffectationProfesseurClasse",
+      "to": "Classe",
+      "name": "classe",
+      "inverse_name": "affectations",
+      "foreign_key": "classe_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "AffectationProfesseurClasse",
+      "to": "AnneeScolaire",
+      "name": "annee_scolaire",
+      "inverse_name": "affectations",
+      "foreign_key": "annee_scolaire_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

@@ -11,6 +11,9 @@ par contrôleur, cette racine se contentant de les brancher explicitement.
 """
 from core.http.router import Router
 from mvc.controllers.home_controller import HomeController
+from mvc.routes.affectation_professeur_classe_routes import (
+    register_affectation_professeur_classe_routes,
+)
 from mvc.routes.annee_scolaire_routes import register_annee_scolaire_routes
 from mvc.routes.auth_routes import register_auth_routes
 from mvc.routes.classe_routes import register_classe_routes
@@ -42,6 +45,9 @@ register_professeur_routes(router)
 
 # Routes appliquées pour : inscription_eleve_controller
 register_inscription_eleve_routes(router)
+
+# Routes appliquées pour : affectation_professeur_classe_controller
+register_affectation_professeur_classe_routes(router)
 
 # Routes appliquées pour : auth_controller
 register_auth_routes(router)
