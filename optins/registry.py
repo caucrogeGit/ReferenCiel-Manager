@@ -30,6 +30,8 @@ BACKEND: str | None = "mariadb"
 # Opt-ins utilisés par ce projet : nom vers catégorie d'intégration.
 ENABLED_OPTINS: dict[str, str] = {
     # >>> opt-in registry (géré par forge opt-in:enable / disable)
+    "admin": "crosscutting",
+    "files": "library",
 }
 
 # >>> opt-in imports (gérés par forge opt-in:enable / disable)
