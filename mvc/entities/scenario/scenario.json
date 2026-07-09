@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "name": "Scenario",
+  "table": "scenario",
+  "fields": [
+    {
+      "name": "titre",
+      "type": "string",
+      "max_length": 200,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "intention",
+      "type": "text",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "objectifs",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "referentiel_id",
+      "type": "foreign_key",
+      "references": "ReferentielNiveauClasse",
+      "required": true
+    },
+    {
+      "name": "auteur_id",
+      "type": "foreign_key",
+      "references": "Professeur",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

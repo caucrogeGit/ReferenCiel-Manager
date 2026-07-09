@@ -290,6 +290,60 @@
         "on_delete": "cascade",
         "fields": []
       }
+    },
+    {
+      "type": "many_to_one",
+      "from": "Scenario",
+      "to": "ReferentielNiveauClasse",
+      "name": "referentiel",
+      "inverse_name": "scenarios",
+      "foreign_key": "referentiel_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "Scenario",
+      "to": "Professeur",
+      "name": "auteur",
+      "inverse_name": "scenarios",
+      "foreign_key": "auteur_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_many",
+      "from": "Scenario",
+      "to": "Competence",
+      "name": "competences",
+      "inverse_name": "scenarios",
+      "pivot": {
+        "table": "scenario_competence",
+        "from_key": "scenario_id",
+        "to_key": "competence_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
+    },
+    {
+      "type": "many_to_many",
+      "from": "Scenario",
+      "to": "CritereObservable",
+      "name": "criteres",
+      "inverse_name": "scenarios",
+      "pivot": {
+        "table": "scenario_critere",
+        "from_key": "scenario_id",
+        "to_key": "critere_observable_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
     }
   ]
 }

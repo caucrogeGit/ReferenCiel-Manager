@@ -1,0 +1,55 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{% from "components/forms.html" import field, textarea_field, select_field, checkbox %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
+    <a href="/scenario" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+</div>
+
+{% include "partials/form_errors.html" %}
+
+<div class="bg-white shadow rounded p-6">
+    <form method="post" action="{{ action }}" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {{ field(name='titre', label='Titre', type='text', value=form.value('titre'), error=form.error('titre')) }}
+        {{ textarea_field(name='intention', label='Intention', value=form.value('intention'), error=form.error('intention')) }}
+        {{ textarea_field(name='objectifs', label='Objectifs', value=form.value('objectifs'), error=form.error('objectifs')) }}
+        {{ field(name='statut', label='Statut', type='text', value=form.value('statut'), error=form.error('statut')) }}
+        {{ field(name='version', label='Version', type='text', value=form.value('version'), error=form.error('version')) }}
+        {{ select_field(name='referentiel_id', label='Referentiel', options=form.options.referentiel_id_choices, selected=form.value('referentiel_id'), error=form.error('referentiel_id')) }}
+        {{ select_field(name='auteur_id', label='Auteur', options=form.options.auteur_id_choices, selected=form.value('auteur_id'), error=form.error('auteur_id')) }}
+        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
+        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Competence</label>
+            <select
+                name="competence_ids"
+                multiple
+                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                {% for value, label in competence_choices %}
+                <option value="{{ value }}" {{ 'selected' if value in competence_ids_selected else '' }}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Critereobservable</label>
+            <select
+                name="critere_observable_ids"
+                multiple
+                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                {% for value, label in critere_observable_choices %}
+                <option value="{{ value }}" {{ 'selected' if value in critere_observable_ids_selected else '' }}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="flex gap-4 pt-2">
+            {{ button(label=trans('common.save'), variant='primary', type='submit') }}
+            {{ button(label=trans('common.cancel'), variant='secondary', href='/scenario') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

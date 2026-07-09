@@ -24,6 +24,7 @@ from mvc.routes.inscription_eleve_routes import register_inscription_eleve_route
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 from mvc.routes.professeur_routes import register_professeur_routes
 from mvc.routes.referentiel_import_routes import register_referentiel_import_routes
+from mvc.routes.scenario_routes import register_scenario_routes
 from optins.registry import register_optins
 
 router = Router()
@@ -48,6 +49,9 @@ register_professeur_routes(router)
 
 # Routes appliquées pour : inscription_eleve_controller
 register_inscription_eleve_routes(router)
+
+# Routes appliquées pour : scenario_controller (chaîne Scenario, ticket 13)
+register_scenario_routes(router)
 
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)

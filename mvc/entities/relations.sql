@@ -211,3 +211,53 @@ CREATE TABLE IF NOT EXISTS cc_competence (
         REFERENCES competence (id)
         ON DELETE CASCADE
 );
+
+ALTER TABLE scenario
+    ADD CONSTRAINT fk_scenario_referentiel_id
+    FOREIGN KEY (referentiel_id)
+    REFERENCES referentiel_niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE scenario
+    ADD CONSTRAINT fk_scenario_auteur_id
+    FOREIGN KEY (auteur_id)
+    REFERENCES professeur (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+CREATE TABLE IF NOT EXISTS scenario_competence (
+    id INT NOT NULL AUTO_INCREMENT,
+    scenario_id INT NOT NULL,
+    competence_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_scenario_competence (scenario_id, competence_id),
+    INDEX idx_scenario_competence_scenario_id (scenario_id),
+    INDEX idx_scenario_competence_competence_id (competence_id),
+    CONSTRAINT fk_scenario_competence_scenario_id
+        FOREIGN KEY (scenario_id)
+        REFERENCES scenario (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_scenario_competence_competence_id
+        FOREIGN KEY (competence_id)
+        REFERENCES competence (id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS scenario_critere (
+    id INT NOT NULL AUTO_INCREMENT,
+    scenario_id INT NOT NULL,
+    critere_observable_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_scenario_critere (scenario_id, critere_observable_id),
+    INDEX idx_scenario_critere_scenario_id (scenario_id),
+    INDEX idx_scenario_critere_critere_observable_id (critere_observable_id),
+    CONSTRAINT fk_scenario_critere_scenario_id
+        FOREIGN KEY (scenario_id)
+        REFERENCES scenario (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_scenario_critere_critere_observable_id
+        FOREIGN KEY (critere_observable_id)
+        REFERENCES critere_observable (id)
+        ON DELETE CASCADE
+);
