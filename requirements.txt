@@ -1,7 +1,7 @@
 # Dependances du projet Forge.
 # Le framework et ses dependances runtime (python-dotenv, Jinja2, Argon2,
 # jsonschema) sont fournis par le paquet forge-mvc.
-forge-mvc @ git+https://github.com/caucrogeGit/Forge.git@809d224fa4b77daffab5ac5edbe6d326ec085c67
+forge-mvc @ git+https://github.com/caucrogeGit/Forge.git@32f552cc5d8dedb46d816b3de81f569bc767d07d
 # Base de donnees (ADR-054/060) : le coeur est agnostique BDD et le squelette
 # est livre SANS backend. Choisissez et installez le backend de votre choix,
 # puis configurez son environnement selon sa documentation. Exemples :
