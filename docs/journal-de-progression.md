@@ -473,14 +473,15 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **⑤ Référentiel — schéma ✅ (tickets 09-10)** | 12 entités (`Formation`, `ReferentielNiveauClasse`, `PoleActivite`, `ActiviteProfessionnelle`, `Tache`, `ResultatAttendu`, `Competence`, `Connaissance`, `CritereObservable`, `IndicateurReussite`, `FamilleCompetence`, `Source`) + `NiveauClasse` réutilisée. Migration `create_referentiel` (14 tables, 13 FK, 7 UNIQUE composites, 2 pivots m2m) appliquée |
 | Total entités | **20** en base (8 socle + 12 référentiel). `make check` vert |
 | Relations | socle : 3 m2o + 2 pivots enrichis + 1 m2m · référentiel : 13 m2o + 2 m2m (`activite_competence`, `cc_competence`) |
-| 🚧 Référentiel — ticket 11 | **Service d'import** `mvc/services/referentiel_importer.py` ✅ (ADR-010 : upsert par identifiant + best-effort ; vérifié sur CIEL 2TNE : 81 objets, 0 erreur). Opt-ins `admin`+`files` activés. **Reste l'UI admin** (upload → valider schéma → importer → rapport) |
+| ✅ Référentiel — ticket 11 | **Importeur complet** : service (`referentiel_importer.py`, ADR-010 upsert + best-effort), **UI d'upload admin** (`/admin/referentiel/import`, validation schéma → import → rapport, provenance conservée), **tests** (mock DB, CI-safe). Vérifié bout-en-bout au navigateur (CIEL 2TNE : 81 objets) |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
+| Qualité | `make check` vert (5 portes, **15 tests**) |
 
-> Prochaine étape : **UI d'upload admin** du ticket 11 — brancher `forge-mvc-admin` +
-> `forge-mvc-files` : formulaire d'upload (admin), validation contre le schéma JSON
-> (ticket 04), appel de `import_referentiel`, affichage du rapport. Puis un test pytest
-> de l'importeur (fixture base). Défauts Forge remontés : retour-010 (F22 partiel),
-> retour-012 (F26/F27), retour-013 (F28).
+> Prochaine étape : **Phase ⑤ Référentiel terminée** (tickets 09-10-11). Passer à la
+> phase **⑥ Scénario** (tickets 12-13, cf. tunnel §11). Restes optionnels du référentiel :
+> lien de nav vers l'import + `ReferentielNiveauClasse` en ressource `forge-mvc-admin`
+> (parcourir les référentiels importés) ; commit d'`env/example` (WIP porteur mêlé).
+> Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27), retour-013 (F28).
 
 ---
 
@@ -666,6 +667,19 @@ forge migration:apply           # → 14 tables (20 entités au total)
 #   pas de make:crud : le référentiel est peuplé par l'importeur (ticket 11)
 ```
 
+**⑮ Importeur par upload admin ✅ (phase ⑤, ticket 11 — ADR-008/010)**
+
+```bash
+pip install forge-mvc-admin forge-mvc-files    # briques (porteur)
+forge opt-in:enable admin --apply ; forge opt-in:enable files --apply
+#   env : UPLOAD_ALLOWED_EXTENSIONS/MIME_TYPES += json (sinon .json refusé)
+#   code (pairing) : mvc/services/referentiel_importer.py (SQL paramétré, upsert,
+#     mapping id locaux, best-effort) + canonical_validator.py (jsonschema 2020-12)
+#     + ReferentielImportController + vues + route protégée /admin/referentiel/import
+#   tests : tests/test_referentiel_importer.py (mock DB, CI-safe)
+forge run                                       # upload CIEL 2TNE → rapport (81 objets)
+```
+
 ---
 
 ## 11. Vue d'ensemble — le tunnel de progression
@@ -681,8 +695,8 @@ flowchart TD
     B["② Sources et JSON canonique ✅<br/>(tickets 01–04, 02b–04b)"]
     C["③ Dictionnaires de données ✅<br/>(05 socle · 08 référentiel · 13b starter)"]
     D["④ BLOC A · Socle scolaire ✅ — ticket 07<br/>AnneeScolaire · NiveauClasse · Classe · Eleve · Professeur<br/>Inscription · Affectation · Groupe (+ m2m) — 8/8"]
-    E["⑤ Référentiel ◀ ICI — schéma ✅ (09-10)<br/>12 entités + 15 relations en base<br/>⬜ importeur JSON (11)"]
-    F["⑥ Scénario ⬜ (12–13)"]
+    E["⑤ Référentiel ✅ (09-10-11)<br/>12 entités + 15 relations en base<br/>importeur JSON par upload admin"]
+    F["⑥ Scénario ◀ ICI ⬜ (12–13)"]
     G["⑦ Starter ⬜ (14)"]
     H["⑧ Parcours ⬜ (15–16)"]
     I["⑨ BLOC B · Exécution pédagogique élève ⬜ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Suivi prof → Évaluation et bilan"]
@@ -690,11 +704,11 @@ flowchart TD
     classDef done fill:#e6f4ea,stroke:#34a853;
     classDef current fill:#fff4e5,stroke:#f9a825,stroke-width:3px;
     classDef todo fill:#f1f3f4,stroke:#9aa0a6;
-    class A,B,C,D done
-    class E current
-    class F,G,H,I todo
+    class A,B,C,D,E done
+    class F current
+    class G,H,I todo
 ```
 
-> **Où on en est** : phases ①–④ faites — **Bloc A terminé (8/8)**. Phase **⑤ Référentiel
-> en cours** : le **schéma est en base** (tickets 09-10 : 12 entités + 15 relations, 20
-> entités au total). Reste le **ticket 11 — importeur JSON canonique** (upload admin).
+> **Où on en est** : phases ①–⑤ faites — **Bloc A (8/8)** et **Référentiel** complets
+> (schéma 20 entités + **importeur par upload admin** vérifié bout-en-bout : CIEL 2TNE,
+> 81 objets). Prochaine phase : **⑥ Scénario** (tickets 12-13).
