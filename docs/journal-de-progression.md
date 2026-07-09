@@ -422,11 +422,12 @@ peuplé par l'importeur (ticket 11).*
 L'application **exerce Forge en réel** et remonte chaque friction. Voir la
 [vue d'ensemble du banc d'essai](banc-essai/README.md).
 
-- **Retours 001 → 013** : du squelette (001) aux bugs runtime (008), au flux
+- **Retours 001 → 014** : du squelette (001) aux bugs runtime (008), au flux
   relation (009), son intégration migration/CRUD (010), l'unicité globale noms/FK
-  (011), les défauts du moteur d'entités (012) et le pivot m2m en `INT` (013).
+  (011), les défauts du moteur d'entités (012), le pivot m2m en `INT` (013) et
+  l'incompatibilité `forge-mvc-admin`/`entities` sur la casse des colonnes (014).
   **001-009 corrigés** et **vérifiés** ; **011 corrigé** dans `32f552cc` (unicité scopée
-  par entité source, vérifié bout-en-bout) ; **010, 012, 013 à remonter**.
+  par entité source, vérifié bout-en-bout) ; **010, 012, 013, 014 à remonter**.
 - **Tickets consolidés** pour l'équipe Forge :
   [ticket-01](banc-essai/ticket-forge-01-retours-terrain-ciel-2tne.md) (résolu),
   [ticket-02](banc-essai/ticket-forge-02-bugs-runtime-tranche-verticale.md),
@@ -478,10 +479,12 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | Qualité | `make check` vert (5 portes, **15 tests**) |
 
 > Prochaine étape : **Phase ⑤ Référentiel terminée** (tickets 09-10-11). Passer à la
-> phase **⑥ Scénario** (tickets 12-13, cf. tunnel §11). Restes optionnels du référentiel :
-> lien de nav vers l'import + `ReferentielNiveauClasse` en ressource `forge-mvc-admin`
-> (parcourir les référentiels importés) ; commit d'`env/example` (WIP porteur mêlé).
-> Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27), retour-013 (F28).
+> phase **⑥ Scénario** (tickets 12-13, cf. tunnel §11). Confort référentiel ajouté :
+> `ReferentielNiveauClasse` exposé en ressource **`forge-mvc-admin`** (`/admin/referentiels`,
+> liste/fiche + gestion du statut ; contournement retour-014/F29 pour la casse des colonnes).
+> Reste : lien de nav vers l'import ; commit d'`env/example` (WIP porteur mêlé).
+> Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27), retour-013 (F28),
+> retour-014 (F29).
 
 ---
 
