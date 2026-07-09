@@ -415,6 +415,25 @@ exprimées côté enfant (`many_to_one`). Codes « uniques dans le référentiel
 composites (comme `Classe.code`). Pivots m2m corrigés à la main (F28). Pas de CRUD :
 peuplé par l'importeur (ticket 11).*
 
+### `Scenario` — table `scenario` ✅ (phase ⑥)
+
+L'**intention pédagogique** du professeur ([dictionnaire dédié](specs/data-dictionary/dictionnaire-scenario.md)).
+Premier objet métier **créé par le prof** (CRUD), pas importé.
+
+| Champ | Type | Contraintes | Notes |
+|---|---|---|---|
+| `titre` | string(200) | **requis** | |
+| `intention` | text | **requis** | le cœur du scénario |
+| `objectifs` | text | nullable | |
+| `statut` | string(20) | **requis** | cycle `brouillon`/`publie`/`archive` |
+| `version` | string(20) | **requis** | |
+| `referentiel_id` | foreign_key → `ReferentielNiveauClasse` | **requis** | cadre |
+| `auteur_id` | foreign_key → `Professeur` | **requis** | prof auteur |
+
+*Relations m2m : `competences` (visées, pivot `scenario_competence`) et `criteres`
+(pivot `scenario_critere`). **CRUD prof m2m-aware** : selects FK + multi-select
+compétences/critères + `sync_*_ids` transactionnel. Tests de persistance (mock DB).*
+
 ---
 
 ## 7. Rôle de banc d'essai — retours & tickets
@@ -472,19 +491,17 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `professeur`, `inscription_eleve` (+3 FK, UNIQUE), `affectation_professeur_classe` (+3 FK, UNIQUE), `groupe` (+1 FK), `groupe_eleve` (pivot m2m), `users`, `auth_*`, `forge_migrations` |
 | **Bloc A — terminé ✅ (8/8)** | `AnneeScolaire`, `NiveauClasse`, `Classe`, `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse`, `Groupe` |
 | **⑤ Référentiel — schéma ✅ (tickets 09-10)** | 12 entités (`Formation`, `ReferentielNiveauClasse`, `PoleActivite`, `ActiviteProfessionnelle`, `Tache`, `ResultatAttendu`, `Competence`, `Connaissance`, `CritereObservable`, `IndicateurReussite`, `FamilleCompetence`, `Source`) + `NiveauClasse` réutilisée. Migration `create_referentiel` (14 tables, 13 FK, 7 UNIQUE composites, 2 pivots m2m) appliquée |
-| Total entités | **20** en base (8 socle + 12 référentiel). `make check` vert |
-| Relations | socle : 3 m2o + 2 pivots enrichis + 1 m2m · référentiel : 13 m2o + 2 m2m (`activite_competence`, `cc_competence`) |
-| ✅ Référentiel — ticket 11 | **Importeur complet** : service (`referentiel_importer.py`, ADR-010 upsert + best-effort), **UI d'upload admin** (`/admin/referentiel/import`, validation schéma → import → rapport, provenance conservée), **tests** (mock DB, CI-safe). Vérifié bout-en-bout au navigateur (CIEL 2TNE : 81 objets) |
+| ✅ Référentiel — ticket 11 | **Importeur complet** : service (`referentiel_importer.py`, ADR-010 upsert + best-effort), **UI d'upload admin** (validation schéma → import → rapport, provenance) + **admin de parcours** (`forge-mvc-admin`) + tests. Vérifié bout-en-bout (CIEL 2TNE : 81 objets) |
+| **⑥ Scénario — terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` (titre, intention, objectifs, statut, version) + 2 FK (referentiel, auteur) + 2 m2m (compétences visées, critères) + **CRUD prof m2m-aware** (multi-select) + tests de persistance |
+| Total entités | **21** en base (8 socle + 12 référentiel + `Scenario`). `make check` vert |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
-| Qualité | `make check` vert (5 portes, **15 tests**) |
+| Qualité | `make check` vert (5 portes, **19 tests**) |
 
-> Prochaine étape : **Phase ⑤ Référentiel terminée** (tickets 09-10-11). Passer à la
-> phase **⑥ Scénario** (tickets 12-13, cf. tunnel §11). Confort référentiel ajouté :
-> `ReferentielNiveauClasse` exposé en ressource **`forge-mvc-admin`** (`/admin/referentiels`,
-> liste/fiche + gestion du statut ; contournement retour-014/F29 pour la casse des colonnes).
-> Reste : lien de nav vers l'import ; commit d'`env/example` (WIP porteur mêlé).
-> Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27), retour-013 (F28),
-> retour-014 (F29).
+> Prochaine étape : **Phases ⑤ et ⑥ terminées**. Passer à la phase **⑦ Starter**
+> (ticket 14 : `StarterWelcome` + `VersionStarter`, dico 13b déjà écrit). Restes de
+> confort : lien de nav (import + admin), commit d'`env/example` (WIP porteur mêlé).
+> Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27 — F27 confirmé
+> 2×), retour-013 (F28), retour-014 (F29).
 
 ---
 
@@ -683,6 +700,20 @@ forge opt-in:enable admin --apply ; forge opt-in:enable files --apply
 forge run                                       # upload CIEL 2TNE → rapport (81 objets)
 ```
 
+**⑯ Chaîne Scenario ✅ (phase ⑥, tickets 12-13)**
+
+```bash
+#   ticket 12 : dictionnaire de données Scenario (docs/specs/data-dictionary/)
+forge make:entity Scenario          # titre, intention, objectifs, statut, version
+forge make:relation                 # ×4 : referentiel, auteur (m2o) + competences, criteres (m2m)
+forge sync:entity Scenario ; forge sync:relations
+forge migration:make create_scenario --from-entity Scenario
+#   compléter : 2 FK + 2 pivots corrigés F28 ; commentaires ASCII SANS ; (F27 confirmé 2×)
+forge migration:apply
+forge make:crud Scenario            # CRUD prof m2m-aware (multi-select competences/criteres)
+#   tests : tests/test_scenario_persistance.py (mock DB)
+```
+
 ---
 
 ## 11. Vue d'ensemble — le tunnel de progression
@@ -699,19 +730,19 @@ flowchart TD
     C["③ Dictionnaires de données ✅<br/>(05 socle · 08 référentiel · 13b starter)"]
     D["④ BLOC A · Socle scolaire ✅ — ticket 07<br/>AnneeScolaire · NiveauClasse · Classe · Eleve · Professeur<br/>Inscription · Affectation · Groupe (+ m2m) — 8/8"]
     E["⑤ Référentiel ✅ (09-10-11)<br/>12 entités + 15 relations en base<br/>importeur JSON par upload admin"]
-    F["⑥ Scénario ◀ ICI ⬜ (12–13)"]
-    G["⑦ Starter ⬜ (14)"]
+    F["⑥ Scénario ✅ (12-13)<br/>dico + entité + CRUD prof m2m-aware + tests"]
+    G["⑦ Starter ◀ ICI ⬜ (14)"]
     H["⑧ Parcours ⬜ (15–16)"]
     I["⑨ BLOC B · Exécution pédagogique élève ⬜ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Suivi prof → Évaluation et bilan"]
     A --> B --> C --> D --> E --> F --> G --> H --> I
     classDef done fill:#e6f4ea,stroke:#34a853;
     classDef current fill:#fff4e5,stroke:#f9a825,stroke-width:3px;
     classDef todo fill:#f1f3f4,stroke:#9aa0a6;
-    class A,B,C,D,E done
-    class F current
-    class G,H,I todo
+    class A,B,C,D,E,F done
+    class G current
+    class H,I todo
 ```
 
-> **Où on en est** : phases ①–⑤ faites — **Bloc A (8/8)** et **Référentiel** complets
-> (schéma 20 entités + **importeur par upload admin** vérifié bout-en-bout : CIEL 2TNE,
-> 81 objets). Prochaine phase : **⑥ Scénario** (tickets 12-13).
+> **Où on en est** : phases ①–⑥ faites — **Bloc A (8/8)**, **Référentiel** (schéma +
+> importeur) et **Scénario** complets (21 entités en base, 19 tests). Prochaine phase :
+> **⑦ Starter** (ticket 14 : `StarterWelcome` + `VersionStarter`).

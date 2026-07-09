@@ -89,12 +89,16 @@ néanmoins dans la chaîne — l'un dans la validation, l'autre à l'application
   « dans une chaîne » et **ne découpent plus**. Les 4 `ALTER` sont alors envoyés en
   **une seule** requête multi-instructions → refus du serveur.
 
-- **Impact** : toute migration (ou tout SQL exécuté via ce chemin) contenant une
-  apostrophe **en commentaire** est cassée de façon **non évidente** (le message pointe
-  une instruction valide). Piège français par excellence (apostrophes fréquentes).
+- **Impact** : toute migration (ou tout SQL exécuté via ce chemin) contenant, **en
+  commentaire**, une **apostrophe** OU un **`;`** est cassée de façon **non évidente**
+  (le message pointe une instruction valide). Le splitter n'est pas conscient des
+  commentaires : un `;` en commentaire **découpe** au mauvais endroit, une `'` ouvre un
+  faux littéral. Piège français (apostrophes) **et** piège de rédaction (un `;` dans un
+  commentaire explicatif). *Confirmé deux fois sur le banc d'essai : `n'inclut` puis un
+  `;` dans un commentaire de migration `create_scenario`.*
 
-- **Contournement (projet)** : rédiger les commentaires de migration **sans
-  apostrophe** (ASCII). Fragile et facile à oublier.
+- **Contournement (projet)** : rédiger les commentaires de migration **sans apostrophe
+  ni `;`** (ASCII sobre). Fragile et facile à oublier.
 
 - **Correctif proposé** : rendre `split_sql_statements` **conscient des commentaires** —
   ignorer `-- …` jusqu'à la fin de ligne et `/* … */` avant de traiter `'` et `;`.
