@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Montée de niveau FRAMEWORK (ADR-009) : passe forge-mvc / forge-mvc-testing au
-# commit git cible et force la réinstallation.
+# Montée de niveau FRAMEWORK (ADR-009) : passe forge-mvc / forge-mvc-testing /
+# forge-mvc-entities au commit git cible et force la réinstallation.
+# forge-mvc-entities (ADR-070) : moteur de données extrait du cœur — REQUIS ici
+# (make:entity/relation/crud, sync, migrations, db:*), sinon la montée le perd.
 #
 # Usage : tools/forge-upgrade.sh <commit-git-forge>
 # Appelé par `make forge-upgrade COMMIT=<sha>` (qui enchaîne `make check`).
@@ -24,8 +26,9 @@ grep -HoE "Forge\.git@[0-9a-f]+" "$ROOT/requirements.txt" "$ROOT/requirements-de
 echo "== 2. réinstallation forcée au commit cible =="
 "$PIP" install --force-reinstall --no-deps \
     "forge-mvc @ ${REPO}@${COMMIT}" \
-    "forge-mvc-testing @ ${REPO}@${COMMIT}#subdirectory=packages/forge-mvc-testing"
+    "forge-mvc-testing @ ${REPO}@${COMMIT}#subdirectory=packages/forge-mvc-testing" \
+    "forge-mvc-entities @ ${REPO}@${COMMIT}#subdirectory=packages/forge-mvc-entities"
 
 echo "== 3. vérification =="
-"$PIP" freeze | grep -iE "forge-mvc(-testing)? @"
+"$PIP" freeze | grep -iE "forge-mvc(-testing|-entities)? @"
 echo "OK — enchaîne avec 'make check'."
