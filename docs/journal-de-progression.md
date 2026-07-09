@@ -352,13 +352,20 @@ couture `user_id` que `Eleve` : le rattachement au compte viendra avec l'ADR dé
 L'application **exerce Forge en réel** et remonte chaque friction. Voir la
 [vue d'ensemble du banc d'essai](banc-essai/README.md).
 
-- **Retours 001 → 009** : du squelette (001) aux bugs runtime (008) et au flux
-  relation (009). Les **retours 001-007 ont été corrigés** dans Forge et **vérifiés**
-  sur le terrain.
+- **Retours 001 → 011** : du squelette (001) aux bugs runtime (008), au flux
+  relation (009), à son intégration migration/CRUD (010) et à l'unicité globale des
+  noms/FK (011). Les **retours 001-007 ont été corrigés** dans Forge et **vérifiés**
+  sur le terrain ; 009 corrigé (809d224f) ; **010 et 011 à remonter**.
 - **Tickets consolidés** pour l'équipe Forge :
   [ticket-01](banc-essai/ticket-forge-01-retours-terrain-ciel-2tne.md) (résolu),
   [ticket-02](banc-essai/ticket-forge-02-bugs-runtime-tranche-verticale.md),
-  [ticket-03](banc-essai/ticket-forge-03-flux-relation-many-to-one.md).
+  [ticket-03](banc-essai/ticket-forge-03-flux-relation-many-to-one.md),
+  [ticket-04](banc-essai/ticket-forge-04-relations-migration-et-crud.md).
+- **Blocage courant** : [retour-011](banc-essai/retour-011-make-relation-unicite-globale-noms-et-fk.md)
+  (F24/F25) — `make:relation` impose une unicité **globale** du nom de relation et de
+  la colonne FK, ce qui **bloque toutes les entités relationnelles restantes** du
+  Bloc A (elles pointent vers des cibles déjà référencées). On **attend le correctif
+  Forge** plutôt que de graver des noms divergents du dictionnaire dans le schéma.
 - **Enseignement clé** : `make check` (portes statiques) peut être **vert** alors que
   l'app **plante à l'exécution** (login, rendu, relations). Seul un **parcours
   end-to-end** avec un vrai backend révèle ces bugs.
@@ -389,12 +396,16 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | `forge-mvc` | `809d224f` (correctifs retours 001-009) |
 | Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `professeur`, `users`, `auth_tokens`, `auth_audit_log`, `auth_rate_limit_attempts`, `forge_migrations` |
 | Entités terminées | `AnneeScolaire`, `NiveauClasse`, `Classe` (avec relations), `Eleve`, `Professeur` |
-| Reste Bloc A | `Groupe`, `InscriptionEleve`, `AffectationProfesseurClasse` |
+| ⏸️ En pause | `InscriptionEleve` — entité créée, 2/3 relations posées (`eleve_id`, `classe_id`) ; 3ᵉ FK (`annee_scolaire_id`) **bloquée par F24/F25** ([retour-011](banc-essai/retour-011-make-relation-unicite-globale-noms-et-fk.md)) |
+| Reste Bloc A | `Groupe`, `AffectationProfesseurClasse` (relationnelles → **mêmes blocages** attendus) |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
 | Qualité | `make check` vert (5 portes, 12 tests) |
 
-> Prochaine étape : poursuivre le Bloc A (`Eleve`, `Groupe`…). Pistes Forge issues de
-> `Classe` : intégrer les FK au CRUD (sélection de l'entité liée) et à `migration:make`.
+> Prochaine étape : **en attente du correctif Forge** pour F24/F25 (retour-011). Une
+> fois l'unicité scopée par entité source, reprendre `InscriptionEleve` (3ᵉ relation
+> `annee_scolaire_id`, migration, CRUD), puis `Groupe` (m2m) et
+> `AffectationProfesseurClasse`. Autres pistes ouvertes (retour-010) : FK au CRUD et à
+> `migration:make`.
 
 ---
 

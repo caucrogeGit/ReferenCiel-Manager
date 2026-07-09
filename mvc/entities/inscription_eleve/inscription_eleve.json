@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "name": "InscriptionEleve",
+  "table": "inscription_eleve",
+  "fields": [
+    {
+      "name": "date_inscription",
+      "type": "date",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}
