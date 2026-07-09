@@ -390,6 +390,31 @@ scaffoldée.*
 > `auth_rate_limit_attempts`) : fourni par Forge (`auth:init`), non listé ici — ce
 > ne sont pas des entités métier du projet.
 
+### Domaine Référentiel (12 entités) — schéma ✅
+
+Détail métier dans le [dictionnaire référentiel](specs/data-dictionary/dictionnaire-referentiel-niveau-classe.md).
+Vue d'ensemble du modèle relationnel :
+
+| Entité | Champs propres | Relations sortantes |
+|---|---|---|
+| `ReferentielNiveauClasse` | identifiant (unique), version, statut, importe_le | → `Formation`, → `NiveauClasse` · UNIQUE `(formation, niveau, version)` |
+| `Formation` | code (unique), intitule | (racine) |
+| `PoleActivite` | intitule | → `ReferentielNiveauClasse` |
+| `ActiviteProfessionnelle` | code, intitule, conditions_exercice | → `Referentiel`, → `Pole` · **m2m** `Competence` (`activite_competence`) · UNIQUE `(ref, code)` |
+| `Tache` | ordre, libelle | → `ActiviteProfessionnelle` |
+| `ResultatAttendu` | code, libelle | → `ActiviteProfessionnelle` · UNIQUE `(activite, code)` |
+| `Competence` | code, intitule | → `Referentiel` · UNIQUE `(ref, code)` |
+| `Connaissance` | libelle, niveau_taxonomique | → `Competence` |
+| `CritereObservable` | code, libelle | → `Competence` · UNIQUE `(competence, code)` |
+| `IndicateurReussite` | code, libelle, origine, ref_code | → `Referentiel` · UNIQUE `(ref, code)` |
+| `FamilleCompetence` | code, intitule | → `Referentiel` · **m2m** `Competence` (`cc_competence`) · UNIQUE `(ref, code)` |
+| `Source` | source_id, source_type, source_fichier, source_note | → `Referentiel` (provenance) |
+
+*FK déclarées en champs `foreign_key` du contrat (modèle `32f552cc`). `one_to_many` du dico
+exprimées côté enfant (`many_to_one`). Codes « uniques dans le référentiel » = UNIQUE
+composites (comme `Classe.code`). Pivots m2m corrigés à la main (F28). Pas de CRUD :
+peuplé par l'importeur (ticket 11).*
+
 ---
 
 ## 7. Rôle de banc d'essai — retours & tickets
@@ -445,16 +470,16 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | `forge-mvc` | `32f552cc` (correctifs retours 001-011) + opt-in **`forge-mvc-entities`** `32f552cc` (moteur de données, ADR-070) |
 | Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `professeur`, `inscription_eleve` (+3 FK, UNIQUE), `affectation_professeur_classe` (+3 FK, UNIQUE), `groupe` (+1 FK), `groupe_eleve` (pivot m2m), `users`, `auth_*`, `forge_migrations` |
 | **Bloc A — terminé ✅ (8/8)** | `AnneeScolaire`, `NiveauClasse`, `Classe`, `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse`, `Groupe` |
-| Relations | 3 `many_to_one` simples (Classe) + 2 pivots enrichis (Inscription, Affectation) + 1 `many_to_many` (Groupe↔Eleve, pivot `groupe_eleve`) |
+| **⑤ Référentiel — schéma ✅ (tickets 09-10)** | 12 entités (`Formation`, `ReferentielNiveauClasse`, `PoleActivite`, `ActiviteProfessionnelle`, `Tache`, `ResultatAttendu`, `Competence`, `Connaissance`, `CritereObservable`, `IndicateurReussite`, `FamilleCompetence`, `Source`) + `NiveauClasse` réutilisée. Migration `create_referentiel` (14 tables, 13 FK, 7 UNIQUE composites, 2 pivots m2m) appliquée |
+| Total entités | **20** en base (8 socle + 12 référentiel). `make check` vert |
+| Relations | socle : 3 m2o + 2 pivots enrichis + 1 m2m · référentiel : 13 m2o + 2 m2m (`activite_competence`, `cc_competence`) |
+| ⬜ Référentiel — ticket 11 | **Importeur JSON canonique → base** (upload admin, ADR-008) — **à concevoir** (code applicatif, pas un générateur) |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
-| Qualité | `make check` vert (5 portes, 12 tests) |
 
-> Prochaine étape : **Bloc A bouclé (8/8)**. Passer à la phase **⑤ Référentiel**
-> (tickets 09–11, cf. roadmap et tunnel §11). Défauts résiduels remontés à Forge :
-> retour-010 (relations dans `migration:make`, partiel), retour-012 (F26 faux positif
-> `entity:validate`, F27 split SQL apostrophe), retour-013 (F28 pivot m2m en `INT`).
-> Piste UX : gérer l'appartenance `groupe_eleve` (attach/detach) — non scaffoldée (m2m
-> pur, hors `make:pivot-crud` qui exige des attributs de pivot).
+> Prochaine étape : **ticket 11 — importeur** du JSON canonique référentiel vers la base
+> (upload admin, ADR-008 ; validation schéma, insertion ordonnée, résolution des liens
+> m2m, provenance). Décision d'architecture à cadrer avec le porteur. Défauts Forge
+> remontés : retour-010 (F22 partiel), retour-012 (F26/F27), retour-013 (F28).
 
 ---
 
@@ -625,6 +650,21 @@ forge migration:make create_groupe --from-entity Groupe
 forge migration:apply && forge make:crud Groupe
 ```
 
+**⑭ Schéma Référentiel ✅ (phase ⑤, tickets 09-10 — 12 entités d'un coup)**
+
+```bash
+forge make:entity …             # ×12 (Formation, ReferentielNiveauClasse, Pole,
+#                                 Activite, Tache, Resultat, Competence, Connaissance,
+#                                 Critere, Indicateur, FamilleCompetence, Source)
+forge make:relation             # ×15 : 13 many_to_one + 2 many_to_many
+forge sync:entity … ; forge sync:relations
+forge migration:make create_referentiel   # squelette ; corps assemblé (tools scratch) :
+#   12 CREATE TABLE (entités) + FK référentiel (relations.sql) + 7 UNIQUE composites
+#   + 2 pivots m2m corrigés F28 (INT → BIGINT UNSIGNED + ENGINE) ; commentaires ASCII (F27)
+forge migration:apply           # → 14 tables (20 entités au total)
+#   pas de make:crud : le référentiel est peuplé par l'importeur (ticket 11)
+```
+
 ---
 
 ## 11. Vue d'ensemble — le tunnel de progression
@@ -640,7 +680,7 @@ flowchart TD
     B["② Sources et JSON canonique ✅<br/>(tickets 01–04, 02b–04b)"]
     C["③ Dictionnaires de données ✅<br/>(05 socle · 08 référentiel · 13b starter)"]
     D["④ BLOC A · Socle scolaire ✅ — ticket 07<br/>AnneeScolaire · NiveauClasse · Classe · Eleve · Professeur<br/>Inscription · Affectation · Groupe (+ m2m) — 8/8"]
-    E["⑤ Référentiel ◀ ICI ⬜ (09–11)"]
+    E["⑤ Référentiel ◀ ICI — schéma ✅ (09-10)<br/>12 entités + 15 relations en base<br/>⬜ importeur JSON (11)"]
     F["⑥ Scénario ⬜ (12–13)"]
     G["⑦ Starter ⬜ (14)"]
     H["⑧ Parcours ⬜ (15–16)"]
@@ -654,6 +694,6 @@ flowchart TD
     class F,G,H,I todo
 ```
 
-> **Où on en est** : phases ①–④ faites — **Bloc A terminé (8/8)** : les 8 entités du
-> socle scolaire sont en base avec toutes leurs relations (3 `many_to_one`, 2 pivots
-> enrichis, 1 `many_to_many`). Prochaine phase : **⑤ Référentiel** (tickets 09–11).
+> **Où on en est** : phases ①–④ faites — **Bloc A terminé (8/8)**. Phase **⑤ Référentiel
+> en cours** : le **schéma est en base** (tickets 09-10 : 12 entités + 15 relations, 20
+> entités au total). Reste le **ticket 11 — importeur JSON canonique** (upload admin).
