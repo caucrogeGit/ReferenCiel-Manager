@@ -317,6 +317,19 @@ Vérifié en base — la jointure tient : `classe 2TNE-A → annee 2025-2026 →
 
 *Options : timestamps. Table créée (migration `create_classe`, FK incluses).*
 
+### `Eleve` — table `eleve` ✅
+
+| Champ | Type | Contraintes | Notes |
+|---|---|---|---|
+| `nom` | string(100) | **requis** | |
+| `prenom` | string(100) | **requis** | |
+| `identifiant` | string(100) | nullable, **unique** | unique **s'il est présent** |
+| `date_naissance` | date | nullable | |
+| `user_id` | big_integer | nullable | **couture** vers le futur compte applicatif (auth différée) — réservé, pas de relation |
+
+*Options : timestamps. Table créée (migration `create_eleve`). Pas de relation active
+(le lien `user_id → CompteUtilisateur` viendra avec un ADR dédié).*
+
 > **Socle Auth/User** (`users`, `auth_tokens`, `auth_audit_log`,
 > `auth_rate_limit_attempts`) : fourni par Forge (`auth:init`), non listé ici — ce
 > ne sont pas des entités métier du projet.
@@ -363,9 +376,9 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | Élément | État |
 |---|---|
 | `forge-mvc` | `809d224f` (correctifs retours 001-009) |
-| Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `users`, `auth_tokens`, `auth_audit_log`, `auth_rate_limit_attempts`, `forge_migrations` |
-| Entités terminées | `AnneeScolaire`, `NiveauClasse`, `Classe` (avec relations) |
-| Reste Bloc A | `Groupe`, `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse` |
+| Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `users`, `auth_tokens`, `auth_audit_log`, `auth_rate_limit_attempts`, `forge_migrations` |
+| Entités terminées | `AnneeScolaire`, `NiveauClasse`, `Classe` (avec relations), `Eleve` |
+| Reste Bloc A | `Groupe`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse` |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
 | Qualité | `make check` vert (5 portes, 12 tests) |
 
@@ -473,6 +486,16 @@ forge make:crud Classe             # CRUD (routes branchées)
 #   seed de vérif : niveau 2TNE + classe 2TNE-A (année=1, niveau=1)
 ```
 
+**⑧ Entité Eleve ✅** (simple, `user_id` couture différée)
+
+```bash
+forge make:entity Eleve            # nom, prenom, identifiant (unique si présent),
+#                                    date_naissance, user_id (nullable, réservé)
+forge migration:make create_eleve --from-entity Eleve
+forge migration:apply              # → table eleve
+forge make:crud Eleve              # CRUD (routes branchées)
+```
+
 ---
 
 ## 11. Vue d'ensemble — le tunnel de progression
@@ -487,7 +510,7 @@ flowchart TD
     A["① Cadrage projet ✅"]
     B["② Sources et JSON canonique ✅<br/>(tickets 01–04, 02b–04b)"]
     C["③ Dictionnaires de données ✅<br/>(05 socle · 08 référentiel · 13b starter)"]
-    D["④ BLOC A · Socle scolaire ◀ ICI — ticket 07<br/>AnneeScolaire ✅ · NiveauClasse ✅ · Classe ✅ (relations)<br/>⬜ Groupe · Eleve · Professeur · Inscription · Affectation"]
+    D["④ BLOC A · Socle scolaire ◀ ICI — ticket 07<br/>AnneeScolaire ✅ · NiveauClasse ✅ · Classe ✅ · Eleve ✅<br/>⬜ Groupe · Professeur · Inscription · Affectation"]
     E["⑤ Référentiel ⬜ (09–11)"]
     F["⑥ Scénario ⬜ (12–13)"]
     G["⑦ Starter ⬜ (14)"]
