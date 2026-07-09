@@ -18,6 +18,7 @@ from mvc.routes.annee_scolaire_routes import register_annee_scolaire_routes
 from mvc.routes.auth_routes import register_auth_routes
 from mvc.routes.classe_routes import register_classe_routes
 from mvc.routes.eleve_routes import register_eleve_routes
+from mvc.routes.groupe_routes import register_groupe_routes
 from mvc.routes.inscription_eleve_routes import register_inscription_eleve_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 from mvc.routes.professeur_routes import register_professeur_routes
@@ -48,6 +49,9 @@ register_inscription_eleve_routes(router)
 
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)
+
+# Routes appliquées pour : groupe_controller
+register_groupe_routes(router)
 
 # Routes appliquées pour : auth_controller
 register_auth_routes(router)

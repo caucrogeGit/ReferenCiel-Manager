@@ -88,6 +88,33 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "Groupe",
+      "to": "Classe",
+      "name": "classe",
+      "inverse_name": "groupes",
+      "foreign_key": "classe_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_many",
+      "from": "Groupe",
+      "to": "Eleve",
+      "name": "eleves",
+      "inverse_name": "groupes",
+      "pivot": {
+        "table": "groupe_eleve",
+        "from_key": "groupe_id",
+        "to_key": "eleve_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
     }
   ]
 }
