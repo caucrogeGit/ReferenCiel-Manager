@@ -1,0 +1,36 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button %}
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">Importer un référentiel niveau-classe</h1>
+    <p class="text-gray-600 mb-6">
+        Uploadez un <strong>JSON canonique</strong> de type
+        <code>referentiel_niveau_classe</code>. Le fichier est <strong>validé contre le
+        schéma</strong> avant tout import ; un ré-import du même identifiant
+        <strong>remplace</strong> le contenu existant.
+    </p>
+
+    {% if erreurs %}
+    <div class="mb-6 rounded border border-red-300 bg-red-50 p-4">
+        <p class="font-semibold text-red-800">{{ titre_erreur or "Import refusé" }}</p>
+        <ul class="mt-2 list-disc list-inside text-sm text-red-700 space-y-1">
+            {% for e in erreurs %}<li>{{ e }}</li>{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <form method="post" action="/admin/referentiel/import"
+          enctype="multipart/form-data" class="bg-white shadow rounded p-6 space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label class="block">
+            <span class="text-sm font-medium text-gray-700">Fichier JSON canonique</span>
+            <input type="file" name="fichier" accept="application/json,.json" required
+                   class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:rounded
+                          file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:font-medium">
+        </label>
+        <div class="pt-2">
+            {{ button(label="Valider et importer", variant="primary", type="submit") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

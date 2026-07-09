@@ -22,6 +22,7 @@ from mvc.routes.groupe_routes import register_groupe_routes
 from mvc.routes.inscription_eleve_routes import register_inscription_eleve_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 from mvc.routes.professeur_routes import register_professeur_routes
+from mvc.routes.referentiel_import_routes import register_referentiel_import_routes
 from optins.registry import register_optins
 
 router = Router()
@@ -52,6 +53,9 @@ register_affectation_professeur_classe_routes(router)
 
 # Routes appliquées pour : groupe_controller
 register_groupe_routes(router)
+
+# Import de référentiel par upload admin (ticket 11, ADR-008)
+register_referentiel_import_routes(router)
 
 # Routes appliquées pour : auth_controller
 register_auth_routes(router)
