@@ -473,13 +473,14 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **⑤ Référentiel — schéma ✅ (tickets 09-10)** | 12 entités (`Formation`, `ReferentielNiveauClasse`, `PoleActivite`, `ActiviteProfessionnelle`, `Tache`, `ResultatAttendu`, `Competence`, `Connaissance`, `CritereObservable`, `IndicateurReussite`, `FamilleCompetence`, `Source`) + `NiveauClasse` réutilisée. Migration `create_referentiel` (14 tables, 13 FK, 7 UNIQUE composites, 2 pivots m2m) appliquée |
 | Total entités | **20** en base (8 socle + 12 référentiel). `make check` vert |
 | Relations | socle : 3 m2o + 2 pivots enrichis + 1 m2m · référentiel : 13 m2o + 2 m2m (`activite_competence`, `cc_competence`) |
-| ⬜ Référentiel — ticket 11 | **Importeur JSON canonique → base** (upload admin, ADR-008) — **à concevoir** (code applicatif, pas un générateur) |
+| 🚧 Référentiel — ticket 11 | **Service d'import** `mvc/services/referentiel_importer.py` ✅ (ADR-010 : upsert par identifiant + best-effort ; vérifié sur CIEL 2TNE : 81 objets, 0 erreur). Opt-ins `admin`+`files` activés. **Reste l'UI admin** (upload → valider schéma → importer → rapport) |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
 
-> Prochaine étape : **ticket 11 — importeur** du JSON canonique référentiel vers la base
-> (upload admin, ADR-008 ; validation schéma, insertion ordonnée, résolution des liens
-> m2m, provenance). Décision d'architecture à cadrer avec le porteur. Défauts Forge
-> remontés : retour-010 (F22 partiel), retour-012 (F26/F27), retour-013 (F28).
+> Prochaine étape : **UI d'upload admin** du ticket 11 — brancher `forge-mvc-admin` +
+> `forge-mvc-files` : formulaire d'upload (admin), validation contre le schéma JSON
+> (ticket 04), appel de `import_referentiel`, affichage du rapport. Puis un test pytest
+> de l'importeur (fixture base). Défauts Forge remontés : retour-010 (F22 partiel),
+> retour-012 (F26/F27), retour-013 (F28).
 
 ---
 
