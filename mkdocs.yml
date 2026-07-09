@@ -104,3 +104,4 @@ nav:
       - Retour 008 — bugs runtime login & bouton: banc-essai/retour-008-bugs-runtime-login-mariadb-et-bouton-crud.md
       - Retour 009 — flux relation many_to_one: banc-essai/retour-009-flux-relation-many-to-one-casse-mariadb.md
       - Retour 010 — relations dans migration & CRUD: banc-essai/retour-010-relations-non-integrees-migration-et-crud.md
+      - Retour 011 — make:relation unicité globale noms & FK: banc-essai/retour-011-make-relation-unicite-globale-noms-et-fk.md
