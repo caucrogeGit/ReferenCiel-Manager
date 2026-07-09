@@ -525,6 +525,6 @@ flowchart TD
     class E,F,G,H,I todo
 ```
 
-> **Où on en est** : phases ①–③ faites, **④ Bloc A en cours** (3 entités sur 8 :
-> `AnneeScolaire`, `NiveauClasse`, `Classe` avec relations). Restent `Groupe`,
-> `Eleve`, `Professeur`, `Inscription`, `Affectation`, puis les phases ⑤–⑨.
+> **Où on en est** : phases ①–③ faites, **④ Bloc A en cours** (4 entités sur 8 :
+> `AnneeScolaire`, `NiveauClasse`, `Classe` (relations), `Eleve`). Restent `Groupe`,
+> `Professeur`, `Inscription`, `Affectation`, puis les phases ⑤–⑨.
