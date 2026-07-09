@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{% from "components/forms.html" import field, textarea_field, select_field, checkbox %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
+    <a href="/eleve" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+</div>
+
+{% include "partials/form_errors.html" %}
+
+<div class="bg-white shadow rounded p-6">
+    <form method="post" action="{{ action }}" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {{ field(name='nom', label='Nom', type='text', value=form.value('nom'), error=form.error('nom')) }}
+        {{ field(name='prenom', label='Prenom', type='text', value=form.value('prenom'), error=form.error('prenom')) }}
+        {{ field(name='identifiant', label='Identifiant', type='text', value=form.value('identifiant'), error=form.error('identifiant')) }}
+        {{ field(name='date_naissance', label='Date naissance', type='date', value=form.value('date_naissance'), error=form.error('date_naissance')) }}
+        {{ field(name='user_id', label='User id', type='number', value=form.value('user_id'), error=form.error('user_id')) }}
+        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
+        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
+        <div class="flex gap-4 pt-2">
+            {{ button(label=trans('common.save'), variant='primary', type='submit') }}
+            {{ button(label=trans('common.cancel'), variant='secondary', href='/eleve') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

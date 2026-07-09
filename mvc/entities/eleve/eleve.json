@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "name": "Eleve",
+  "table": "eleve",
+  "fields": [
+    {
+      "name": "nom",
+      "type": "string",
+      "max_length": 100,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "prenom",
+      "type": "string",
+      "max_length": 100,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "identifiant",
+      "type": "string",
+      "max_length": 100,
+      "required": false,
+      "nullable": true,
+      "unique": true
+    },
+    {
+      "name": "date_naissance",
+      "type": "date",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "user_id",
+      "type": "big_integer",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}
