@@ -2,7 +2,18 @@
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
 **Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
-**Statut :** à remonter.
+**Statut :** ✅ **Résolu dans forge-mvc 32f552cc** (2026-07-09) — **vérifié bout-en-bout** sur le banc d'essai.
+
+> **Correctif vérifié.** Sur `32f552cc`, `make:relation InscriptionEleve → AnneeScolaire`
+> accepte le nom **`annee_scolaire`** et la colonne **`annee_scolaire_id`** — pourtant
+> déjà portés par `Classe` — sans erreur. L'unicité est désormais **scopée par entité
+> source**. Bonus structurel (réponse aussi à [retour-009](retour-009-flux-relation-many-to-one-casse-mariadb.md)/[010](retour-010-relations-non-integrees-migration-et-crud.md)) :
+> `make:relation` déclare la FK comme **champ `foreign_key`** du contrat d'entité
+> (`{"type": "foreign_key", "references": "AnneeScolaire"}`), si bien que `sync:entity`
+> génère la **colonne** (dans le `CREATE TABLE`) et `sync:relations` la **contrainte +
+> index** (sans dupliquer la colonne). La table `inscription_eleve` a été créée et son
+> CRUD généré est **FK-aware** (voir [retour-012](retour-012-entity-validate-faux-positif-fk-et-split-sql-apostrophe.md)
+> pour deux défauts résiduels rencontrés au passage).
 
 ## Environnement
 

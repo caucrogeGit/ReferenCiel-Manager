@@ -341,6 +341,22 @@ Vérifié en base — la jointure tient : `classe 2TNE-A → annee 2025-2026 →
 *Options : timestamps. Table créée (migration `create_professeur`). Même schéma de
 couture `user_id` que `Eleve` : le rattachement au compte viendra avec l'ADR dédié.*
 
+### `InscriptionEleve` — table `inscription_eleve` ✅ (pivot enrichi)
+
+Un élève inscrit dans une classe pour une année. Premier pivot construit sur le
+**nouveau modèle FK** (`32f552cc`) : chaque FK est un **champ `foreign_key`** du contrat.
+
+| Champ | Type | Contraintes | Notes |
+|---|---|---|---|
+| `date_inscription` | date | nullable | date de l'inscription |
+| `eleve_id` | foreign_key → `Eleve` | **requis**, FK `restrict` | |
+| `classe_id` | foreign_key → `Classe` | **requis**, FK `restrict` | |
+| `annee_scolaire_id` | foreign_key → `AnneeScolaire` | **requis**, FK `restrict` | |
+
+*Contrainte **UNIQUE composite** `(eleve_id, classe_id, annee_scolaire_id)` (dictionnaire),
+ajoutée à la main dans la migration. CRUD **FK-aware** (3 `<select>` peuplés). Trois
+`many_to_one` déclarées via `make:relation` (relations.json = contraintes + index).*
+
 > **Socle Auth/User** (`users`, `auth_tokens`, `auth_audit_log`,
 > `auth_rate_limit_attempts`) : fourni par Forge (`auth:init`), non listé ici — ce
 > ne sont pas des entités métier du projet.
@@ -352,20 +368,24 @@ couture `user_id` que `Eleve` : le rattachement au compte viendra avec l'ADR dé
 L'application **exerce Forge en réel** et remonte chaque friction. Voir la
 [vue d'ensemble du banc d'essai](banc-essai/README.md).
 
-- **Retours 001 → 011** : du squelette (001) aux bugs runtime (008), au flux
-  relation (009), à son intégration migration/CRUD (010) et à l'unicité globale des
-  noms/FK (011). Les **retours 001-007 ont été corrigés** dans Forge et **vérifiés**
-  sur le terrain ; 009 corrigé (809d224f) ; **010 et 011 à remonter**.
+- **Retours 001 → 012** : du squelette (001) aux bugs runtime (008), au flux
+  relation (009), son intégration migration/CRUD (010), l'unicité globale noms/FK
+  (011) et les défauts résiduels du moteur d'entités (012). **001-009 corrigés** et
+  **vérifiés** ; **011 corrigé** dans `32f552cc` (unicité scopée par entité source,
+  vérifié bout-en-bout) ; **010 et 012 à remonter**.
 - **Tickets consolidés** pour l'équipe Forge :
   [ticket-01](banc-essai/ticket-forge-01-retours-terrain-ciel-2tne.md) (résolu),
   [ticket-02](banc-essai/ticket-forge-02-bugs-runtime-tranche-verticale.md),
   [ticket-03](banc-essai/ticket-forge-03-flux-relation-many-to-one.md),
   [ticket-04](banc-essai/ticket-forge-04-relations-migration-et-crud.md).
-- **Blocage courant** : [retour-011](banc-essai/retour-011-make-relation-unicite-globale-noms-et-fk.md)
-  (F24/F25) — `make:relation` impose une unicité **globale** du nom de relation et de
-  la colonne FK, ce qui **bloque toutes les entités relationnelles restantes** du
-  Bloc A (elles pointent vers des cibles déjà référencées). On **attend le correctif
-  Forge** plutôt que de graver des noms divergents du dictionnaire dans le schéma.
+- **ADR-070 (montée `32f552cc`)** : le moteur d'entités a été **extrait du cœur** dans
+  l'opt-in `forge-mvc-entities`. Une montée depuis une version pré-ADR-070 le **perd en
+  silence** (toutes les commandes `make:relation`/`sync:*`/`migration:*`/`db:*`
+  deviennent « inconnues »). Corrigé : paquet ajouté à `requirements.txt` (épinglé) et
+  `tools/forge-upgrade.sh` le réinstalle désormais avec les deux autres.
+- **Nouveau modèle FK (bonus de 011)** : la FK est un **champ `foreign_key`** du contrat
+  (`sync:entity` → colonne, `sync:relations` → contrainte/index), et `make:crud` est
+  **FK-aware** (selects peuplés) → **retour-010 F23 réglé**.
 - **Enseignement clé** : `make check` (portes statiques) peut être **vert** alors que
   l'app **plante à l'exécution** (login, rendu, relations). Seul un **parcours
   end-to-end** avec un vrai backend révèle ces bugs.
@@ -393,19 +413,19 @@ Trace des arbitrages structurants (le *pourquoi*) :
 
 | Élément | État |
 |---|---|
-| `forge-mvc` | `809d224f` (correctifs retours 001-009) |
-| Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `professeur`, `users`, `auth_tokens`, `auth_audit_log`, `auth_rate_limit_attempts`, `forge_migrations` |
-| Entités terminées | `AnneeScolaire`, `NiveauClasse`, `Classe` (avec relations), `Eleve`, `Professeur` |
-| ⏸️ En pause | `InscriptionEleve` — entité créée, 2/3 relations posées (`eleve_id`, `classe_id`) ; 3ᵉ FK (`annee_scolaire_id`) **bloquée par F24/F25** ([retour-011](banc-essai/retour-011-make-relation-unicite-globale-noms-et-fk.md)) |
-| Reste Bloc A | `Groupe`, `AffectationProfesseurClasse` (relationnelles → **mêmes blocages** attendus) |
+| `forge-mvc` | `32f552cc` (correctifs retours 001-011) + opt-in **`forge-mvc-entities`** `32f552cc` (moteur de données, ADR-070) |
+| Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `professeur`, `inscription_eleve` (+3 FK, UNIQUE composite), `users`, `auth_tokens`, `auth_audit_log`, `auth_rate_limit_attempts`, `forge_migrations` |
+| Entités terminées | `AnneeScolaire`, `NiveauClasse`, `Classe` (relations), `Eleve`, `Professeur`, `InscriptionEleve` (pivot enrichi, relations) |
+| Reste Bloc A | `Groupe` (many_to_one + **many_to_many**), `AffectationProfesseurClasse` (pivot enrichi) |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
 | Qualité | `make check` vert (5 portes, 12 tests) |
 
-> Prochaine étape : **en attente du correctif Forge** pour F24/F25 (retour-011). Une
-> fois l'unicité scopée par entité source, reprendre `InscriptionEleve` (3ᵉ relation
-> `annee_scolaire_id`, migration, CRUD), puis `Groupe` (m2m) et
-> `AffectationProfesseurClasse`. Autres pistes ouvertes (retour-010) : FK au CRUD et à
-> `migration:make`.
+> Prochaine étape : **F24/F25 corrigés** (retour-011, `32f552cc`) → `InscriptionEleve`
+> terminée sur le nouveau modèle FK (champ `foreign_key` + `relations.json`, CRUD
+> FK-aware). Reste `Groupe` (terrain neuf : **many_to_many**, table pivot `groupe_eleve`)
+> et `AffectationProfesseurClasse`. Défauts résiduels notés : retour-012 (F26 faux
+> positif `entity:validate`, F27 split SQL apostrophe) et retour-010 (relations dans
+> `migration:make`, encore partiel).
 
 ---
 
@@ -528,6 +548,31 @@ forge migration:apply              # → table professeur
 forge make:crud Professeur         # CRUD (routes branchées)
 ```
 
+**⑩ Montée squelette `32f552cc` (ADR-070) + restauration du moteur de données**
+
+```bash
+make skeleton-check REF=../Test                 # écarts (grossier)
+make forge-upgrade COMMIT=32f552cc…             # bump 3 pins + réinstall + make check
+#   ADR-070 : moteur d'entités extrait du cœur → réinstaller l'opt-in :
+pip install --force-reinstall --no-deps \
+  "forge-mvc-entities @ …@32f552cc#subdirectory=packages/forge-mvc-entities"
+#   overlay squelette : home_controller + mvc/views/pages/charte.html
+```
+
+**⑪ Entité InscriptionEleve ✅ (pivot enrichi, nouveau modèle FK — F24/F25 corrigés)**
+
+```bash
+forge make:entity InscriptionEleve              # date_inscription (scalaire seul)
+forge make:relation                             # ×3 : eleve, classe, annee_scolaire
+#   → ajoute chaque FK comme champ foreign_key du contrat + relations.json
+forge sync:entity InscriptionEleve              # colonnes FK dans le CREATE TABLE
+forge sync:relations                            # contraintes + index
+forge migration:make create_inscription_eleve --from-entity InscriptionEleve
+#   compléter à la main : contraintes FK (relations.sql) + UNIQUE composite (dico)
+forge migration:apply                           # → table inscription_eleve
+forge make:crud InscriptionEleve                # CRUD FK-aware (3 selects)
+```
+
 ---
 
 ## 11. Vue d'ensemble — le tunnel de progression
@@ -542,7 +587,7 @@ flowchart TD
     A["① Cadrage projet ✅"]
     B["② Sources et JSON canonique ✅<br/>(tickets 01–04, 02b–04b)"]
     C["③ Dictionnaires de données ✅<br/>(05 socle · 08 référentiel · 13b starter)"]
-    D["④ BLOC A · Socle scolaire ◀ ICI — ticket 07<br/>AnneeScolaire ✅ · NiveauClasse ✅ · Classe ✅ · Eleve ✅ · Professeur ✅<br/>⬜ Groupe · Inscription · Affectation"]
+    D["④ BLOC A · Socle scolaire ◀ ICI — ticket 07<br/>AnneeScolaire ✅ · NiveauClasse ✅ · Classe ✅ · Eleve ✅ · Professeur ✅ · Inscription ✅<br/>⬜ Groupe · Affectation"]
     E["⑤ Référentiel ⬜ (09–11)"]
     F["⑥ Scénario ⬜ (12–13)"]
     G["⑦ Starter ⬜ (14)"]
@@ -557,6 +602,6 @@ flowchart TD
     class E,F,G,H,I todo
 ```
 
-> **Où on en est** : phases ①–③ faites, **④ Bloc A en cours** (5 entités sur 8 :
-> `AnneeScolaire`, `NiveauClasse`, `Classe` (relations), `Eleve`, `Professeur`).
-> Restent `Groupe`, `Inscription`, `Affectation`, puis les phases ⑤–⑨.
+> **Où on en est** : phases ①–③ faites, **④ Bloc A en cours** (6 entités sur 8 :
+> `AnneeScolaire`, `NiveauClasse`, `Classe` (relations), `Eleve`, `Professeur`,
+> `InscriptionEleve` (pivot)). Restent `Groupe`, `Affectation`, puis les phases ⑤–⑨.
