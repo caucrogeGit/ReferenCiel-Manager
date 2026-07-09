@@ -11,6 +11,7 @@ par contrôleur, cette racine se contentant de les brancher explicitement.
 """
 from core.http.router import Router
 from mvc.controllers.home_controller import HomeController
+from mvc.routes.admin_routes import register_admin
 from mvc.routes.affectation_professeur_classe_routes import (
     register_affectation_professeur_classe_routes,
 )
@@ -56,6 +57,10 @@ register_groupe_routes(router)
 
 # Import de référentiel par upload admin (ticket 11, ADR-008)
 register_referentiel_import_routes(router)
+
+# Back-office admin (forge-mvc-admin) : parcourir les référentiels importés.
+# Monté après l'import pour que /admin/referentiel/import matche avant /admin/{slug}/{id}.
+register_admin(router)
 
 # Routes appliquées pour : auth_controller
 register_auth_routes(router)

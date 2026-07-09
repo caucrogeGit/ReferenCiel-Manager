@@ -108,3 +108,4 @@ nav:
       - Retour 011 — make:relation unicité globale noms & FK: banc-essai/retour-011-make-relation-unicite-globale-noms-et-fk.md
       - Retour 012 — entity:validate FK & split SQL apostrophe: banc-essai/retour-012-entity-validate-faux-positif-fk-et-split-sql-apostrophe.md
       - Retour 013 — pivot many_to_many colonnes INT: banc-essai/retour-013-pivot-many-to-many-colonnes-int-au-lieu-de-bigint-unsigned.md
+      - Retour 014 — forge-mvc-admin snake_case vs entities PascalCase: banc-essai/retour-014-forge-mvc-admin-snake-case-vs-entities-pascalcase.md
