@@ -357,6 +357,35 @@ Un élève inscrit dans une classe pour une année. Premier pivot construit sur 
 ajoutée à la main dans la migration. CRUD **FK-aware** (3 `<select>` peuplés). Trois
 `many_to_one` déclarées via `make:relation` (relations.json = contraintes + index).*
 
+### `AffectationProfesseurClasse` — table `affectation_professeur_classe` ✅ (pivot enrichi)
+
+Un professeur affecté à une classe pour une année. Même motif que `InscriptionEleve`.
+
+| Champ | Type | Contraintes | Notes |
+|---|---|---|---|
+| `role` | string(100) | nullable | ex. professeur principal |
+| `professeur_id` | foreign_key → `Professeur` | **requis**, FK `restrict` | |
+| `classe_id` | foreign_key → `Classe` | **requis**, FK `restrict` | |
+| `annee_scolaire_id` | foreign_key → `AnneeScolaire` | **requis**, FK `restrict` | |
+
+*UNIQUE composite `(professeur_id, classe_id, annee_scolaire_id)`. CRUD FK-aware.
+Noms/colonnes fidèles au dico sans collision avec `InscriptionEleve` (F24/F25 scopés).*
+
+### `Groupe` — table `groupe` ✅ (+ pivot `groupe_eleve`)
+
+Sous-ensemble d'une classe (TP, îlots). Premier **many_to_many** du projet.
+
+| Champ | Type | Contraintes | Notes |
+|---|---|---|---|
+| `nom` | string(100) | **requis** | ex. `Groupe 1` |
+| `classe_id` | foreign_key → `Classe` | **requis**, FK `restrict` | classe parente |
+
+*Relation **many_to_many** `eleves` ↔ `Eleve` via pivot **`groupe_eleve`** (jonction
+pure : `id`, `groupe_id`, `eleve_id`, UNIQUE `(groupe_id, eleve_id)`, `ON DELETE cascade`).
+DDL pivot corrigé à la main (retour-013 F28 : colonnes générées en `INT` au lieu de
+`BIGINT UNSIGNED`). CRUD standard pour `nom`/`classe_id` ; l'appartenance m2m n'est pas
+scaffoldée.*
+
 > **Socle Auth/User** (`users`, `auth_tokens`, `auth_audit_log`,
 > `auth_rate_limit_attempts`) : fourni par Forge (`auth:init`), non listé ici — ce
 > ne sont pas des entités métier du projet.
@@ -368,11 +397,11 @@ ajoutée à la main dans la migration. CRUD **FK-aware** (3 `<select>` peuplés)
 L'application **exerce Forge en réel** et remonte chaque friction. Voir la
 [vue d'ensemble du banc d'essai](banc-essai/README.md).
 
-- **Retours 001 → 012** : du squelette (001) aux bugs runtime (008), au flux
+- **Retours 001 → 013** : du squelette (001) aux bugs runtime (008), au flux
   relation (009), son intégration migration/CRUD (010), l'unicité globale noms/FK
-  (011) et les défauts résiduels du moteur d'entités (012). **001-009 corrigés** et
-  **vérifiés** ; **011 corrigé** dans `32f552cc` (unicité scopée par entité source,
-  vérifié bout-en-bout) ; **010 et 012 à remonter**.
+  (011), les défauts du moteur d'entités (012) et le pivot m2m en `INT` (013).
+  **001-009 corrigés** et **vérifiés** ; **011 corrigé** dans `32f552cc` (unicité scopée
+  par entité source, vérifié bout-en-bout) ; **010, 012, 013 à remonter**.
 - **Tickets consolidés** pour l'équipe Forge :
   [ticket-01](banc-essai/ticket-forge-01-retours-terrain-ciel-2tne.md) (résolu),
   [ticket-02](banc-essai/ticket-forge-02-bugs-runtime-tranche-verticale.md),
@@ -414,18 +443,18 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | Élément | État |
 |---|---|
 | `forge-mvc` | `32f552cc` (correctifs retours 001-011) + opt-in **`forge-mvc-entities`** `32f552cc` (moteur de données, ADR-070) |
-| Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `professeur`, `inscription_eleve` (+3 FK, UNIQUE composite), `users`, `auth_tokens`, `auth_audit_log`, `auth_rate_limit_attempts`, `forge_migrations` |
-| Entités terminées | `AnneeScolaire`, `NiveauClasse`, `Classe` (relations), `Eleve`, `Professeur`, `InscriptionEleve` (pivot enrichi, relations) |
-| Reste Bloc A | `Groupe` (many_to_one + **many_to_many**), `AffectationProfesseurClasse` (pivot enrichi) |
+| Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `professeur`, `inscription_eleve` (+3 FK, UNIQUE), `affectation_professeur_classe` (+3 FK, UNIQUE), `groupe` (+1 FK), `groupe_eleve` (pivot m2m), `users`, `auth_*`, `forge_migrations` |
+| **Bloc A — terminé ✅ (8/8)** | `AnneeScolaire`, `NiveauClasse`, `Classe`, `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse`, `Groupe` |
+| Relations | 3 `many_to_one` simples (Classe) + 2 pivots enrichis (Inscription, Affectation) + 1 `many_to_many` (Groupe↔Eleve, pivot `groupe_eleve`) |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
 | Qualité | `make check` vert (5 portes, 12 tests) |
 
-> Prochaine étape : **F24/F25 corrigés** (retour-011, `32f552cc`) → `InscriptionEleve`
-> terminée sur le nouveau modèle FK (champ `foreign_key` + `relations.json`, CRUD
-> FK-aware). Reste `Groupe` (terrain neuf : **many_to_many**, table pivot `groupe_eleve`)
-> et `AffectationProfesseurClasse`. Défauts résiduels notés : retour-012 (F26 faux
-> positif `entity:validate`, F27 split SQL apostrophe) et retour-010 (relations dans
-> `migration:make`, encore partiel).
+> Prochaine étape : **Bloc A bouclé (8/8)**. Passer à la phase **⑤ Référentiel**
+> (tickets 09–11, cf. roadmap et tunnel §11). Défauts résiduels remontés à Forge :
+> retour-010 (relations dans `migration:make`, partiel), retour-012 (F26 faux positif
+> `entity:validate`, F27 split SQL apostrophe), retour-013 (F28 pivot m2m en `INT`).
+> Piste UX : gérer l'appartenance `groupe_eleve` (attach/detach) — non scaffoldée (m2m
+> pur, hors `make:pivot-crud` qui exige des attributs de pivot).
 
 ---
 
@@ -573,6 +602,29 @@ forge migration:apply                           # → table inscription_eleve
 forge make:crud InscriptionEleve                # CRUD FK-aware (3 selects)
 ```
 
+**⑫ Entité AffectationProfesseurClasse ✅ (pivot enrichi, motif Inscription rodé)**
+
+```bash
+forge make:entity AffectationProfesseurClasse   # role (string nullable)
+forge make:relation                             # ×3 : professeur, classe, annee_scolaire
+forge sync:entity … && forge sync:relations
+forge migration:make create_affectation_professeur_classe --from-entity …
+#   compléter à la main : contraintes FK + UNIQUE (prof, classe, annee) — ASCII (F27)
+forge migration:apply && forge make:crud AffectationProfesseurClasse
+```
+
+**⑬ Entité Groupe ✅ (many_to_one Classe + many_to_many Eleve — Bloc A complet)**
+
+```bash
+forge make:entity Groupe                        # nom (string requis)
+forge make:relation                             # many_to_one → Classe
+forge make:relation                             # many_to_many → Eleve (pivot groupe_eleve)
+forge sync:entity Groupe && forge sync:relations
+forge migration:make create_groupe --from-entity Groupe
+#   corriger à la main le pivot groupe_eleve : INT → BIGINT UNSIGNED + ENGINE (F28)
+forge migration:apply && forge make:crud Groupe
+```
+
 ---
 
 ## 11. Vue d'ensemble — le tunnel de progression
@@ -587,8 +639,8 @@ flowchart TD
     A["① Cadrage projet ✅"]
     B["② Sources et JSON canonique ✅<br/>(tickets 01–04, 02b–04b)"]
     C["③ Dictionnaires de données ✅<br/>(05 socle · 08 référentiel · 13b starter)"]
-    D["④ BLOC A · Socle scolaire ◀ ICI — ticket 07<br/>AnneeScolaire ✅ · NiveauClasse ✅ · Classe ✅ · Eleve ✅ · Professeur ✅ · Inscription ✅<br/>⬜ Groupe · Affectation"]
-    E["⑤ Référentiel ⬜ (09–11)"]
+    D["④ BLOC A · Socle scolaire ✅ — ticket 07<br/>AnneeScolaire · NiveauClasse · Classe · Eleve · Professeur<br/>Inscription · Affectation · Groupe (+ m2m) — 8/8"]
+    E["⑤ Référentiel ◀ ICI ⬜ (09–11)"]
     F["⑥ Scénario ⬜ (12–13)"]
     G["⑦ Starter ⬜ (14)"]
     H["⑧ Parcours ⬜ (15–16)"]
@@ -597,11 +649,11 @@ flowchart TD
     classDef done fill:#e6f4ea,stroke:#34a853;
     classDef current fill:#fff4e5,stroke:#f9a825,stroke-width:3px;
     classDef todo fill:#f1f3f4,stroke:#9aa0a6;
-    class A,B,C done
-    class D current
-    class E,F,G,H,I todo
+    class A,B,C,D done
+    class E current
+    class F,G,H,I todo
 ```
 
-> **Où on en est** : phases ①–③ faites, **④ Bloc A en cours** (6 entités sur 8 :
-> `AnneeScolaire`, `NiveauClasse`, `Classe` (relations), `Eleve`, `Professeur`,
-> `InscriptionEleve` (pivot)). Restent `Groupe`, `Affectation`, puis les phases ⑤–⑨.
+> **Où on en est** : phases ①–④ faites — **Bloc A terminé (8/8)** : les 8 entités du
+> socle scolaire sont en base avec toutes leurs relations (3 `many_to_one`, 2 pivots
+> enrichis, 1 `many_to_many`). Prochaine phase : **⑤ Référentiel** (tickets 09–11).

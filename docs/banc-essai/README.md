@@ -31,3 +31,4 @@ silence, on documente et on remonte.
 | [010](retour-010-relations-non-integrees-migration-et-crud.md) | Relations non intégrées à `migration:make` ni au CRUD généré (FK absentes du formulaire) | À remonter |
 | [011](retour-011-make-relation-unicite-globale-noms-et-fk.md) | `make:relation` impose une unicité **globale** du nom de relation (F24) et de la colonne FK (F25) — schémas multi-pivots inexprimables avec des noms fidèles au dictionnaire | ✅ Résolu (32f552cc) |
 | [012](retour-012-entity-validate-faux-positif-fk-et-split-sql-apostrophe.md) | Faux positif `entity:validate` sur un champ `foreign_key` (F26) ; `split_sql_statements` cassé par une apostrophe en commentaire (F27) | À remonter |
+| [013](retour-013-pivot-many-to-many-colonnes-int-au-lieu-de-bigint-unsigned.md) | Le pivot `many_to_many` généré type ses colonnes en `INT` au lieu de `BIGINT UNSIGNED` → FK errno 150 (+ `ENGINE` manquant) (F28) | À remonter |
