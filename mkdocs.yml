@@ -72,6 +72,7 @@ nav:
       - ADR-007 — Typage Python strict: adr/007-typage-python-strict.md
       - ADR-008 — Import JSON canonique par upload admin: adr/008-import-json-canonique-par-upload-admin.md
       - ADR-009 — Montée de squelette Forge en place: adr/009-montee-squelette-forge-en-place.md
+      - ADR-010 — Importeur référentiel (upsert, best-effort): adr/010-importeur-referentiel-upsert-best-effort.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
