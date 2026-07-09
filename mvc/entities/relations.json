@@ -44,6 +44,17 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "InscriptionEleve",
+      "to": "AnneeScolaire",
+      "name": "annee_scolaire",
+      "inverse_name": "inscriptions",
+      "foreign_key": "annee_scolaire_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

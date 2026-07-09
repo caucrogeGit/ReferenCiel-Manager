@@ -19,7 +19,10 @@ from core.validation import (
 class InscriptionEleveBase:
     """Classe de base regenerable de InscriptionEleve."""
 
-    def __init__(self, created_at, updated_at, id=None, date_inscription=None):
+    def __init__(self, eleve_id, classe_id, annee_scolaire_id, created_at, updated_at, id=None, date_inscription=None):
+        self.eleve_id = eleve_id
+        self.classe_id = classe_id
+        self.annee_scolaire_id = annee_scolaire_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -64,6 +67,39 @@ class InscriptionEleveBase:
         self._date_inscription = value
 
     @property
+    def eleve_id(self):
+        return self._eleve_id
+
+    @eleve_id.setter
+    @typed(int)
+    def eleve_id(self, value):
+        if value is None:
+            raise ValidationError("eleve_id", 'La propriété "eleve_id" ne peut pas être nulle.')
+        self._eleve_id = value
+
+    @property
+    def classe_id(self):
+        return self._classe_id
+
+    @classe_id.setter
+    @typed(int)
+    def classe_id(self, value):
+        if value is None:
+            raise ValidationError("classe_id", 'La propriété "classe_id" ne peut pas être nulle.')
+        self._classe_id = value
+
+    @property
+    def annee_scolaire_id(self):
+        return self._annee_scolaire_id
+
+    @annee_scolaire_id.setter
+    @typed(int)
+    def annee_scolaire_id(self, value):
+        if value is None:
+            raise ValidationError("annee_scolaire_id", 'La propriété "annee_scolaire_id" ne peut pas être nulle.')
+        self._annee_scolaire_id = value
+
+    @property
     def created_at(self):
         return self._created_at
 
@@ -89,6 +125,9 @@ class InscriptionEleveBase:
         return {
             "id": self.id,
             "date_inscription": None if self.date_inscription is None else self.date_inscription.isoformat(),
+            "eleve_id": self.eleve_id,
+            "classe_id": self.classe_id,
+            "annee_scolaire_id": self.annee_scolaire_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -98,10 +137,13 @@ class InscriptionEleveBase:
         return cls(
             id=data["id"],
             date_inscription=cls._coerce_date(data.get("date_inscription")),
+            eleve_id=data["eleve_id"],
+            classe_id=data["classe_id"],
+            annee_scolaire_id=data["annee_scolaire_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"InscriptionEleveBase(id={self.id!r}, date_inscription={self.date_inscription!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"InscriptionEleveBase(id={self.id!r}, date_inscription={self.date_inscription!r}, eleve_id={self.eleve_id!r}, classe_id={self.classe_id!r}, annee_scolaire_id={self.annee_scolaire_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

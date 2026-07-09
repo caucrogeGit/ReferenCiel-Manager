@@ -1,6 +1,9 @@
 CREATE TABLE IF NOT EXISTS inscription_eleve (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     DateInscription DATE NULL,
+    eleve_id BIGINT UNSIGNED NOT NULL,
+    classe_id BIGINT UNSIGNED NOT NULL,
+    annee_scolaire_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

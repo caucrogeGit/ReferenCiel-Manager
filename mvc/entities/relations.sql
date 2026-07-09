@@ -17,3 +17,24 @@ ALTER TABLE classe
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 CREATE INDEX idx_classe_niveau_classe_id ON classe (niveau_classe_id);
+
+ALTER TABLE inscription_eleve
+    ADD CONSTRAINT fk_inscription_eleve_eleve_id
+    FOREIGN KEY (eleve_id)
+    REFERENCES eleve (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE inscription_eleve
+    ADD CONSTRAINT fk_inscription_eleve_classe_id
+    FOREIGN KEY (classe_id)
+    REFERENCES classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE inscription_eleve
+    ADD CONSTRAINT fk_inscription_eleve_annee_scolaire_id
+    FOREIGN KEY (annee_scolaire_id)
+    REFERENCES annee_scolaire (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;

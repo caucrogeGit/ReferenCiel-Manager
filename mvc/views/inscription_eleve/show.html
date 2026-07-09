@@ -1,0 +1,44 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail inscription_eleve</h1>
+    <div class="space-x-2">
+        {{ button(label=trans('crud.edit'), variant='primary', href='/inscription_eleve/edit/' ~ inscription_eleve.Id) }}
+        <a href="/inscription_eleve" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Date inscription</p>
+        <p class="text-gray-800">{{ inscription_eleve.DateInscription }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Eleve</p>
+        <p class="text-gray-800">{{ inscription_eleve.eleve_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Classe</p>
+        <p class="text-gray-800">{{ inscription_eleve.classe_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Annee scolaire</p>
+        <p class="text-gray-800">{{ inscription_eleve.annee_scolaire_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Created at</p>
+        <p class="text-gray-800">{{ inscription_eleve.CreatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Updated at</p>
+        <p class="text-gray-800">{{ inscription_eleve.UpdatedAt }}</p>
+    </div>
+</div>
+
+<form method="post" action="/inscription_eleve/destroy/{{ inscription_eleve.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+</form>
+{% endblock %}
