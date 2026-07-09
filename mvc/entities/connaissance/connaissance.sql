@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS connaissance (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    Libelle TEXT NOT NULL,
+    NiveauTaxonomique INT NULL,
+    competence_id BIGINT UNSIGNED NOT NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

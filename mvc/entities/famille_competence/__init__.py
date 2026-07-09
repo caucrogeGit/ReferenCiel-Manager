@@ -1,0 +1,1 @@
+from .famille_competence import FamilleCompetence as FamilleCompetence

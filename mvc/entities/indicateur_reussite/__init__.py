@@ -1,0 +1,1 @@
+from .indicateur_reussite import IndicateurReussite as IndicateurReussite

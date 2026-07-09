@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "name": "Competence",
+  "table": "competence",
+  "fields": [
+    {
+      "name": "code",
+      "type": "string",
+      "max_length": 10,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "intitule",
+      "type": "string",
+      "max_length": 250,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "referentiel_id",
+      "type": "foreign_key",
+      "references": "ReferentielNiveauClasse",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

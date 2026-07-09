@@ -115,6 +115,181 @@
         "on_delete": "cascade",
         "fields": []
       }
+    },
+    {
+      "type": "many_to_one",
+      "from": "ReferentielNiveauClasse",
+      "to": "Formation",
+      "name": "formation",
+      "inverse_name": "referentiels",
+      "foreign_key": "formation_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ReferentielNiveauClasse",
+      "to": "NiveauClasse",
+      "name": "niveau_classe",
+      "inverse_name": "referentiels",
+      "foreign_key": "niveau_classe_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "PoleActivite",
+      "to": "ReferentielNiveauClasse",
+      "name": "referentiel",
+      "inverse_name": "poles",
+      "foreign_key": "referentiel_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ActiviteProfessionnelle",
+      "to": "ReferentielNiveauClasse",
+      "name": "referentiel",
+      "inverse_name": "activites",
+      "foreign_key": "referentiel_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ActiviteProfessionnelle",
+      "to": "PoleActivite",
+      "name": "pole",
+      "inverse_name": "activites",
+      "foreign_key": "pole_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "Tache",
+      "to": "ActiviteProfessionnelle",
+      "name": "activite",
+      "inverse_name": "taches",
+      "foreign_key": "activite_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ResultatAttendu",
+      "to": "ActiviteProfessionnelle",
+      "name": "activite",
+      "inverse_name": "resultats_attendus",
+      "foreign_key": "activite_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "Competence",
+      "to": "ReferentielNiveauClasse",
+      "name": "referentiel",
+      "inverse_name": "competences",
+      "foreign_key": "referentiel_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "Connaissance",
+      "to": "Competence",
+      "name": "competence",
+      "inverse_name": "connaissances",
+      "foreign_key": "competence_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "CritereObservable",
+      "to": "Competence",
+      "name": "competence",
+      "inverse_name": "criteres",
+      "foreign_key": "competence_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "IndicateurReussite",
+      "to": "ReferentielNiveauClasse",
+      "name": "referentiel",
+      "inverse_name": "indicateurs",
+      "foreign_key": "referentiel_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "FamilleCompetence",
+      "to": "ReferentielNiveauClasse",
+      "name": "referentiel",
+      "inverse_name": "familles_competences",
+      "foreign_key": "referentiel_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "Source",
+      "to": "ReferentielNiveauClasse",
+      "name": "referentiel",
+      "inverse_name": "sources",
+      "foreign_key": "referentiel_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_many",
+      "from": "ActiviteProfessionnelle",
+      "to": "Competence",
+      "name": "competences",
+      "inverse_name": "activites",
+      "pivot": {
+        "table": "activite_competence",
+        "from_key": "activite_professionnelle_id",
+        "to_key": "competence_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
+    },
+    {
+      "type": "many_to_many",
+      "from": "FamilleCompetence",
+      "to": "Competence",
+      "name": "competences",
+      "inverse_name": "familles_competences",
+      "pivot": {
+        "table": "cc_competence",
+        "from_key": "famille_competence_id",
+        "to_key": "competence_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
     }
   ]
 }

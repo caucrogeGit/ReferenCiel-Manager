@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "name": "IndicateurReussite",
+  "table": "indicateur_reussite",
+  "fields": [
+    {
+      "name": "code",
+      "type": "string",
+      "max_length": 100,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "libelle",
+      "type": "text",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "origine",
+      "type": "string",
+      "max_length": 30,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "ref_code",
+      "type": "string",
+      "max_length": 50,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "referentiel_id",
+      "type": "foreign_key",
+      "references": "ReferentielNiveauClasse",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

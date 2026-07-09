@@ -84,3 +84,130 @@ CREATE TABLE IF NOT EXISTS groupe_eleve (
         REFERENCES eleve (id)
         ON DELETE CASCADE
 );
+
+ALTER TABLE referentiel_niveau_classe
+    ADD CONSTRAINT fk_referentiel_niveau_classe_formation_id
+    FOREIGN KEY (formation_id)
+    REFERENCES formation (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE referentiel_niveau_classe
+    ADD CONSTRAINT fk_referentiel_niveau_classe_niveau_classe_id
+    FOREIGN KEY (niveau_classe_id)
+    REFERENCES niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE pole_activite
+    ADD CONSTRAINT fk_pole_activite_referentiel_id
+    FOREIGN KEY (referentiel_id)
+    REFERENCES referentiel_niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE activite_professionnelle
+    ADD CONSTRAINT fk_activite_professionnelle_referentiel_id
+    FOREIGN KEY (referentiel_id)
+    REFERENCES referentiel_niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE activite_professionnelle
+    ADD CONSTRAINT fk_activite_professionnelle_pole_id
+    FOREIGN KEY (pole_id)
+    REFERENCES pole_activite (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE tache
+    ADD CONSTRAINT fk_tache_activite_id
+    FOREIGN KEY (activite_id)
+    REFERENCES activite_professionnelle (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE resultat_attendu
+    ADD CONSTRAINT fk_resultat_attendu_activite_id
+    FOREIGN KEY (activite_id)
+    REFERENCES activite_professionnelle (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE competence
+    ADD CONSTRAINT fk_competence_referentiel_id
+    FOREIGN KEY (referentiel_id)
+    REFERENCES referentiel_niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE connaissance
+    ADD CONSTRAINT fk_connaissance_competence_id
+    FOREIGN KEY (competence_id)
+    REFERENCES competence (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE critere_observable
+    ADD CONSTRAINT fk_critere_observable_competence_id
+    FOREIGN KEY (competence_id)
+    REFERENCES competence (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE indicateur_reussite
+    ADD CONSTRAINT fk_indicateur_reussite_referentiel_id
+    FOREIGN KEY (referentiel_id)
+    REFERENCES referentiel_niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE famille_competence
+    ADD CONSTRAINT fk_famille_competence_referentiel_id
+    FOREIGN KEY (referentiel_id)
+    REFERENCES referentiel_niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE source
+    ADD CONSTRAINT fk_source_referentiel_id
+    FOREIGN KEY (referentiel_id)
+    REFERENCES referentiel_niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+CREATE TABLE IF NOT EXISTS activite_competence (
+    id INT NOT NULL AUTO_INCREMENT,
+    activite_professionnelle_id INT NOT NULL,
+    competence_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_activite_competence (activite_professionnelle_id, competence_id),
+    INDEX idx_activite_competence_activite_professionnelle_id (activite_professionnelle_id),
+    INDEX idx_activite_competence_competence_id (competence_id),
+    CONSTRAINT fk_activite_competence_activite_professionnelle_id
+        FOREIGN KEY (activite_professionnelle_id)
+        REFERENCES activite_professionnelle (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_activite_competence_competence_id
+        FOREIGN KEY (competence_id)
+        REFERENCES competence (id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS cc_competence (
+    id INT NOT NULL AUTO_INCREMENT,
+    famille_competence_id INT NOT NULL,
+    competence_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_cc_competence (famille_competence_id, competence_id),
+    INDEX idx_cc_competence_famille_competence_id (famille_competence_id),
+    INDEX idx_cc_competence_competence_id (competence_id),
+    CONSTRAINT fk_cc_competence_famille_competence_id
+        FOREIGN KEY (famille_competence_id)
+        REFERENCES famille_competence (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_cc_competence_competence_id
+        FOREIGN KEY (competence_id)
+        REFERENCES competence (id)
+        ON DELETE CASCADE
+);

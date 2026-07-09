@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "name": "Formation",
+  "table": "formation",
+  "fields": [
+    {
+      "name": "code",
+      "type": "string",
+      "max_length": 50,
+      "required": true,
+      "nullable": false,
+      "unique": true
+    },
+    {
+      "name": "intitule",
+      "type": "string",
+      "max_length": 200,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

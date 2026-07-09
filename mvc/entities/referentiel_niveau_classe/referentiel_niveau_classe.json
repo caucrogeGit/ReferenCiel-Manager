@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "name": "ReferentielNiveauClasse",
+  "table": "referentiel_niveau_classe",
+  "fields": [
+    {
+      "name": "identifiant",
+      "type": "string",
+      "max_length": 100,
+      "required": true,
+      "nullable": false,
+      "unique": true
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "importe_le",
+      "type": "datetime",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "formation_id",
+      "type": "foreign_key",
+      "references": "Formation",
+      "required": true
+    },
+    {
+      "name": "niveau_classe_id",
+      "type": "foreign_key",
+      "references": "NiveauClasse",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

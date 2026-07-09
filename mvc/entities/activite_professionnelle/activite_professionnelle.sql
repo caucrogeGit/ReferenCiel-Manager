@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS activite_professionnelle (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    Code VARCHAR(20) NOT NULL,
+    Intitule VARCHAR(250) NOT NULL,
+    ConditionsExercice TEXT NULL,
+    referentiel_id BIGINT UNSIGNED NOT NULL,
+    pole_id BIGINT UNSIGNED NOT NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

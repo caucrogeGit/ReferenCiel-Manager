@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "name": "Source",
+  "table": "source",
+  "fields": [
+    {
+      "name": "source_id",
+      "type": "string",
+      "max_length": 100,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "source_type",
+      "type": "string",
+      "max_length": 30,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "source_fichier",
+      "type": "string",
+      "max_length": 255,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "source_note",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "referentiel_id",
+      "type": "foreign_key",
+      "references": "ReferentielNiveauClasse",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

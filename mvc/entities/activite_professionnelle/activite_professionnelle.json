@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "name": "ActiviteProfessionnelle",
+  "table": "activite_professionnelle",
+  "fields": [
+    {
+      "name": "code",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "intitule",
+      "type": "string",
+      "max_length": 250,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "conditions_exercice",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "referentiel_id",
+      "type": "foreign_key",
+      "references": "ReferentielNiveauClasse",
+      "required": true
+    },
+    {
+      "name": "pole_id",
+      "type": "foreign_key",
+      "references": "PoleActivite",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

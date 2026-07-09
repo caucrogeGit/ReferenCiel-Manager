@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "name": "CritereObservable",
+  "table": "critere_observable",
+  "fields": [
+    {
+      "name": "code",
+      "type": "string",
+      "max_length": 100,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "libelle",
+      "type": "text",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "competence_id",
+      "type": "foreign_key",
+      "references": "Competence",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

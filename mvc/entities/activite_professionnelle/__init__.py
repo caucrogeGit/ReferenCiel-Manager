@@ -1,0 +1,1 @@
+from .activite_professionnelle import ActiviteProfessionnelle as ActiviteProfessionnelle

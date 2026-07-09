@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "name": "Tache",
+  "table": "tache",
+  "fields": [
+    {
+      "name": "ordre",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "libelle",
+      "type": "text",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "activite_id",
+      "type": "foreign_key",
+      "references": "ActiviteProfessionnelle",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}
