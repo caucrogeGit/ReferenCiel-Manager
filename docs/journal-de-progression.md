@@ -444,8 +444,21 @@ Parcours réutilisable, en **identité + versions** ([ADR-011](adr/011-versionne
 | `StarterWelcome` (identité) | `identifiant` (unique), `titre`, `presentation` | `niveau_classe_id` → NiveauClasse |
 | `VersionStarter` (version) | `version`, `statut` (`brouillon`/`publie`/`archive`), `activite_glissante`, `ordre_impose` | `starter_id` → StarterWelcome · **unique** `(starter, version)` |
 
-*CRUD de gestion pour les deux (select FK + checkboxes booléens). Les contenus versionnés
-(paliers, QCM…) se rattacheront à une `VersionStarter` — tickets ultérieurs. Tests (mock DB).*
+*CRUD de gestion pour les deux (select FK + checkboxes booléens). Le starter est un
+**gabarit** ; ses contenus sont instanciés dans un **parcours** dérivé (voir ci-dessous). Tests (mock DB).*
+
+### `Parcours` / `VersionParcours` / `Palier` — phase ⑧ ✅
+
+Le parcours **organise le travail élève**, **dérivé** d'un starter ([ADR-011](adr/011-versionnement-identite-plus-version.md),
+[dico Parcours](specs/data-dictionary/dictionnaire-parcours.md)).
+
+| Entité | Champs | Relations |
+|---|---|---|
+| `Parcours` (identité) | `titre` | `version_starter_id` → VersionStarter (**dérivation**) |
+| `VersionParcours` (version) | `version`, `statut` | `parcours_id` → Parcours · unique `(parcours, version)` |
+| `Palier` (découpage) | `ordre`, `titre`, `theme`, `production_attendue`, `dossier_technique_fichier` | `version_parcours_id` → VersionParcours · unique `(version_parcours, ordre)` |
+
+*CRUD FK-aware pour les trois. Les contenus de palier (QCM, checklist, dépôt) = Bloc B / ticket 19. Tests (mock DB).*
 
 ---
 
@@ -506,16 +519,19 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **⑤ Référentiel — schéma ✅ (tickets 09-10)** | 12 entités (`Formation`, `ReferentielNiveauClasse`, `PoleActivite`, `ActiviteProfessionnelle`, `Tache`, `ResultatAttendu`, `Competence`, `Connaissance`, `CritereObservable`, `IndicateurReussite`, `FamilleCompetence`, `Source`) + `NiveauClasse` réutilisée. Migration `create_referentiel` (14 tables, 13 FK, 7 UNIQUE composites, 2 pivots m2m) appliquée |
 | ✅ Référentiel — ticket 11 | **Importeur complet** : service (`referentiel_importer.py`, ADR-010 upsert + best-effort), **UI d'upload admin** (validation schéma → import → rapport, provenance) + **admin de parcours** (`forge-mvc-admin`) + tests. Vérifié bout-en-bout (CIEL 2TNE : 81 objets) |
 | **⑥ Scénario — terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` + 2 FK + 2 m2m (compétences, critères) + **CRUD prof m2m-aware** + tests |
-| **⑦ Starter — terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-011) : `StarterWelcome` (identifiant, titre, presentation, niveau_classe) + `VersionStarter` (version, statut, activite_glissante, ordre_impose ; unique `(starter, version)`) + CRUD de gestion + tests |
-| Total entités | **23** en base (8 socle + 12 référentiel + `Scenario` + `StarterWelcome` + `VersionStarter`). `make check` vert |
+| **⑦ Starter — terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-011) : `StarterWelcome` + `VersionStarter` (unique `(starter, version)`) + CRUD + tests |
+| **⑧ Parcours — terminé ✅ (tickets 15-16)** | `Parcours` (dérivé d'une `VersionStarter`) + `VersionParcours` (ADR-011) + `Palier` (découpage, rattaché à `VersionParcours`, unique `(version_parcours, ordre)`) + CRUD FK-aware + tests |
+| Total entités | **26** en base (8 socle + 12 référentiel + Scénario + Starter×2 + Parcours×3). `make check` vert |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
-| Qualité | `make check` vert (5 portes, **22 tests**) |
+| Qualité | `make check` vert (5 portes, **25 tests**) |
 
-> Prochaine étape : **Phases ⑤–⑦ terminées**. Passer à la phase **⑧ Parcours**
-> (tickets 15-16 : `Parcours` + `VersionParcours` — **réutilise ADR-011** — puis
-> `Palier`). Restes de confort : lien de nav (import + admin), commit d'`env/example`
-> (WIP porteur mêlé). Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27 — F27 confirmé
-> 2×), retour-013 (F28), retour-014 (F29).
+> Prochaine étape : **Phases ⑤–⑧ terminées** — toute la **conception pédagogique** est
+> en base (référentiel → scénario → starter → parcours). Passer au **Bloc B · exécution
+> élève** (tickets 17-21 : `AffectationParcours`, `ProgressionEleve`, QCM/checklist/dépôt,
+> suivi prof, évaluation). Restes de confort : lien de nav, commit d'`env/example` (WIP
+> porteur mêlé). Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27 —
+> **F27 re-rencontré 3×** : un `;`/`'` en commentaire de migration casse le splitter),
+> retour-013 (F28), retour-014 (F29).
 
 ---
 
@@ -742,6 +758,21 @@ forge migration:apply ; forge make:crud StarterWelcome ; forge make:crud Version
 #   tests : tests/test_starter_versionnement.py (mock DB)
 ```
 
+**⑱ Parcours + VersionParcours + Palier ✅ (phase ⑧, tickets 15-16 — ADR-011)**
+
+```bash
+#   cadrage porteur : Parcours dérivé d'une VersionStarter ; Palier appartient au parcours
+#   dico Parcours créé ; dico Starter révisé (Palier -> domaine Parcours)
+forge make:entity Parcours ; forge make:entity VersionParcours ; forge make:entity Palier
+forge make:relation   # Parcours->VersionStarter ; VersionParcours->Parcours ; Palier->VersionParcours
+forge sync:entity … ; forge sync:relations
+forge migration:make create_parcours --from-entity Parcours
+#   compléter : 3 tables + 3 FK + 2 unique (parcours,version)/(version_parcours,ordre)
+#   ATTENTION F27 : commentaires ASCII SANS ; ni ' (re-rencontré 3e fois)
+forge migration:apply ; forge make:crud Parcours ; forge make:crud VersionParcours ; forge make:crud Palier
+#   tests : tests/test_parcours_persistance.py (mock DB)
+```
+
 ---
 
 ## 11. Vue d'ensemble — le tunnel de progression
@@ -760,17 +791,17 @@ flowchart TD
     E["⑤ Référentiel ✅ (09-10-11)<br/>12 entités + 15 relations en base<br/>importeur JSON par upload admin"]
     F["⑥ Scénario ✅ (12-13)<br/>dico + entité + CRUD prof m2m-aware + tests"]
     G["⑦ Starter ✅ (14)<br/>StarterWelcome + VersionStarter (identité + versions, ADR-011)"]
-    H["⑧ Parcours ◀ ICI ⬜ (15–16)"]
-    I["⑨ BLOC B · Exécution pédagogique élève ⬜ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Suivi prof → Évaluation et bilan"]
+    H["⑧ Parcours ✅ (15-16)<br/>Parcours (dérivé starter) + VersionParcours + Palier"]
+    I["⑨ BLOC B · Exécution pédagogique élève ◀ ICI ⬜ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Suivi prof → Évaluation et bilan"]
     A --> B --> C --> D --> E --> F --> G --> H --> I
     classDef done fill:#e6f4ea,stroke:#34a853;
     classDef current fill:#fff4e5,stroke:#f9a825,stroke-width:3px;
     classDef todo fill:#f1f3f4,stroke:#9aa0a6;
-    class A,B,C,D,E,F,G done
-    class H current
-    class I todo
+    class A,B,C,D,E,F,G,H done
+    class I current
 ```
 
-> **Où on en est** : phases ①–⑦ faites — **Bloc A (8/8)**, **Référentiel** (schéma +
-> importeur), **Scénario** et **Starter** (identité + versions) complets (23 entités en
-> base, 22 tests). Prochaine phase : **⑧ Parcours** (tickets 15-16, réutilise ADR-011).
+> **Où on en est** : phases ①–⑧ faites — toute la **conception pédagogique** est en base
+> (Bloc A socle · Référentiel + importeur · Scénario · Starter · Parcours), **26 entités,
+> 25 tests**. Reste le **Bloc B · exécution élève** (tickets 17-21) : affecter un parcours
+> publié, suivre la progression, QCM/checklists/dépôts, évaluer.
