@@ -521,8 +521,8 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **⑥ Scénario — terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` + 2 FK + 2 m2m (compétences, critères) + **CRUD prof m2m-aware** + tests |
 | **⑦ Starter — terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-011) : `StarterWelcome` + `VersionStarter` (unique `(starter, version)`) + CRUD + tests |
 | **⑧ Parcours — terminé ✅ (tickets 15-16)** | `Parcours` (dérivé d'une `VersionStarter`) + `VersionParcours` (ADR-011) + `Palier` (découpage, rattaché à `VersionParcours`, unique `(version_parcours, ordre)`) + CRUD FK-aware + tests |
-| **⑨ Bloc B — quasi terminé 🚧** | **17 ✅** Affectation · **18 ✅** Progression×2 · **19 ✅** QCM+checklist+activité+dépôt (11 ent.) · **21 ✅** Évaluation par critères (`EvaluationActivite` + `EvaluationCritere`, barème 4 niveaux). **Reste 20** (suivi prof = **vues d'agrégation**, pas d'entité) |
-| **Modèle de données — COMPLET ✅** | **42 entités** couvrant toute la chaîne : `référentiel → scénario → starter → parcours → affectation → progression → QCM/checklist/activité/dépôt → évaluation`. `make check` vert (**41 tests**) |
+| **⑨ Bloc B — TERMINÉ ✅ (17-21)** | Affectation · Progression×2 · QCM+checklist+activité+dépôt (11 ent.) · Évaluation par critères (2 ent.) · **suivi prof** (`/suivi` : tableau de bord lecture seule, requêtes d'agrégation, alerte « bloqué ») |
+| **Modèle + exécution — COMPLETS ✅** | **42 entités** : `référentiel → scénario → starter → parcours → affectation → progression → QCM/checklist/activité/dépôt → évaluation`, plus le **suivi**. `make check` vert (**43 tests**) |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
 | Qualité | `make check` vert (5 portes, **25 tests**) |
 
@@ -793,17 +793,18 @@ flowchart TD
     F["⑥ Scénario ✅ (12-13)<br/>dico + entité + CRUD prof m2m-aware + tests"]
     G["⑦ Starter ✅ (14)<br/>StarterWelcome + VersionStarter (identité + versions, ADR-011)"]
     H["⑧ Parcours ✅ (15-16)<br/>Parcours (dérivé starter) + VersionParcours + Palier"]
-    I["⑨ BLOC B · Exécution pédagogique élève ◀ ICI ⬜ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Suivi prof → Évaluation et bilan"]
+    I["⑨ BLOC B · Exécution pédagogique élève ✅ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Évaluation → Suivi prof"]
     A --> B --> C --> D --> E --> F --> G --> H --> I
     classDef done fill:#e6f4ea,stroke:#34a853;
     classDef current fill:#fff4e5,stroke:#f9a825,stroke-width:3px;
     classDef todo fill:#f1f3f4,stroke:#9aa0a6;
-    class A,B,C,D,E,F,G,H done
-    class I current
+    class A,B,C,D,E,F,G,H,I done
 ```
 
-> **Où on en est** : phases ①–⑧ faites **et Bloc B quasi terminé** — le **modèle de
-> données complet** est en base (**42 entités**, 41 tests) : `référentiel → scénario →
+> **Où on en est** : 🏁 **tunnel complet — toutes les phases ①–⑨ faites.** Toute la
+> chaîne pédagogique est **modélisée, exécutable et suivie** : `référentiel → scénario →
 > starter → parcours → affectation → progression → QCM/checklist/activité/dépôt →
-> évaluation`. Tickets Bloc B 17-19 + 21 ✅. **Reste le ticket 20** (suivi professeur =
-> **vues d'agrégation**, pas de nouvelle entité).
+> évaluation par critères → suivi professeur`. **42 entités, 43 tests, `make check` vert.**
+> La suite relève de l'**enrichissement** (interfaces prof/élève abouties, services
+> métier — ex. valider une tentative met à jour la progression —, import starter,
+> permissions RBAC, seed de démonstration), pas du **squelette** métier, désormais complet.
