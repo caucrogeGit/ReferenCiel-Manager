@@ -21,6 +21,8 @@ from mvc.routes.annee_scolaire_routes import register_annee_scolaire_routes
 from mvc.routes.auth_routes import register_auth_routes
 from mvc.routes.classe_routes import register_classe_routes
 from mvc.routes.eleve_routes import register_eleve_routes
+from mvc.routes.evaluation_activite_routes import register_evaluation_activite_routes
+from mvc.routes.evaluation_critere_routes import register_evaluation_critere_routes
 from mvc.routes.groupe_routes import register_groupe_routes
 from mvc.routes.inscription_eleve_routes import register_inscription_eleve_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
@@ -106,6 +108,10 @@ register_item_coche_routes(router)
 # Bloc B — Activité + DépôtEleve (ticket 19, sous-lot 4 — fin ticket 19)
 register_activite_routes(router)
 register_depot_eleve_routes(router)
+
+# Bloc B — Évaluation par critères (ticket 21)
+register_evaluation_activite_routes(router)
+register_evaluation_critere_routes(router)
 
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)

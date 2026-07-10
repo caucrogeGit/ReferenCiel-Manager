@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "name": "EvaluationCritere",
+  "table": "evaluation_critere",
+  "fields": [
+    {
+      "name": "niveau",
+      "type": "string",
+      "max_length": 30,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "evaluation_activite_id",
+      "type": "foreign_key",
+      "references": "EvaluationActivite",
+      "required": true
+    },
+    {
+      "name": "critere_id",
+      "type": "foreign_key",
+      "references": "CritereObservable",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

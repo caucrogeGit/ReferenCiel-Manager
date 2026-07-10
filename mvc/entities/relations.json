@@ -657,6 +657,61 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "EvaluationActivite",
+      "to": "ProgressionPalier",
+      "name": "progression_palier",
+      "inverse_name": "evaluations",
+      "foreign_key": "progression_palier_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "EvaluationActivite",
+      "to": "Activite",
+      "name": "activite",
+      "inverse_name": "evaluations",
+      "foreign_key": "activite_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "EvaluationActivite",
+      "to": "Professeur",
+      "name": "professeur",
+      "inverse_name": "evaluations_activite",
+      "foreign_key": "professeur_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "EvaluationCritere",
+      "to": "EvaluationActivite",
+      "name": "evaluation_activite",
+      "inverse_name": "criteres",
+      "foreign_key": "evaluation_activite_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "EvaluationCritere",
+      "to": "CritereObservable",
+      "name": "critere",
+      "inverse_name": "evaluations",
+      "foreign_key": "critere_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

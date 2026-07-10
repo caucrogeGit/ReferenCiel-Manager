@@ -468,3 +468,38 @@ ALTER TABLE depot_eleve
     REFERENCES activite (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE evaluation_activite
+    ADD CONSTRAINT fk_evaluation_activite_progression_palier_id
+    FOREIGN KEY (progression_palier_id)
+    REFERENCES progression_palier (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE evaluation_activite
+    ADD CONSTRAINT fk_evaluation_activite_activite_id
+    FOREIGN KEY (activite_id)
+    REFERENCES activite (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE evaluation_activite
+    ADD CONSTRAINT fk_evaluation_activite_professeur_id
+    FOREIGN KEY (professeur_id)
+    REFERENCES professeur (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE evaluation_critere
+    ADD CONSTRAINT fk_evaluation_critere_evaluation_activite_id
+    FOREIGN KEY (evaluation_activite_id)
+    REFERENCES evaluation_activite (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE evaluation_critere
+    ADD CONSTRAINT fk_evaluation_critere_critere_id
+    FOREIGN KEY (critere_id)
+    REFERENCES critere_observable (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
