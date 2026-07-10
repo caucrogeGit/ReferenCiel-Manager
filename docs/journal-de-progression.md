@@ -521,8 +521,8 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **⑥ Scénario — terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` + 2 FK + 2 m2m (compétences, critères) + **CRUD prof m2m-aware** + tests |
 | **⑦ Starter — terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-011) : `StarterWelcome` + `VersionStarter` (unique `(starter, version)`) + CRUD + tests |
 | **⑧ Parcours — terminé ✅ (tickets 15-16)** | `Parcours` (dérivé d'une `VersionStarter`) + `VersionParcours` (ADR-011) + `Palier` (découpage, rattaché à `VersionParcours`, unique `(version_parcours, ordre)`) + CRUD FK-aware + tests |
-| **⑨ Bloc B — en cours 🚧** | **17 ✅** Affectation · **18 ✅** Progression×2 · **19 (en cours)** : QCM déf+exec ✅ (5 ent.) · **checklist ✅** (`Checklist`→`Section`→`Item` + exécution `ItemCoche` élève/prof, 4 ent.). Reste 19 : **Activité + DépôtEleve** · 20 suivi · 21 évaluation |
-| Total entités | **38** en base (Bloc A 8 + référentiel 12 + Scénario + Starter×2 + Parcours×3 + Affectation + Progression×2 + QCM×5 + Checklist×4). `make check` vert (**37 tests**) |
+| **⑨ Bloc B — en cours 🚧** | **17 ✅** Affectation · **18 ✅** Progression×2 · **19 ✅** QCM (déf+exec, 5 ent.) + checklist (déf+exec, 4 ent.) + `Activite` + `DepotEleve`. Reste **20** (suivi prof — surtout des vues) · **21** (évaluation par critères : `EvaluationActivite`, `EvaluationCritere`) |
+| Total entités | **40** en base (Bloc A 8 + référentiel 12 + Scénario + Starter×2 + Parcours×3 + Affectation + Progression×2 + QCM×5 + Checklist×4 + Activite + DepotEleve). `make check` vert (**39 tests**) |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
 | Qualité | `make check` vert (5 portes, **25 tests**) |
 
