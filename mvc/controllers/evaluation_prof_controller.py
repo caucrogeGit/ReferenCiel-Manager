@@ -18,6 +18,7 @@ from mvc.models.evaluation_prof_model import (
     get_progression_detail,
     set_palier_statut,
 )
+from mvc.models.notation_critere_model import enregistrer_notation, get_grille
 
 
 class EvaluationProfController:
@@ -80,4 +81,38 @@ class EvaluationProfController:
             return BaseController.not_found()
         cible = f"/evaluation/progression/{data['progression_id']}"
         message = f"Checklist confirmée : {resultat['coches']} / {resultat['items']} items validés."
+        return BaseController.redirect_with_flash(request, cible, message, "success")
+
+    @staticmethod
+    def activite(request: Request) -> Response:
+        """Grille de notation par critères (`GET /evaluation/activite/<progression_palier_id>`)."""
+        pp_id = int(request.route("id") or "0")
+        data = get_grille(pp_id)
+        if data is None:
+            return BaseController.not_found()
+        return BaseController.render(
+            "evaluation/activite.html",
+            context={"grille": data, "flash": get_flash(get_session_id(request))},
+            request=request,
+        )
+
+    @staticmethod
+    def noter(request: Request) -> Response:
+        """Enregistre la notation (`POST /evaluation/activite/<progression_palier_id>`)."""
+        pp_id = int(request.route("id") or "0")
+        data = get_grille(pp_id)
+        if data is None:
+            return BaseController.not_found()
+        niveaux: dict[int, str] = {}
+        for competence in data["competences"]:
+            for critere in competence["criteres"]:
+                cid = int(critere["id"])
+                niveau = request.form(f"critere_{cid}", "")
+                if niveau:
+                    niveaux[cid] = niveau
+        resultat = enregistrer_notation(pp_id, niveaux)
+        if resultat is None:
+            return BaseController.not_found()
+        cible = f"/evaluation/progression/{data['progression_id']}"
+        message = f"Notation enregistrée : {resultat['notes']} critère(s) noté(s)."
         return BaseController.redirect_with_flash(request, cible, message, "success")

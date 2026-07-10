@@ -14,3 +14,5 @@ def register_evaluation_prof_routes(router: Router) -> None:
         g.add("POST", "/palier/{id}/statut", EvaluationProfController.set_statut, name="evaluation-palier-statut")
         g.add("GET", "/checklist/{id}", EvaluationProfController.checklist, name="evaluation-checklist")
         g.add("POST", "/checklist/{id}", EvaluationProfController.coche, name="evaluation-checklist-coche")
+        g.add("GET", "/activite/{id}", EvaluationProfController.activite, name="evaluation-activite")
+        g.add("POST", "/activite/{id}", EvaluationProfController.noter, name="evaluation-activite-noter")
