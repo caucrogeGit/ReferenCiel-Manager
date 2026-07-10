@@ -29,7 +29,7 @@
     {% block header %}
     <header class="bg-surface border-b border-line px-8 py-4">
         <div class="max-w-5xl mx-auto flex items-center justify-between gap-6">
-            <a href="/" class="flex items-center gap-2 text-lg font-extrabold tracking-tight">
+            <a href="/" class="flex items-center gap-2 text-lg font-extrabold tracking-tight text-forge">
                 {{ app_name }}
             </a>
             <nav class="flex items-center gap-6 text-sm font-medium text-muted">
@@ -44,7 +44,7 @@
     </main>
 
     <footer class="bg-ink text-white/70 px-8 py-6 text-center text-xs">
-        {% block footer %}Généré avec Forge 1.0.0rc2. Framework MVC Python, sans magie cachée.{% endblock %}
+        {% block footer %}Généré avec <a href="https://forgemvc.com/docs/forge/" target="_blank" rel="noopener noreferrer" class="text-forge hover:underline">Forge 1.0.0rc2</a>. Framework MVC Python, sans magie cachée.{% endblock %}
     </footer>
 
 </body>

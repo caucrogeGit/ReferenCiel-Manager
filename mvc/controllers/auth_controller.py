@@ -4,7 +4,7 @@ Flux de connexion sur le socle `users` (forge auth:init) : formulaire, POST de
 login (avec défense anti-fixation de session), et logout. Le loader charge un
 utilisateur par email pour `authenticate_user` (cœur).
 """
-from core.auth.session import authenticate_user, login_user, logout_user
+from core.auth.session import authenticate_user, is_authenticated, login_user, logout_user
 from core.database.db import fetch_one
 from core.http.request import Request
 from core.http.response import Response
@@ -26,6 +26,10 @@ class AuthController(BaseController):
 
     @staticmethod
     def login_form(request: Request) -> Response:
+        # Un utilisateur déjà connecté n'a rien à faire sur le formulaire : on le
+        # renvoie à l'accueil (évite la boucle avec la racine qui redirige ici).
+        if is_authenticated(request):
+            return BaseController.redirect("/")
         # Garantit une session (donc un csrf_token) même pour un visiteur anonyme.
         session_id = get_session_id(request)
         if not session_id or get_session(session_id) is None:

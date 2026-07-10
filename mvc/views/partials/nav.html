@@ -7,8 +7,8 @@
    toujours visible. #}
 {% from "components/ui.html" import button %}
 <div class="app-nav">
-    <a href="/" class="nav-link">Accueil</a>
-
+    {# Pas de lien « Accueil » : le brand {{ app_name }} du header (base.html)
+       pointe déjà vers « / ». #}
     {% if can('socle.gerer') %}
     <div class="nav-item">
         <button class="nav-trigger" type="button">Admin ▾</button>

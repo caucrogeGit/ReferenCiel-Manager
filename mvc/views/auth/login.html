@@ -2,6 +2,11 @@
 {% from "components/forms.html" import field, submit %}
 {% from "components/ui.html" import alert %}
 {% block title %}Connexion{% endblock %}
+
+{# Page d'entrée : on vide la navigation (le bouton « Connexion » ferait doublon
+   avec le formulaire). Le brand du header reste le seul élément de nav. #}
+{% block nav %}{% endblock %}
+
 {% block content %}
 <div class="max-w-sm mx-auto">
     <h1 class="text-[28px] font-extrabold tracking-tight mb-6 text-center">Connexion</h1>
