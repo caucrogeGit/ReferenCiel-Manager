@@ -79,6 +79,7 @@ nav:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
       - Ticket 02 — Contrat JSON canonique: tickets/ticket-02-contrat-json-canonique.md
+      - Ticket 22 — Bac à sable outils pédagogiques: tickets/ticket-22-bac-a-sable-outils-pedagogiques.md
   - Spécifications:
       - JSON canonique: specs/json-canonique/README.md
       - Contrat — référentiel niveau-classe: specs/json-canonique/contrat-referentiel-niveau-classe.md
@@ -115,3 +116,4 @@ nav:
       - Retour 014 — forge-mvc-admin snake_case vs entities PascalCase: banc-essai/retour-014-forge-mvc-admin-snake-case-vs-entities-pascalcase.md
       - Retour 015 — RBAC session dépréciée & schéma non livré: banc-essai/retour-015-rbac-resolveur-session-depreciee-et-schema-non-livre.md
       - Retour 016 — sessions-db hors catalogue, schéma non livré & read-modify-write non transactionnel: banc-essai/retour-016-sessions-db-hors-catalogue-schema-non-livre-et-read-modify-write-non-transactionnel.md
+      - Retour 017 — sessions:gc n'amorce pas la config & --help s'exécute: banc-essai/retour-017-sessions-gc-namorce-pas-la-config-et-help-sexecute.md

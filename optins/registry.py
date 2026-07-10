@@ -33,11 +33,11 @@ ENABLED_OPTINS: dict[str, str] = {
     "rbac": "crosscutting",
     "admin": "crosscutting",
     "files": "library",
+    # Opt-in bibliothèque, au catalogue `forge opt-in:list` depuis F33 (retour-016) :
+    # câblé dans app.py via forge.configure(session_store=DbSessionStore(...)) ;
+    # table forge_sessions provisionnée par migration (ADR-071).
+    "sessions-db": "library",
     # <<< fin du bloc géré par forge opt-in:enable / disable
-    # Opt-in externe (paquet du fork Forge), hors catalogue `forge opt-in:list` :
-    # installé via pip, câblé à la main dans app.py (forge.configure(session_store=…)).
-    # Ne pas mettre dans le bloc géré ci-dessus (forge le régénérerait).
-    "sessions-db": "crosscutting",
 }
 
 # >>> opt-in imports (gérés par forge opt-in:enable / disable)
