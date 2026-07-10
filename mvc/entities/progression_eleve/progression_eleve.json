@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "name": "ProgressionEleve",
+  "table": "progression_eleve",
+  "fields": [
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "date_debut",
+      "type": "date",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "eleve_id",
+      "type": "foreign_key",
+      "references": "Eleve",
+      "required": true
+    },
+    {
+      "name": "affectation_parcours_id",
+      "type": "foreign_key",
+      "references": "AffectationParcours",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

@@ -1,0 +1,28 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{% from "components/forms.html" import field, textarea_field, select_field, checkbox %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
+    <a href="/progression_eleve" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+</div>
+
+{% include "partials/form_errors.html" %}
+
+<div class="bg-white shadow rounded p-6">
+    <form method="post" action="{{ action }}" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {{ field(name='statut', label='Statut', type='text', value=form.value('statut'), error=form.error('statut')) }}
+        {{ field(name='date_debut', label='Date debut', type='date', value=form.value('date_debut'), error=form.error('date_debut')) }}
+        {{ select_field(name='eleve_id', label='Eleve', options=form.options.eleve_id_choices, selected=form.value('eleve_id'), error=form.error('eleve_id')) }}
+        {{ select_field(name='affectation_parcours_id', label='Affectation parcours', options=form.options.affectation_parcours_id_choices, selected=form.value('affectation_parcours_id'), error=form.error('affectation_parcours_id')) }}
+        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
+        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
+        <div class="flex gap-4 pt-2">
+            {{ button(label=trans('common.save'), variant='primary', type='submit') }}
+            {{ button(label=trans('common.cancel'), variant='secondary', href='/progression_eleve') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

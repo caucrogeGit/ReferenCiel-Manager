@@ -448,6 +448,50 @@
         "on_delete": "cascade",
         "fields": []
       }
+    },
+    {
+      "type": "many_to_one",
+      "from": "ProgressionEleve",
+      "to": "Eleve",
+      "name": "eleve",
+      "inverse_name": "progressions",
+      "foreign_key": "eleve_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ProgressionEleve",
+      "to": "AffectationParcours",
+      "name": "affectation_parcours",
+      "inverse_name": "progressions",
+      "foreign_key": "affectation_parcours_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ProgressionPalier",
+      "to": "ProgressionEleve",
+      "name": "progression_eleve",
+      "inverse_name": "paliers",
+      "foreign_key": "progression_eleve_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ProgressionPalier",
+      "to": "Palier",
+      "name": "palier",
+      "inverse_name": "progressions",
+      "foreign_key": "palier_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

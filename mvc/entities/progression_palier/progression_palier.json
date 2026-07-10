@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "name": "ProgressionPalier",
+  "table": "progression_palier",
+  "fields": [
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "progression_eleve_id",
+      "type": "foreign_key",
+      "references": "ProgressionEleve",
+      "required": true
+    },
+    {
+      "name": "palier_id",
+      "type": "foreign_key",
+      "references": "Palier",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

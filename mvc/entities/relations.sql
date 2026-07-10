@@ -335,3 +335,31 @@ CREATE TABLE IF NOT EXISTS affectation_parcours_eleve (
         REFERENCES eleve (id)
         ON DELETE CASCADE
 );
+
+ALTER TABLE progression_eleve
+    ADD CONSTRAINT fk_progression_eleve_eleve_id
+    FOREIGN KEY (eleve_id)
+    REFERENCES eleve (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE progression_eleve
+    ADD CONSTRAINT fk_progression_eleve_affectation_parcours_id
+    FOREIGN KEY (affectation_parcours_id)
+    REFERENCES affectation_parcours (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE progression_palier
+    ADD CONSTRAINT fk_progression_palier_progression_eleve_id
+    FOREIGN KEY (progression_eleve_id)
+    REFERENCES progression_eleve (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE progression_palier
+    ADD CONSTRAINT fk_progression_palier_palier_id
+    FOREIGN KEY (palier_id)
+    REFERENCES palier (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;

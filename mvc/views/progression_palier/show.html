@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail progression_palier</h1>
+    <div class="space-x-2">
+        {{ button(label=trans('crud.edit'), variant='primary', href='/progression_palier/edit/' ~ progression_palier.Id) }}
+        <a href="/progression_palier" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Statut</p>
+        <p class="text-gray-800">{{ progression_palier.Statut }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Progression eleve</p>
+        <p class="text-gray-800">{{ progression_palier.progression_eleve_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Palier</p>
+        <p class="text-gray-800">{{ progression_palier.palier_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Created at</p>
+        <p class="text-gray-800">{{ progression_palier.CreatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Updated at</p>
+        <p class="text-gray-800">{{ progression_palier.UpdatedAt }}</p>
+    </div>
+</div>
+
+<form method="post" action="/progression_palier/destroy/{{ progression_palier.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+</form>
+{% endblock %}
