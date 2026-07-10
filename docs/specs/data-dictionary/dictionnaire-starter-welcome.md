@@ -46,13 +46,15 @@ Une **version** d'un StarterWelcome (cycle de vie + options + contenu rattaché)
 
 ### Palier
 
+> **Déplacé (phase ⑧)** : le `Palier` appartient désormais au **parcours** (« découpage du
+> parcours », ticket 16) — il est défini dans le [dictionnaire Parcours](dictionnaire-parcours.md#palier),
+> rattaché à une `VersionParcours`. Le starter reste un **gabarit** ; ses contenus sont
+> instanciés dans le parcours dérivé. Les sous-entités ci-dessous (QCM, checklist…)
+> décrivent le **contenu de palier** (tickets ultérieurs, 19) et s'y rattacheront.
+
 | Champ | Type | Oblig. | Description / règle |
 |---|---|:--:|---|
-| `version_starter_id` | many_to_one → VersionStarter | oui | version parente (ADR-011) |
-| `ordre` | integer | oui | rang 1..n, **unique et contigu** dans le parcours |
-| `titre` | string | oui | |
-| `theme` | string | non | |
-| `production_attendue` | string | non | ex. « Un câble droit conforme » |
+| *(voir [dico Parcours](dictionnaire-parcours.md#palier))* | | | `version_parcours_id`, `ordre`, `titre`, `theme`, `production_attendue`, `dossier_technique_fichier` |
 | `dossier_technique_fichier` | string | oui | référence de contenu (bundle) |
 
 ### QCM
@@ -123,7 +125,7 @@ Un QCM par palier ; porte de passage (validé à 100 % avant l'activité).
 | Relation | Type Forge | Cardinalité |
 |---|---|---|
 | StarterWelcome → VersionStarter | many_to_one (inverse) | 1 identité, n versions (ADR-011) |
-| VersionStarter → Palier | many_to_one (inverse) | 1 version, n paliers |
+| VersionStarter → Parcours | many_to_one (inverse) | 1 version de starter, n parcours dérivés (voir [dico Parcours](dictionnaire-parcours.md)) |
 | Palier → QCM / Activite / Checklist | many_to_one (inverse) | 1 palier, 0..1 de chaque |
 | QCM → QuestionQCM → ChoixQCM | one_to_many | cascade |
 | Checklist → SectionChecklist → ItemChecklist | one_to_many | cascade |

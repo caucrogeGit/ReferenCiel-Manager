@@ -86,6 +86,7 @@ nav:
       - Dictionnaire — socle scolaire: specs/data-dictionary/dictionnaire-socle-scolaire.md
       - Dictionnaire — Scénario pédagogique: specs/data-dictionary/dictionnaire-scenario.md
       - Dictionnaire — Starter Welcome: specs/data-dictionary/dictionnaire-starter-welcome.md
+      - Dictionnaire — Parcours: specs/data-dictionary/dictionnaire-parcours.md
       - Registre des sources: specs/json-canonique/registre-des-sources.md
       - Trace — JSON canonique CIEL 2TNE: specs/json-canonique/traces/trace-creation-json-canonique-ciel-2tne.md
       - Capitalisation — fichier .scpro CPRO: specs/json-canonique/traces/capitalisation-fichier-scpro-cpro.md
