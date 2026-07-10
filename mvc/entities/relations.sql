@@ -261,3 +261,17 @@ CREATE TABLE IF NOT EXISTS scenario_critere (
         REFERENCES critere_observable (id)
         ON DELETE CASCADE
 );
+
+ALTER TABLE starter_welcome
+    ADD CONSTRAINT fk_starter_welcome_niveau_classe_id
+    FOREIGN KEY (niveau_classe_id)
+    REFERENCES niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE version_starter
+    ADD CONSTRAINT fk_version_starter_starter_id
+    FOREIGN KEY (starter_id)
+    REFERENCES starter_welcome (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;

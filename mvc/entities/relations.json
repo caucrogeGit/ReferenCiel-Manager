@@ -344,6 +344,28 @@
         "on_delete": "cascade",
         "fields": []
       }
+    },
+    {
+      "type": "many_to_one",
+      "from": "StarterWelcome",
+      "to": "NiveauClasse",
+      "name": "niveau_classe",
+      "inverse_name": "starters",
+      "foreign_key": "niveau_classe_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "VersionStarter",
+      "to": "StarterWelcome",
+      "name": "starter",
+      "inverse_name": "versions",
+      "foreign_key": "starter_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

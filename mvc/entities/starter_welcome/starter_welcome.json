@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "name": "StarterWelcome",
+  "table": "starter_welcome",
+  "fields": [
+    {
+      "name": "identifiant",
+      "type": "string",
+      "max_length": 100,
+      "required": true,
+      "nullable": false,
+      "unique": true
+    },
+    {
+      "name": "titre",
+      "type": "string",
+      "max_length": 200,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "presentation",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "niveau_classe_id",
+      "type": "foreign_key",
+      "references": "NiveauClasse",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}
