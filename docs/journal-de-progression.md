@@ -525,14 +525,15 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **Modèle + exécution — COMPLETS ✅** | **42 entités** : `référentiel → scénario → starter → parcours → affectation → progression → QCM/checklist/activité/dépôt → évaluation`, plus le **suivi**. `make check` vert (**43 tests**) |
 | Auth | opérationnelle (login `admin@` et `prof@`) ; **MFA différé** |
 | **Nav + RBAC — TERMINÉ ✅** | Barre à menus déroulants par domaine (`nav.html`/`nav.css`). **Rôles opérationnels** via une **couche fine maison** (`mvc/services/rbac.py`, [ADR-012](adr/012-rbac-couche-fine-maison-sur-contrat.md)) : rôles lus en base depuis la session moderne, décision au **contrat** `rbac.json`. `can()` filtre la nav, `guard_prefix` protège les routes. **admin** voit tout ; **professeur** voit Conception/Exécution/Suivi (pas Admin) ; anonyme sur route socle → **403** |
-| **Espace élève — v1 ✅** | Rôle **`eleve`** (contrat + base). Lien compte↔élève : FK 1↔1 `eleve.UserId` → `users(id)` (INT, UNIQUE, `ON DELETE SET NULL`). Vue **« Mon parcours »** (`/mon-parcours`, `espace_eleve.voir`) : lecture seule, filtrée par compte (row-level), parcours affectés + paliers. Lien de nav réservé à l'élève. **Reste : flux admin pour créer/lier un compte élève** (aucun compte `eleve` en base pour l'instant) |
-| Qualité | `make check` vert (5 portes, **46 tests**) |
+| **Espace élève — v1 ✅** | Rôle **`eleve`** (contrat + base). Lien compte↔élève : FK 1↔1 `eleve.UserId` → `users(id)` (INT, UNIQUE, `ON DELETE SET NULL`). Vue **« Mon parcours »** (`/mon-parcours`, `espace_eleve.voir`) : lecture seule, filtrée par compte (row-level), parcours affectés + paliers. Lien de nav réservé à l'élève |
+| **Comptes élèves — flux admin ✅** | Écran **`/eleve/comptes`** (gardé `socle.gerer`) : l'admin crée un compte `users` (email + mot de passe hashé), lui pose le rôle `eleve` et le **lie** à une fiche `Eleve` — en une transaction. Validé bout-en-bout sur MariaDB (compte jetable). **Testable au navigateur** : créer un compte élève, se connecter, voir « Mon parcours » |
+| Qualité | `make check` vert (5 portes, **48 tests**) |
 
-> Prochaine étape : **flux admin de gestion des comptes élèves** — créer un compte
-> `users`, lui affecter le rôle `eleve` et le **lier** à une fiche `Eleve` (`UserId`),
-> pour peupler l'espace « Mon parcours » et le tester au navigateur. Le modèle (42 entités),
-> l'exécution, l'import référentiel, la nav, le **RBAC** et la **v1 de l'espace élève** sont
-> en place. Défauts Forge remontés :
+> Prochaine étape : **test navigateur** de la chaîne complète (admin crée un compte élève →
+> l'élève se connecte → « Mon parcours »), puis **v2 de l'espace élève** (passer des paliers
+> en saisie : QCM, checklist, dépôt — écritures avec contrôle d'appartenance). Le modèle
+> (42 entités), l'exécution, l'import référentiel, la nav, le **RBAC**, l'**espace élève v1**
+> et le **flux comptes élèves** sont en place. Défauts Forge remontés :
 > retour-010 (F22 partiel), retour-012 (F26/F27 — **F27 re-rencontré 3×**), retour-013 (F28),
 > retour-014 (F29), **retour-015 (F30/F31/F32 — RBAC : resolveur sur session dépréciée,
 > schéma non livré, deux modèles de permission)**.
