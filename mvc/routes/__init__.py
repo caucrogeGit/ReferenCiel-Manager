@@ -44,6 +44,7 @@ from mvc.routes.tentative_qcm_routes import register_tentative_qcm_routes
 from mvc.routes.referentiel_import_routes import register_referentiel_import_routes
 from mvc.routes.scenario_routes import register_scenario_routes
 from mvc.routes.starter_welcome_routes import register_starter_welcome_routes
+from mvc.routes.suivi_routes import register_suivi_routes
 from mvc.routes.version_parcours_routes import register_version_parcours_routes
 from mvc.routes.version_starter_routes import register_version_starter_routes
 from optins.registry import register_optins
@@ -112,6 +113,9 @@ register_depot_eleve_routes(router)
 # Bloc B — Évaluation par critères (ticket 21)
 register_evaluation_activite_routes(router)
 register_evaluation_critere_routes(router)
+
+# Bloc B — Suivi professeur (ticket 20) : tableau de bord lecture seule
+register_suivi_routes(router)
 
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)
