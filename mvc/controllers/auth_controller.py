@@ -35,7 +35,7 @@ class AuthController(BaseController):
         if not session_id or get_session(session_id) is None:
             session_id = get_session_store().create()
         session = get_session(session_id) or {}
-        response = BaseController.render("auth/login.html", context={
+        response = BaseController.render("app/auth/login.html", context={
             "csrf_token": session.get("csrf_token", ""),
             "erreur": "",
         })
@@ -60,7 +60,7 @@ class AuthController(BaseController):
             set_session_cookie(response, new_id)
             return response
 
-        response = BaseController.render("auth/login.html", context={
+        response = BaseController.render("app/auth/login.html", context={
             "csrf_token": session.get("csrf_token", ""),
             "erreur": "Identifiant ou mot de passe incorrect.",
         })
