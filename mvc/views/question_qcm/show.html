@@ -1,0 +1,44 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail question_qcm</h1>
+    <div class="space-x-2">
+        {{ button(label=trans('crud.edit'), variant='primary', href='/question_qcm/edit/' ~ question_qcm.Id) }}
+        <a href="/question_qcm" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Numero</p>
+        <p class="text-gray-800">{{ question_qcm.Numero }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Enonce</p>
+        <p class="text-gray-800">{{ question_qcm.Enonce }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Bonne reponse</p>
+        <p class="text-gray-800">{{ question_qcm.BonneReponse }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Qcm</p>
+        <p class="text-gray-800">{{ question_qcm.qcm_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Created at</p>
+        <p class="text-gray-800">{{ question_qcm.CreatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Updated at</p>
+        <p class="text-gray-800">{{ question_qcm.UpdatedAt }}</p>
+    </div>
+</div>
+
+<form method="post" action="/question_qcm/destroy/{{ question_qcm.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+</form>
+{% endblock %}

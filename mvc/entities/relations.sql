@@ -363,3 +363,24 @@ ALTER TABLE progression_palier
     REFERENCES palier (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE qcm
+    ADD CONSTRAINT fk_qcm_palier_id
+    FOREIGN KEY (palier_id)
+    REFERENCES palier (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE question_qcm
+    ADD CONSTRAINT fk_question_qcm_qcm_id
+    FOREIGN KEY (qcm_id)
+    REFERENCES qcm (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE choix_qcm
+    ADD CONSTRAINT fk_choix_qcm_question_id
+    FOREIGN KEY (question_id)
+    REFERENCES question_qcm (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;

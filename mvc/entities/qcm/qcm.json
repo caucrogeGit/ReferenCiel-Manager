@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "name": "QCM",
+  "table": "qcm",
+  "fields": [
+    {
+      "name": "format_reponse",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "seuil_validation",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "palier_id",
+      "type": "foreign_key",
+      "references": "Palier",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

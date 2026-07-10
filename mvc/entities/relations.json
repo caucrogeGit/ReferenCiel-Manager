@@ -492,6 +492,39 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "QCM",
+      "to": "Palier",
+      "name": "palier",
+      "inverse_name": "qcm",
+      "foreign_key": "palier_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "QuestionQCM",
+      "to": "QCM",
+      "name": "qcm",
+      "inverse_name": "questions",
+      "foreign_key": "qcm_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ChoixQCM",
+      "to": "QuestionQCM",
+      "name": "question",
+      "inverse_name": "choix",
+      "foreign_key": "question_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

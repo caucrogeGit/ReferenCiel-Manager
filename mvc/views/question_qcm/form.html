@@ -1,0 +1,28 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{% from "components/forms.html" import field, textarea_field, select_field, checkbox %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
+    <a href="/question_qcm" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+</div>
+
+{% include "partials/form_errors.html" %}
+
+<div class="bg-white shadow rounded p-6">
+    <form method="post" action="{{ action }}" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {{ field(name='numero', label='Numero', type='number', value=form.value('numero'), error=form.error('numero')) }}
+        {{ textarea_field(name='enonce', label='Enonce', value=form.value('enonce'), error=form.error('enonce')) }}
+        {{ field(name='bonne_reponse', label='Bonne reponse', type='text', value=form.value('bonne_reponse'), error=form.error('bonne_reponse')) }}
+        {{ select_field(name='qcm_id', label='Qcm', options=form.options.qcm_id_choices, selected=form.value('qcm_id'), error=form.error('qcm_id')) }}
+        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
+        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
+        <div class="flex gap-4 pt-2">
+            {{ button(label=trans('common.save'), variant='primary', type='submit') }}
+            {{ button(label=trans('common.cancel'), variant='secondary', href='/question_qcm') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "name": "QuestionQCM",
+  "table": "question_qcm",
+  "fields": [
+    {
+      "name": "numero",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "enonce",
+      "type": "text",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "bonne_reponse",
+      "type": "string",
+      "max_length": 5,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "qcm_id",
+      "type": "foreign_key",
+      "references": "QCM",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

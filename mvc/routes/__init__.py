@@ -25,9 +25,12 @@ from mvc.routes.inscription_eleve_routes import register_inscription_eleve_route
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 from mvc.routes.palier_routes import register_palier_routes
 from mvc.routes.parcours_routes import register_parcours_routes
+from mvc.routes.choix_qcm_routes import register_choix_qcm_routes
 from mvc.routes.professeur_routes import register_professeur_routes
 from mvc.routes.progression_eleve_routes import register_progression_eleve_routes
 from mvc.routes.progression_palier_routes import register_progression_palier_routes
+from mvc.routes.qcm_routes import register_qcm_routes
+from mvc.routes.question_qcm_routes import register_question_qcm_routes
 from mvc.routes.referentiel_import_routes import register_referentiel_import_routes
 from mvc.routes.scenario_routes import register_scenario_routes
 from mvc.routes.starter_welcome_routes import register_starter_welcome_routes
@@ -76,6 +79,11 @@ register_affectation_parcours_routes(router)
 # Bloc B — ProgressionEleve + ProgressionPalier (ticket 18)
 register_progression_eleve_routes(router)
 register_progression_palier_routes(router)
+
+# Bloc B — Définition QCM : QCM + QuestionQCM + ChoixQCM (ticket 19, sous-lot 1)
+register_qcm_routes(router)
+register_question_qcm_routes(router)
+register_choix_qcm_routes(router)
 
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)

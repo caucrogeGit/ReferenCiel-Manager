@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "name": "ChoixQCM",
+  "table": "choix_qcm",
+  "fields": [
+    {
+      "name": "lettre",
+      "type": "string",
+      "max_length": 5,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "texte",
+      "type": "string",
+      "max_length": 255,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "question_id",
+      "type": "foreign_key",
+      "references": "QuestionQCM",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}
