@@ -29,11 +29,10 @@
     <header class="bg-surface border-b border-line px-8 py-4">
         <div class="max-w-5xl mx-auto flex items-center justify-between gap-6">
             <a href="/" class="flex items-center gap-2 text-lg font-extrabold tracking-tight">
-                <img src="/static/forge-nav.png" alt="" class="h-8 w-auto">
                 {{ app_name }}
             </a>
             <nav class="flex items-center gap-6 text-sm font-medium text-muted">
-                {% block nav %}{% endblock %}
+                {% block nav %}{% include "partials/nav.html" ignore missing %}{% endblock %}
             </nav>
         </div>
     </header>
