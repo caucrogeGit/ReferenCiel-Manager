@@ -523,16 +523,17 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **⑧ Parcours — terminé ✅ (tickets 15-16)** | `Parcours` (dérivé d'une `VersionStarter`) + `VersionParcours` (ADR-011) + `Palier` (découpage, rattaché à `VersionParcours`, unique `(version_parcours, ordre)`) + CRUD FK-aware + tests |
 | **⑨ Bloc B — TERMINÉ ✅ (17-21)** | Affectation · Progression×2 · QCM+checklist+activité+dépôt (11 ent.) · Évaluation par critères (2 ent.) · **suivi prof** (`/suivi` : tableau de bord lecture seule, requêtes d'agrégation, alerte « bloqué ») |
 | **Modèle + exécution — COMPLETS ✅** | **42 entités** : `référentiel → scénario → starter → parcours → affectation → progression → QCM/checklist/activité/dépôt → évaluation`, plus le **suivi**. `make check` vert (**43 tests**) |
-| Auth | opérationnelle (login prof, RBAC/MFA différés) |
-| Qualité | `make check` vert (5 portes, **25 tests**) |
+| Auth | opérationnelle (login `admin@` et `prof@`) ; **MFA différé** |
+| **Nav + RBAC — TERMINÉ ✅** | Barre à menus déroulants par domaine (`nav.html`/`nav.css`). **Rôles opérationnels** via une **couche fine maison** (`mvc/services/rbac.py`, ADR à venir) : rôles lus en base depuis la session moderne, décision au **contrat** `rbac.json`. `can()` filtre la nav, `guard_prefix` protège les routes. **admin** voit tout ; **professeur** voit Conception/Exécution/Suivi (pas Admin) ; anonyme sur route socle → **403** |
+| Qualité | `make check` vert (5 portes, **43 tests**) |
 
-> Prochaine étape : **Phases ⑤–⑧ terminées** — toute la **conception pédagogique** est
-> en base (référentiel → scénario → starter → parcours). Passer au **Bloc B · exécution
-> élève** (tickets 17-21 : `AffectationParcours`, `ProgressionEleve`, QCM/checklist/dépôt,
-> suivi prof, évaluation). Restes de confort : lien de nav, commit d'`env/example` (WIP
-> porteur mêlé). Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27 —
-> **F27 re-rencontré 3×** : un `;`/`'` en commentaire de migration casse le splitter),
-> retour-013 (F28), retour-014 (F29).
+> Prochaine étape : **squelette métier + accès complets**. Le modèle (42 entités),
+> l'exécution, l'import référentiel, la nav et le **RBAC** sont en place. Restes : ADR sur
+> la couche RBAC maison, affectation du rôle **élève** (nécessite une UI élève + accès
+> « ses propres données »), et test navigateur des menus par rôle. Défauts Forge remontés :
+> retour-010 (F22 partiel), retour-012 (F26/F27 — **F27 re-rencontré 3×**), retour-013 (F28),
+> retour-014 (F29), **retour-015 (F30/F31/F32 — RBAC : resolveur sur session dépréciée,
+> schéma non livré, deux modèles de permission)**.
 
 ---
 
