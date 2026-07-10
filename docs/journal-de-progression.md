@@ -521,8 +521,8 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **⑥ Scénario — terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` + 2 FK + 2 m2m (compétences, critères) + **CRUD prof m2m-aware** + tests |
 | **⑦ Starter — terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-011) : `StarterWelcome` + `VersionStarter` (unique `(starter, version)`) + CRUD + tests |
 | **⑧ Parcours — terminé ✅ (tickets 15-16)** | `Parcours` (dérivé d'une `VersionStarter`) + `VersionParcours` (ADR-011) + `Palier` (découpage, rattaché à `VersionParcours`, unique `(version_parcours, ordre)`) + CRUD FK-aware + tests |
-| **⑨ Bloc B — en cours 🚧** | **17 ✅** `AffectationParcours` · **18 ✅** `ProgressionEleve`+`ProgressionPalier` · **19 (en cours)** — sous-lot 1 ✅ : **définition QCM** `QCM`→`QuestionQCM`→`ChoixQCM` (corrigé fusionné, rattaché au Palier). Reste 19 : tentatives QCM, checklist, activité, dépôt · 20 suivi · 21 évaluation |
-| Total entités | **32** en base (Bloc A 8 + référentiel 12 + Scénario + Starter×2 + Parcours×3 + Affectation + Progression×2 + QCM×3). `make check` vert (**32 tests**) |
+| **⑨ Bloc B — en cours 🚧** | **17 ✅** `AffectationParcours` · **18 ✅** `Progression×2` · **19 (en cours)** — sous-lot 1 ✅ **définition QCM** (`QCM`→`QuestionQCM`→`ChoixQCM`) · sous-lot 2 ✅ **exécution QCM** (`TentativeQCM`→`ProgressionPalier`, `ReponseQCM` justesse figée). Reste 19 : checklist, activité, dépôt · 20 suivi · 21 évaluation |
+| Total entités | **34** en base (Bloc A 8 + référentiel 12 + Scénario + Starter×2 + Parcours×3 + Affectation + Progression×2 + QCM×5). `make check` vert (**34 tests**) |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
 | Qualité | `make check` vert (5 portes, **25 tests**) |
 
