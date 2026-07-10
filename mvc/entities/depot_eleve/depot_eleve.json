@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "name": "DepotEleve",
+  "table": "depot_eleve",
+  "fields": [
+    {
+      "name": "fichier",
+      "type": "string",
+      "max_length": 255,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "commentaire",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "date_depot",
+      "type": "datetime",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "progression_palier_id",
+      "type": "foreign_key",
+      "references": "ProgressionPalier",
+      "required": true
+    },
+    {
+      "name": "activite_id",
+      "type": "foreign_key",
+      "references": "Activite",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

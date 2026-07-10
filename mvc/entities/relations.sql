@@ -447,3 +447,24 @@ ALTER TABLE item_coche
     REFERENCES progression_palier (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE activite
+    ADD CONSTRAINT fk_activite_palier_id
+    FOREIGN KEY (palier_id)
+    REFERENCES palier (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE depot_eleve
+    ADD CONSTRAINT fk_depot_eleve_progression_palier_id
+    FOREIGN KEY (progression_palier_id)
+    REFERENCES progression_palier (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE depot_eleve
+    ADD CONSTRAINT fk_depot_eleve_activite_id
+    FOREIGN KEY (activite_id)
+    REFERENCES activite (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;

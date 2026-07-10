@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "name": "Activite",
+  "table": "activite",
+  "fields": [
+    {
+      "name": "objectif",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "fichier",
+      "type": "string",
+      "max_length": 255,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "palier_id",
+      "type": "foreign_key",
+      "references": "Palier",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

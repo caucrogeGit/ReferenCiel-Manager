@@ -624,6 +624,39 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "Activite",
+      "to": "Palier",
+      "name": "palier",
+      "inverse_name": "activites",
+      "foreign_key": "palier_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "DepotEleve",
+      "to": "ProgressionPalier",
+      "name": "progression_palier",
+      "inverse_name": "depots",
+      "foreign_key": "progression_palier_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "DepotEleve",
+      "to": "Activite",
+      "name": "activite",
+      "inverse_name": "depots",
+      "foreign_key": "activite_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

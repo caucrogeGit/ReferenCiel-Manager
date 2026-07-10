@@ -1,0 +1,48 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail depot_eleve</h1>
+    <div class="space-x-2">
+        {{ button(label=trans('crud.edit'), variant='primary', href='/depot_eleve/edit/' ~ depot_eleve.Id) }}
+        <a href="/depot_eleve" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Fichier</p>
+        <p class="text-gray-800">{{ depot_eleve.Fichier }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Commentaire</p>
+        <p class="text-gray-800">{{ depot_eleve.Commentaire }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Date depot</p>
+        <p class="text-gray-800">{{ depot_eleve.DateDepot }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Progression palier</p>
+        <p class="text-gray-800">{{ depot_eleve.progression_palier_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Activite</p>
+        <p class="text-gray-800">{{ depot_eleve.activite_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Created at</p>
+        <p class="text-gray-800">{{ depot_eleve.CreatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Updated at</p>
+        <p class="text-gray-800">{{ depot_eleve.UpdatedAt }}</p>
+    </div>
+</div>
+
+<form method="post" action="/depot_eleve/destroy/{{ depot_eleve.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+</form>
+{% endblock %}

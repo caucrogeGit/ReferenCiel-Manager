@@ -12,6 +12,7 @@ par contrôleur, cette racine se contentant de les brancher explicitement.
 from core.http.router import Router
 from mvc.controllers.home_controller import HomeController
 from mvc.routes.admin_routes import register_admin
+from mvc.routes.activite_routes import register_activite_routes
 from mvc.routes.affectation_parcours_routes import register_affectation_parcours_routes
 from mvc.routes.affectation_professeur_classe_routes import (
     register_affectation_professeur_classe_routes,
@@ -27,6 +28,7 @@ from mvc.routes.palier_routes import register_palier_routes
 from mvc.routes.parcours_routes import register_parcours_routes
 from mvc.routes.checklist_routes import register_checklist_routes
 from mvc.routes.choix_qcm_routes import register_choix_qcm_routes
+from mvc.routes.depot_eleve_routes import register_depot_eleve_routes
 from mvc.routes.item_checklist_routes import register_item_checklist_routes
 from mvc.routes.item_coche_routes import register_item_coche_routes
 from mvc.routes.professeur_routes import register_professeur_routes
@@ -100,6 +102,10 @@ register_checklist_routes(router)
 register_section_checklist_routes(router)
 register_item_checklist_routes(router)
 register_item_coche_routes(router)
+
+# Bloc B — Activité + DépôtEleve (ticket 19, sous-lot 4 — fin ticket 19)
+register_activite_routes(router)
+register_depot_eleve_routes(router)
 
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)
