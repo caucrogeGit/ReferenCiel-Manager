@@ -1,12 +1,15 @@
 {# Navigation applicative — menus déroulants par domaine (grands points d'entrée).
-   Style : static/nav.css. `is_authenticated` / `csrf_token` injectés par BaseController.render.
-   Les rubriques sont réservées aux utilisateurs connectés (back-office protégé) ; le bouton
-   Connexion/Déconnexion reste toujours visible. Séparation par rôle : à venir avec le RBAC. #}
+   Style : static/nav.css. `is_authenticated` / `csrf_token` injectés par BaseController.render ;
+   `can(permission)` injecté par la couche RBAC (mvc/services/rbac.py, provider Jinja).
+   Visibilité pilotée par le RÔLE : chaque rubrique est gardée par sa permission (contrat
+   mvc/security/rbac.json). Le masquage n'est que du confort : les routes sensibles sont
+   AUSSI protégées par `guarded(...)` (mvc/routes/…). Le bouton Connexion/Déconnexion reste
+   toujours visible. #}
 {% from "components/ui.html" import button %}
 <div class="app-nav">
     <a href="/" class="nav-link">Accueil</a>
 
-    {% if is_authenticated %}
+    {% if can('socle.gerer') %}
     <div class="nav-item">
         <button class="nav-trigger" type="button">Admin ▾</button>
         <div class="nav-menu">
@@ -27,6 +30,9 @@
         </div>
     </div>
 
+    {% endif %}
+
+    {% if can('conception.gerer') %}
     <div class="nav-item">
         <button class="nav-trigger" type="button">Conception ▾</button>
         <div class="nav-menu">
@@ -38,6 +44,9 @@
         </div>
     </div>
 
+    {% endif %}
+
+    {% if can('execution.gerer') %}
     <div class="nav-item">
         <button class="nav-trigger" type="button">Exécution ▾</button>
         <div class="nav-menu">
@@ -53,6 +62,9 @@
         </div>
     </div>
 
+    {% endif %}
+
+    {% if can('suivi.voir') %}
     <a href="/suivi" class="nav-link">Suivi</a>
     {% endif %}
 

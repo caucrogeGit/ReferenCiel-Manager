@@ -47,6 +47,7 @@ from mvc.routes.starter_welcome_routes import register_starter_welcome_routes
 from mvc.routes.suivi_routes import register_suivi_routes
 from mvc.routes.version_parcours_routes import register_version_parcours_routes
 from mvc.routes.version_starter_routes import register_version_starter_routes
+from mvc.services.rbac import guard_prefix, register_rbac_provider
 from optins.registry import register_optins
 
 router = Router()
@@ -135,3 +136,41 @@ register_auth_routes(router)
 
 # Routes des opt-ins activés (ADR-061).
 register_optins(router)
+
+# RBAC applicatif (couche fine maison) : injecte `can(...)` dans tous les rendus
+# Jinja. Les rôles sont lus en base depuis la session moderne, le resolveur natif
+# de l'opt-in lisant une session dépréciée (voir docs/banc-essai).
+register_rbac_provider()
+
+# Gardes de route par domaine (permission du contrat mvc/security/rbac.json).
+# Masquer le menu n'est que du confort ; ces gardes protègent l'URL tapée à la
+# main. Une passe post-enregistrement (guard_prefix) enveloppe chaque handler du
+# préfixe, ce qui couvre aussi les routes futures du même domaine.
+#
+# Socle scolaire + référentiel + back-office admin : réservés à `socle.gerer`
+# (l'admin). C'est la vraie frontière de privilège : un professeur ne doit pas
+# gérer le socle même en tapant l'URL.
+for _prefix in (
+    "/annee_scolaire", "/niveau_classe", "/classe", "/eleve", "/professeur",
+    "/inscription_eleve", "/affectation_professeur_classe", "/groupe", "/admin",
+):
+    guard_prefix(router, _prefix, "socle.gerer")
+
+# Conception pédagogique : `conception.gerer` (admin + professeur).
+for _prefix in (
+    "/scenario", "/starter_welcome", "/version_starter",
+    "/parcours", "/version_parcours", "/palier",
+):
+    guard_prefix(router, _prefix, "conception.gerer")
+
+# Exécution (travail, évaluation) : `execution.gerer` (admin + professeur).
+for _prefix in (
+    "/affectation_parcours", "/progression_eleve", "/progression_palier",
+    "/qcm", "/question_qcm", "/choix_qcm", "/tentative_qcm", "/reponse_qcm",
+    "/checklist", "/section_checklist", "/item_checklist", "/item_coche",
+    "/activite", "/depot_eleve", "/evaluation_activite", "/evaluation_critere",
+):
+    guard_prefix(router, _prefix, "execution.gerer")
+
+# Suivi (lecture seule) : `suivi.voir` (admin + professeur).
+guard_prefix(router, "/suivi", "suivi.voir")
