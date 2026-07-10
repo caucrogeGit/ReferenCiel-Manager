@@ -20,6 +20,7 @@ from mvc.routes.affectation_professeur_classe_routes import (
 from mvc.routes.annee_scolaire_routes import register_annee_scolaire_routes
 from mvc.routes.auth_routes import register_auth_routes
 from mvc.routes.classe_routes import register_classe_routes
+from mvc.routes.eleve_compte_routes import register_eleve_compte_routes
 from mvc.routes.eleve_routes import register_eleve_routes
 from mvc.routes.evaluation_activite_routes import register_evaluation_activite_routes
 from mvc.routes.evaluation_critere_routes import register_evaluation_critere_routes
@@ -64,6 +65,10 @@ register_niveau_classe_routes(router)
 
 # Routes appliquées pour : classe_controller
 register_classe_routes(router)
+
+# Comptes élèves (socle admin) : créer + lier un compte à une fiche Eleve.
+# Monté avant le CRUD /eleve pour que /eleve/comptes matche en priorité.
+register_eleve_compte_routes(router)
 
 # Routes appliquées pour : eleve_controller
 register_eleve_routes(router)

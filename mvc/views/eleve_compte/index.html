@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+{% from "components/forms.html" import field, submit, form_errors %}
+{% from "components/ui.html" import flash_messages %}
+{% block title %}Comptes élèves{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-1">Comptes élèves</h1>
+    <p class="text-gray-600 mb-6">
+        Créez un compte de connexion pour un élève et rattachez-le à sa fiche.
+        L'élève pourra alors consulter « Mon parcours ».
+    </p>
+
+    {{ flash_messages(flash) }}
+
+    <section class="bg-white shadow rounded p-5 mb-8">
+        <h2 class="font-semibold text-gray-800 mb-4">Nouveau compte élève</h2>
+
+        {% if erreurs %}{{ form_errors(erreurs) }}{% endif %}
+
+        {% if sans_compte %}
+        <form method="POST" action="/eleve/comptes/create" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <div class="mb-4">
+                <label for="eleve_id" class="block text-sm font-medium text-gray-700 mb-1">Élève (sans compte)</label>
+                <select id="eleve_id" name="eleve_id" required
+                        class="w-full rounded border border-gray-300 px-3 py-2 text-sm">
+                    <option value="">— Choisir un élève —</option>
+                    {% for e in sans_compte %}
+                    <option value="{{ e.id }}">{{ e.nom }} {{ e.prenom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {{ field(name="email", label="Email de connexion", type="email", value=email, required=True) }}
+            {{ field(name="password", label="Mot de passe (8 caractères min.)", type="password", required=True) }}
+            {{ submit(label="Créer le compte et lier") }}
+        </form>
+        {% else %}
+        <p class="text-gray-500 italic">Tous les élèves ont déjà un compte.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2 class="font-semibold text-gray-800 mb-3">État des comptes</h2>
+        {% if eleves %}
+        <table class="w-full text-sm bg-white shadow rounded overflow-hidden">
+            <thead class="bg-gray-100 text-left text-gray-700">
+                <tr>
+                    <th class="px-4 py-2">Élève</th>
+                    <th class="px-4 py-2">Compte</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in eleves %}
+                <tr class="border-t border-gray-100">
+                    <td class="px-4 py-2 font-medium">{{ e.nom }} {{ e.prenom }}</td>
+                    <td class="px-4 py-2">
+                        {% if e.email %}
+                        <span class="text-green-700">{{ e.email }}</span>
+                        {% else %}
+                        <span class="text-gray-400 italic">pas de compte</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-gray-500 italic">Aucun élève enregistré.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
