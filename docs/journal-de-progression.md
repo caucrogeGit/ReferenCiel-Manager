@@ -434,6 +434,19 @@ Premier objet métier **créé par le prof** (CRUD), pas importé.
 (pivot `scenario_critere`). **CRUD prof m2m-aware** : selects FK + multi-select
 compétences/critères + `sync_*_ids` transactionnel. Tests de persistance (mock DB).*
 
+### `StarterWelcome` / `VersionStarter` — tables `starter_welcome` / `version_starter` ✅ (phase ⑦)
+
+Parcours réutilisable, en **identité + versions** ([ADR-011](adr/011-versionnement-identite-plus-version.md),
+[dico](specs/data-dictionary/dictionnaire-starter-welcome.md)).
+
+| Entité | Champs | Relations |
+|---|---|---|
+| `StarterWelcome` (identité) | `identifiant` (unique), `titre`, `presentation` | `niveau_classe_id` → NiveauClasse |
+| `VersionStarter` (version) | `version`, `statut` (`brouillon`/`publie`/`archive`), `activite_glissante`, `ordre_impose` | `starter_id` → StarterWelcome · **unique** `(starter, version)` |
+
+*CRUD de gestion pour les deux (select FK + checkboxes booléens). Les contenus versionnés
+(paliers, QCM…) se rattacheront à une `VersionStarter` — tickets ultérieurs. Tests (mock DB).*
+
 ---
 
 ## 7. Rôle de banc d'essai — retours & tickets
@@ -492,15 +505,16 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **Bloc A — terminé ✅ (8/8)** | `AnneeScolaire`, `NiveauClasse`, `Classe`, `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse`, `Groupe` |
 | **⑤ Référentiel — schéma ✅ (tickets 09-10)** | 12 entités (`Formation`, `ReferentielNiveauClasse`, `PoleActivite`, `ActiviteProfessionnelle`, `Tache`, `ResultatAttendu`, `Competence`, `Connaissance`, `CritereObservable`, `IndicateurReussite`, `FamilleCompetence`, `Source`) + `NiveauClasse` réutilisée. Migration `create_referentiel` (14 tables, 13 FK, 7 UNIQUE composites, 2 pivots m2m) appliquée |
 | ✅ Référentiel — ticket 11 | **Importeur complet** : service (`referentiel_importer.py`, ADR-010 upsert + best-effort), **UI d'upload admin** (validation schéma → import → rapport, provenance) + **admin de parcours** (`forge-mvc-admin`) + tests. Vérifié bout-en-bout (CIEL 2TNE : 81 objets) |
-| **⑥ Scénario — terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` (titre, intention, objectifs, statut, version) + 2 FK (referentiel, auteur) + 2 m2m (compétences visées, critères) + **CRUD prof m2m-aware** (multi-select) + tests de persistance |
-| Total entités | **21** en base (8 socle + 12 référentiel + `Scenario`). `make check` vert |
+| **⑥ Scénario — terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` + 2 FK + 2 m2m (compétences, critères) + **CRUD prof m2m-aware** + tests |
+| **⑦ Starter — terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-011) : `StarterWelcome` (identifiant, titre, presentation, niveau_classe) + `VersionStarter` (version, statut, activite_glissante, ordre_impose ; unique `(starter, version)`) + CRUD de gestion + tests |
+| Total entités | **23** en base (8 socle + 12 référentiel + `Scenario` + `StarterWelcome` + `VersionStarter`). `make check` vert |
 | Auth | opérationnelle (login prof, RBAC/MFA différés) |
-| Qualité | `make check` vert (5 portes, **19 tests**) |
+| Qualité | `make check` vert (5 portes, **22 tests**) |
 
-> Prochaine étape : **Phases ⑤ et ⑥ terminées**. Passer à la phase **⑦ Starter**
-> (ticket 14 : `StarterWelcome` + `VersionStarter`, dico 13b déjà écrit). Restes de
-> confort : lien de nav (import + admin), commit d'`env/example` (WIP porteur mêlé).
-> Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27 — F27 confirmé
+> Prochaine étape : **Phases ⑤–⑦ terminées**. Passer à la phase **⑧ Parcours**
+> (tickets 15-16 : `Parcours` + `VersionParcours` — **réutilise ADR-011** — puis
+> `Palier`). Restes de confort : lien de nav (import + admin), commit d'`env/example`
+> (WIP porteur mêlé). Défauts Forge remontés : retour-010 (F22 partiel), retour-012 (F26/F27 — F27 confirmé
 > 2×), retour-013 (F28), retour-014 (F29).
 
 ---
@@ -714,6 +728,20 @@ forge make:crud Scenario            # CRUD prof m2m-aware (multi-select competen
 #   tests : tests/test_scenario_persistance.py (mock DB)
 ```
 
+**⑰ StarterWelcome + VersionStarter ✅ (phase ⑦, ticket 14 — ADR-011)**
+
+```bash
+#   ADR-011 : versionnement identité + version ; dico Starter Welcome affiné
+forge make:entity StarterWelcome    # identifiant (unique), titre, presentation
+forge make:entity VersionStarter    # version, statut, activite_glissante, ordre_impose
+forge make:relation                 # StarterWelcome → NiveauClasse ; VersionStarter → StarterWelcome
+forge sync:entity … ; forge sync:relations
+forge migration:make create_starter_welcome --from-entity StarterWelcome
+#   compléter : table version_starter + 2 FK + unique (starter, version) ; ASCII sans ;/'
+forge migration:apply ; forge make:crud StarterWelcome ; forge make:crud VersionStarter
+#   tests : tests/test_starter_versionnement.py (mock DB)
+```
+
 ---
 
 ## 11. Vue d'ensemble — le tunnel de progression
@@ -731,18 +759,18 @@ flowchart TD
     D["④ BLOC A · Socle scolaire ✅ — ticket 07<br/>AnneeScolaire · NiveauClasse · Classe · Eleve · Professeur<br/>Inscription · Affectation · Groupe (+ m2m) — 8/8"]
     E["⑤ Référentiel ✅ (09-10-11)<br/>12 entités + 15 relations en base<br/>importeur JSON par upload admin"]
     F["⑥ Scénario ✅ (12-13)<br/>dico + entité + CRUD prof m2m-aware + tests"]
-    G["⑦ Starter ◀ ICI ⬜ (14)"]
-    H["⑧ Parcours ⬜ (15–16)"]
+    G["⑦ Starter ✅ (14)<br/>StarterWelcome + VersionStarter (identité + versions, ADR-011)"]
+    H["⑧ Parcours ◀ ICI ⬜ (15–16)"]
     I["⑨ BLOC B · Exécution pédagogique élève ⬜ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Suivi prof → Évaluation et bilan"]
     A --> B --> C --> D --> E --> F --> G --> H --> I
     classDef done fill:#e6f4ea,stroke:#34a853;
     classDef current fill:#fff4e5,stroke:#f9a825,stroke-width:3px;
     classDef todo fill:#f1f3f4,stroke:#9aa0a6;
-    class A,B,C,D,E,F done
-    class G current
-    class H,I todo
+    class A,B,C,D,E,F,G done
+    class H current
+    class I todo
 ```
 
-> **Où on en est** : phases ①–⑥ faites — **Bloc A (8/8)**, **Référentiel** (schéma +
-> importeur) et **Scénario** complets (21 entités en base, 19 tests). Prochaine phase :
-> **⑦ Starter** (ticket 14 : `StarterWelcome` + `VersionStarter`).
+> **Où on en est** : phases ①–⑦ faites — **Bloc A (8/8)**, **Référentiel** (schéma +
+> importeur), **Scénario** et **Starter** (identité + versions) complets (23 entités en
+> base, 22 tests). Prochaine phase : **⑧ Parcours** (tickets 15-16, réutilise ADR-011).
