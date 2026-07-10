@@ -11,6 +11,12 @@ UPLOAD_MAX_SIZE=5242880
 UPLOAD_ALLOWED_EXTENSIONS=jpg,jpeg,png,webp,pdf,json
 UPLOAD_ALLOWED_MIME_TYPES=image/jpeg,image/png,image/webp,application/pdf,application/json,text/plain
 
+# Sessions
+# Store persistant en base (opt-in forge-mvc-sessions-db, ADR-054) : sessions
+# partagées entre workers et conservées au redémarrage. Table forge_sessions
+# provisionnée par migration. SESSION_TTL = durée de vie en secondes (défaut 1 h).
+SESSION_TTL=3600
+
 # Serveur
 APP_HOST=127.0.0.1
 APP_PORT=8000

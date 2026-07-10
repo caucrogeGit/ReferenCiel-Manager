@@ -51,6 +51,10 @@ SQL_DIR           = os.getenv("SQL_DIR",           "mvc/models/sql")
 # l'opt-in forge-mvc-files depuis l'environnement ; ajoutez-les à env/dev au besoin.
 UPLOAD_MAX_SIZE   = int(os.getenv("UPLOAD_MAX_SIZE", 5 * 1024 * 1024))
 
+# Sessions : durée de vie (secondes) du store persistant DbSessionStore
+# (opt-in forge-mvc-sessions-db, ADR-054). Défaut 1 h.
+SESSION_TTL       = int(os.getenv("SESSION_TTL", 3600))
+
 # Mail : aucune configuration ici. Le mail est un opt-in (forge-mvc-mail,
 # ADR-031) qui lit ses variables MAIL_* directement depuis l'environnement.
 # Installez forge-mvc-mail et ajoutez le bloc MAIL_* à env/dev pour l'activer.

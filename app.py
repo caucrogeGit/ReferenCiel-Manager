@@ -83,11 +83,15 @@ import importlib
 from config import (APP_HOST, APP_PORT, APP_SSL_ENABLED, SSL_CERTFILE, SSL_KEYFILE,
                     APP_ENV, APP_NAME, APP_ROUTES_MODULE,
                     VIEWS_DIR, SQL_DIR,
-                    UPLOAD_MAX_SIZE,
+                    UPLOAD_MAX_SIZE, SESSION_TTL,
                     APP_CSP_NONCE_ENABLED, APP_TRUSTED_PROXIES)
 import core.security.csp as _csp
 from core.security.headers import apply_security_headers
 import core.forge as forge
+# Sessions persistantes en base (opt-in forge-mvc-sessions-db, ADR-054) :
+# partagées entre workers et conservées au redémarrage, contrairement au
+# MemorySessionStore par défaut du cœur. Table forge_sessions requise (migration).
+from forge_mvc_sessions_db import DbSessionStore
 from core.app.dev_server import (
     format_port_in_use_message,
     format_prod_host_guard_error,
@@ -101,6 +105,7 @@ forge.configure(
     sql_dir      = SQL_DIR,
     upload_max_size = UPLOAD_MAX_SIZE,
     trusted_proxies = APP_TRUSTED_PROXIES,
+    session_store   = DbSessionStore(ttl=SESSION_TTL),
 )
 from core.http.request import Request, RequestEntityTooLarge
 from core.http.response import Response
