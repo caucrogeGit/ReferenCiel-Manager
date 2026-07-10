@@ -37,11 +37,17 @@ def mes_progressions(eleve_id: int) -> list[dict[str, Any]]:
 
 
 def paliers_progression(progression_id: int) -> list[dict[str, Any]]:
-    """Les paliers d'une progression, dans l'ordre, avec leur statut."""
+    """Les paliers d'une progression, dans l'ordre, avec leur statut.
+
+    Expose `progression_palier_id` (cible des actions de saisie) et `qcm_id`
+    (présence d'un QCM à passer, ou NULL) pour la vue « Mon parcours ».
+    """
     return fetch_all(
-        "SELECT pa.Ordre AS ordre, pa.Titre AS titre, pp.Statut AS statut "
+        "SELECT pp.Id AS progression_palier_id, pa.Ordre AS ordre, pa.Titre AS titre, "
+        "pp.Statut AS statut, q.Id AS qcm_id "
         "FROM progression_palier pp "
         "JOIN palier pa ON pa.Id = pp.palier_id "
+        "LEFT JOIN qcm q ON q.palier_id = pa.Id "
         "WHERE pp.progression_eleve_id = ? "
         "ORDER BY pa.Ordre",
         (progression_id,),
