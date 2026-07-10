@@ -8,7 +8,7 @@
 
     {% if is_authenticated %}
     <div class="nav-item">
-        <button class="nav-trigger" type="button">Socle ▾</button>
+        <button class="nav-trigger" type="button">Admin ▾</button>
         <div class="nav-menu">
             <div class="nav-group-label">Structure scolaire</div>
             <a href="/annee_scolaire">Années scolaires</a>
@@ -19,6 +19,11 @@
             <a href="/inscription_eleve">Inscriptions</a>
             <a href="/affectation_professeur_classe">Affectations professeur</a>
             <a href="/groupe">Groupes</a>
+            <div class="nav-group-label">Référentiel</div>
+            <a href="/admin/referentiel/import">Importer un référentiel</a>
+            <a href="/admin/referentiels">Référentiels importés</a>
+            <div class="nav-group-label">Administration</div>
+            <a href="/admin">Tableau de bord</a>
         </div>
     </div>
 
@@ -49,16 +54,6 @@
     </div>
 
     <a href="/suivi" class="nav-link">Suivi</a>
-
-    <div class="nav-item">
-        <button class="nav-trigger" type="button">Admin ▾</button>
-        <div class="nav-menu">
-            <div class="nav-group-label">Administration</div>
-            <a href="/admin">Tableau de bord</a>
-            <a href="/admin/referentiel/import">Importer un référentiel</a>
-            <a href="/admin/referentiels">Référentiels importés</a>
-        </div>
-    </div>
     {% endif %}
 
     {% if is_authenticated %}
