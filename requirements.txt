@@ -1,12 +1,12 @@
 # Dependances du projet Forge.
 # Le framework et ses dependances runtime (python-dotenv, Jinja2, Argon2,
 # jsonschema) sont fournis par le paquet forge-mvc.
-forge-mvc @ git+https://github.com/caucrogeGit/Forge.git@1d564a0c
+forge-mvc @ git+https://github.com/caucrogeGit/Forge.git@c4568c72
 # Couche de donnees (ADR-070) : le moteur d'entites (make:entity, make:relation,
 # make:crud, sync:*, entity:validate, migrations, db:*) est un opt-in separe depuis
 # 32f552cc. Ce projet modelise des donnees -> il est REQUIS, epingle au MEME commit
 # que forge-mvc (voir aussi tools/forge-upgrade.sh qui bumpe les trois paquets).
-forge-mvc-entities @ git+https://github.com/caucrogeGit/Forge.git@1d564a0c#subdirectory=packages/forge-mvc-entities
+forge-mvc-entities @ git+https://github.com/caucrogeGit/Forge.git@c4568c72#subdirectory=packages/forge-mvc-entities
 # Base de donnees (ADR-054/060) : le coeur est agnostique BDD et le squelette
 # est livre SANS backend. Choisissez et installez le backend de votre choix,
 # puis configurez son environnement selon sa documentation. Exemples :
