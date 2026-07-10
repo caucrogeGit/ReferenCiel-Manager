@@ -524,7 +524,7 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **⑨ Bloc B — TERMINÉ ✅ (17-21)** | Affectation · Progression×2 · QCM+checklist+activité+dépôt (11 ent.) · Évaluation par critères (2 ent.) · **suivi prof** (`/suivi` : tableau de bord lecture seule, requêtes d'agrégation, alerte « bloqué ») |
 | **Modèle + exécution — COMPLETS ✅** | **42 entités** : `référentiel → scénario → starter → parcours → affectation → progression → QCM/checklist/activité/dépôt → évaluation`, plus le **suivi**. `make check` vert (**43 tests**) |
 | Auth | opérationnelle (login `admin@` et `prof@`) ; **MFA différé** |
-| **Nav + RBAC — TERMINÉ ✅** | Barre à menus déroulants par domaine (`nav.html`/`nav.css`). **Rôles opérationnels** via une **couche fine maison** (`mvc/services/rbac.py`, ADR à venir) : rôles lus en base depuis la session moderne, décision au **contrat** `rbac.json`. `can()` filtre la nav, `guard_prefix` protège les routes. **admin** voit tout ; **professeur** voit Conception/Exécution/Suivi (pas Admin) ; anonyme sur route socle → **403** |
+| **Nav + RBAC — TERMINÉ ✅** | Barre à menus déroulants par domaine (`nav.html`/`nav.css`). **Rôles opérationnels** via une **couche fine maison** (`mvc/services/rbac.py`, [ADR-012](adr/012-rbac-couche-fine-maison-sur-contrat.md)) : rôles lus en base depuis la session moderne, décision au **contrat** `rbac.json`. `can()` filtre la nav, `guard_prefix` protège les routes. **admin** voit tout ; **professeur** voit Conception/Exécution/Suivi (pas Admin) ; anonyme sur route socle → **403** |
 | Qualité | `make check` vert (5 portes, **43 tests**) |
 
 > Prochaine étape : **squelette métier + accès complets**. Le modèle (42 entités),

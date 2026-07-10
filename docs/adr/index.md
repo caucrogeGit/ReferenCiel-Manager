@@ -29,6 +29,12 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   upload admin (validation puis persistance).
 - `009-montee-squelette-forge-en-place.md` : montée du squelette Forge en place
   (manifeste de propriété ; ni déplacement de dossier, ni force-push).
+- `010-importeur-referentiel-upsert-best-effort.md` : importeur du référentiel
+  (upsert par identifiant, best-effort avec rapport).
+- `011-versionnement-identite-plus-version.md` : versionnement par entité
+  d'identité + entité de version.
+- `012-rbac-couche-fine-maison-sur-contrat.md` : couche RBAC applicative fine,
+  adossée au contrat, contournant le resolveur déprécié de l'opt-in.
 
-Numérotez les décisions suivantes `010`, `011`, etc., et ajoutez-les à ce
+Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal. Le gabarit `000-template.md` n'est pas une décision : c'est la trame.
