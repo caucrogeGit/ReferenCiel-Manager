@@ -1,11 +1,72 @@
-{# Bouton Connexion / Déconnexion pour la barre de navigation.
-   `is_authenticated` est injecté dans tout template par BaseController.render. #}
+{# Navigation applicative — menus déroulants par domaine (grands points d'entrée).
+   Style : static/nav.css. `is_authenticated` / `csrf_token` injectés par BaseController.render.
+   Les rubriques sont réservées aux utilisateurs connectés (back-office protégé) ; le bouton
+   Connexion/Déconnexion reste toujours visible. Séparation par rôle : à venir avec le RBAC. #}
 {% from "components/ui.html" import button %}
-{% if is_authenticated %}
-<form method="post" action="/logout">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    {{ button("Déconnexion", variant="secondary", type="submit") }}
-</form>
-{% else %}
-{{ button("Connexion", variant="primary", href="/login") }}
-{% endif %}
+<div class="app-nav">
+    <a href="/" class="nav-link">Accueil</a>
+
+    {% if is_authenticated %}
+    <div class="nav-item">
+        <button class="nav-trigger" type="button">Socle ▾</button>
+        <div class="nav-menu">
+            <div class="nav-group-label">Structure scolaire</div>
+            <a href="/annee_scolaire">Années scolaires</a>
+            <a href="/niveau_classe">Niveaux de classe</a>
+            <a href="/classe">Classes</a>
+            <a href="/eleve">Élèves</a>
+            <a href="/professeur">Professeurs</a>
+            <a href="/inscription_eleve">Inscriptions</a>
+            <a href="/affectation_professeur_classe">Affectations professeur</a>
+            <a href="/groupe">Groupes</a>
+        </div>
+    </div>
+
+    <div class="nav-item">
+        <button class="nav-trigger" type="button">Conception ▾</button>
+        <div class="nav-menu">
+            <div class="nav-group-label">Contenus pédagogiques</div>
+            <a href="/scenario">Scénarios</a>
+            <a href="/starter_welcome">Starters Welcome</a>
+            <a href="/parcours">Parcours</a>
+            <a href="/palier">Paliers</a>
+        </div>
+    </div>
+
+    <div class="nav-item">
+        <button class="nav-trigger" type="button">Exécution ▾</button>
+        <div class="nav-menu">
+            <div class="nav-group-label">Travail et évaluation</div>
+            <a href="/affectation_parcours">Affectations de parcours</a>
+            <a href="/progression_eleve">Progressions</a>
+            <a href="/qcm">QCM</a>
+            <a href="/tentative_qcm">Tentatives QCM</a>
+            <a href="/checklist">Checklists</a>
+            <a href="/activite">Activités</a>
+            <a href="/depot_eleve">Dépôts élève</a>
+            <a href="/evaluation_activite">Évaluations</a>
+        </div>
+    </div>
+
+    <a href="/suivi" class="nav-link">Suivi</a>
+
+    <div class="nav-item">
+        <button class="nav-trigger" type="button">Admin ▾</button>
+        <div class="nav-menu">
+            <div class="nav-group-label">Administration</div>
+            <a href="/admin">Tableau de bord</a>
+            <a href="/admin/referentiel/import">Importer un référentiel</a>
+            <a href="/admin/referentiels">Référentiels importés</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if is_authenticated %}
+    <form method="post" action="/logout" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {{ button("Déconnexion", variant="secondary", type="submit") }}
+    </form>
+    {% else %}
+    {{ button("Connexion", variant="primary", href="/login") }}
+    {% endif %}
+</div>
