@@ -25,6 +25,7 @@ from mvc.routes.evaluation_activite_routes import register_evaluation_activite_r
 from mvc.routes.evaluation_critere_routes import register_evaluation_critere_routes
 from mvc.routes.groupe_routes import register_groupe_routes
 from mvc.routes.inscription_eleve_routes import register_inscription_eleve_routes
+from mvc.routes.mon_parcours_routes import register_mon_parcours_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 from mvc.routes.palier_routes import register_palier_routes
 from mvc.routes.parcours_routes import register_parcours_routes
@@ -118,6 +119,9 @@ register_evaluation_critere_routes(router)
 # Bloc B — Suivi professeur (ticket 20) : tableau de bord lecture seule
 register_suivi_routes(router)
 
+# Espace élève — « Mon parcours » (lecture seule, rôle eleve)
+register_mon_parcours_routes(router)
+
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)
 
@@ -174,3 +178,6 @@ for _prefix in (
 
 # Suivi (lecture seule) : `suivi.voir` (admin + professeur).
 guard_prefix(router, "/suivi", "suivi.voir")
+
+# Espace élève : `espace_eleve.voir` (rôle eleve). Données filtrées par compte.
+guard_prefix(router, "/mon-parcours", "espace_eleve.voir")

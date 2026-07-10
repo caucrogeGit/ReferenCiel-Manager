@@ -1,0 +1,61 @@
+{% extends "layouts/base.html" %}
+{% block title %}Mon parcours{% endblock %}
+
+{% macro statut_badge(statut) %}
+    {% set couleur = {
+        'valide': 'bg-green-100 text-green-800',
+        'bloque': 'bg-red-100 text-red-800',
+        'en_cours': 'bg-amber-100 text-amber-800',
+        'non_commence': 'bg-gray-100 text-gray-600'
+    } %}
+    <span class="text-xs font-medium px-2 py-0.5 rounded {{ couleur.get(statut, 'bg-gray-100 text-gray-600') }}">
+        {{ statut | replace('_', ' ') }}
+    </span>
+{% endmacro %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    {% if data is none %}
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Mon parcours</h1>
+    <div class="bg-amber-50 border border-amber-200 text-amber-800 rounded p-4">
+        Votre compte n'est rattaché à aucun profil élève pour l'instant.
+        Rapprochez-vous de l'administration pour l'associer à votre fiche.
+    </div>
+    {% else %}
+    <h1 class="text-2xl font-bold text-gray-800 mb-1">Mon parcours</h1>
+    <p class="text-gray-600 mb-6">{{ data.eleve.prenom }} {{ data.eleve.nom }}</p>
+
+    {% if data.progressions %}
+    <div class="space-y-6">
+        {% for prog in data.progressions %}
+        <section class="bg-white shadow rounded overflow-hidden">
+            <header class="px-4 py-3 border-b border-gray-100 flex items-center justify-between gap-4">
+                <div>
+                    <h2 class="font-semibold text-gray-800">{{ prog.parcours_titre }}</h2>
+                    <p class="text-xs text-gray-500">Version {{ prog.version }}</p>
+                </div>
+                {{ statut_badge(prog.statut) }}
+            </header>
+            {% if prog.paliers %}
+            <ol class="divide-y divide-gray-100">
+                {% for palier in prog.paliers %}
+                <li class="px-4 py-2 flex items-center justify-between gap-4">
+                    <span class="text-sm text-gray-700">
+                        <span class="text-gray-400 mr-2">{{ palier.ordre }}.</span>{{ palier.titre }}
+                    </span>
+                    {{ statut_badge(palier.statut) }}
+                </li>
+                {% endfor %}
+            </ol>
+            {% else %}
+            <p class="px-4 py-3 text-sm text-gray-500 italic">Aucun palier pour ce parcours.</p>
+            {% endif %}
+        </section>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-gray-500 italic">Aucun parcours ne vous est affecté pour l'instant.</p>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

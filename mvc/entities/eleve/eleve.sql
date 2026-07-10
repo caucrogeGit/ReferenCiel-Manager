@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS eleve (
     Identifiant VARCHAR(100) NULL,
     UNIQUE KEY uk_eleve_identifiant (Identifiant),
     DateNaissance DATE NULL,
-    UserId BIGINT NULL,
+    UserId INT NULL,
+    UNIQUE KEY uk_eleve_user_id (UserId),
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

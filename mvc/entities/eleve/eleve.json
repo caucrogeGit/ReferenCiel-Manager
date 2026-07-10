@@ -36,10 +36,10 @@
     },
     {
       "name": "user_id",
-      "type": "big_integer",
+      "type": "integer",
       "required": false,
       "nullable": true,
-      "unique": false
+      "unique": true
     }
   ],
   "options": {

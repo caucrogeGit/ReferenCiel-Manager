@@ -68,6 +68,10 @@
     <a href="/suivi" class="nav-link">Suivi</a>
     {% endif %}
 
+    {% if can('espace_eleve.voir') %}
+    <a href="/mon-parcours" class="nav-link">Mon parcours</a>
+    {% endif %}
+
     {% if is_authenticated %}
     <form method="post" action="/logout" style="display:inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
