@@ -528,16 +528,17 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **Espace élève — v1 ✅** | Rôle **`eleve`** (contrat + base). Lien compte↔élève : FK 1↔1 `eleve.UserId` → `users(id)` (INT, UNIQUE, `ON DELETE SET NULL`). Vue **« Mon parcours »** (`/mon-parcours`, `espace_eleve.voir`) : lecture seule, filtrée par compte (row-level), parcours affectés + paliers. Lien de nav réservé à l'élève |
 | **Comptes élèves — flux admin ✅** | Écran **`/eleve/comptes`** (gardé `socle.gerer`) : l'admin crée un compte `users` (email + mot de passe hashé), lui pose le rôle `eleve` et le **lie** à une fiche `Eleve` — en une transaction. Validé bout-en-bout sur MariaDB (compte jetable). **Testable au navigateur** : créer un compte élève, se connecter, voir « Mon parcours » |
 | **Espace élève v2 — saisie complète ✅** | Trois écritures élève, patron commun (garde `espace_eleve.voir` + **contrôle d'appartenance** à chaque appel, palier d'autrui → 404). **QCM** (`/mon-parcours/qcm/{id}`) : correction côté serveur (`choix.Lettre` vs `BonneReponse`), score %, tentative + réponses + statut (100 % → validé, sinon en cours, pas de régression, tentatives multiples). **Checklist** (`/checklist/{id}`) : auto-cochage `CocheEleve` (upsert idempotent), `CocheProfesseur` préservé. **Dépôt** (`/depot/{id}`) : upload via `forge-mvc-files` (allowlist), chemin en base. Checklist/dépôt : validation = professeur → statut palier inchangé. Toutes requêtes validées sur MariaDB |
-| **Évaluation prof — boucle ✅** | Écran `/evaluation/progression/{id}` (gardé `execution.gerer`) : détail d'une progression élève avec **preuves** (meilleur score QCM, cochage élève/prof, nb dépôts) ; le prof **valide un palier** (`Statut` contrôlé) et **confirme la checklist** (`CocheProfesseur`, sans toucher le cochage élève). Lien « Évaluer » par élève dans le suivi. **Différé** : notation par critères (`evaluation_activite/critere`) — lien critère↔activité à cadrer |
-| Qualité | `make check` vert (5 portes, **59 tests**) |
+| **Évaluation prof — boucle ✅** | Écran `/evaluation/progression/{id}` (gardé `execution.gerer`) : détail d'une progression élève avec **preuves** (meilleur score QCM, cochage élève/prof, nb dépôts) ; le prof **valide un palier** (`Statut` contrôlé) et **confirme la checklist** (`CocheProfesseur`, sans toucher le cochage élève). Lien « Évaluer » par élève dans le suivi |
+| **Notation par critères ✅** | `/evaluation/activite/{id}` : noter l'activité d'un palier via les **critères observables** (groupés par compétence, référentiel), échelle **4 niveaux** (`non_atteint`/`partiellement_atteint`/`atteint`/`depasse`). `evaluation_activite` find-or-create + `evaluation_critere` upsert. `professeur_id` = celui de l'affectation (compte prof↔fiche `professeur` non encore relié : raffinement futur, cf. `professeur.UserId`) |
+| Qualité | `make check` vert (5 portes, **62 tests**) |
 
-> Prochaine étape : **test navigateur** de la boucle complète (admin crée un compte élève →
-> l'élève passe QCM / checklist / dépôt → le prof valide au `/evaluation`), puis, si besoin,
-> **cadrer la notation par critères** (lien critère↔activité) pour compléter l'évaluation. La
-> **boucle pédagogique de bout en bout est fonctionnelle** : socle → référentiel → conception
-> → affectation → saisie élève → évaluation prof. En place : modèle (42 entités), import,
-> nav, **RBAC** (3 rôles), **espace élève complet**, **flux comptes élèves**, **évaluation
-> prof**. Défauts Forge remontés :
+> Prochaine étape : **tests terrain** (le porteur, une fois tout installé) de la boucle
+> complète, puis raffinement du **lien compte prof ↔ fiche `professeur`** (comme `eleve.UserId`)
+> pour attribuer l'évaluation au prof connecté. La **boucle pédagogique est complète** : socle
+> → référentiel → conception → affectation → saisie élève (QCM/checklist/dépôt) → évaluation
+> prof (validation palier + `CocheProfesseur` + **notation par critères**). En place : modèle
+> (42 entités), import, nav, **RBAC** (3 rôles), **espace élève complet**, **flux comptes
+> élèves**, **évaluation prof complète**. Défauts Forge remontés :
 > retour-010 (F22 partiel), retour-012 (F26/F27 — **F27 re-rencontré 3×**), retour-013 (F28),
 > retour-014 (F29), **retour-015 (F30/F31/F32 — RBAC : resolveur sur session dépréciée,
 > schéma non livré, deux modèles de permission)**.
