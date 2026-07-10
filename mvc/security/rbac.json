@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "roles": {
+    "admin": ["socle.gerer", "referentiel.gerer", "conception.gerer", "execution.gerer", "suivi.voir"],
+    "professeur": ["conception.gerer", "execution.gerer", "suivi.voir"]
+  }
+}
