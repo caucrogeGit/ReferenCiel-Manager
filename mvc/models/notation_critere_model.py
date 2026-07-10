@@ -39,6 +39,12 @@ def _contexte(progression_palier_id: int) -> dict[str, Any] | None:
     )
 
 
+def professeur_de_user(user_id: int) -> int | None:
+    """La fiche professeur rattachée à ce compte, si le compte est lié."""
+    row = fetch_one("SELECT Id AS id FROM professeur WHERE UserId = ?", (user_id,))
+    return int(row["id"]) if row is not None else None
+
+
 def _evaluation_existante(progression_palier_id: int, activite_id: int) -> int | None:
     row = fetch_one(
         "SELECT Id AS id FROM evaluation_activite "
@@ -78,17 +84,20 @@ def get_grille(progression_palier_id: int) -> dict[str, Any] | None:
 
 
 def enregistrer_notation(
-    progression_palier_id: int, niveaux: dict[int, str]
+    progression_palier_id: int, niveaux: dict[int, str], user_id: int | None = None
 ) -> dict[str, Any] | None:
     """Enregistre les niveaux des critères notés (find-or-create de l'évaluation).
 
     `niveaux` : {critere_id: niveau}. Les niveaux hors échelle ou vides sont
-    ignorés. Renvoie {notes} ou None si le palier n'a pas d'activité à évaluer.
+    ignorés. Le professeur attribué est celui du compte connecté (`user_id` lié à
+    une fiche `professeur`) ; à défaut, celui de l'affectation. Renvoie {notes} ou
+    None si le palier n'a pas d'activité à évaluer.
     """
     ctx = _contexte(progression_palier_id)
     if ctx is None or ctx["activite_id"] is None:
         return None
     activite_id = int(ctx["activite_id"])
+    professeur_id = (professeur_de_user(user_id) if user_id is not None else None) or ctx["professeur_id"]
     valides = {cid: niv for cid, niv in niveaux.items() if niv in NIVEAUX}
 
     with transaction() as tx:
@@ -98,7 +107,7 @@ def enregistrer_notation(
                 "INSERT INTO evaluation_activite "
                 "(DateEvaluation, progression_palier_id, activite_id, professeur_id, CreatedAt, UpdatedAt) "
                 "VALUES (NOW(), ?, ?, ?, NOW(), NOW())",
-                (progression_palier_id, activite_id, ctx["professeur_id"]),
+                (progression_palier_id, activite_id, professeur_id),
                 tx=tx,
             )
         for critere_id, niveau in valides.items():

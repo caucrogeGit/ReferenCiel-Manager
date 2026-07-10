@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS professeur (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     Nom VARCHAR(100) NOT NULL,
     Prenom VARCHAR(100) NOT NULL,
-    UserId BIGINT NULL,
+    UserId INT NULL,
+    UNIQUE KEY uk_professeur_user_id (UserId),
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

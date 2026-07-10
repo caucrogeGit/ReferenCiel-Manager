@@ -6,6 +6,7 @@ professeur (et à l'admin). Écritures POST protégées par CSRF (défaut Forge)
 """
 from __future__ import annotations
 
+from core.auth.session import get_authenticated_user_id
 from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller import BaseController
@@ -110,7 +111,7 @@ class EvaluationProfController:
                 niveau = request.form(f"critere_{cid}", "")
                 if niveau:
                     niveaux[cid] = niveau
-        resultat = enregistrer_notation(pp_id, niveaux)
+        resultat = enregistrer_notation(pp_id, niveaux, get_authenticated_user_id(request))
         if resultat is None:
             return BaseController.not_found()
         cible = f"/evaluation/progression/{data['progression_id']}"

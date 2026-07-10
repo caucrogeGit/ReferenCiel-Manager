@@ -22,12 +22,14 @@ class _FakeTx:
         return False
 
 
-def _install(monkeypatch: pytest.MonkeyPatch, *, ctx: dict[str, Any] | None, eval_existante: dict[str, Any] | None) -> dict[str, list[Any]]:
+def _install(monkeypatch: pytest.MonkeyPatch, *, ctx: dict[str, Any] | None, eval_existante: dict[str, Any] | None, prof_fiche: dict[str, Any] | None = None) -> dict[str, list[Any]]:
     cap: dict[str, list[Any]] = {"insert": [], "execute": []}
 
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
         if "FROM progression_palier pp" in sql:
             return ctx
+        if "FROM professeur WHERE UserId" in sql:
+            return prof_fiche
         if "FROM evaluation_activite" in sql:
             return eval_existante
         return None
@@ -63,6 +65,20 @@ def test_cree_l_evaluation_et_upsert_les_niveaux_valides(monkeypatch: pytest.Mon
     paires = {(c[1][0], c[1][2]) for c in cap["execute"]}  # (niveau, critere_id)
     assert paires == {("atteint", 7), ("depasse", 9)}
     assert all("ON DUPLICATE KEY UPDATE Niveau = VALUES(Niveau)" in c[0] for c in cap["execute"])
+
+
+def test_attribue_au_professeur_connecte_si_lie(monkeypatch: pytest.MonkeyPatch) -> None:
+    # compte user 99 lié à la fiche professeur 42 -> l'évaluation lui est attribuée
+    cap = _install(monkeypatch, ctx=_CTX, eval_existante=None, prof_fiche={"id": 42})
+    m.enregistrer_notation(1, {7: "atteint"}, user_id=99)
+    assert cap["insert"][0][1] == (1, 9, 42)  # professeur du compte, pas celui de l'affectation (2)
+
+
+def test_repli_sur_le_professeur_de_l_affectation(monkeypatch: pytest.MonkeyPatch) -> None:
+    # compte non lié à une fiche prof -> repli sur le professeur de l'affectation
+    cap = _install(monkeypatch, ctx=_CTX, eval_existante=None, prof_fiche=None)
+    m.enregistrer_notation(1, {7: "atteint"}, user_id=99)
+    assert cap["insert"][0][1] == (1, 9, 2)  # professeur_id de l'affectation
 
 
 def test_reutilise_l_evaluation_existante(monkeypatch: pytest.MonkeyPatch) -> None:

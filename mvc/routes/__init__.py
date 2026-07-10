@@ -36,6 +36,7 @@ from mvc.routes.choix_qcm_routes import register_choix_qcm_routes
 from mvc.routes.depot_eleve_routes import register_depot_eleve_routes
 from mvc.routes.item_checklist_routes import register_item_checklist_routes
 from mvc.routes.item_coche_routes import register_item_coche_routes
+from mvc.routes.professeur_compte_routes import register_professeur_compte_routes
 from mvc.routes.professeur_routes import register_professeur_routes
 from mvc.routes.progression_eleve_routes import register_progression_eleve_routes
 from mvc.routes.progression_palier_routes import register_progression_palier_routes
@@ -73,6 +74,10 @@ register_eleve_compte_routes(router)
 
 # Routes appliquées pour : eleve_controller
 register_eleve_routes(router)
+
+# Comptes professeurs (socle admin) : créer + lier un compte à une fiche Professeur.
+# Monté avant le CRUD /professeur pour que /professeur/comptes matche en priorité.
+register_professeur_compte_routes(router)
 
 # Routes appliquées pour : professeur_controller
 register_professeur_routes(router)
