@@ -1,0 +1,66 @@
+{% extends "layouts/base.html" %}
+{% from "components/ui.html" import flash_messages %}
+{% block title %}Évaluer — {{ progression.prenom }} {{ progression.nom }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex items-center justify-between mb-1">
+        <h1 class="text-2xl font-bold text-gray-800">Évaluation — {{ progression.prenom }} {{ progression.nom }}</h1>
+        <a href="/suivi" class="text-gray-600 hover:underline">← Suivi</a>
+    </div>
+    <p class="text-gray-600 mb-6">{{ progression.parcours_titre }} (v{{ progression.version }}) — statut global : {{ progression.statut }}</p>
+
+    {{ flash_messages(flash) }}
+
+    {% if progression.paliers %}
+    <table class="w-full text-sm bg-white shadow rounded overflow-hidden">
+        <thead class="bg-gray-100 text-left text-gray-700">
+            <tr>
+                <th class="px-3 py-2">Palier</th>
+                <th class="px-3 py-2 text-right">QCM</th>
+                <th class="px-3 py-2 text-right">Checklist</th>
+                <th class="px-3 py-2 text-right">Dépôts</th>
+                <th class="px-3 py-2">Statut / action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for palier in progression.paliers %}
+            <tr class="border-t border-gray-100 align-top">
+                <td class="px-3 py-2 font-medium">
+                    <span class="text-gray-400 mr-1">{{ palier.ordre }}.</span>{{ palier.titre }}
+                </td>
+                <td class="px-3 py-2 text-right">
+                    {% if palier.meilleur_score is not none %}{{ palier.meilleur_score }} %{% else %}<span class="text-gray-400">—</span>{% endif %}
+                </td>
+                <td class="px-3 py-2 text-right">
+                    {% if palier.checklist_id %}
+                    <a href="/evaluation/checklist/{{ palier.progression_palier_id }}" class="text-blue-600 hover:underline">
+                        {{ palier.coches_prof }}/{{ palier.coches_eleve }} <span class="text-gray-400">(prof/élève)</span>
+                    </a>
+                    {% else %}<span class="text-gray-400">—</span>{% endif %}
+                </td>
+                <td class="px-3 py-2 text-right">{{ palier.nb_depots }}</td>
+                <td class="px-3 py-2">
+                    <form method="POST" action="/evaluation/palier/{{ palier.progression_palier_id }}/statut"
+                          class="flex items-center gap-2">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="progression_id" value="{{ progression.id }}">
+                        <select name="statut" class="rounded border border-gray-300 px-2 py-1 text-sm">
+                            {% for s in statuts %}
+                            <option value="{{ s }}"{% if s == palier.statut %} selected{% endif %}>{{ s | replace('_', ' ') }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                            Enregistrer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-500 italic">Aucun palier pour cette progression.</p>
+    {% endif %}
+</div>
+{% endblock %}

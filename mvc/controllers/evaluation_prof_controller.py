@@ -1,0 +1,83 @@
+# pyright: strict
+"""Évaluation professeur — détail d'une progression, validation, confirmation checklist.
+
+Routes gardées par `execution.gerer` (préfixe `/evaluation`) : réservées au
+professeur (et à l'admin). Écritures POST protégées par CSRF (défaut Forge).
+"""
+from __future__ import annotations
+
+from core.http.request import Request
+from core.http.response import Response
+from core.mvc.controller import BaseController
+from core.security.session import get_flash, get_session_id
+
+from mvc.models.evaluation_prof_model import (
+    STATUTS_PALIER,
+    enregistrer_coches_prof,
+    get_checklist_review,
+    get_progression_detail,
+    set_palier_statut,
+)
+
+
+class EvaluationProfController:
+    @staticmethod
+    def progression(request: Request) -> Response:
+        """Détail d'une progression élève (`GET /evaluation/progression/<progression_id>`)."""
+        progression_id = int(request.route("id") or "0")
+        data = get_progression_detail(progression_id)
+        if data is None:
+            return BaseController.not_found()
+        return BaseController.render(
+            "evaluation/progression.html",
+            context={
+                "progression": data,
+                "statuts": STATUTS_PALIER,
+                "flash": get_flash(get_session_id(request)),
+            },
+            request=request,
+        )
+
+    @staticmethod
+    def set_statut(request: Request) -> Response:
+        """Pose le statut d'un palier (`POST /evaluation/palier/<progression_palier_id>/statut`)."""
+        pp_id = int(request.route("id") or "0")
+        statut = request.form("statut", "")
+        progression_id = request.form("progression_id", "0")
+        cible = f"/evaluation/progression/{progression_id}"
+        if set_palier_statut(pp_id, statut):
+            return BaseController.redirect_with_flash(request, cible, f"Palier mis à jour : {statut}.", "success")
+        return BaseController.redirect_with_flash(request, cible, "Statut invalide.", "error")
+
+    @staticmethod
+    def checklist(request: Request) -> Response:
+        """Revue de la checklist d'un palier (`GET /evaluation/checklist/<progression_palier_id>`)."""
+        pp_id = int(request.route("id") or "0")
+        data = get_checklist_review(pp_id)
+        if data is None:
+            return BaseController.not_found()
+        return BaseController.render(
+            "evaluation/checklist.html",
+            context={"checklist": data, "flash": get_flash(get_session_id(request))},
+            request=request,
+        )
+
+    @staticmethod
+    def coche(request: Request) -> Response:
+        """Confirme la checklist (`POST /evaluation/checklist/<progression_palier_id>`)."""
+        pp_id = int(request.route("id") or "0")
+        data = get_checklist_review(pp_id)
+        if data is None:
+            return BaseController.not_found()
+        coches: set[int] = set()
+        for section in data["sections"]:
+            for item in section["items"]:
+                iid = int(item["id"])
+                if request.form(f"item_{iid}", ""):
+                    coches.add(iid)
+        resultat = enregistrer_coches_prof(pp_id, coches)
+        if resultat is None:
+            return BaseController.not_found()
+        cible = f"/evaluation/progression/{data['progression_id']}"
+        message = f"Checklist confirmée : {resultat['coches']} / {resultat['items']} items validés."
+        return BaseController.redirect_with_flash(request, cible, message, "success")

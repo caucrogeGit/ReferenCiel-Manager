@@ -24,6 +24,7 @@ from mvc.routes.eleve_compte_routes import register_eleve_compte_routes
 from mvc.routes.eleve_routes import register_eleve_routes
 from mvc.routes.evaluation_activite_routes import register_evaluation_activite_routes
 from mvc.routes.evaluation_critere_routes import register_evaluation_critere_routes
+from mvc.routes.evaluation_prof_routes import register_evaluation_prof_routes
 from mvc.routes.groupe_routes import register_groupe_routes
 from mvc.routes.inscription_eleve_routes import register_inscription_eleve_routes
 from mvc.routes.mon_parcours_routes import register_mon_parcours_routes
@@ -127,6 +128,9 @@ register_suivi_routes(router)
 # Espace élève — « Mon parcours » (lecture seule, rôle eleve)
 register_mon_parcours_routes(router)
 
+# Évaluation professeur — détail progression, validation palier, checklist prof
+register_evaluation_prof_routes(router)
+
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)
 
@@ -183,6 +187,9 @@ for _prefix in (
 
 # Suivi (lecture seule) : `suivi.voir` (admin + professeur).
 guard_prefix(router, "/suivi", "suivi.voir")
+
+# Évaluation professeur (écritures : valider, confirmer) : `execution.gerer`.
+guard_prefix(router, "/evaluation", "execution.gerer")
 
 # Espace élève : `espace_eleve.voir` (rôle eleve). Données filtrées par compte.
 guard_prefix(router, "/mon-parcours", "espace_eleve.voir")
