@@ -2,30 +2,35 @@
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
 **Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
-**Statut :** **partiellement résolu** côté Forge (voir bandeau) ; upgrade projet appliqué.
+**Statut :** **résolu** côté Forge (6/6) ; upgrade projet appliqué (opt-in + cœur sur `5dbb382`).
 
-> ## ✅ Résolu — forge-mvc-sessions-db `5dbb382` (2026-07-10)
+> ## ✅ Résolu — Forge `5dbb382` (2026-07-10)
 >
-> **5 des 6 constats corrigés** côté framework et **vérifiés sur le banc d'essai**
-> (upgrade du paquet + `make check` vert + test fonctionnel du store) :
+> **Les 6 constats corrigés** côté framework et **vérifiés sur le banc d'essai**
+> (upgrade opt-in + cœur, `make check` vert, test fonctionnel du store, drive
+> HTTP authentifié) :
 >
 > | Constat | Correctif (Forge) | Vérif |
 > |---|---|---|
+> | **F33** | `sessions-db` inscrit au **catalogue** `forge opt-in:list` (`cli/optins/catalog.py`) — livré dans le **cœur/CLI**, visible après upgrade de `forge-mvc` | ✅ |
 > | **F34** | Migration livrée (`forge_mvc_sessions_db/migrations/20260710130000`) + commande `forge sessions:init` (ADR-071) | ✅ |
 > | **F35** | Commande `forge sessions:gc` (purge sans dépendre de `jobs`) | ✅ |
 > | **F36** | Store durci : concurrence optimiste (colonne `version` + garde `WHERE version = ?` + retry), flash lu une seule fois | ✅ |
 > | **F37** | Horodatages en **UTC** (`timezone.utc`), Python seule autorité (plus de `DEFAULT`/`ON UPDATE` SGBD) | ✅ |
 > | **F38** | Warning squelette pointe l'opt-in `sessions-db` au lieu de l'ADR-002 fantôme (`517956f`) | ✅ |
-> | **F33** | **Non levé** : `sessions-db` reste **absent** de `forge opt-in:list` ; registre projet toujours édité à la main | ⏳ |
 >
 > **Bonus Forge** : **ADR-071** — convention unique de provisioning des opt-ins
-> adossés à la base (migration versionnée + `migration:apply`).
+> adossés à la base (migration versionnée + `migration:apply`) ; le cœur retire
+> son `MariaDbSessionStore` intégré au profit de l'opt-in `DbSessionStore`.
 >
-> **Upgrade projet appliqué** (paquet `sessions-db` reinstallé sur `5dbb382`) :
-> migration de réconciliation `20260710195527_align_forge_sessions_v2` (ajout
-> `version`, retrait des defauts SGBD des horodatages), warning `app.py` aligné sur
-> le squelette corrigé. Le contournement F33 (inscription manuelle dans
-> `optins/registry.py`) reste **en vigueur** tant que F33 n'est pas traité.
+> **Upgrade projet appliqué** : opt-in `sessions-db` **et** cœur `forge-mvc`
+> (+ CLI + `entities`) reinstallés sur `5dbb382` ; migration de réconciliation
+> `20260710195527_align_forge_sessions_v2` (ajout `version`, retrait des defauts
+> SGBD des horodatages) ; warning `app.py` aligné sur le squelette corrigé.
+>
+> **Suite optionnelle** : F33 étant levé, l'inscription manuelle de `sessions-db`
+> dans `optins/registry.py` (hors bloc géré) pourrait être remplacée par
+> `forge opt-in:enable sessions-db` — reconciliation non bloquante, non encore faite.
 
 ## Environnement
 
