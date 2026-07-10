@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "name": "AffectationParcours",
+  "table": "affectation_parcours",
+  "fields": [
+    {
+      "name": "date_affectation",
+      "type": "date",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "version_parcours_id",
+      "type": "foreign_key",
+      "references": "VersionParcours",
+      "required": true
+    },
+    {
+      "name": "classe_id",
+      "type": "foreign_key",
+      "references": "Classe",
+      "required": true
+    },
+    {
+      "name": "professeur_id",
+      "type": "foreign_key",
+      "references": "Professeur",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

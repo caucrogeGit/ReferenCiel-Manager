@@ -1,0 +1,55 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Liste des affectation_parcourss</h1>
+    {{ button(label='Nouveau affectation_parcours', variant='primary', href='/affectation_parcours/new') }}
+</div>
+
+<form method="get" action="/affectation_parcours"
+      hx-get="/affectation_parcours" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
+      class="mb-4 flex gap-2 items-center flex-wrap">
+    <input type="search" name="q" value="{{ pagination.q }}"
+           placeholder="{{ trans('common.search') }}…"
+           class="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-400">
+    <select name="version_parcours_id"
+            class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <option value="">Tous les VersionParcours</option>
+        {% for option in relation_filters.version_parcours_id.options %}
+        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.version_parcours_id|string == option.id|string else '' }}>{{ option.label }}</option>
+        {% endfor %}
+    </select>
+    <select name="classe_id"
+            class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <option value="">Tous les Classe</option>
+        {% for option in relation_filters.classe_id.options %}
+        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.classe_id|string == option.id|string else '' }}>{{ option.label }}</option>
+        {% endfor %}
+    </select>
+    <select name="professeur_id"
+            class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <option value="">Tous les Professeur</option>
+        {% for option in relation_filters.professeur_id.options %}
+        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.professeur_id|string == option.id|string else '' }}>{{ option.label }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit"
+            class="bg-gray-100 text-gray-800 text-sm px-3 py-1.5 rounded font-medium hover:bg-gray-200">
+        {{ trans('common.search') }}</button>
+    {% if pagination.q or pagination.filters %}
+    <a href="/affectation_parcours"
+       hx-get="/affectation_parcours" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
+       class="text-sm text-gray-500 hover:underline">Réinitialiser</a>
+    {% endif %}
+</form>
+
+<div class="mb-2">
+    <a href="/affectation_parcours/export-csv?q={{ pagination.q | urlencode }}&amp;sort={{ pagination.sort }}&amp;direction={{ pagination.direction }}{% for key, val in pagination.filters.items() %}{% if val %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
+       class="text-sm text-blue-600 hover:underline">Exporter CSV</a>
+</div>
+
+<div id="crud-results">
+    {% include "affectation_parcours/_results.html" %}
+</div>
+{% endblock %}

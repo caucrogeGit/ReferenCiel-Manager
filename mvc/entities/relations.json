@@ -399,6 +399,55 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "AffectationParcours",
+      "to": "VersionParcours",
+      "name": "version_parcours",
+      "inverse_name": "affectations",
+      "foreign_key": "version_parcours_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "AffectationParcours",
+      "to": "Classe",
+      "name": "classe",
+      "inverse_name": "affectations_parcours",
+      "foreign_key": "classe_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "AffectationParcours",
+      "to": "Professeur",
+      "name": "professeur",
+      "inverse_name": "affectations_parcours",
+      "foreign_key": "professeur_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_many",
+      "from": "AffectationParcours",
+      "to": "Eleve",
+      "name": "eleves",
+      "inverse_name": "affectations_parcours",
+      "pivot": {
+        "table": "affectation_parcours_eleve",
+        "from_key": "affectation_parcours_id",
+        "to_key": "eleve_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
     }
   ]
 }

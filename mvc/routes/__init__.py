@@ -12,6 +12,7 @@ par contrôleur, cette racine se contentant de les brancher explicitement.
 from core.http.router import Router
 from mvc.controllers.home_controller import HomeController
 from mvc.routes.admin_routes import register_admin
+from mvc.routes.affectation_parcours_routes import register_affectation_parcours_routes
 from mvc.routes.affectation_professeur_classe_routes import (
     register_affectation_professeur_classe_routes,
 )
@@ -66,6 +67,9 @@ register_version_starter_routes(router)
 register_parcours_routes(router)
 register_version_parcours_routes(router)
 register_palier_routes(router)
+
+# Bloc B — AffectationParcours (ticket 17)
+register_affectation_parcours_routes(router)
 
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)

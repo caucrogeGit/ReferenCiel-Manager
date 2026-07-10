@@ -296,3 +296,42 @@ ALTER TABLE palier
     REFERENCES version_parcours (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE affectation_parcours
+    ADD CONSTRAINT fk_affectation_parcours_version_parcours_id
+    FOREIGN KEY (version_parcours_id)
+    REFERENCES version_parcours (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE affectation_parcours
+    ADD CONSTRAINT fk_affectation_parcours_classe_id
+    FOREIGN KEY (classe_id)
+    REFERENCES classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE affectation_parcours
+    ADD CONSTRAINT fk_affectation_parcours_professeur_id
+    FOREIGN KEY (professeur_id)
+    REFERENCES professeur (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+CREATE TABLE IF NOT EXISTS affectation_parcours_eleve (
+    id INT NOT NULL AUTO_INCREMENT,
+    affectation_parcours_id INT NOT NULL,
+    eleve_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_affectation_parcours_eleve (affectation_parcours_id, eleve_id),
+    INDEX idx_affectation_parcours_eleve_affectation_parcours_id (affectation_parcours_id),
+    INDEX idx_affectation_parcours_eleve_eleve_id (eleve_id),
+    CONSTRAINT fk_affectation_parcours_eleve_affectation_parcours_id
+        FOREIGN KEY (affectation_parcours_id)
+        REFERENCES affectation_parcours (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_affectation_parcours_eleve_eleve_id
+        FOREIGN KEY (eleve_id)
+        REFERENCES eleve (id)
+        ON DELETE CASCADE
+);
