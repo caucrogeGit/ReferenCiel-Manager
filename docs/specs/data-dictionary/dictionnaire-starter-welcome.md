@@ -17,26 +17,38 @@ en base. Les **données structurées** (QCM, checklists) sont persistées.
 
 ## Entités
 
+> **Versionnement (ADR-011)** : `StarterWelcome` est l'**identité stable** du parcours
+> réutilisable ; ses **versions** vivent dans `VersionStarter`. Les contenus versionnés
+> (paliers, QCM, checklists) se rattachent à une **version**, pas à l'identité.
+
 ### StarterWelcome
 
-Le parcours réutilisable. Racine du domaine.
+L'**identité** du parcours réutilisable (stable dans le temps). Racine du domaine.
 
 | Champ | Type | Oblig. | Description / règle |
 |---|---|:--:|---|
-| `identifiant` | slug | oui | ex. `welcome-reseau`, **unique** |
-| `version` | string | oui | semver |
-| `niveau_classe_id` | many_to_one → NiveauClasse | oui | classe visée |
+| `identifiant` | slug | oui | ex. `welcome-reseau`, **unique** (stable) |
 | `titre` | string | oui | ex. « Semaine réseau et virtualisation » |
 | `presentation` | text | non | texte d'accueil |
+| `niveau_classe_id` | many_to_one → NiveauClasse | oui | classe visée |
+
+### VersionStarter
+
+Une **version** d'un StarterWelcome (cycle de vie + options + contenu rattaché).
+
+| Champ | Type | Oblig. | Description / règle |
+|---|---|:--:|---|
+| `starter_id` | many_to_one → StarterWelcome | oui | identité parente |
+| `version` | string | oui | semver ; unique `(starter_id, version)` |
+| `statut` | string | oui | `brouillon` \| `publie` \| `archive` |
 | `activite_glissante` | boolean | oui | chaque élève à son rythme |
 | `ordre_impose` | boolean | oui | paliers dans l'ordre |
-| `statut` | string | oui | `brouillon` \| `publie` \| `archive` |
 
 ### Palier
 
 | Champ | Type | Oblig. | Description / règle |
 |---|---|:--:|---|
-| `starter_id` | many_to_one → StarterWelcome | oui | parcours parent |
+| `version_starter_id` | many_to_one → VersionStarter | oui | version parente (ADR-011) |
 | `ordre` | integer | oui | rang 1..n, **unique et contigu** dans le parcours |
 | `titre` | string | oui | |
 | `theme` | string | non | |
@@ -110,7 +122,8 @@ Un QCM par palier ; porte de passage (validé à 100 % avant l'activité).
 
 | Relation | Type Forge | Cardinalité |
 |---|---|---|
-| StarterWelcome → Palier | many_to_one (inverse) | 1 parcours, n paliers |
+| StarterWelcome → VersionStarter | many_to_one (inverse) | 1 identité, n versions (ADR-011) |
+| VersionStarter → Palier | many_to_one (inverse) | 1 version, n paliers |
 | Palier → QCM / Activite / Checklist | many_to_one (inverse) | 1 palier, 0..1 de chaque |
 | QCM → QuestionQCM → ChoixQCM | one_to_many | cascade |
 | Checklist → SectionChecklist → ItemChecklist | one_to_many | cascade |
