@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail palier</h1>
+    <div class="space-x-2">
+        {{ button(label=trans('crud.edit'), variant='primary', href='/palier/edit/' ~ palier.Id) }}
+        <a href="/palier" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Ordre</p>
+        <p class="text-gray-800">{{ palier.Ordre }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Titre</p>
+        <p class="text-gray-800">{{ palier.Titre }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Theme</p>
+        <p class="text-gray-800">{{ palier.Theme }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Production attendue</p>
+        <p class="text-gray-800">{{ palier.ProductionAttendue }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Dossier technique fichier</p>
+        <p class="text-gray-800">{{ palier.DossierTechniqueFichier }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Version parcours</p>
+        <p class="text-gray-800">{{ palier.version_parcours_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Created at</p>
+        <p class="text-gray-800">{{ palier.CreatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Updated at</p>
+        <p class="text-gray-800">{{ palier.UpdatedAt }}</p>
+    </div>
+</div>
+
+<form method="post" action="/palier/destroy/{{ palier.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+</form>
+{% endblock %}

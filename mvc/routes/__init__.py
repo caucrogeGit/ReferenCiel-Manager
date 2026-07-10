@@ -22,10 +22,13 @@ from mvc.routes.eleve_routes import register_eleve_routes
 from mvc.routes.groupe_routes import register_groupe_routes
 from mvc.routes.inscription_eleve_routes import register_inscription_eleve_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
+from mvc.routes.palier_routes import register_palier_routes
+from mvc.routes.parcours_routes import register_parcours_routes
 from mvc.routes.professeur_routes import register_professeur_routes
 from mvc.routes.referentiel_import_routes import register_referentiel_import_routes
 from mvc.routes.scenario_routes import register_scenario_routes
 from mvc.routes.starter_welcome_routes import register_starter_welcome_routes
+from mvc.routes.version_parcours_routes import register_version_parcours_routes
 from mvc.routes.version_starter_routes import register_version_starter_routes
 from optins.registry import register_optins
 
@@ -58,6 +61,11 @@ register_scenario_routes(router)
 # Routes StarterWelcome + VersionStarter (phase ⑦, ticket 14)
 register_starter_welcome_routes(router)
 register_version_starter_routes(router)
+
+# Routes Parcours + VersionParcours + Palier (phase ⑧, tickets 15-16)
+register_parcours_routes(router)
+register_version_parcours_routes(router)
+register_palier_routes(router)
 
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)

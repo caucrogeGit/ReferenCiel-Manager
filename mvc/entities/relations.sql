@@ -275,3 +275,24 @@ ALTER TABLE version_starter
     REFERENCES starter_welcome (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE parcours
+    ADD CONSTRAINT fk_parcours_version_starter_id
+    FOREIGN KEY (version_starter_id)
+    REFERENCES version_starter (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE version_parcours
+    ADD CONSTRAINT fk_version_parcours_parcours_id
+    FOREIGN KEY (parcours_id)
+    REFERENCES parcours (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE palier
+    ADD CONSTRAINT fk_palier_version_parcours_id
+    FOREIGN KEY (version_parcours_id)
+    REFERENCES version_parcours (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;

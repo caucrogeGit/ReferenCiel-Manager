@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "name": "VersionParcours",
+  "table": "version_parcours",
+  "fields": [
+    {
+      "name": "version",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "parcours_id",
+      "type": "foreign_key",
+      "references": "Parcours",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

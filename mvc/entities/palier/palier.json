@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "name": "Palier",
+  "table": "palier",
+  "fields": [
+    {
+      "name": "ordre",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "titre",
+      "type": "string",
+      "max_length": 200,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "theme",
+      "type": "string",
+      "max_length": 100,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "production_attendue",
+      "type": "string",
+      "max_length": 255,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "dossier_technique_fichier",
+      "type": "string",
+      "max_length": 255,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "version_parcours_id",
+      "type": "foreign_key",
+      "references": "VersionParcours",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}
