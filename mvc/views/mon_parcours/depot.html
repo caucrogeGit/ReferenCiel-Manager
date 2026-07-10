@@ -1,0 +1,49 @@
+{% extends "layouts/base.html" %}
+{% from "components/ui.html" import flash_messages %}
+{% block title %}Dépôt — {{ activite.palier_titre }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="flex items-center justify-between mb-1">
+        <h1 class="text-2xl font-bold text-gray-800">Déposer un fichier</h1>
+        <a href="/mon-parcours" class="text-gray-600 hover:underline">← Mon parcours</a>
+    </div>
+    <p class="text-gray-600 mb-6">Palier : {{ activite.palier_titre }}</p>
+
+    {{ flash_messages(flash) }}
+
+    {% if activite.consigne %}
+    <p class="text-sm text-gray-600 mb-4">Consigne fournie : <span class="font-mono">{{ activite.consigne }}</span></p>
+    {% endif %}
+
+    <form method="POST" action="/mon-parcours/depot/{{ activite.progression_palier_id }}"
+          enctype="multipart/form-data" class="bg-white shadow rounded p-5 mb-8 space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div>
+            <label for="fichier" class="block text-sm font-medium text-gray-700 mb-1">Votre fichier</label>
+            <input type="file" id="fichier" name="fichier" required class="text-sm">
+            <p class="text-xs text-gray-500 mt-1">Formats autorisés selon la configuration (PDF, images…).</p>
+        </div>
+        <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded">
+            Déposer
+        </button>
+    </form>
+
+    <section>
+        <h2 class="font-semibold text-gray-800 mb-3">Mes dépôts</h2>
+        {% if activite.depots %}
+        <ul class="bg-white shadow rounded divide-y divide-gray-100">
+            {% for depot in activite.depots %}
+            <li class="px-4 py-2 flex items-center justify-between gap-4 text-sm">
+                <span class="font-mono text-gray-700 truncate">{{ depot.fichier }}</span>
+                <span class="text-gray-500 whitespace-nowrap">{{ depot.date_depot }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-500 italic">Aucun dépôt pour l'instant.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

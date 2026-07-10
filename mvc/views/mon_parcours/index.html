@@ -50,6 +50,14 @@
                             {{ 'Refaire le QCM' if palier.statut == 'valide' else 'Passer le QCM' }}
                         </a>
                         {% endif %}
+                        {% if palier.checklist_id %}
+                        <a href="/mon-parcours/checklist/{{ palier.progression_palier_id }}"
+                           class="text-sm text-blue-600 hover:underline">Checklist</a>
+                        {% endif %}
+                        {% if palier.activite_id %}
+                        <a href="/mon-parcours/depot/{{ palier.progression_palier_id }}"
+                           class="text-sm text-blue-600 hover:underline">Dépôt</a>
+                        {% endif %}
                         {{ statut_badge(palier.statut) }}
                     </span>
                 </li>
