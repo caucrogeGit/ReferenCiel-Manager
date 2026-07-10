@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "name": "ItemChecklist",
+  "table": "item_checklist",
+  "fields": [
+    {
+      "name": "libelle",
+      "type": "text",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "section_id",
+      "type": "foreign_key",
+      "references": "SectionChecklist",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

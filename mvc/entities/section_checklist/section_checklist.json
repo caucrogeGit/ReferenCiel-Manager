@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "name": "SectionChecklist",
+  "table": "section_checklist",
+  "fields": [
+    {
+      "name": "numero",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "titre",
+      "type": "string",
+      "max_length": 200,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "checklist_id",
+      "type": "foreign_key",
+      "references": "Checklist",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

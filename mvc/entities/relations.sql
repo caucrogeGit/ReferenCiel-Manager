@@ -412,3 +412,38 @@ ALTER TABLE reponse_qcm
     REFERENCES choix_qcm (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE checklist
+    ADD CONSTRAINT fk_checklist_palier_id
+    FOREIGN KEY (palier_id)
+    REFERENCES palier (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE section_checklist
+    ADD CONSTRAINT fk_section_checklist_checklist_id
+    FOREIGN KEY (checklist_id)
+    REFERENCES checklist (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE item_checklist
+    ADD CONSTRAINT fk_item_checklist_section_id
+    FOREIGN KEY (section_id)
+    REFERENCES section_checklist (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE item_coche
+    ADD CONSTRAINT fk_item_coche_item_id
+    FOREIGN KEY (item_id)
+    REFERENCES item_checklist (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE item_coche
+    ADD CONSTRAINT fk_item_coche_progression_palier_id
+    FOREIGN KEY (progression_palier_id)
+    REFERENCES progression_palier (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;

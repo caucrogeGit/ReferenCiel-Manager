@@ -1,0 +1,44 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail item_coche</h1>
+    <div class="space-x-2">
+        {{ button(label=trans('crud.edit'), variant='primary', href='/item_coche/edit/' ~ item_coche.Id) }}
+        <a href="/item_coche" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Coche eleve</p>
+        <p class="text-gray-800">{{ item_coche.CocheEleve }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Coche professeur</p>
+        <p class="text-gray-800">{{ item_coche.CocheProfesseur }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Item</p>
+        <p class="text-gray-800">{{ item_coche.item_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Progression palier</p>
+        <p class="text-gray-800">{{ item_coche.progression_palier_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Created at</p>
+        <p class="text-gray-800">{{ item_coche.CreatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Updated at</p>
+        <p class="text-gray-800">{{ item_coche.UpdatedAt }}</p>
+    </div>
+</div>
+
+<form method="post" action="/item_coche/destroy/{{ item_coche.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+</form>
+{% endblock %}

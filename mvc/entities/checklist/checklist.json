@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "name": "Checklist",
+  "table": "checklist",
+  "fields": [
+    {
+      "name": "decision_finale",
+      "type": "json",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "palier_id",
+      "type": "foreign_key",
+      "references": "Palier",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

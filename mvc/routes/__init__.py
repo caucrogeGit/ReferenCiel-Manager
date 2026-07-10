@@ -25,12 +25,16 @@ from mvc.routes.inscription_eleve_routes import register_inscription_eleve_route
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 from mvc.routes.palier_routes import register_palier_routes
 from mvc.routes.parcours_routes import register_parcours_routes
+from mvc.routes.checklist_routes import register_checklist_routes
 from mvc.routes.choix_qcm_routes import register_choix_qcm_routes
+from mvc.routes.item_checklist_routes import register_item_checklist_routes
+from mvc.routes.item_coche_routes import register_item_coche_routes
 from mvc.routes.professeur_routes import register_professeur_routes
 from mvc.routes.progression_eleve_routes import register_progression_eleve_routes
 from mvc.routes.progression_palier_routes import register_progression_palier_routes
 from mvc.routes.qcm_routes import register_qcm_routes
 from mvc.routes.question_qcm_routes import register_question_qcm_routes
+from mvc.routes.section_checklist_routes import register_section_checklist_routes
 from mvc.routes.reponse_qcm_routes import register_reponse_qcm_routes
 from mvc.routes.tentative_qcm_routes import register_tentative_qcm_routes
 from mvc.routes.referentiel_import_routes import register_referentiel_import_routes
@@ -90,6 +94,12 @@ register_choix_qcm_routes(router)
 # Bloc B — Exécution QCM : TentativeQCM + ReponseQCM (ticket 19, sous-lot 2)
 register_tentative_qcm_routes(router)
 register_reponse_qcm_routes(router)
+
+# Bloc B — Checklist : définition (Checklist/Section/Item) + exécution (ItemCoche) (ticket 19, sous-lot 3)
+register_checklist_routes(router)
+register_section_checklist_routes(router)
+register_item_checklist_routes(router)
+register_item_coche_routes(router)
 
 # Routes appliquées pour : affectation_professeur_classe_controller
 register_affectation_professeur_classe_routes(router)

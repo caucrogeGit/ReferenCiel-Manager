@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "name": "ItemCoche",
+  "table": "item_coche",
+  "fields": [
+    {
+      "name": "coche_eleve",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "coche_professeur",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "item_id",
+      "type": "foreign_key",
+      "references": "ItemChecklist",
+      "required": true
+    },
+    {
+      "name": "progression_palier_id",
+      "type": "foreign_key",
+      "references": "ProgressionPalier",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

@@ -569,6 +569,61 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "Checklist",
+      "to": "Palier",
+      "name": "palier",
+      "inverse_name": "checklists",
+      "foreign_key": "palier_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "SectionChecklist",
+      "to": "Checklist",
+      "name": "checklist",
+      "inverse_name": "sections",
+      "foreign_key": "checklist_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ItemChecklist",
+      "to": "SectionChecklist",
+      "name": "section",
+      "inverse_name": "items",
+      "foreign_key": "section_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ItemCoche",
+      "to": "ItemChecklist",
+      "name": "item",
+      "inverse_name": "cochages",
+      "foreign_key": "item_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ItemCoche",
+      "to": "ProgressionPalier",
+      "name": "progression_palier",
+      "inverse_name": "cochages_items",
+      "foreign_key": "progression_palier_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }
