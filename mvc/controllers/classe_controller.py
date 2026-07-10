@@ -131,13 +131,13 @@ class ClasseController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ClasseController._list_context(request)
-        template = "classe/_results.html" if _is_hx_request(request) else "classe/index.html"
+        template = "app/classe/_results.html" if _is_hx_request(request) else "app/classe/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ClasseForm(**_classe_form_options())
-        return BaseController.render("classe/form.html",
+        return BaseController.render("app/classe/form.html",
             context={
                 "form": form,
                 "action": "/classe/create",
@@ -149,7 +149,7 @@ class ClasseController(BaseController):
     def create(request: Request) -> Response:
         form = ClasseForm.from_request(request, **_classe_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("classe/form.html",
+            return BaseController.validation_error("app/classe/form.html",
                 context={
                     "form": form,
                     "action": "/classe/create",
@@ -167,7 +167,7 @@ class ClasseController(BaseController):
         classe = get_classe_by_id(id)
         if classe is None:
             return BaseController.not_found()
-        return BaseController.render("classe/show.html",
+        return BaseController.render("app/classe/show.html",
             context={"classe": classe, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -179,7 +179,7 @@ class ClasseController(BaseController):
         classe = get_classe_by_id(id)
         if classe is None:
             return BaseController.not_found()
-        return BaseController.render("classe/form.html",
+        return BaseController.render("app/classe/form.html",
             context={
                 "form": ClasseForm(_form_data_from_classe(classe), **_classe_form_options()),
                 "action": f"/classe/update/{id}",
@@ -194,7 +194,7 @@ class ClasseController(BaseController):
             return BaseController.not_found()
         form = ClasseForm.from_request(request, **_classe_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("classe/form.html",
+            return BaseController.validation_error("app/classe/form.html",
                 context={
                     "form": form,
                     "action": f"/classe/update/{id}",
@@ -213,7 +213,7 @@ class ClasseController(BaseController):
         delete_classe(id)
         if _is_hx_request(request):
             context = ClasseController._list_context(request)
-            return BaseController.render("classe/_results.html", context=context, request=request)
+            return BaseController.render("app/classe/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/classe", "Classe supprimé.")
 
 
@@ -222,7 +222,7 @@ class ClasseController(BaseController):
         ids = ClasseController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/classe", "Aucun élément sélectionné.")
-        return BaseController.render("classe/bulk_delete_confirm.html",
+        return BaseController.render("app/classe/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

@@ -100,13 +100,13 @@ class NiveauClasseController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = NiveauClasseController._list_context(request)
-        template = "niveau_classe/_results.html" if _is_hx_request(request) else "niveau_classe/index.html"
+        template = "app/niveau_classe/_results.html" if _is_hx_request(request) else "app/niveau_classe/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = NiveauClasseForm()
-        return BaseController.render("niveau_classe/form.html",
+        return BaseController.render("app/niveau_classe/form.html",
             context={
                 "form": form,
                 "action": "/niveau_classe/create",
@@ -118,7 +118,7 @@ class NiveauClasseController(BaseController):
     def create(request: Request) -> Response:
         form = NiveauClasseForm.from_request(request)
         if not form.is_valid():
-            return BaseController.validation_error("niveau_classe/form.html",
+            return BaseController.validation_error("app/niveau_classe/form.html",
                 context={
                     "form": form,
                     "action": "/niveau_classe/create",
@@ -136,7 +136,7 @@ class NiveauClasseController(BaseController):
         niveau_classe = get_niveau_classe_by_id(id)
         if niveau_classe is None:
             return BaseController.not_found()
-        return BaseController.render("niveau_classe/show.html",
+        return BaseController.render("app/niveau_classe/show.html",
             context={"niveau_classe": niveau_classe, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -148,7 +148,7 @@ class NiveauClasseController(BaseController):
         niveau_classe = get_niveau_classe_by_id(id)
         if niveau_classe is None:
             return BaseController.not_found()
-        return BaseController.render("niveau_classe/form.html",
+        return BaseController.render("app/niveau_classe/form.html",
             context={
                 "form": NiveauClasseForm(_form_data_from_niveau_classe(niveau_classe)),
                 "action": f"/niveau_classe/update/{id}",
@@ -163,7 +163,7 @@ class NiveauClasseController(BaseController):
             return BaseController.not_found()
         form = NiveauClasseForm.from_request(request)
         if not form.is_valid():
-            return BaseController.validation_error("niveau_classe/form.html",
+            return BaseController.validation_error("app/niveau_classe/form.html",
                 context={
                     "form": form,
                     "action": f"/niveau_classe/update/{id}",
@@ -182,7 +182,7 @@ class NiveauClasseController(BaseController):
         delete_niveau_classe(id)
         if _is_hx_request(request):
             context = NiveauClasseController._list_context(request)
-            return BaseController.render("niveau_classe/_results.html", context=context, request=request)
+            return BaseController.render("app/niveau_classe/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/niveau_classe", "NiveauClasse supprimé.")
 
 
@@ -191,7 +191,7 @@ class NiveauClasseController(BaseController):
         ids = NiveauClasseController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/niveau_classe", "Aucun élément sélectionné.")
-        return BaseController.render("niveau_classe/bulk_delete_confirm.html",
+        return BaseController.render("app/niveau_classe/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

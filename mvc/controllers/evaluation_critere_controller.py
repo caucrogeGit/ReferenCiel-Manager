@@ -130,13 +130,13 @@ class EvaluationCritereController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = EvaluationCritereController._list_context(request)
-        template = "evaluation_critere/_results.html" if _is_hx_request(request) else "evaluation_critere/index.html"
+        template = "app/evaluation_critere/_results.html" if _is_hx_request(request) else "app/evaluation_critere/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = EvaluationCritereForm(**_evaluation_critere_form_options())
-        return BaseController.render("evaluation_critere/form.html",
+        return BaseController.render("app/evaluation_critere/form.html",
             context={
                 "form": form,
                 "action": "/evaluation_critere/create",
@@ -148,7 +148,7 @@ class EvaluationCritereController(BaseController):
     def create(request: Request) -> Response:
         form = EvaluationCritereForm.from_request(request, **_evaluation_critere_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("evaluation_critere/form.html",
+            return BaseController.validation_error("app/evaluation_critere/form.html",
                 context={
                     "form": form,
                     "action": "/evaluation_critere/create",
@@ -166,7 +166,7 @@ class EvaluationCritereController(BaseController):
         evaluation_critere = get_evaluation_critere_by_id(id)
         if evaluation_critere is None:
             return BaseController.not_found()
-        return BaseController.render("evaluation_critere/show.html",
+        return BaseController.render("app/evaluation_critere/show.html",
             context={"evaluation_critere": evaluation_critere, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -178,7 +178,7 @@ class EvaluationCritereController(BaseController):
         evaluation_critere = get_evaluation_critere_by_id(id)
         if evaluation_critere is None:
             return BaseController.not_found()
-        return BaseController.render("evaluation_critere/form.html",
+        return BaseController.render("app/evaluation_critere/form.html",
             context={
                 "form": EvaluationCritereForm(_form_data_from_evaluation_critere(evaluation_critere), **_evaluation_critere_form_options()),
                 "action": f"/evaluation_critere/update/{id}",
@@ -193,7 +193,7 @@ class EvaluationCritereController(BaseController):
             return BaseController.not_found()
         form = EvaluationCritereForm.from_request(request, **_evaluation_critere_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("evaluation_critere/form.html",
+            return BaseController.validation_error("app/evaluation_critere/form.html",
                 context={
                     "form": form,
                     "action": f"/evaluation_critere/update/{id}",
@@ -212,7 +212,7 @@ class EvaluationCritereController(BaseController):
         delete_evaluation_critere(id)
         if _is_hx_request(request):
             context = EvaluationCritereController._list_context(request)
-            return BaseController.render("evaluation_critere/_results.html", context=context, request=request)
+            return BaseController.render("app/evaluation_critere/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/evaluation_critere", "EvaluationCritere supprimé.")
 
 
@@ -221,7 +221,7 @@ class EvaluationCritereController(BaseController):
         ids = EvaluationCritereController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/evaluation_critere", "Aucun élément sélectionné.")
-        return BaseController.render("evaluation_critere/bulk_delete_confirm.html",
+        return BaseController.render("app/evaluation_critere/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

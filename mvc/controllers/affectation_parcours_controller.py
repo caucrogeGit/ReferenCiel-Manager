@@ -162,13 +162,13 @@ class AffectationParcoursController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = AffectationParcoursController._list_context(request)
-        template = "affectation_parcours/_results.html" if _is_hx_request(request) else "affectation_parcours/index.html"
+        template = "app/affectation_parcours/_results.html" if _is_hx_request(request) else "app/affectation_parcours/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = AffectationParcoursForm(**_affectation_parcours_form_options())
-        return BaseController.render("affectation_parcours/form.html",
+        return BaseController.render("app/affectation_parcours/form.html",
             context={
                 "form": form,
                 "action": "/affectation_parcours/create",
@@ -183,7 +183,7 @@ class AffectationParcoursController(BaseController):
         form = AffectationParcoursForm.from_request(request, **_affectation_parcours_form_options())
         eleve_ids = AffectationParcoursController._parse_many_ids(request, "eleve_ids")
         if not form.is_valid():
-            return BaseController.validation_error("affectation_parcours/form.html",
+            return BaseController.validation_error("app/affectation_parcours/form.html",
                 context={
                     "form": form,
                     "action": "/affectation_parcours/create",
@@ -205,7 +205,7 @@ class AffectationParcoursController(BaseController):
         if affectation_parcours is None:
             return BaseController.not_found()
         eleve_labels = get_affectation_parcours_eleve_labels(id)
-        return BaseController.render("affectation_parcours/show.html",
+        return BaseController.render("app/affectation_parcours/show.html",
             context={"affectation_parcours": affectation_parcours, "flash": get_flash(get_session_id(request)), "eleve_labels": eleve_labels},
             request=request)
 
@@ -217,7 +217,7 @@ class AffectationParcoursController(BaseController):
         affectation_parcours = get_affectation_parcours_by_id(id)
         if affectation_parcours is None:
             return BaseController.not_found()
-        return BaseController.render("affectation_parcours/form.html",
+        return BaseController.render("app/affectation_parcours/form.html",
             context={
                 "form": AffectationParcoursForm(_form_data_from_affectation_parcours(affectation_parcours), **_affectation_parcours_form_options()),
                 "action": f"/affectation_parcours/update/{id}",
@@ -235,7 +235,7 @@ class AffectationParcoursController(BaseController):
         form = AffectationParcoursForm.from_request(request, **_affectation_parcours_form_options())
         eleve_ids = AffectationParcoursController._parse_many_ids(request, "eleve_ids")
         if not form.is_valid():
-            return BaseController.validation_error("affectation_parcours/form.html",
+            return BaseController.validation_error("app/affectation_parcours/form.html",
                 context={
                     "form": form,
                     "action": f"/affectation_parcours/update/{id}",
@@ -257,7 +257,7 @@ class AffectationParcoursController(BaseController):
         delete_affectation_parcours(id)
         if _is_hx_request(request):
             context = AffectationParcoursController._list_context(request)
-            return BaseController.render("affectation_parcours/_results.html", context=context, request=request)
+            return BaseController.render("app/affectation_parcours/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/affectation_parcours", "AffectationParcours supprimé.")
 
 
@@ -266,7 +266,7 @@ class AffectationParcoursController(BaseController):
         ids = AffectationParcoursController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/affectation_parcours", "Aucun élément sélectionné.")
-        return BaseController.render("affectation_parcours/bulk_delete_confirm.html",
+        return BaseController.render("app/affectation_parcours/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

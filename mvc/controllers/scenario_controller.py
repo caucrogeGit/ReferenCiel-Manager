@@ -154,13 +154,13 @@ class ScenarioController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ScenarioController._list_context(request)
-        template = "scenario/_results.html" if _is_hx_request(request) else "scenario/index.html"
+        template = "app/scenario/_results.html" if _is_hx_request(request) else "app/scenario/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ScenarioForm(**_scenario_form_options())
-        return BaseController.render("scenario/form.html",
+        return BaseController.render("app/scenario/form.html",
             context={
                 "form": form,
                 "action": "/scenario/create",
@@ -178,7 +178,7 @@ class ScenarioController(BaseController):
         competence_ids = ScenarioController._parse_many_ids(request, "competence_ids")
         critere_observable_ids = ScenarioController._parse_many_ids(request, "critere_observable_ids")
         if not form.is_valid():
-            return BaseController.validation_error("scenario/form.html",
+            return BaseController.validation_error("app/scenario/form.html",
                 context={
                     "form": form,
                     "action": "/scenario/create",
@@ -204,7 +204,7 @@ class ScenarioController(BaseController):
             return BaseController.not_found()
         competence_labels = get_scenario_competence_labels(id)
         critere_observable_labels = get_scenario_critere_observable_labels(id)
-        return BaseController.render("scenario/show.html",
+        return BaseController.render("app/scenario/show.html",
             context={"scenario": scenario, "flash": get_flash(get_session_id(request)), "competence_labels": competence_labels, "critere_observable_labels": critere_observable_labels},
             request=request)
 
@@ -216,7 +216,7 @@ class ScenarioController(BaseController):
         scenario = get_scenario_by_id(id)
         if scenario is None:
             return BaseController.not_found()
-        return BaseController.render("scenario/form.html",
+        return BaseController.render("app/scenario/form.html",
             context={
                 "form": ScenarioForm(_form_data_from_scenario(scenario), **_scenario_form_options()),
                 "action": f"/scenario/update/{id}",
@@ -237,7 +237,7 @@ class ScenarioController(BaseController):
         competence_ids = ScenarioController._parse_many_ids(request, "competence_ids")
         critere_observable_ids = ScenarioController._parse_many_ids(request, "critere_observable_ids")
         if not form.is_valid():
-            return BaseController.validation_error("scenario/form.html",
+            return BaseController.validation_error("app/scenario/form.html",
                 context={
                     "form": form,
                     "action": f"/scenario/update/{id}",
@@ -262,7 +262,7 @@ class ScenarioController(BaseController):
         delete_scenario(id)
         if _is_hx_request(request):
             context = ScenarioController._list_context(request)
-            return BaseController.render("scenario/_results.html", context=context, request=request)
+            return BaseController.render("app/scenario/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/scenario", "Scenario supprimé.")
 
 
@@ -271,7 +271,7 @@ class ScenarioController(BaseController):
         ids = ScenarioController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/scenario", "Aucun élément sélectionné.")
-        return BaseController.render("scenario/bulk_delete_confirm.html",
+        return BaseController.render("app/scenario/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

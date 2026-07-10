@@ -118,13 +118,13 @@ class ItemChecklistController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ItemChecklistController._list_context(request)
-        template = "item_checklist/_results.html" if _is_hx_request(request) else "item_checklist/index.html"
+        template = "app/item_checklist/_results.html" if _is_hx_request(request) else "app/item_checklist/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ItemChecklistForm(**_item_checklist_form_options())
-        return BaseController.render("item_checklist/form.html",
+        return BaseController.render("app/item_checklist/form.html",
             context={
                 "form": form,
                 "action": "/item_checklist/create",
@@ -136,7 +136,7 @@ class ItemChecklistController(BaseController):
     def create(request: Request) -> Response:
         form = ItemChecklistForm.from_request(request, **_item_checklist_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("item_checklist/form.html",
+            return BaseController.validation_error("app/item_checklist/form.html",
                 context={
                     "form": form,
                     "action": "/item_checklist/create",
@@ -154,7 +154,7 @@ class ItemChecklistController(BaseController):
         item_checklist = get_item_checklist_by_id(id)
         if item_checklist is None:
             return BaseController.not_found()
-        return BaseController.render("item_checklist/show.html",
+        return BaseController.render("app/item_checklist/show.html",
             context={"item_checklist": item_checklist, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -166,7 +166,7 @@ class ItemChecklistController(BaseController):
         item_checklist = get_item_checklist_by_id(id)
         if item_checklist is None:
             return BaseController.not_found()
-        return BaseController.render("item_checklist/form.html",
+        return BaseController.render("app/item_checklist/form.html",
             context={
                 "form": ItemChecklistForm(_form_data_from_item_checklist(item_checklist), **_item_checklist_form_options()),
                 "action": f"/item_checklist/update/{id}",
@@ -181,7 +181,7 @@ class ItemChecklistController(BaseController):
             return BaseController.not_found()
         form = ItemChecklistForm.from_request(request, **_item_checklist_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("item_checklist/form.html",
+            return BaseController.validation_error("app/item_checklist/form.html",
                 context={
                     "form": form,
                     "action": f"/item_checklist/update/{id}",
@@ -200,7 +200,7 @@ class ItemChecklistController(BaseController):
         delete_item_checklist(id)
         if _is_hx_request(request):
             context = ItemChecklistController._list_context(request)
-            return BaseController.render("item_checklist/_results.html", context=context, request=request)
+            return BaseController.render("app/item_checklist/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/item_checklist", "ItemChecklist supprimé.")
 
 
@@ -209,7 +209,7 @@ class ItemChecklistController(BaseController):
         ids = ItemChecklistController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/item_checklist", "Aucun élément sélectionné.")
-        return BaseController.render("item_checklist/bulk_delete_confirm.html",
+        return BaseController.render("app/item_checklist/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

@@ -27,7 +27,7 @@ class PasserQcmController:
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
-            "mon_parcours/qcm.html",
+            "app/mon_parcours/qcm.html",
             context={"qcm": data, "flash": get_flash(get_session_id(request))},
             request=request,
         )

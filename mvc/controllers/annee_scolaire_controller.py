@@ -102,13 +102,13 @@ class AnneeScolaireController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = AnneeScolaireController._list_context(request)
-        template = "annee_scolaire/_results.html" if _is_hx_request(request) else "annee_scolaire/index.html"
+        template = "app/annee_scolaire/_results.html" if _is_hx_request(request) else "app/annee_scolaire/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = AnneeScolaireForm()
-        return BaseController.render("annee_scolaire/form.html",
+        return BaseController.render("app/annee_scolaire/form.html",
             context={
                 "form": form,
                 "action": "/annee_scolaire/create",
@@ -120,7 +120,7 @@ class AnneeScolaireController(BaseController):
     def create(request: Request) -> Response:
         form = AnneeScolaireForm.from_request(request)
         if not form.is_valid():
-            return BaseController.validation_error("annee_scolaire/form.html",
+            return BaseController.validation_error("app/annee_scolaire/form.html",
                 context={
                     "form": form,
                     "action": "/annee_scolaire/create",
@@ -138,7 +138,7 @@ class AnneeScolaireController(BaseController):
         annee_scolaire = get_annee_scolaire_by_id(id)
         if annee_scolaire is None:
             return BaseController.not_found()
-        return BaseController.render("annee_scolaire/show.html",
+        return BaseController.render("app/annee_scolaire/show.html",
             context={"annee_scolaire": annee_scolaire, "flash_html": render_flash_html(request)},
             request=request)
 
@@ -150,7 +150,7 @@ class AnneeScolaireController(BaseController):
         annee_scolaire = get_annee_scolaire_by_id(id)
         if annee_scolaire is None:
             return BaseController.not_found()
-        return BaseController.render("annee_scolaire/form.html",
+        return BaseController.render("app/annee_scolaire/form.html",
             context={
                 "form": AnneeScolaireForm(_form_data_from_annee_scolaire(annee_scolaire)),
                 "action": f"/annee_scolaire/update/{id}",
@@ -165,7 +165,7 @@ class AnneeScolaireController(BaseController):
             return BaseController.not_found()
         form = AnneeScolaireForm.from_request(request)
         if not form.is_valid():
-            return BaseController.validation_error("annee_scolaire/form.html",
+            return BaseController.validation_error("app/annee_scolaire/form.html",
                 context={
                     "form": form,
                     "action": f"/annee_scolaire/update/{id}",
@@ -184,7 +184,7 @@ class AnneeScolaireController(BaseController):
         delete_annee_scolaire(id)
         if _is_hx_request(request):
             context = AnneeScolaireController._list_context(request)
-            return BaseController.render("annee_scolaire/_results.html", context=context, request=request)
+            return BaseController.render("app/annee_scolaire/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/annee_scolaire", "AnneeScolaire supprimé.")
 
 
@@ -193,7 +193,7 @@ class AnneeScolaireController(BaseController):
         ids = AnneeScolaireController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/annee_scolaire", "Aucun élément sélectionné.")
-        return BaseController.render("annee_scolaire/bulk_delete_confirm.html",
+        return BaseController.render("app/annee_scolaire/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash_html": render_flash_html(request)},
             request=request)
 

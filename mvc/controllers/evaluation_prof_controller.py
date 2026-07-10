@@ -31,7 +31,7 @@ class EvaluationProfController:
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
-            "evaluation/progression.html",
+            "app/evaluation/progression.html",
             context={
                 "progression": data,
                 "statuts": STATUTS_PALIER,
@@ -59,7 +59,7 @@ class EvaluationProfController:
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
-            "evaluation/checklist.html",
+            "app/evaluation/checklist.html",
             context={"checklist": data, "flash": get_flash(get_session_id(request))},
             request=request,
         )
@@ -92,7 +92,7 @@ class EvaluationProfController:
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
-            "evaluation/activite.html",
+            "app/evaluation/activite.html",
             context={"grille": data, "flash": get_flash(get_session_id(request))},
             request=request,
         )

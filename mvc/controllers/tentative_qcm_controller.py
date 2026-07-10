@@ -121,13 +121,13 @@ class TentativeQCMController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = TentativeQCMController._list_context(request)
-        template = "tentative_qcm/_results.html" if _is_hx_request(request) else "tentative_qcm/index.html"
+        template = "app/tentative_qcm/_results.html" if _is_hx_request(request) else "app/tentative_qcm/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = TentativeQCMForm(**_tentative_qcm_form_options())
-        return BaseController.render("tentative_qcm/form.html",
+        return BaseController.render("app/tentative_qcm/form.html",
             context={
                 "form": form,
                 "action": "/tentative_qcm/create",
@@ -139,7 +139,7 @@ class TentativeQCMController(BaseController):
     def create(request: Request) -> Response:
         form = TentativeQCMForm.from_request(request, **_tentative_qcm_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("tentative_qcm/form.html",
+            return BaseController.validation_error("app/tentative_qcm/form.html",
                 context={
                     "form": form,
                     "action": "/tentative_qcm/create",
@@ -157,7 +157,7 @@ class TentativeQCMController(BaseController):
         tentative_qcm = get_tentative_qcm_by_id(id)
         if tentative_qcm is None:
             return BaseController.not_found()
-        return BaseController.render("tentative_qcm/show.html",
+        return BaseController.render("app/tentative_qcm/show.html",
             context={"tentative_qcm": tentative_qcm, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -169,7 +169,7 @@ class TentativeQCMController(BaseController):
         tentative_qcm = get_tentative_qcm_by_id(id)
         if tentative_qcm is None:
             return BaseController.not_found()
-        return BaseController.render("tentative_qcm/form.html",
+        return BaseController.render("app/tentative_qcm/form.html",
             context={
                 "form": TentativeQCMForm(_form_data_from_tentative_qcm(tentative_qcm), **_tentative_qcm_form_options()),
                 "action": f"/tentative_qcm/update/{id}",
@@ -184,7 +184,7 @@ class TentativeQCMController(BaseController):
             return BaseController.not_found()
         form = TentativeQCMForm.from_request(request, **_tentative_qcm_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("tentative_qcm/form.html",
+            return BaseController.validation_error("app/tentative_qcm/form.html",
                 context={
                     "form": form,
                     "action": f"/tentative_qcm/update/{id}",
@@ -203,7 +203,7 @@ class TentativeQCMController(BaseController):
         delete_tentative_qcm(id)
         if _is_hx_request(request):
             context = TentativeQCMController._list_context(request)
-            return BaseController.render("tentative_qcm/_results.html", context=context, request=request)
+            return BaseController.render("app/tentative_qcm/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/tentative_qcm", "TentativeQCM supprimé.")
 
 
@@ -212,7 +212,7 @@ class TentativeQCMController(BaseController):
         ids = TentativeQCMController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/tentative_qcm", "Aucun élément sélectionné.")
-        return BaseController.render("tentative_qcm/bulk_delete_confirm.html",
+        return BaseController.render("app/tentative_qcm/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

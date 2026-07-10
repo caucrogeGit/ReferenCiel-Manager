@@ -118,13 +118,13 @@ class ParcoursController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ParcoursController._list_context(request)
-        template = "parcours/_results.html" if _is_hx_request(request) else "parcours/index.html"
+        template = "app/parcours/_results.html" if _is_hx_request(request) else "app/parcours/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ParcoursForm(**_parcours_form_options())
-        return BaseController.render("parcours/form.html",
+        return BaseController.render("app/parcours/form.html",
             context={
                 "form": form,
                 "action": "/parcours/create",
@@ -136,7 +136,7 @@ class ParcoursController(BaseController):
     def create(request: Request) -> Response:
         form = ParcoursForm.from_request(request, **_parcours_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("parcours/form.html",
+            return BaseController.validation_error("app/parcours/form.html",
                 context={
                     "form": form,
                     "action": "/parcours/create",
@@ -154,7 +154,7 @@ class ParcoursController(BaseController):
         parcours = get_parcours_by_id(id)
         if parcours is None:
             return BaseController.not_found()
-        return BaseController.render("parcours/show.html",
+        return BaseController.render("app/parcours/show.html",
             context={"parcours": parcours, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -166,7 +166,7 @@ class ParcoursController(BaseController):
         parcours = get_parcours_by_id(id)
         if parcours is None:
             return BaseController.not_found()
-        return BaseController.render("parcours/form.html",
+        return BaseController.render("app/parcours/form.html",
             context={
                 "form": ParcoursForm(_form_data_from_parcours(parcours), **_parcours_form_options()),
                 "action": f"/parcours/update/{id}",
@@ -181,7 +181,7 @@ class ParcoursController(BaseController):
             return BaseController.not_found()
         form = ParcoursForm.from_request(request, **_parcours_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("parcours/form.html",
+            return BaseController.validation_error("app/parcours/form.html",
                 context={
                     "form": form,
                     "action": f"/parcours/update/{id}",
@@ -200,7 +200,7 @@ class ParcoursController(BaseController):
         delete_parcours(id)
         if _is_hx_request(request):
             context = ParcoursController._list_context(request)
-            return BaseController.render("parcours/_results.html", context=context, request=request)
+            return BaseController.render("app/parcours/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/parcours", "Parcours supprimé.")
 
 
@@ -209,7 +209,7 @@ class ParcoursController(BaseController):
         ids = ParcoursController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/parcours", "Aucun élément sélectionné.")
-        return BaseController.render("parcours/bulk_delete_confirm.html",
+        return BaseController.render("app/parcours/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

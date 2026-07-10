@@ -122,13 +122,13 @@ class PalierController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = PalierController._list_context(request)
-        template = "palier/_results.html" if _is_hx_request(request) else "palier/index.html"
+        template = "app/palier/_results.html" if _is_hx_request(request) else "app/palier/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = PalierForm(**_palier_form_options())
-        return BaseController.render("palier/form.html",
+        return BaseController.render("app/palier/form.html",
             context={
                 "form": form,
                 "action": "/palier/create",
@@ -140,7 +140,7 @@ class PalierController(BaseController):
     def create(request: Request) -> Response:
         form = PalierForm.from_request(request, **_palier_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("palier/form.html",
+            return BaseController.validation_error("app/palier/form.html",
                 context={
                     "form": form,
                     "action": "/palier/create",
@@ -158,7 +158,7 @@ class PalierController(BaseController):
         palier = get_palier_by_id(id)
         if palier is None:
             return BaseController.not_found()
-        return BaseController.render("palier/show.html",
+        return BaseController.render("app/palier/show.html",
             context={"palier": palier, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -170,7 +170,7 @@ class PalierController(BaseController):
         palier = get_palier_by_id(id)
         if palier is None:
             return BaseController.not_found()
-        return BaseController.render("palier/form.html",
+        return BaseController.render("app/palier/form.html",
             context={
                 "form": PalierForm(_form_data_from_palier(palier), **_palier_form_options()),
                 "action": f"/palier/update/{id}",
@@ -185,7 +185,7 @@ class PalierController(BaseController):
             return BaseController.not_found()
         form = PalierForm.from_request(request, **_palier_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("palier/form.html",
+            return BaseController.validation_error("app/palier/form.html",
                 context={
                     "form": form,
                     "action": f"/palier/update/{id}",
@@ -204,7 +204,7 @@ class PalierController(BaseController):
         delete_palier(id)
         if _is_hx_request(request):
             context = PalierController._list_context(request)
-            return BaseController.render("palier/_results.html", context=context, request=request)
+            return BaseController.render("app/palier/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/palier", "Palier supprimé.")
 
 
@@ -213,7 +213,7 @@ class PalierController(BaseController):
         ids = PalierController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/palier", "Aucun élément sélectionné.")
-        return BaseController.render("palier/bulk_delete_confirm.html",
+        return BaseController.render("app/palier/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

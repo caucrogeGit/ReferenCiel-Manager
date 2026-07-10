@@ -130,13 +130,13 @@ class ProgressionPalierController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ProgressionPalierController._list_context(request)
-        template = "progression_palier/_results.html" if _is_hx_request(request) else "progression_palier/index.html"
+        template = "app/progression_palier/_results.html" if _is_hx_request(request) else "app/progression_palier/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ProgressionPalierForm(**_progression_palier_form_options())
-        return BaseController.render("progression_palier/form.html",
+        return BaseController.render("app/progression_palier/form.html",
             context={
                 "form": form,
                 "action": "/progression_palier/create",
@@ -148,7 +148,7 @@ class ProgressionPalierController(BaseController):
     def create(request: Request) -> Response:
         form = ProgressionPalierForm.from_request(request, **_progression_palier_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("progression_palier/form.html",
+            return BaseController.validation_error("app/progression_palier/form.html",
                 context={
                     "form": form,
                     "action": "/progression_palier/create",
@@ -166,7 +166,7 @@ class ProgressionPalierController(BaseController):
         progression_palier = get_progression_palier_by_id(id)
         if progression_palier is None:
             return BaseController.not_found()
-        return BaseController.render("progression_palier/show.html",
+        return BaseController.render("app/progression_palier/show.html",
             context={"progression_palier": progression_palier, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -178,7 +178,7 @@ class ProgressionPalierController(BaseController):
         progression_palier = get_progression_palier_by_id(id)
         if progression_palier is None:
             return BaseController.not_found()
-        return BaseController.render("progression_palier/form.html",
+        return BaseController.render("app/progression_palier/form.html",
             context={
                 "form": ProgressionPalierForm(_form_data_from_progression_palier(progression_palier), **_progression_palier_form_options()),
                 "action": f"/progression_palier/update/{id}",
@@ -193,7 +193,7 @@ class ProgressionPalierController(BaseController):
             return BaseController.not_found()
         form = ProgressionPalierForm.from_request(request, **_progression_palier_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("progression_palier/form.html",
+            return BaseController.validation_error("app/progression_palier/form.html",
                 context={
                     "form": form,
                     "action": f"/progression_palier/update/{id}",
@@ -212,7 +212,7 @@ class ProgressionPalierController(BaseController):
         delete_progression_palier(id)
         if _is_hx_request(request):
             context = ProgressionPalierController._list_context(request)
-            return BaseController.render("progression_palier/_results.html", context=context, request=request)
+            return BaseController.render("app/progression_palier/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/progression_palier", "ProgressionPalier supprimé.")
 
 
@@ -221,7 +221,7 @@ class ProgressionPalierController(BaseController):
         ids = ProgressionPalierController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/progression_palier", "Aucun élément sélectionné.")
-        return BaseController.render("progression_palier/bulk_delete_confirm.html",
+        return BaseController.render("app/progression_palier/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

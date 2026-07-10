@@ -23,7 +23,7 @@ class MonParcoursController:
         user_id = get_authenticated_user_id(request)
         data = mon_parcours(user_id) if user_id is not None else None
         return BaseController.render(
-            "mon_parcours/index.html",
+            "app/mon_parcours/index.html",
             context={"data": data},
             request=request,
         )

@@ -101,13 +101,13 @@ class ProfesseurController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ProfesseurController._list_context(request)
-        template = "professeur/_results.html" if _is_hx_request(request) else "professeur/index.html"
+        template = "app/professeur/_results.html" if _is_hx_request(request) else "app/professeur/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ProfesseurForm()
-        return BaseController.render("professeur/form.html",
+        return BaseController.render("app/professeur/form.html",
             context={
                 "form": form,
                 "action": "/professeur/create",
@@ -119,7 +119,7 @@ class ProfesseurController(BaseController):
     def create(request: Request) -> Response:
         form = ProfesseurForm.from_request(request)
         if not form.is_valid():
-            return BaseController.validation_error("professeur/form.html",
+            return BaseController.validation_error("app/professeur/form.html",
                 context={
                     "form": form,
                     "action": "/professeur/create",
@@ -137,7 +137,7 @@ class ProfesseurController(BaseController):
         professeur = get_professeur_by_id(id)
         if professeur is None:
             return BaseController.not_found()
-        return BaseController.render("professeur/show.html",
+        return BaseController.render("app/professeur/show.html",
             context={"professeur": professeur, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -149,7 +149,7 @@ class ProfesseurController(BaseController):
         professeur = get_professeur_by_id(id)
         if professeur is None:
             return BaseController.not_found()
-        return BaseController.render("professeur/form.html",
+        return BaseController.render("app/professeur/form.html",
             context={
                 "form": ProfesseurForm(_form_data_from_professeur(professeur)),
                 "action": f"/professeur/update/{id}",
@@ -164,7 +164,7 @@ class ProfesseurController(BaseController):
             return BaseController.not_found()
         form = ProfesseurForm.from_request(request)
         if not form.is_valid():
-            return BaseController.validation_error("professeur/form.html",
+            return BaseController.validation_error("app/professeur/form.html",
                 context={
                     "form": form,
                     "action": f"/professeur/update/{id}",
@@ -183,7 +183,7 @@ class ProfesseurController(BaseController):
         delete_professeur(id)
         if _is_hx_request(request):
             context = ProfesseurController._list_context(request)
-            return BaseController.render("professeur/_results.html", context=context, request=request)
+            return BaseController.render("app/professeur/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/professeur", "Professeur supprimé.")
 
 
@@ -192,7 +192,7 @@ class ProfesseurController(BaseController):
         ids = ProfesseurController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/professeur", "Aucun élément sélectionné.")
-        return BaseController.render("professeur/bulk_delete_confirm.html",
+        return BaseController.render("app/professeur/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

@@ -28,7 +28,7 @@ class EleveCompteController:
     def index(request: Request) -> Response:
         """Liste des élèves avec l'état de leur compte + formulaire (`GET /eleve/comptes`)."""
         return BaseController.render(
-            "eleve_compte/index.html",
+            "app/eleve_compte/index.html",
             context={
                 "eleves": list_eleves_avec_compte(),
                 "sans_compte": eleves_sans_compte(),
@@ -58,7 +58,7 @@ class EleveCompteController:
 
         if erreurs:
             return BaseController.render(
-                "eleve_compte/index.html",
+                "app/eleve_compte/index.html",
                 status=422,
                 context={
                     "eleves": list_eleves_avec_compte(),

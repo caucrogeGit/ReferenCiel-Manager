@@ -119,13 +119,13 @@ class VersionParcoursController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = VersionParcoursController._list_context(request)
-        template = "version_parcours/_results.html" if _is_hx_request(request) else "version_parcours/index.html"
+        template = "app/version_parcours/_results.html" if _is_hx_request(request) else "app/version_parcours/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = VersionParcoursForm(**_version_parcours_form_options())
-        return BaseController.render("version_parcours/form.html",
+        return BaseController.render("app/version_parcours/form.html",
             context={
                 "form": form,
                 "action": "/version_parcours/create",
@@ -137,7 +137,7 @@ class VersionParcoursController(BaseController):
     def create(request: Request) -> Response:
         form = VersionParcoursForm.from_request(request, **_version_parcours_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("version_parcours/form.html",
+            return BaseController.validation_error("app/version_parcours/form.html",
                 context={
                     "form": form,
                     "action": "/version_parcours/create",
@@ -155,7 +155,7 @@ class VersionParcoursController(BaseController):
         version_parcours = get_version_parcours_by_id(id)
         if version_parcours is None:
             return BaseController.not_found()
-        return BaseController.render("version_parcours/show.html",
+        return BaseController.render("app/version_parcours/show.html",
             context={"version_parcours": version_parcours, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -167,7 +167,7 @@ class VersionParcoursController(BaseController):
         version_parcours = get_version_parcours_by_id(id)
         if version_parcours is None:
             return BaseController.not_found()
-        return BaseController.render("version_parcours/form.html",
+        return BaseController.render("app/version_parcours/form.html",
             context={
                 "form": VersionParcoursForm(_form_data_from_version_parcours(version_parcours), **_version_parcours_form_options()),
                 "action": f"/version_parcours/update/{id}",
@@ -182,7 +182,7 @@ class VersionParcoursController(BaseController):
             return BaseController.not_found()
         form = VersionParcoursForm.from_request(request, **_version_parcours_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("version_parcours/form.html",
+            return BaseController.validation_error("app/version_parcours/form.html",
                 context={
                     "form": form,
                     "action": f"/version_parcours/update/{id}",
@@ -201,7 +201,7 @@ class VersionParcoursController(BaseController):
         delete_version_parcours(id)
         if _is_hx_request(request):
             context = VersionParcoursController._list_context(request)
-            return BaseController.render("version_parcours/_results.html", context=context, request=request)
+            return BaseController.render("app/version_parcours/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/version_parcours", "VersionParcours supprimé.")
 
 
@@ -210,7 +210,7 @@ class VersionParcoursController(BaseController):
         ids = VersionParcoursController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/version_parcours", "Aucun élément sélectionné.")
-        return BaseController.render("version_parcours/bulk_delete_confirm.html",
+        return BaseController.render("app/version_parcours/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

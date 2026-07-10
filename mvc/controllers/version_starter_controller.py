@@ -121,13 +121,13 @@ class VersionStarterController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = VersionStarterController._list_context(request)
-        template = "version_starter/_results.html" if _is_hx_request(request) else "version_starter/index.html"
+        template = "app/version_starter/_results.html" if _is_hx_request(request) else "app/version_starter/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = VersionStarterForm(**_version_starter_form_options())
-        return BaseController.render("version_starter/form.html",
+        return BaseController.render("app/version_starter/form.html",
             context={
                 "form": form,
                 "action": "/version_starter/create",
@@ -139,7 +139,7 @@ class VersionStarterController(BaseController):
     def create(request: Request) -> Response:
         form = VersionStarterForm.from_request(request, **_version_starter_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("version_starter/form.html",
+            return BaseController.validation_error("app/version_starter/form.html",
                 context={
                     "form": form,
                     "action": "/version_starter/create",
@@ -157,7 +157,7 @@ class VersionStarterController(BaseController):
         version_starter = get_version_starter_by_id(id)
         if version_starter is None:
             return BaseController.not_found()
-        return BaseController.render("version_starter/show.html",
+        return BaseController.render("app/version_starter/show.html",
             context={"version_starter": version_starter, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -169,7 +169,7 @@ class VersionStarterController(BaseController):
         version_starter = get_version_starter_by_id(id)
         if version_starter is None:
             return BaseController.not_found()
-        return BaseController.render("version_starter/form.html",
+        return BaseController.render("app/version_starter/form.html",
             context={
                 "form": VersionStarterForm(_form_data_from_version_starter(version_starter), **_version_starter_form_options()),
                 "action": f"/version_starter/update/{id}",
@@ -184,7 +184,7 @@ class VersionStarterController(BaseController):
             return BaseController.not_found()
         form = VersionStarterForm.from_request(request, **_version_starter_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("version_starter/form.html",
+            return BaseController.validation_error("app/version_starter/form.html",
                 context={
                     "form": form,
                     "action": f"/version_starter/update/{id}",
@@ -203,7 +203,7 @@ class VersionStarterController(BaseController):
         delete_version_starter(id)
         if _is_hx_request(request):
             context = VersionStarterController._list_context(request)
-            return BaseController.render("version_starter/_results.html", context=context, request=request)
+            return BaseController.render("app/version_starter/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/version_starter", "VersionStarter supprimé.")
 
 
@@ -212,7 +212,7 @@ class VersionStarterController(BaseController):
         ids = VersionStarterController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/version_starter", "Aucun élément sélectionné.")
-        return BaseController.render("version_starter/bulk_delete_confirm.html",
+        return BaseController.render("app/version_starter/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

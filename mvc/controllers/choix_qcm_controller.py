@@ -119,13 +119,13 @@ class ChoixQCMController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ChoixQCMController._list_context(request)
-        template = "choix_qcm/_results.html" if _is_hx_request(request) else "choix_qcm/index.html"
+        template = "app/choix_qcm/_results.html" if _is_hx_request(request) else "app/choix_qcm/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ChoixQCMForm(**_choix_qcm_form_options())
-        return BaseController.render("choix_qcm/form.html",
+        return BaseController.render("app/choix_qcm/form.html",
             context={
                 "form": form,
                 "action": "/choix_qcm/create",
@@ -137,7 +137,7 @@ class ChoixQCMController(BaseController):
     def create(request: Request) -> Response:
         form = ChoixQCMForm.from_request(request, **_choix_qcm_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("choix_qcm/form.html",
+            return BaseController.validation_error("app/choix_qcm/form.html",
                 context={
                     "form": form,
                     "action": "/choix_qcm/create",
@@ -155,7 +155,7 @@ class ChoixQCMController(BaseController):
         choix_qcm = get_choix_qcm_by_id(id)
         if choix_qcm is None:
             return BaseController.not_found()
-        return BaseController.render("choix_qcm/show.html",
+        return BaseController.render("app/choix_qcm/show.html",
             context={"choix_qcm": choix_qcm, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -167,7 +167,7 @@ class ChoixQCMController(BaseController):
         choix_qcm = get_choix_qcm_by_id(id)
         if choix_qcm is None:
             return BaseController.not_found()
-        return BaseController.render("choix_qcm/form.html",
+        return BaseController.render("app/choix_qcm/form.html",
             context={
                 "form": ChoixQCMForm(_form_data_from_choix_qcm(choix_qcm), **_choix_qcm_form_options()),
                 "action": f"/choix_qcm/update/{id}",
@@ -182,7 +182,7 @@ class ChoixQCMController(BaseController):
             return BaseController.not_found()
         form = ChoixQCMForm.from_request(request, **_choix_qcm_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("choix_qcm/form.html",
+            return BaseController.validation_error("app/choix_qcm/form.html",
                 context={
                     "form": form,
                     "action": f"/choix_qcm/update/{id}",
@@ -201,7 +201,7 @@ class ChoixQCMController(BaseController):
         delete_choix_qcm(id)
         if _is_hx_request(request):
             context = ChoixQCMController._list_context(request)
-            return BaseController.render("choix_qcm/_results.html", context=context, request=request)
+            return BaseController.render("app/choix_qcm/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/choix_qcm", "ChoixQCM supprimé.")
 
 
@@ -210,7 +210,7 @@ class ChoixQCMController(BaseController):
         ids = ChoixQCMController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/choix_qcm", "Aucun élément sélectionné.")
-        return BaseController.render("choix_qcm/bulk_delete_confirm.html",
+        return BaseController.render("app/choix_qcm/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

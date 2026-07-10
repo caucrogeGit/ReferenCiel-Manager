@@ -132,13 +132,13 @@ class DepotEleveController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = DepotEleveController._list_context(request)
-        template = "depot_eleve/_results.html" if _is_hx_request(request) else "depot_eleve/index.html"
+        template = "app/depot_eleve/_results.html" if _is_hx_request(request) else "app/depot_eleve/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = DepotEleveForm(**_depot_eleve_form_options())
-        return BaseController.render("depot_eleve/form.html",
+        return BaseController.render("app/depot_eleve/form.html",
             context={
                 "form": form,
                 "action": "/depot_eleve/create",
@@ -150,7 +150,7 @@ class DepotEleveController(BaseController):
     def create(request: Request) -> Response:
         form = DepotEleveForm.from_request(request, **_depot_eleve_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("depot_eleve/form.html",
+            return BaseController.validation_error("app/depot_eleve/form.html",
                 context={
                     "form": form,
                     "action": "/depot_eleve/create",
@@ -168,7 +168,7 @@ class DepotEleveController(BaseController):
         depot_eleve = get_depot_eleve_by_id(id)
         if depot_eleve is None:
             return BaseController.not_found()
-        return BaseController.render("depot_eleve/show.html",
+        return BaseController.render("app/depot_eleve/show.html",
             context={"depot_eleve": depot_eleve, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -180,7 +180,7 @@ class DepotEleveController(BaseController):
         depot_eleve = get_depot_eleve_by_id(id)
         if depot_eleve is None:
             return BaseController.not_found()
-        return BaseController.render("depot_eleve/form.html",
+        return BaseController.render("app/depot_eleve/form.html",
             context={
                 "form": DepotEleveForm(_form_data_from_depot_eleve(depot_eleve), **_depot_eleve_form_options()),
                 "action": f"/depot_eleve/update/{id}",
@@ -195,7 +195,7 @@ class DepotEleveController(BaseController):
             return BaseController.not_found()
         form = DepotEleveForm.from_request(request, **_depot_eleve_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("depot_eleve/form.html",
+            return BaseController.validation_error("app/depot_eleve/form.html",
                 context={
                     "form": form,
                     "action": f"/depot_eleve/update/{id}",
@@ -214,7 +214,7 @@ class DepotEleveController(BaseController):
         delete_depot_eleve(id)
         if _is_hx_request(request):
             context = DepotEleveController._list_context(request)
-            return BaseController.render("depot_eleve/_results.html", context=context, request=request)
+            return BaseController.render("app/depot_eleve/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/depot_eleve", "DepotEleve supprimé.")
 
 
@@ -223,7 +223,7 @@ class DepotEleveController(BaseController):
         ids = DepotEleveController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/depot_eleve", "Aucun élément sélectionné.")
-        return BaseController.render("depot_eleve/bulk_delete_confirm.html",
+        return BaseController.render("app/depot_eleve/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

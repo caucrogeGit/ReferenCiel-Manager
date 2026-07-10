@@ -120,13 +120,13 @@ class StarterWelcomeController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = StarterWelcomeController._list_context(request)
-        template = "starter_welcome/_results.html" if _is_hx_request(request) else "starter_welcome/index.html"
+        template = "app/starter_welcome/_results.html" if _is_hx_request(request) else "app/starter_welcome/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = StarterWelcomeForm(**_starter_welcome_form_options())
-        return BaseController.render("starter_welcome/form.html",
+        return BaseController.render("app/starter_welcome/form.html",
             context={
                 "form": form,
                 "action": "/starter_welcome/create",
@@ -138,7 +138,7 @@ class StarterWelcomeController(BaseController):
     def create(request: Request) -> Response:
         form = StarterWelcomeForm.from_request(request, **_starter_welcome_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("starter_welcome/form.html",
+            return BaseController.validation_error("app/starter_welcome/form.html",
                 context={
                     "form": form,
                     "action": "/starter_welcome/create",
@@ -156,7 +156,7 @@ class StarterWelcomeController(BaseController):
         starter_welcome = get_starter_welcome_by_id(id)
         if starter_welcome is None:
             return BaseController.not_found()
-        return BaseController.render("starter_welcome/show.html",
+        return BaseController.render("app/starter_welcome/show.html",
             context={"starter_welcome": starter_welcome, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -168,7 +168,7 @@ class StarterWelcomeController(BaseController):
         starter_welcome = get_starter_welcome_by_id(id)
         if starter_welcome is None:
             return BaseController.not_found()
-        return BaseController.render("starter_welcome/form.html",
+        return BaseController.render("app/starter_welcome/form.html",
             context={
                 "form": StarterWelcomeForm(_form_data_from_starter_welcome(starter_welcome), **_starter_welcome_form_options()),
                 "action": f"/starter_welcome/update/{id}",
@@ -183,7 +183,7 @@ class StarterWelcomeController(BaseController):
             return BaseController.not_found()
         form = StarterWelcomeForm.from_request(request, **_starter_welcome_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("starter_welcome/form.html",
+            return BaseController.validation_error("app/starter_welcome/form.html",
                 context={
                     "form": form,
                     "action": f"/starter_welcome/update/{id}",
@@ -202,7 +202,7 @@ class StarterWelcomeController(BaseController):
         delete_starter_welcome(id)
         if _is_hx_request(request):
             context = StarterWelcomeController._list_context(request)
-            return BaseController.render("starter_welcome/_results.html", context=context, request=request)
+            return BaseController.render("app/starter_welcome/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/starter_welcome", "StarterWelcome supprimé.")
 
 
@@ -211,7 +211,7 @@ class StarterWelcomeController(BaseController):
         ids = StarterWelcomeController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/starter_welcome", "Aucun élément sélectionné.")
-        return BaseController.render("starter_welcome/bulk_delete_confirm.html",
+        return BaseController.render("app/starter_welcome/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

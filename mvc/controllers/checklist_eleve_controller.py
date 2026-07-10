@@ -25,7 +25,7 @@ class ChecklistEleveController:
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
-            "mon_parcours/checklist.html",
+            "app/mon_parcours/checklist.html",
             context={"checklist": data, "flash": get_flash(get_session_id(request))},
             request=request,
         )

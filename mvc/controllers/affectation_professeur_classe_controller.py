@@ -142,13 +142,13 @@ class AffectationProfesseurClasseController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = AffectationProfesseurClasseController._list_context(request)
-        template = "affectation_professeur_classe/_results.html" if _is_hx_request(request) else "affectation_professeur_classe/index.html"
+        template = "app/affectation_professeur_classe/_results.html" if _is_hx_request(request) else "app/affectation_professeur_classe/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = AffectationProfesseurClasseForm(**_affectation_professeur_classe_form_options())
-        return BaseController.render("affectation_professeur_classe/form.html",
+        return BaseController.render("app/affectation_professeur_classe/form.html",
             context={
                 "form": form,
                 "action": "/affectation_professeur_classe/create",
@@ -160,7 +160,7 @@ class AffectationProfesseurClasseController(BaseController):
     def create(request: Request) -> Response:
         form = AffectationProfesseurClasseForm.from_request(request, **_affectation_professeur_classe_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("affectation_professeur_classe/form.html",
+            return BaseController.validation_error("app/affectation_professeur_classe/form.html",
                 context={
                     "form": form,
                     "action": "/affectation_professeur_classe/create",
@@ -178,7 +178,7 @@ class AffectationProfesseurClasseController(BaseController):
         affectation_professeur_classe = get_affectation_professeur_classe_by_id(id)
         if affectation_professeur_classe is None:
             return BaseController.not_found()
-        return BaseController.render("affectation_professeur_classe/show.html",
+        return BaseController.render("app/affectation_professeur_classe/show.html",
             context={"affectation_professeur_classe": affectation_professeur_classe, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -190,7 +190,7 @@ class AffectationProfesseurClasseController(BaseController):
         affectation_professeur_classe = get_affectation_professeur_classe_by_id(id)
         if affectation_professeur_classe is None:
             return BaseController.not_found()
-        return BaseController.render("affectation_professeur_classe/form.html",
+        return BaseController.render("app/affectation_professeur_classe/form.html",
             context={
                 "form": AffectationProfesseurClasseForm(_form_data_from_affectation_professeur_classe(affectation_professeur_classe), **_affectation_professeur_classe_form_options()),
                 "action": f"/affectation_professeur_classe/update/{id}",
@@ -205,7 +205,7 @@ class AffectationProfesseurClasseController(BaseController):
             return BaseController.not_found()
         form = AffectationProfesseurClasseForm.from_request(request, **_affectation_professeur_classe_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("affectation_professeur_classe/form.html",
+            return BaseController.validation_error("app/affectation_professeur_classe/form.html",
                 context={
                     "form": form,
                     "action": f"/affectation_professeur_classe/update/{id}",
@@ -224,7 +224,7 @@ class AffectationProfesseurClasseController(BaseController):
         delete_affectation_professeur_classe(id)
         if _is_hx_request(request):
             context = AffectationProfesseurClasseController._list_context(request)
-            return BaseController.render("affectation_professeur_classe/_results.html", context=context, request=request)
+            return BaseController.render("app/affectation_professeur_classe/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/affectation_professeur_classe", "AffectationProfesseurClasse supprimé.")
 
 
@@ -233,7 +233,7 @@ class AffectationProfesseurClasseController(BaseController):
         ids = AffectationProfesseurClasseController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/affectation_professeur_classe", "Aucun élément sélectionné.")
-        return BaseController.render("affectation_professeur_classe/bulk_delete_confirm.html",
+        return BaseController.render("app/affectation_professeur_classe/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

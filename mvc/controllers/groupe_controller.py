@@ -137,13 +137,13 @@ class GroupeController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = GroupeController._list_context(request)
-        template = "groupe/_results.html" if _is_hx_request(request) else "groupe/index.html"
+        template = "app/groupe/_results.html" if _is_hx_request(request) else "app/groupe/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = GroupeForm(**_groupe_form_options())
-        return BaseController.render("groupe/form.html",
+        return BaseController.render("app/groupe/form.html",
             context={
                 "form": form,
                 "action": "/groupe/create",
@@ -158,7 +158,7 @@ class GroupeController(BaseController):
         form = GroupeForm.from_request(request, **_groupe_form_options())
         eleve_ids = GroupeController._parse_many_ids(request, "eleve_ids")
         if not form.is_valid():
-            return BaseController.validation_error("groupe/form.html",
+            return BaseController.validation_error("app/groupe/form.html",
                 context={
                     "form": form,
                     "action": "/groupe/create",
@@ -180,7 +180,7 @@ class GroupeController(BaseController):
         if groupe is None:
             return BaseController.not_found()
         eleve_labels = get_groupe_eleve_labels(id)
-        return BaseController.render("groupe/show.html",
+        return BaseController.render("app/groupe/show.html",
             context={"groupe": groupe, "flash": get_flash(get_session_id(request)), "eleve_labels": eleve_labels},
             request=request)
 
@@ -192,7 +192,7 @@ class GroupeController(BaseController):
         groupe = get_groupe_by_id(id)
         if groupe is None:
             return BaseController.not_found()
-        return BaseController.render("groupe/form.html",
+        return BaseController.render("app/groupe/form.html",
             context={
                 "form": GroupeForm(_form_data_from_groupe(groupe), **_groupe_form_options()),
                 "action": f"/groupe/update/{id}",
@@ -210,7 +210,7 @@ class GroupeController(BaseController):
         form = GroupeForm.from_request(request, **_groupe_form_options())
         eleve_ids = GroupeController._parse_many_ids(request, "eleve_ids")
         if not form.is_valid():
-            return BaseController.validation_error("groupe/form.html",
+            return BaseController.validation_error("app/groupe/form.html",
                 context={
                     "form": form,
                     "action": f"/groupe/update/{id}",
@@ -232,7 +232,7 @@ class GroupeController(BaseController):
         delete_groupe(id)
         if _is_hx_request(request):
             context = GroupeController._list_context(request)
-            return BaseController.render("groupe/_results.html", context=context, request=request)
+            return BaseController.render("app/groupe/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/groupe", "Groupe supprimé.")
 
 
@@ -241,7 +241,7 @@ class GroupeController(BaseController):
         ids = GroupeController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/groupe", "Aucun élément sélectionné.")
-        return BaseController.render("groupe/bulk_delete_confirm.html",
+        return BaseController.render("app/groupe/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

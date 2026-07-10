@@ -131,13 +131,13 @@ class ItemCocheController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ItemCocheController._list_context(request)
-        template = "item_coche/_results.html" if _is_hx_request(request) else "item_coche/index.html"
+        template = "app/item_coche/_results.html" if _is_hx_request(request) else "app/item_coche/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ItemCocheForm(**_item_coche_form_options())
-        return BaseController.render("item_coche/form.html",
+        return BaseController.render("app/item_coche/form.html",
             context={
                 "form": form,
                 "action": "/item_coche/create",
@@ -149,7 +149,7 @@ class ItemCocheController(BaseController):
     def create(request: Request) -> Response:
         form = ItemCocheForm.from_request(request, **_item_coche_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("item_coche/form.html",
+            return BaseController.validation_error("app/item_coche/form.html",
                 context={
                     "form": form,
                     "action": "/item_coche/create",
@@ -167,7 +167,7 @@ class ItemCocheController(BaseController):
         item_coche = get_item_coche_by_id(id)
         if item_coche is None:
             return BaseController.not_found()
-        return BaseController.render("item_coche/show.html",
+        return BaseController.render("app/item_coche/show.html",
             context={"item_coche": item_coche, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -179,7 +179,7 @@ class ItemCocheController(BaseController):
         item_coche = get_item_coche_by_id(id)
         if item_coche is None:
             return BaseController.not_found()
-        return BaseController.render("item_coche/form.html",
+        return BaseController.render("app/item_coche/form.html",
             context={
                 "form": ItemCocheForm(_form_data_from_item_coche(item_coche), **_item_coche_form_options()),
                 "action": f"/item_coche/update/{id}",
@@ -194,7 +194,7 @@ class ItemCocheController(BaseController):
             return BaseController.not_found()
         form = ItemCocheForm.from_request(request, **_item_coche_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("item_coche/form.html",
+            return BaseController.validation_error("app/item_coche/form.html",
                 context={
                     "form": form,
                     "action": f"/item_coche/update/{id}",
@@ -213,7 +213,7 @@ class ItemCocheController(BaseController):
         delete_item_coche(id)
         if _is_hx_request(request):
             context = ItemCocheController._list_context(request)
-            return BaseController.render("item_coche/_results.html", context=context, request=request)
+            return BaseController.render("app/item_coche/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/item_coche", "ItemCoche supprimé.")
 
 
@@ -222,7 +222,7 @@ class ItemCocheController(BaseController):
         ids = ItemCocheController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/item_coche", "Aucun élément sélectionné.")
-        return BaseController.render("item_coche/bulk_delete_confirm.html",
+        return BaseController.render("app/item_coche/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

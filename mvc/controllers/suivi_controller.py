@@ -18,7 +18,7 @@ class SuiviController:
     def index(request: Request) -> Response:
         """Liste des affectations à suivre (`GET /suivi`)."""
         return BaseController.render(
-            "suivi/index.html",
+            "app/suivi/index.html",
             context={"affectations": list_affectations()},
             request=request,
         )
@@ -31,7 +31,7 @@ class SuiviController:
         if affectation is None:
             return BaseController.not_found()
         return BaseController.render(
-            "suivi/show.html",
+            "app/suivi/show.html",
             context={"affectation": affectation, "eleves": suivi_eleves(affectation_id)},
             request=request,
         )

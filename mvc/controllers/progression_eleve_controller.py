@@ -131,13 +131,13 @@ class ProgressionEleveController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ProgressionEleveController._list_context(request)
-        template = "progression_eleve/_results.html" if _is_hx_request(request) else "progression_eleve/index.html"
+        template = "app/progression_eleve/_results.html" if _is_hx_request(request) else "app/progression_eleve/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ProgressionEleveForm(**_progression_eleve_form_options())
-        return BaseController.render("progression_eleve/form.html",
+        return BaseController.render("app/progression_eleve/form.html",
             context={
                 "form": form,
                 "action": "/progression_eleve/create",
@@ -149,7 +149,7 @@ class ProgressionEleveController(BaseController):
     def create(request: Request) -> Response:
         form = ProgressionEleveForm.from_request(request, **_progression_eleve_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("progression_eleve/form.html",
+            return BaseController.validation_error("app/progression_eleve/form.html",
                 context={
                     "form": form,
                     "action": "/progression_eleve/create",
@@ -167,7 +167,7 @@ class ProgressionEleveController(BaseController):
         progression_eleve = get_progression_eleve_by_id(id)
         if progression_eleve is None:
             return BaseController.not_found()
-        return BaseController.render("progression_eleve/show.html",
+        return BaseController.render("app/progression_eleve/show.html",
             context={"progression_eleve": progression_eleve, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -179,7 +179,7 @@ class ProgressionEleveController(BaseController):
         progression_eleve = get_progression_eleve_by_id(id)
         if progression_eleve is None:
             return BaseController.not_found()
-        return BaseController.render("progression_eleve/form.html",
+        return BaseController.render("app/progression_eleve/form.html",
             context={
                 "form": ProgressionEleveForm(_form_data_from_progression_eleve(progression_eleve), **_progression_eleve_form_options()),
                 "action": f"/progression_eleve/update/{id}",
@@ -194,7 +194,7 @@ class ProgressionEleveController(BaseController):
             return BaseController.not_found()
         form = ProgressionEleveForm.from_request(request, **_progression_eleve_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("progression_eleve/form.html",
+            return BaseController.validation_error("app/progression_eleve/form.html",
                 context={
                     "form": form,
                     "action": f"/progression_eleve/update/{id}",
@@ -213,7 +213,7 @@ class ProgressionEleveController(BaseController):
         delete_progression_eleve(id)
         if _is_hx_request(request):
             context = ProgressionEleveController._list_context(request)
-            return BaseController.render("progression_eleve/_results.html", context=context, request=request)
+            return BaseController.render("app/progression_eleve/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/progression_eleve", "ProgressionEleve supprimé.")
 
 
@@ -222,7 +222,7 @@ class ProgressionEleveController(BaseController):
         ids = ProgressionEleveController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/progression_eleve", "Aucun élément sélectionné.")
-        return BaseController.render("progression_eleve/bulk_delete_confirm.html",
+        return BaseController.render("app/progression_eleve/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

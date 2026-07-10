@@ -143,13 +143,13 @@ class EvaluationActiviteController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = EvaluationActiviteController._list_context(request)
-        template = "evaluation_activite/_results.html" if _is_hx_request(request) else "evaluation_activite/index.html"
+        template = "app/evaluation_activite/_results.html" if _is_hx_request(request) else "app/evaluation_activite/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = EvaluationActiviteForm(**_evaluation_activite_form_options())
-        return BaseController.render("evaluation_activite/form.html",
+        return BaseController.render("app/evaluation_activite/form.html",
             context={
                 "form": form,
                 "action": "/evaluation_activite/create",
@@ -161,7 +161,7 @@ class EvaluationActiviteController(BaseController):
     def create(request: Request) -> Response:
         form = EvaluationActiviteForm.from_request(request, **_evaluation_activite_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("evaluation_activite/form.html",
+            return BaseController.validation_error("app/evaluation_activite/form.html",
                 context={
                     "form": form,
                     "action": "/evaluation_activite/create",
@@ -179,7 +179,7 @@ class EvaluationActiviteController(BaseController):
         evaluation_activite = get_evaluation_activite_by_id(id)
         if evaluation_activite is None:
             return BaseController.not_found()
-        return BaseController.render("evaluation_activite/show.html",
+        return BaseController.render("app/evaluation_activite/show.html",
             context={"evaluation_activite": evaluation_activite, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -191,7 +191,7 @@ class EvaluationActiviteController(BaseController):
         evaluation_activite = get_evaluation_activite_by_id(id)
         if evaluation_activite is None:
             return BaseController.not_found()
-        return BaseController.render("evaluation_activite/form.html",
+        return BaseController.render("app/evaluation_activite/form.html",
             context={
                 "form": EvaluationActiviteForm(_form_data_from_evaluation_activite(evaluation_activite), **_evaluation_activite_form_options()),
                 "action": f"/evaluation_activite/update/{id}",
@@ -206,7 +206,7 @@ class EvaluationActiviteController(BaseController):
             return BaseController.not_found()
         form = EvaluationActiviteForm.from_request(request, **_evaluation_activite_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("evaluation_activite/form.html",
+            return BaseController.validation_error("app/evaluation_activite/form.html",
                 context={
                     "form": form,
                     "action": f"/evaluation_activite/update/{id}",
@@ -225,7 +225,7 @@ class EvaluationActiviteController(BaseController):
         delete_evaluation_activite(id)
         if _is_hx_request(request):
             context = EvaluationActiviteController._list_context(request)
-            return BaseController.render("evaluation_activite/_results.html", context=context, request=request)
+            return BaseController.render("app/evaluation_activite/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/evaluation_activite", "EvaluationActivite supprimé.")
 
 
@@ -234,7 +234,7 @@ class EvaluationActiviteController(BaseController):
         ids = EvaluationActiviteController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/evaluation_activite", "Aucun élément sélectionné.")
-        return BaseController.render("evaluation_activite/bulk_delete_confirm.html",
+        return BaseController.render("app/evaluation_activite/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

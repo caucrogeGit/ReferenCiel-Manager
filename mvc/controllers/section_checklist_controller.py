@@ -119,13 +119,13 @@ class SectionChecklistController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = SectionChecklistController._list_context(request)
-        template = "section_checklist/_results.html" if _is_hx_request(request) else "section_checklist/index.html"
+        template = "app/section_checklist/_results.html" if _is_hx_request(request) else "app/section_checklist/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = SectionChecklistForm(**_section_checklist_form_options())
-        return BaseController.render("section_checklist/form.html",
+        return BaseController.render("app/section_checklist/form.html",
             context={
                 "form": form,
                 "action": "/section_checklist/create",
@@ -137,7 +137,7 @@ class SectionChecklistController(BaseController):
     def create(request: Request) -> Response:
         form = SectionChecklistForm.from_request(request, **_section_checklist_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("section_checklist/form.html",
+            return BaseController.validation_error("app/section_checklist/form.html",
                 context={
                     "form": form,
                     "action": "/section_checklist/create",
@@ -155,7 +155,7 @@ class SectionChecklistController(BaseController):
         section_checklist = get_section_checklist_by_id(id)
         if section_checklist is None:
             return BaseController.not_found()
-        return BaseController.render("section_checklist/show.html",
+        return BaseController.render("app/section_checklist/show.html",
             context={"section_checklist": section_checklist, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -167,7 +167,7 @@ class SectionChecklistController(BaseController):
         section_checklist = get_section_checklist_by_id(id)
         if section_checklist is None:
             return BaseController.not_found()
-        return BaseController.render("section_checklist/form.html",
+        return BaseController.render("app/section_checklist/form.html",
             context={
                 "form": SectionChecklistForm(_form_data_from_section_checklist(section_checklist), **_section_checklist_form_options()),
                 "action": f"/section_checklist/update/{id}",
@@ -182,7 +182,7 @@ class SectionChecklistController(BaseController):
             return BaseController.not_found()
         form = SectionChecklistForm.from_request(request, **_section_checklist_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("section_checklist/form.html",
+            return BaseController.validation_error("app/section_checklist/form.html",
                 context={
                     "form": form,
                     "action": f"/section_checklist/update/{id}",
@@ -201,7 +201,7 @@ class SectionChecklistController(BaseController):
         delete_section_checklist(id)
         if _is_hx_request(request):
             context = SectionChecklistController._list_context(request)
-            return BaseController.render("section_checklist/_results.html", context=context, request=request)
+            return BaseController.render("app/section_checklist/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/section_checklist", "SectionChecklist supprimé.")
 
 
@@ -210,7 +210,7 @@ class SectionChecklistController(BaseController):
         ids = SectionChecklistController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/section_checklist", "Aucun élément sélectionné.")
-        return BaseController.render("section_checklist/bulk_delete_confirm.html",
+        return BaseController.render("app/section_checklist/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

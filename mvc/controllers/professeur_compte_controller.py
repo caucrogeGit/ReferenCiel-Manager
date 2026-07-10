@@ -27,7 +27,7 @@ class ProfesseurCompteController:
     def index(request: Request) -> Response:
         """Liste des professeurs + formulaire (`GET /professeur/comptes`)."""
         return BaseController.render(
-            "professeur_compte/index.html",
+            "app/professeur_compte/index.html",
             context={
                 "professeurs": list_professeurs_avec_compte(),
                 "sans_compte": professeurs_sans_compte(),
@@ -57,7 +57,7 @@ class ProfesseurCompteController:
 
         if erreurs:
             return BaseController.render(
-                "professeur_compte/index.html",
+                "app/professeur_compte/index.html",
                 status=422,
                 context={
                     "professeurs": list_professeurs_avec_compte(),

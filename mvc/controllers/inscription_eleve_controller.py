@@ -142,13 +142,13 @@ class InscriptionEleveController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = InscriptionEleveController._list_context(request)
-        template = "inscription_eleve/_results.html" if _is_hx_request(request) else "inscription_eleve/index.html"
+        template = "app/inscription_eleve/_results.html" if _is_hx_request(request) else "app/inscription_eleve/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = InscriptionEleveForm(**_inscription_eleve_form_options())
-        return BaseController.render("inscription_eleve/form.html",
+        return BaseController.render("app/inscription_eleve/form.html",
             context={
                 "form": form,
                 "action": "/inscription_eleve/create",
@@ -160,7 +160,7 @@ class InscriptionEleveController(BaseController):
     def create(request: Request) -> Response:
         form = InscriptionEleveForm.from_request(request, **_inscription_eleve_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("inscription_eleve/form.html",
+            return BaseController.validation_error("app/inscription_eleve/form.html",
                 context={
                     "form": form,
                     "action": "/inscription_eleve/create",
@@ -178,7 +178,7 @@ class InscriptionEleveController(BaseController):
         inscription_eleve = get_inscription_eleve_by_id(id)
         if inscription_eleve is None:
             return BaseController.not_found()
-        return BaseController.render("inscription_eleve/show.html",
+        return BaseController.render("app/inscription_eleve/show.html",
             context={"inscription_eleve": inscription_eleve, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -190,7 +190,7 @@ class InscriptionEleveController(BaseController):
         inscription_eleve = get_inscription_eleve_by_id(id)
         if inscription_eleve is None:
             return BaseController.not_found()
-        return BaseController.render("inscription_eleve/form.html",
+        return BaseController.render("app/inscription_eleve/form.html",
             context={
                 "form": InscriptionEleveForm(_form_data_from_inscription_eleve(inscription_eleve), **_inscription_eleve_form_options()),
                 "action": f"/inscription_eleve/update/{id}",
@@ -205,7 +205,7 @@ class InscriptionEleveController(BaseController):
             return BaseController.not_found()
         form = InscriptionEleveForm.from_request(request, **_inscription_eleve_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("inscription_eleve/form.html",
+            return BaseController.validation_error("app/inscription_eleve/form.html",
                 context={
                     "form": form,
                     "action": f"/inscription_eleve/update/{id}",
@@ -224,7 +224,7 @@ class InscriptionEleveController(BaseController):
         delete_inscription_eleve(id)
         if _is_hx_request(request):
             context = InscriptionEleveController._list_context(request)
-            return BaseController.render("inscription_eleve/_results.html", context=context, request=request)
+            return BaseController.render("app/inscription_eleve/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/inscription_eleve", "InscriptionEleve supprimé.")
 
 
@@ -233,7 +233,7 @@ class InscriptionEleveController(BaseController):
         ids = InscriptionEleveController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/inscription_eleve", "Aucun élément sélectionné.")
-        return BaseController.render("inscription_eleve/bulk_delete_confirm.html",
+        return BaseController.render("app/inscription_eleve/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

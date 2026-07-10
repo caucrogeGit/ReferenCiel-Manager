@@ -28,7 +28,7 @@ class DepotEleveSaisieController:
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
-            "mon_parcours/depot.html",
+            "app/mon_parcours/depot.html",
             context={"activite": data, "flash": get_flash(get_session_id(request))},
             request=request,
         )

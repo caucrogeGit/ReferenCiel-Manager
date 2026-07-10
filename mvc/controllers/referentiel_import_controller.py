@@ -27,7 +27,7 @@ _TYPE_ATTENDU = "referentiel_niveau_classe"
 def _refuser(request: Request, messages: list[str], titre: str = "Import refusé") -> Response:
     """Ré-affiche le formulaire avec les messages d'erreur (rien n'est importé)."""
     return BaseController.render(
-        "referentiel_import/form.html",
+        "app/referentiel_import/form.html",
         status=400,
         context={"erreurs": messages, "titre_erreur": titre},
         request=request,
@@ -39,7 +39,7 @@ class ReferentielImportController:
     def form(request: Request) -> Response:
         """Formulaire d'upload (`GET /admin/referentiel/import`)."""
         return BaseController.render(
-            "referentiel_import/form.html", context={}, request=request
+            "app/referentiel_import/form.html", context={}, request=request
         )
 
     @staticmethod
@@ -74,7 +74,7 @@ class ReferentielImportController:
 
         rapport = import_referentiel(canonique)
         return BaseController.render(
-            "referentiel_import/rapport.html",
+            "app/referentiel_import/rapport.html",
             context={
                 "rapport": rapport,
                 "fichier": saved.original_name,

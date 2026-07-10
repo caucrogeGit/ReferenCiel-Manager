@@ -119,13 +119,13 @@ class ActiviteController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = ActiviteController._list_context(request)
-        template = "activite/_results.html" if _is_hx_request(request) else "activite/index.html"
+        template = "app/activite/_results.html" if _is_hx_request(request) else "app/activite/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = ActiviteForm(**_activite_form_options())
-        return BaseController.render("activite/form.html",
+        return BaseController.render("app/activite/form.html",
             context={
                 "form": form,
                 "action": "/activite/create",
@@ -137,7 +137,7 @@ class ActiviteController(BaseController):
     def create(request: Request) -> Response:
         form = ActiviteForm.from_request(request, **_activite_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("activite/form.html",
+            return BaseController.validation_error("app/activite/form.html",
                 context={
                     "form": form,
                     "action": "/activite/create",
@@ -155,7 +155,7 @@ class ActiviteController(BaseController):
         activite = get_activite_by_id(id)
         if activite is None:
             return BaseController.not_found()
-        return BaseController.render("activite/show.html",
+        return BaseController.render("app/activite/show.html",
             context={"activite": activite, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -167,7 +167,7 @@ class ActiviteController(BaseController):
         activite = get_activite_by_id(id)
         if activite is None:
             return BaseController.not_found()
-        return BaseController.render("activite/form.html",
+        return BaseController.render("app/activite/form.html",
             context={
                 "form": ActiviteForm(_form_data_from_activite(activite), **_activite_form_options()),
                 "action": f"/activite/update/{id}",
@@ -182,7 +182,7 @@ class ActiviteController(BaseController):
             return BaseController.not_found()
         form = ActiviteForm.from_request(request, **_activite_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("activite/form.html",
+            return BaseController.validation_error("app/activite/form.html",
                 context={
                     "form": form,
                     "action": f"/activite/update/{id}",
@@ -201,7 +201,7 @@ class ActiviteController(BaseController):
         delete_activite(id)
         if _is_hx_request(request):
             context = ActiviteController._list_context(request)
-            return BaseController.render("activite/_results.html", context=context, request=request)
+            return BaseController.render("app/activite/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/activite", "Activite supprimé.")
 
 
@@ -210,7 +210,7 @@ class ActiviteController(BaseController):
         ids = ActiviteController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/activite", "Aucun élément sélectionné.")
-        return BaseController.render("activite/bulk_delete_confirm.html",
+        return BaseController.render("app/activite/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 

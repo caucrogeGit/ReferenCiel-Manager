@@ -119,13 +119,13 @@ class QCMController(BaseController):
     @staticmethod
     def index(request: Request) -> Response:
         context = QCMController._list_context(request)
-        template = "qcm/_results.html" if _is_hx_request(request) else "qcm/index.html"
+        template = "app/qcm/_results.html" if _is_hx_request(request) else "app/qcm/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
         form = QCMForm(**_qcm_form_options())
-        return BaseController.render("qcm/form.html",
+        return BaseController.render("app/qcm/form.html",
             context={
                 "form": form,
                 "action": "/qcm/create",
@@ -137,7 +137,7 @@ class QCMController(BaseController):
     def create(request: Request) -> Response:
         form = QCMForm.from_request(request, **_qcm_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("qcm/form.html",
+            return BaseController.validation_error("app/qcm/form.html",
                 context={
                     "form": form,
                     "action": "/qcm/create",
@@ -155,7 +155,7 @@ class QCMController(BaseController):
         qcm = get_qcm_by_id(id)
         if qcm is None:
             return BaseController.not_found()
-        return BaseController.render("qcm/show.html",
+        return BaseController.render("app/qcm/show.html",
             context={"qcm": qcm, "flash": get_flash(get_session_id(request))},
             request=request)
 
@@ -167,7 +167,7 @@ class QCMController(BaseController):
         qcm = get_qcm_by_id(id)
         if qcm is None:
             return BaseController.not_found()
-        return BaseController.render("qcm/form.html",
+        return BaseController.render("app/qcm/form.html",
             context={
                 "form": QCMForm(_form_data_from_qcm(qcm), **_qcm_form_options()),
                 "action": f"/qcm/update/{id}",
@@ -182,7 +182,7 @@ class QCMController(BaseController):
             return BaseController.not_found()
         form = QCMForm.from_request(request, **_qcm_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("qcm/form.html",
+            return BaseController.validation_error("app/qcm/form.html",
                 context={
                     "form": form,
                     "action": f"/qcm/update/{id}",
@@ -201,7 +201,7 @@ class QCMController(BaseController):
         delete_qcm(id)
         if _is_hx_request(request):
             context = QCMController._list_context(request)
-            return BaseController.render("qcm/_results.html", context=context, request=request)
+            return BaseController.render("app/qcm/_results.html", context=context, request=request)
         return BaseController.redirect_with_flash(request, "/qcm", "QCM supprimé.")
 
 
@@ -210,7 +210,7 @@ class QCMController(BaseController):
         ids = QCMController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/qcm", "Aucun élément sélectionné.")
-        return BaseController.render("qcm/bulk_delete_confirm.html",
+        return BaseController.render("app/qcm/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 
