@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "name": "TentativeQCM",
+  "table": "tentative_qcm",
+  "fields": [
+    {
+      "name": "numero_tentative",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "score",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "validee",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "date_tentative",
+      "type": "datetime",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "progression_palier_id",
+      "type": "foreign_key",
+      "references": "ProgressionPalier",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

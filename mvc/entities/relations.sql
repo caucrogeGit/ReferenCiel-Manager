@@ -384,3 +384,31 @@ ALTER TABLE choix_qcm
     REFERENCES question_qcm (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE tentative_qcm
+    ADD CONSTRAINT fk_tentative_qcm_progression_palier_id
+    FOREIGN KEY (progression_palier_id)
+    REFERENCES progression_palier (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE reponse_qcm
+    ADD CONSTRAINT fk_reponse_qcm_tentative_id
+    FOREIGN KEY (tentative_id)
+    REFERENCES tentative_qcm (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE reponse_qcm
+    ADD CONSTRAINT fk_reponse_qcm_question_id
+    FOREIGN KEY (question_id)
+    REFERENCES question_qcm (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE reponse_qcm
+    ADD CONSTRAINT fk_reponse_qcm_choix_id
+    FOREIGN KEY (choix_id)
+    REFERENCES choix_qcm (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;

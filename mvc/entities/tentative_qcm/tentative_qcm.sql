@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS tentative_qcm (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    NumeroTentative INT NOT NULL,
+    Score INT NOT NULL,
+    Validee BOOLEAN NOT NULL,
+    DateTentative DATETIME NOT NULL,
+    progression_palier_id BIGINT UNSIGNED NOT NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

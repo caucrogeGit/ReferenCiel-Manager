@@ -525,6 +525,50 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "TentativeQCM",
+      "to": "ProgressionPalier",
+      "name": "progression_palier",
+      "inverse_name": "tentatives",
+      "foreign_key": "progression_palier_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ReponseQCM",
+      "to": "TentativeQCM",
+      "name": "tentative",
+      "inverse_name": "reponses",
+      "foreign_key": "tentative_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ReponseQCM",
+      "to": "QuestionQCM",
+      "name": "question",
+      "inverse_name": "reponses",
+      "foreign_key": "question_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ReponseQCM",
+      "to": "ChoixQCM",
+      "name": "choix",
+      "inverse_name": "reponses",
+      "foreign_key": "choix_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "name": "ReponseQCM",
+  "table": "reponse_qcm",
+  "fields": [
+    {
+      "name": "est_correcte",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "tentative_id",
+      "type": "foreign_key",
+      "references": "TentativeQCM",
+      "required": true
+    },
+    {
+      "name": "question_id",
+      "type": "foreign_key",
+      "references": "QuestionQCM",
+      "required": true
+    },
+    {
+      "name": "choix_id",
+      "type": "foreign_key",
+      "references": "ChoixQCM",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}
