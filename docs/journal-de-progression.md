@@ -527,13 +527,14 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | **Nav + RBAC — TERMINÉ ✅** | Barre à menus déroulants par domaine (`nav.html`/`nav.css`). **Rôles opérationnels** via une **couche fine maison** (`mvc/services/rbac.py`, [ADR-012](adr/012-rbac-couche-fine-maison-sur-contrat.md)) : rôles lus en base depuis la session moderne, décision au **contrat** `rbac.json`. `can()` filtre la nav, `guard_prefix` protège les routes. **admin** voit tout ; **professeur** voit Conception/Exécution/Suivi (pas Admin) ; anonyme sur route socle → **403** |
 | **Espace élève — v1 ✅** | Rôle **`eleve`** (contrat + base). Lien compte↔élève : FK 1↔1 `eleve.UserId` → `users(id)` (INT, UNIQUE, `ON DELETE SET NULL`). Vue **« Mon parcours »** (`/mon-parcours`, `espace_eleve.voir`) : lecture seule, filtrée par compte (row-level), parcours affectés + paliers. Lien de nav réservé à l'élève |
 | **Comptes élèves — flux admin ✅** | Écran **`/eleve/comptes`** (gardé `socle.gerer`) : l'admin crée un compte `users` (email + mot de passe hashé), lui pose le rôle `eleve` et le **lie** à une fiche `Eleve` — en une transaction. Validé bout-en-bout sur MariaDB (compte jetable). **Testable au navigateur** : créer un compte élève, se connecter, voir « Mon parcours » |
-| Qualité | `make check` vert (5 portes, **48 tests**) |
+| **Espace élève v2 — passer un QCM ✅** | Première **écriture** élève : `/mon-parcours/qcm/{id}` (gardé `espace_eleve.voir` + **appartenance**). Correction **côté serveur** (`choix.Lettre` vs `question_qcm.BonneReponse`), score en %, tentative + réponses (`EstCorrecte` figée) + statut palier en une transaction. Règle : **100 % → validé**, sinon en cours ; pas de régression ; tentatives multiples. Toutes les requêtes validées contre le schéma MariaDB |
+| Qualité | `make check` vert (5 portes, **51 tests**) |
 
-> Prochaine étape : **test navigateur** de la chaîne complète (admin crée un compte élève →
-> l'élève se connecte → « Mon parcours »), puis **v2 de l'espace élève** (passer des paliers
-> en saisie : QCM, checklist, dépôt — écritures avec contrôle d'appartenance). Le modèle
-> (42 entités), l'exécution, l'import référentiel, la nav, le **RBAC**, l'**espace élève v1**
-> et le **flux comptes élèves** sont en place. Défauts Forge remontés :
+> Prochaine étape : **compléter la saisie élève** — checklist (cocher les items) et
+> dépôt de fichier (activité), sur le même patron que le QCM (écriture + contrôle
+> d'appartenance) ; puis **test navigateur** de la chaîne complète. En place : le modèle
+> (42 entités), l'exécution, l'import référentiel, la nav, le **RBAC**, l'**espace élève**
+> (v1 « Mon parcours » + v2 QCM scoré) et le **flux comptes élèves**. Défauts Forge remontés :
 > retour-010 (F22 partiel), retour-012 (F26/F27 — **F27 re-rencontré 3×**), retour-013 (F28),
 > retour-014 (F29), **retour-015 (F30/F31/F32 — RBAC : resolveur sur session dépréciée,
 > schéma non livré, deux modèles de permission)**.
