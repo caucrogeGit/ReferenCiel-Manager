@@ -28,17 +28,42 @@ from forge_mvc_mfa import (
     decrypt_totp_secret,
     totp_provisioning_uri,
     validate_mfa_secret_key_config,
+    verify_recovery_code,
+    verify_totp_code,
 )
 
 from mvc.models.mfa_model import (
     activate_factor,
     count_unused_recovery,
     desactiver_mfa,
+    get_active_totp_factors,
     get_pending_totp_factor,
+    get_unused_recovery_codes,
     has_active_totp,
     insert_factor,
+    mark_recovery_used,
     remplacer_recovery_codes,
 )
+
+
+def _revalider_second_facteur(user_id: int, code: str) -> bool:
+    """Re-vérifie le 2e facteur (TOTP ou code de secours) pour une action sensible.
+
+    Contourne `verify_mfa_revalidation` de l'opt-in, qui exige une session au format
+    déprécié (cf. retour-015 F30, même limite que le RBAC ADR-012). On vérifie donc
+    directement contre les facteurs/codes du compte. Un code de secours utilisé est
+    consommé.
+    """
+    if not code.strip():
+        return False
+    for factor in get_active_totp_factors(user_id):
+        if verify_totp_code(decrypt_totp_secret(factor.totp_secret), code):
+            return True
+    for rec in get_unused_recovery_codes(user_id):
+        if verify_recovery_code(code, rec.code_hash):
+            mark_recovery_used(rec.code_hash)
+            return True
+    return False
 
 _ISSUER = "ReferenCiel-Manager"
 
@@ -148,11 +173,38 @@ class SecuriteController:
         )
 
     @staticmethod
-    def desactiver(request: Request) -> Response:
-        """Désactive la MFA du compte (`POST /securite/desactiver`)."""
+    def desactiver_confirm(request: Request) -> Response:
+        """Page de confirmation de désactivation (`GET /securite/desactiver`).
+
+        Action sensible : si la MFA est active et qu'aucune revalidation récente
+        n'existe, on exige un code (TOTP ou code de secours) — step-up (ADR-014).
+        """
         user_id = get_authenticated_user_id(request)
         if user_id is None:
             return BaseController.redirect("/login")
+        if not has_active_totp(user_id):
+            return BaseController.redirect("/securite")
+        return BaseController.render(
+            "app/securite/desactiver.html",
+            context={"besoin_code": True, "erreur": ""},
+            request=request,
+        )
+
+    @staticmethod
+    def desactiver(request: Request) -> Response:
+        """Désactive la MFA du compte, après re-preuve du 2e facteur (`POST /securite/desactiver`)."""
+        user_id = get_authenticated_user_id(request)
+        if user_id is None:
+            return BaseController.redirect("/login")
+        if has_active_totp(user_id):
+            # Step-up : re-prouver le second facteur avant de retirer la MFA.
+            if not _revalider_second_facteur(user_id, request.form("code", "")):
+                return BaseController.render(
+                    "app/securite/desactiver.html",
+                    status=422,
+                    context={"besoin_code": True, "erreur": "Code invalide. Réessayez."},
+                    request=request,
+                )
         desactiver_mfa(user_id)
         return BaseController.redirect_with_flash(
             request, "/securite", "MFA désactivée.", "success"

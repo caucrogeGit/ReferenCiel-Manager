@@ -55,10 +55,19 @@ sous `mvc/models/sql/` mais **n'est pas migré** (le socle auth l'a délibérém
 6. **Audit.** Les événements `AUTH_EVENT_MFA_REQUIRED` / `_CHALLENGE_SUCCESS` /
    `_CHALLENGE_FAILED` sont émis autour du flux (table `auth_audit_log`, déjà migrée).
 
-7. **Différé (incréments ultérieurs).** La **revalidation step-up**
-   (`require_recent_mfa` avant actions sensibles) et le durcissement multi-worker de
-   l'anti-rejeu ne sont **pas** dans ce premier incrément. L'obligation de MFA (au
-   lieu de l'option) reste hors périmètre tant que le besoin ne l'impose pas.
+7. **Step-up sur la désactivation.** Retirer la MFA est une action sensible : elle
+   exige une **re-preuve du 2ᵉ facteur** (code TOTP ou de secours). L'API de
+   revalidation de l'opt-in (`verify_mfa_revalidation`, `require_recent_mfa`) étant
+   **inutilisable** avec l'auth moderne (elle lit une session dépréciée — même défaut
+   que le RBAC, cf. [retour-019](../banc-essai/retour-019-mfa-revalidation-step-up-session-depreciee.md)
+   / F30), on **contourne** en vérifiant le facteur directement (`verify_totp_code` /
+   `verify_recovery_code`), comme l'ADR-012 contourne le resolveur RBAC. Le step-up
+   demande donc un code à chaque désactivation (pas de fenêtre de revalidation).
+
+8. **Différé (incréments ultérieurs).** Le step-up « à fenêtre » (revalidation valable
+   10 min via l'API de l'opt-in) attend le correctif Forge du F30/F42 ; le durcissement
+   multi-worker de l'anti-rejeu et l'obligation de MFA (au lieu de l'option) restent
+   hors périmètre tant que le besoin ne l'impose pas.
 
 ## Conséquences
 

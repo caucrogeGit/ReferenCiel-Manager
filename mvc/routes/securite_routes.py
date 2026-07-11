@@ -16,4 +16,5 @@ def register_securite_routes(router: Router) -> None:
         g.add("GET", "/activer", SecuriteController.activer, name="securite-activer")
         g.add("POST", "/confirmer", SecuriteController.confirmer, name="securite-confirmer")
         g.add("POST", "/codes/regenerer", SecuriteController.regenerer_codes, name="securite-codes-regenerer")
+        g.add("GET", "/desactiver", SecuriteController.desactiver_confirm, name="securite-desactiver_confirm")
         g.add("POST", "/desactiver", SecuriteController.desactiver, name="securite-desactiver")
