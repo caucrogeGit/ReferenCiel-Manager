@@ -87,9 +87,9 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 06 | **ADR-003 — Architecture Forge (mvc/ vs app/, contrats, migrations, services, repositories)** — prérequis du code | — | Terminé (Accepté) |
 | 07 | Tranche verticale Bloc A (walking skeleton) : contrats d'entité → migrations Forge → accès données → vue professeur minimale listant classes/élèves (derrière l'auth Forge). Aboutissement : espace professeur « Mes classes » (`/mes-classes`), filtré par compte (`professeur.UserId`), gardé par `suivi.voir` (le RBAC ayant été câblé depuis, ADR-012). Vérifié de bout en bout (login prof → liste). | A | Terminé |
 | 08 | [Dictionnaire de données Référentiel](../specs/data-dictionary/dictionnaire-referentiel-niveau-classe.md) (Formation, NiveauClasse, PôleActivité, ActivitéProfessionnelle + tâches/résultats, Compétence + connaissances/critères, Indicateur, FamilleCompétence, Source, relations, règles) | Référentiel | Terminé |
-| 09 | Modèle relationnel + contrats d'entité référentiel | Référentiel | À faire |
-| 10 | Migrations référentiel (via `forge`) | Référentiel | À faire |
-| 11 | Importeur JSON canonique → base référentielle | Référentiel | À faire |
+| 09 | Modèle relationnel + contrats d'entité référentiel. Vérifié : 12 contrats d'entité valides + toutes les relations du dictionnaire, dont les 2 pivots M2M (`activite_competence`, `cc_competence`). | Référentiel | Terminé |
+| 10 | Migrations référentiel (via `forge`). Vérifié : `create_referentiel.sql` crée les 14 tables + contraintes FK ; tables présentes en base. | Référentiel | Terminé |
+| 11 | Importeur JSON canonique → base référentielle. Chaîne validation schéma → import upsert best-effort → rapport (ADR-010). Vérifié sur la fixture `ciel-2tne` (81 objets, pivots M2M compris). | Référentiel | Terminé |
 | 12 | Dictionnaire de données `Scenario` | Scénario | À faire |
 | 13 | Chaîne `Scenario` (contrat, migration, service, interface prof minimale, tests de persistance) | Scénario | À faire |
 | 13b | [Dictionnaire de données Starter Welcome](../specs/data-dictionary/dictionnaire-starter-welcome.md) (StarterWelcome, Palier, QCM/Question/Choix, Activite, Checklist/Section/Item, Image, Ressource ; contenu par référence ; lien `Palier ↔ Competence` optionnel) | Starter | Terminé |

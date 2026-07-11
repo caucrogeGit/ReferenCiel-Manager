@@ -2,7 +2,7 @@
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
 **Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
-**Statut :** à remonter.
+**Statut :** à remonter — **F26 confirmé persistant en Forge 1.0.0rc2** (2026-07-11, voir note sous F26).
 
 ## Environnement
 
@@ -61,6 +61,17 @@ néanmoins dans la chaîne — l'un dans la validation, l'autre à l'application
 - **Correctif proposé** : dans la règle 7, **exclure les champs `type == "foreign_key"`**
   de `existing_fields` (ou ne signaler la collision que si le champ homonyme est d'un
   **autre** type). Un champ `foreign_key` portant le nom de la FK est l'état **attendu**.
+
+- **Confirmation (2026-07-11, Forge 1.0.0rc2 / `forge-mvc-entities` 1.0.0rc2)** : F26
+  **persiste**. `forge entity:validate` remonte **54** occurrences
+  `FORGE_RELATION_FK_COLLISION` — une par champ `foreign_key` du projet — sur toutes les
+  entités liées (socle scolaire, référentiel, Bloc B). Chaque entité reste valide
+  individuellement (`[OK]`) ; seules les **relations** sont rejetées. Schéma en base
+  **sain** (une colonne + une contrainte par FK, vérifié sur `referentiel_niveau_classe`).
+  `make check` / `forge project:check` restent **verts** (cette règle n'y est pas
+  exécutée). Non corrigé côté framework à ce jour ; contrats projet **inchangés** (le
+  pattern champ + relation est l'état officiel ADR-069). Constaté lors de la vérification
+  des tickets 09–11 (chaîne référentiel).
 
 ### F27 — `split_sql_statements` : une apostrophe **dans un commentaire** casse le découpage des instructions
 
