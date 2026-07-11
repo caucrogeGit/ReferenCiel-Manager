@@ -27,6 +27,7 @@ from mvc.routes.evaluation_critere_routes import register_evaluation_critere_rou
 from mvc.routes.evaluation_prof_routes import register_evaluation_prof_routes
 from mvc.routes.groupe_routes import register_groupe_routes
 from mvc.routes.inscription_eleve_routes import register_inscription_eleve_routes
+from mvc.routes.mes_classes_routes import register_mes_classes_routes
 from mvc.routes.mon_parcours_routes import register_mon_parcours_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 from mvc.routes.palier_routes import register_palier_routes
@@ -130,6 +131,9 @@ register_evaluation_critere_routes(router)
 # Bloc B — Suivi professeur (ticket 20) : tableau de bord lecture seule
 register_suivi_routes(router)
 
+# Espace professeur — « Mes classes » (lecture seule, socle scolaire filtré par compte)
+register_mes_classes_routes(router)
+
 # Espace élève — « Mon parcours » (lecture seule, rôle eleve)
 register_mon_parcours_routes(router)
 
@@ -192,6 +196,11 @@ for _prefix in (
 
 # Suivi (lecture seule) : `suivi.voir` (admin + professeur).
 guard_prefix(router, "/suivi", "suivi.voir")
+
+# Espace professeur « Mes classes » (lecture seule) : `suivi.voir` (admin + professeur).
+# Le socle scolaire complet reste réservé à `socle.gerer` (admin) ; cet espace
+# n'expose au professeur que SES classes, filtrées par compte (`professeur.UserId`).
+guard_prefix(router, "/mes-classes", "suivi.voir")
 
 # Évaluation professeur (écritures : valider, confirmer) : `execution.gerer`.
 guard_prefix(router, "/evaluation", "execution.gerer")

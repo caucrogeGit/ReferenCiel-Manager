@@ -1,0 +1,57 @@
+{% extends "layouts/base.html" %}
+{% block title %}Mes classes{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    {% if data is none %}
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Mes classes</h1>
+    <div class="bg-amber-50 border border-amber-200 text-amber-800 rounded p-4">
+        Votre compte n'est rattaché à aucune fiche professeur pour l'instant.
+        Rapprochez-vous de l'administration pour l'associer à votre fiche.
+    </div>
+    {% else %}
+    <h1 class="text-2xl font-bold text-gray-800 mb-1">Mes classes</h1>
+    <p class="text-gray-600 mb-6">{{ data.professeur.prenom }} {{ data.professeur.nom }}</p>
+
+    {% if data.affectations %}
+    <div class="space-y-6">
+        {% for aff in data.affectations %}
+        <section class="bg-white shadow rounded overflow-hidden">
+            <header class="px-4 py-3 border-b border-gray-100 flex items-center justify-between gap-4">
+                <div>
+                    <h2 class="font-semibold text-gray-800">
+                        {{ aff.classe_code }}
+                        {% if aff.classe_libelle %}<span class="text-gray-500 font-normal">— {{ aff.classe_libelle }}</span>{% endif %}
+                    </h2>
+                    <p class="text-xs text-gray-500">
+                        {{ aff.niveau_code }} · {{ aff.annee_libelle }}
+                        {% if aff.role %} · {{ aff.role }}{% endif %}
+                    </p>
+                </div>
+                <span class="text-xs font-medium px-2 py-0.5 rounded bg-blue-100 text-blue-800">
+                    {{ aff.nb_eleves }} élève{{ 's' if aff.nb_eleves > 1 else '' }}
+                </span>
+            </header>
+            {% if aff.eleves %}
+            <ol class="divide-y divide-gray-100">
+                {% for eleve in aff.eleves %}
+                <li class="px-4 py-2 flex items-center justify-between gap-4">
+                    <span class="text-sm text-gray-700">{{ eleve.nom }} {{ eleve.prenom }}</span>
+                    {% if eleve.identifiant %}
+                    <span class="text-xs text-gray-400">{{ eleve.identifiant }}</span>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+            {% else %}
+            <p class="px-4 py-3 text-sm text-gray-500 italic">Aucun élève inscrit dans cette classe.</p>
+            {% endif %}
+        </section>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-gray-500 italic">Aucune classe ne vous est affectée pour l'instant.</p>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
