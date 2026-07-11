@@ -90,17 +90,17 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 09 | Modèle relationnel + contrats d'entité référentiel. Vérifié : 12 contrats d'entité valides + toutes les relations du dictionnaire, dont les 2 pivots M2M (`activite_competence`, `cc_competence`). | Référentiel | Terminé |
 | 10 | Migrations référentiel (via `forge`). Vérifié : `create_referentiel.sql` crée les 14 tables + contraintes FK ; tables présentes en base. | Référentiel | Terminé |
 | 11 | Importeur JSON canonique → base référentielle. Chaîne validation schéma → import upsert best-effort → rapport (ADR-010). Vérifié sur la fixture `ciel-2tne` (81 objets, pivots M2M compris). | Référentiel | Terminé |
-| 12 | Dictionnaire de données `Scenario` | Scénario | À faire |
-| 13 | Chaîne `Scenario` (contrat, migration, service, interface prof minimale, tests de persistance) | Scénario | À faire |
+| 12 | [Dictionnaire de données `Scenario`](../specs/data-dictionary/dictionnaire-scenario.md) | Scénario | Terminé |
+| 13 | Chaîne `Scenario` (contrat, migration, service, interface prof minimale, tests de persistance). Vérifié : contrat + migration + model + controller + vues `app/scenario` ; `test_scenario_persistance.py` (4 tests) vert. | Scénario | Terminé |
 | 13b | [Dictionnaire de données Starter Welcome](../specs/data-dictionary/dictionnaire-starter-welcome.md) (StarterWelcome, Palier, QCM/Question/Choix, Activite, Checklist/Section/Item, Image, Ressource ; contenu par référence ; lien `Palier ↔ Competence` optionnel) | Starter | Terminé |
-| 14 | `StarterWelcome` (+ `VersionStarter`) | Starter | À faire |
-| 15 | `Parcours` + `VersionParcours` | Parcours | À faire |
-| 16 | `Palier` (découpage du parcours) — ticket explicite | Parcours | À faire |
-| 17 | `AffectationParcours` à une classe ou à des élèves | B | À faire |
-| 18 | `ProgressionEleve` (+ `ProgressionPalier`) | B | À faire |
-| 19 | QCM / checklist / activité / dépôt élève (définition + tentative/réponse/dépôt) | B | À faire |
-| 20 | Suivi professeur par classe | B | À faire |
-| 21 | Évaluation par critères et bilan | B | À faire |
+| 14 | `StarterWelcome` (+ `VersionStarter`) | Starter | Terminé |
+| 15 | `Parcours` + `VersionParcours` | Parcours | Terminé |
+| 16 | `Palier` (découpage du parcours) — ticket explicite | Parcours | Terminé |
+| 17 | `AffectationParcours` à une classe ou à des élèves | B | Terminé |
+| 18 | `ProgressionEleve` (+ `ProgressionPalier`) | B | Terminé |
+| 19 | QCM / checklist / activité / dépôt élève (définition + tentative/réponse/dépôt) | B | Terminé |
+| 20 | Suivi professeur par classe (vue de synthèse `/suivi`, lecture seule) | B | Terminé |
+| 21 | Évaluation par critères et bilan | B | En cours — évaluation par critères **faite** (`evaluation_activite`, `evaluation_critere`, contrôleur prof) ; **bilan `BilanEleve` non implémenté** (seul reste du tunnel) |
 
 ### Après le tunnel (sécurité applicative réelle)
 
