@@ -46,3 +46,9 @@ DB_ADMIN_LOGIN=
 DB_ADMIN_PWD=
 DB_APP_LOGIN=
 DB_APP_PWD=
+
+# MFA (forge-mvc-mfa, ADR-014) : clé Fernet de chiffrement des secrets TOTP.
+# Obligatoire dès que la MFA est utilisée. Générer une clé PROPRE à chaque
+# environnement (jamais commitée, jamais partagée) :
+#   python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+FORGE_MFA_SECRET_KEY=

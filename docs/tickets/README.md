@@ -112,5 +112,7 @@ Trajectoire (ADR-013) :
 
 - **T1 — durcissement des mots de passe** : ✅ *fait* — politique appliquée à la
   création de compte + flux de réinitialisation (`/password/forgot`, `/password/reset`).
-- **T2 — MFA prof/admin** : à faire (opt-in `forge-mvc-mfa`, flux TOTP) — ADR ultérieur.
+- **T2 — MFA TOTP** : ✅ *fait* ([ADR-014](../adr/014-mfa-totp-optionnelle.md)) — MFA
+  optionnelle en self-service (`/securite`) : enrôlement TOTP + codes de secours +
+  challenge au login (`/login/mfa`), secret chiffré (Fernet).
 - **T3 — permissions fines** (§19) : différé tant que la granularité par domaine suffit.

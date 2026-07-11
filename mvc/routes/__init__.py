@@ -50,6 +50,7 @@ from mvc.routes.reponse_qcm_routes import register_reponse_qcm_routes
 from mvc.routes.tentative_qcm_routes import register_tentative_qcm_routes
 from mvc.routes.referentiel_import_routes import register_referentiel_import_routes
 from mvc.routes.scenario_routes import register_scenario_routes
+from mvc.routes.securite_routes import register_securite_routes
 from mvc.routes.starter_welcome_routes import register_starter_welcome_routes
 from mvc.routes.suivi_routes import register_suivi_routes
 from mvc.routes.version_parcours_routes import register_version_parcours_routes
@@ -163,6 +164,9 @@ register_auth_routes(router)
 
 # Réinitialisation de mot de passe (ADR-013 T1) : routes publiques, CSRF actif
 register_password_reset_routes(router)
+
+# Espace Sécurité — MFA self-service (ADR-014) : auth requise, self-service
+register_securite_routes(router)
 
 # Routes des opt-ins activés (ADR-061).
 register_optins(router)

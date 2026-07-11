@@ -38,6 +38,8 @@ Contexte, Décision, Conséquences, Alternatives écartées.
 - `013-securite-applicative-reelle.md` : acte l'existant (auth, sessions, RBAC,
   liens comptes, CSRF/CSP) ; trajectoire durcissement mots de passe → MFA →
   permissions fines.
+- `014-mfa-totp-optionnelle.md` : MFA TOTP optionnelle en self-service (T2) —
+  enrôlement + codes de secours + challenge au login, secret chiffré (Fernet).
 
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal. Le gabarit `000-template.md` n'est pas une décision : c'est la trame.

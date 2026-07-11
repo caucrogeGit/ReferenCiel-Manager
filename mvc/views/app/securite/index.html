@@ -1,0 +1,50 @@
+{% extends "layouts/base.html" %}
+{% from "components/ui.html" import button, flash_messages %}
+{% block title %}Sécurité{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-1">Sécurité</h1>
+    <p class="text-gray-600 mb-6">Authentification à deux facteurs (MFA) de votre compte.</p>
+
+    {{ flash_messages(flash) }}
+
+    <section class="bg-white shadow rounded p-5">
+        <div class="flex items-center justify-between gap-4">
+            <div>
+                <h2 class="font-semibold text-gray-800">Application d'authentification (TOTP)</h2>
+                {% if mfa_active %}
+                <p class="text-sm text-green-700 mt-1">✓ Activée · {{ codes_restants }} code(s) de secours restant(s)</p>
+                {% else %}
+                <p class="text-sm text-gray-500 mt-1">Non activée. Ajoutez une couche de sécurité au-delà du mot de passe.</p>
+                {% endif %}
+            </div>
+            {% if mfa_active %}
+            <form method="POST" action="/securite/desactiver">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                {{ button("Désactiver", variant="secondary", type="submit") }}
+            </form>
+            {% else %}
+            {{ button("Activer la MFA", variant="primary", href="/securite/activer") }}
+            {% endif %}
+        </div>
+
+        {% if not cle_configuree %}
+        <p class="mt-4 text-sm bg-amber-50 border border-amber-200 text-amber-800 rounded p-3">
+            La clé de chiffrement MFA (<code>FORGE_MFA_SECRET_KEY</code>) n'est pas configurée :
+            l'activation est indisponible.
+        </p>
+        {% endif %}
+
+        {% if mfa_active %}
+        <div class="mt-4 pt-4 border-t border-gray-100">
+            <form method="POST" action="/securite/codes/regenerer">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                {{ button("Régénérer les codes de secours", variant="secondary", type="submit") }}
+            </form>
+            <p class="text-xs text-gray-500 mt-1">Les anciens codes seront invalidés.</p>
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
