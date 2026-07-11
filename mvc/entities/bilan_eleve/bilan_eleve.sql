@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS bilan_eleve (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    AppreciationGlobale TEXT NOT NULL,
+    Statut VARCHAR(20) NOT NULL,
+    DateBilan DATETIME NOT NULL,
+    Synthese LONGTEXT NULL,
+    eleve_id BIGINT UNSIGNED NOT NULL,
+    professeur_id BIGINT UNSIGNED NOT NULL,
+    progression_eleve_id BIGINT UNSIGNED NOT NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

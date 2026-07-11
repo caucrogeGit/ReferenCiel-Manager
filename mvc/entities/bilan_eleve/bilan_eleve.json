@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "name": "BilanEleve",
+  "table": "bilan_eleve",
+  "fields": [
+    {
+      "name": "appreciation_globale",
+      "type": "text",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "date_bilan",
+      "type": "datetime",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "synthese",
+      "type": "json",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "eleve_id",
+      "type": "foreign_key",
+      "references": "Eleve",
+      "required": true
+    },
+    {
+      "name": "professeur_id",
+      "type": "foreign_key",
+      "references": "Professeur",
+      "required": true
+    },
+    {
+      "name": "progression_eleve_id",
+      "type": "foreign_key",
+      "references": "ProgressionEleve",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

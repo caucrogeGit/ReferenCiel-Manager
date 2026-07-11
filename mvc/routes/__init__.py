@@ -14,6 +14,7 @@ from mvc.controllers.home_controller import HomeController
 from mvc.routes.admin_routes import register_admin
 from mvc.routes.activite_routes import register_activite_routes
 from mvc.routes.affectation_parcours_routes import register_affectation_parcours_routes
+from mvc.routes.bilan_eleve_routes import register_bilan_eleve_routes
 from mvc.routes.affectation_professeur_classe_routes import (
     register_affectation_professeur_classe_routes,
 )
@@ -128,6 +129,9 @@ register_depot_eleve_routes(router)
 register_evaluation_activite_routes(router)
 register_evaluation_critere_routes(router)
 
+# Bloc B — Bilan élève (ticket 21) : synthèse arrêtée des évaluations
+register_bilan_eleve_routes(router)
+
 # Bloc B — Suivi professeur (ticket 20) : tableau de bord lecture seule
 register_suivi_routes(router)
 
@@ -191,6 +195,7 @@ for _prefix in (
     "/qcm", "/question_qcm", "/choix_qcm", "/tentative_qcm", "/reponse_qcm",
     "/checklist", "/section_checklist", "/item_checklist", "/item_coche",
     "/activite", "/depot_eleve", "/evaluation_activite", "/evaluation_critere",
+    "/bilan",
 ):
     guard_prefix(router, _prefix, "execution.gerer")
 

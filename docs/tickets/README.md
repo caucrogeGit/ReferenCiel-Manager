@@ -100,7 +100,7 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 18 | `ProgressionEleve` (+ `ProgressionPalier`) | B | Terminé |
 | 19 | QCM / checklist / activité / dépôt élève (définition + tentative/réponse/dépôt) | B | Terminé |
 | 20 | Suivi professeur par classe (vue de synthèse `/suivi`, lecture seule) | B | Terminé |
-| 21 | Évaluation par critères et bilan | B | En cours — évaluation par critères **faite** (`evaluation_activite`, `evaluation_critere`, contrôleur prof) ; **bilan `BilanEleve` non implémenté** (seul reste du tunnel) |
+| 21 | [Évaluation par critères et bilan](../specs/data-dictionary/dictionnaire-bilan.md) | B | Terminé — évaluation par critères (`evaluation_activite`, `evaluation_critere`) + **bilan `BilanEleve`** : synthèse arrêtée (agrégation critères→compétence, snapshot JSON figé), espace prof `/bilan`. Vérifié de bout en bout (création → synthèse figée → consultation). |
 
 ### Après le tunnel (sécurité applicative réelle)
 

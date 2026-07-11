@@ -712,6 +712,39 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "BilanEleve",
+      "to": "Eleve",
+      "name": "eleve",
+      "inverse_name": "bilans",
+      "foreign_key": "eleve_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "BilanEleve",
+      "to": "Professeur",
+      "name": "professeur",
+      "inverse_name": "bilans",
+      "foreign_key": "professeur_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "BilanEleve",
+      "to": "ProgressionEleve",
+      "name": "progression",
+      "inverse_name": "bilans",
+      "foreign_key": "progression_eleve_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

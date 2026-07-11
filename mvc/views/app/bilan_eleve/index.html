@@ -1,0 +1,43 @@
+{% extends "layouts/base.html" %}
+{% from "components/ui.html" import button, flash_messages %}
+{% block title %}Bilans élève{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="flex items-center justify-between gap-4 mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Bilans élève</h1>
+        {{ button("Nouveau bilan", variant="primary", href="/bilan/new") }}
+    </div>
+
+    {{ flash_messages(flash) }}
+
+    {% if bilans %}
+    <table class="w-full text-sm bg-white shadow rounded overflow-hidden">
+        <thead class="bg-gray-100 text-left text-gray-700">
+            <tr>
+                <th class="px-4 py-2">Élève</th>
+                <th class="px-4 py-2">Date</th>
+                <th class="px-4 py-2">Statut</th>
+                <th class="px-4 py-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in bilans %}
+            <tr class="border-t border-gray-100">
+                <td class="px-4 py-2 font-medium">{{ b.eleve_nom }} {{ b.eleve_prenom }}</td>
+                <td class="px-4 py-2 text-gray-600">{{ b.date_bilan }}</td>
+                <td class="px-4 py-2">
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-gray-100 text-gray-700">{{ b.statut }}</span>
+                </td>
+                <td class="px-4 py-2 text-right">
+                    <a href="/bilan/show/{{ b.id }}" class="text-sm text-blue-600 hover:underline">Consulter</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-500 italic">Aucun bilan pour l'instant.</p>
+    {% endif %}
+</div>
+{% endblock %}

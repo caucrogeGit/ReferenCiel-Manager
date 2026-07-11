@@ -503,3 +503,24 @@ ALTER TABLE evaluation_critere
     REFERENCES critere_observable (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE bilan_eleve
+    ADD CONSTRAINT fk_bilan_eleve_eleve_id
+    FOREIGN KEY (eleve_id)
+    REFERENCES eleve (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE bilan_eleve
+    ADD CONSTRAINT fk_bilan_eleve_professeur_id
+    FOREIGN KEY (professeur_id)
+    REFERENCES professeur (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE bilan_eleve
+    ADD CONSTRAINT fk_bilan_eleve_progression_eleve_id
+    FOREIGN KEY (progression_eleve_id)
+    REFERENCES progression_eleve (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
