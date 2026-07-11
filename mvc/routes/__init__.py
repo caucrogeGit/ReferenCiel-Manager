@@ -31,6 +31,7 @@ from mvc.routes.inscription_eleve_routes import register_inscription_eleve_route
 from mvc.routes.mes_classes_routes import register_mes_classes_routes
 from mvc.routes.mon_parcours_routes import register_mon_parcours_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
+from mvc.routes.password_reset_routes import register_password_reset_routes
 from mvc.routes.palier_routes import register_palier_routes
 from mvc.routes.parcours_routes import register_parcours_routes
 from mvc.routes.checklist_routes import register_checklist_routes
@@ -159,6 +160,9 @@ register_admin(router)
 
 # Routes appliquées pour : auth_controller
 register_auth_routes(router)
+
+# Réinitialisation de mot de passe (ADR-013 T1) : routes publiques, CSRF actif
+register_password_reset_routes(router)
 
 # Routes des opt-ins activés (ADR-061).
 register_optins(router)

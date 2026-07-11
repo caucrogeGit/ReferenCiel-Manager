@@ -35,6 +35,9 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   d'identité + entité de version.
 - `012-rbac-couche-fine-maison-sur-contrat.md` : couche RBAC applicative fine,
   adossée au contrat, contournant le resolveur déprécié de l'opt-in.
+- `013-securite-applicative-reelle.md` : acte l'existant (auth, sessions, RBAC,
+  liens comptes, CSRF/CSP) ; trajectoire durcissement mots de passe → MFA →
+  permissions fines.
 
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal. Le gabarit `000-template.md` n'est pas une décision : c'est la trame.

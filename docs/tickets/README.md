@@ -102,8 +102,15 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 20 | Suivi professeur par classe (vue de synthèse `/suivi`, lecture seule) | B | Terminé |
 | 21 | [Évaluation par critères et bilan](../specs/data-dictionary/dictionnaire-bilan.md) | B | Terminé — évaluation par critères (`evaluation_activite`, `evaluation_critere`) + **bilan `BilanEleve`** : synthèse arrêtée (agrégation critères→compétence, snapshot JSON figé), espace prof `/bilan`. Vérifié de bout en bout (création → synthèse figée → consultation). |
 
-### Après le tunnel (sécurité applicative réelle)
+### Après le tunnel (sécurité applicative réelle) — ouvert par [ADR-013](../adr/013-securite-applicative-reelle.md)
 
-Différé volontairement, à ouvrir par un ADR dédié le moment venu :
-`CompteUtilisateur`, connexion applicative, RBAC, MFA, permissions réelles, lien
-`CompteUtilisateur` ↔ `Eleve`.
+**Base acquise** (livrée en cours de tunnel, actée par l'ADR-013) : connexion
+applicative, sessions durcies (`sessions-db`), RBAC ([ADR-012](../adr/012-rbac-couche-fine-maison-sur-contrat.md)),
+lien `CompteUtilisateur` ↔ `Eleve`/`Professeur` + filtrage row-level, CSRF, CSP.
+
+Trajectoire (ADR-013) :
+
+- **T1 — durcissement des mots de passe** : ✅ *fait* — politique appliquée à la
+  création de compte + flux de réinitialisation (`/password/forgot`, `/password/reset`).
+- **T2 — MFA prof/admin** : à faire (opt-in `forge-mvc-mfa`, flux TOTP) — ADR ultérieur.
+- **T3 — permissions fines** (§19) : différé tant que la granularité par domaine suffit.

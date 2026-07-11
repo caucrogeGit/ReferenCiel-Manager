@@ -75,6 +75,7 @@ nav:
       - ADR-010 — Importeur référentiel (upsert, best-effort): adr/010-importeur-referentiel-upsert-best-effort.md
       - ADR-011 — Versionnement identité + version: adr/011-versionnement-identite-plus-version.md
       - ADR-012 — Couche RBAC fine maison sur contrat: adr/012-rbac-couche-fine-maison-sur-contrat.md
+      - ADR-013 — Sécurité applicative réelle: adr/013-securite-applicative-reelle.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md

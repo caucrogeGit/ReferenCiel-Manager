@@ -19,8 +19,7 @@ from mvc.models.eleve_compte_model import (
     email_existe,
     list_eleves_avec_compte,
 )
-
-_PASSWORD_MIN = 8
+from mvc.services.password_policy import valider_mot_de_passe
 
 
 class EleveCompteController:
@@ -53,8 +52,9 @@ class EleveCompteController:
             erreurs.append("Email invalide (format attendu : utilisateur@domaine.com).")
         elif email_existe(email):
             erreurs.append("Cet email est déjà utilisé par un compte.")
-        if len(password) < _PASSWORD_MIN:
-            erreurs.append(f"Le mot de passe doit faire au moins {_PASSWORD_MIN} caractères.")
+        message_mdp = valider_mot_de_passe(password)
+        if message_mdp is not None:
+            erreurs.append(message_mdp)
 
         if erreurs:
             return BaseController.render(

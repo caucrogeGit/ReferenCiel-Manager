@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+{% from "components/forms.html" import field, submit, form_errors %}
+{% block title %}Nouveau mot de passe{% endblock %}
+{% block nav %}{% endblock %}
+
+{% block content %}
+<div class="max-w-sm mx-auto">
+    <h1 class="text-xl font-bold text-gray-800 mb-4">Nouveau mot de passe</h1>
+
+    {% if erreurs %}<div class="mb-4">{{ form_errors(erreurs) }}</div>{% endif %}
+
+    <form method="POST" action="/password/reset" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="token" value="{{ token }}">
+        {{ field(name="password", label="Nouveau mot de passe (8 caractères min.)", type="password", required=True) }}
+        {{ field(name="password_confirmation", label="Confirmer le mot de passe", type="password", required=True) }}
+        {{ submit(label="Réinitialiser") }}
+    </form>
+    <p class="mt-4 text-center text-sm">
+        <a href="/login" class="text-blue-600 hover:underline">← Retour à la connexion</a>
+    </p>
+</div>
+{% endblock %}
