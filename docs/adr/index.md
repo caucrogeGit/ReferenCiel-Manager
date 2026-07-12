@@ -40,6 +40,9 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   permissions fines.
 - `014-mfa-totp-optionnelle.md` : MFA TOTP optionnelle en self-service (T2) —
   enrôlement + codes de secours + challenge au login, secret chiffré (Fernet).
+- `015-rbac-bascule-sur-le-contrat-natif.md` : F30 corrigé côté Forge → bascule du
+  RBAC sur le contrat natif (middleware `request.roles`), `guard_prefix` conservé ;
+  amende partiellement l'ADR-012. Décision + plan de tickets.
 
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal. Le gabarit `000-template.md` n'est pas une décision : c'est la trame.

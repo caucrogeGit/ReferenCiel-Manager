@@ -77,6 +77,7 @@ nav:
       - ADR-012 — Couche RBAC fine maison sur contrat: adr/012-rbac-couche-fine-maison-sur-contrat.md
       - ADR-013 — Sécurité applicative réelle: adr/013-securite-applicative-reelle.md
       - ADR-014 — MFA TOTP optionnelle: adr/014-mfa-totp-optionnelle.md
+      - ADR-015 — RBAC bascule sur le contrat natif: adr/015-rbac-bascule-sur-le-contrat-natif.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
