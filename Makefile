@@ -23,6 +23,7 @@ setup:
 
 check: type lint test docs
 	$(VENV)/forge project:check
+	$(VENV)/forge entity:validate
 
 type:
 	$(VENV)/pyright

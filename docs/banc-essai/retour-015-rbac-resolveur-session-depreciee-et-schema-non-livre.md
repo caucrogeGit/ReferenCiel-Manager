@@ -47,6 +47,21 @@
   parlent pas. Aucun message n'alerte : on croit à un problème de contrat ou
   d'affectation de rôles, alors que le pont de session est manquant.
 
+- **Suivi (2026-07-12)** : correction en **deux temps** côté Forge.
+  - Sur `d2b5157c`, F30 n'était corrigé qu'à moitié : le chemin **base**
+    (`authorization.py`, `jinja.py`, `resolver.py`) passait à
+    `get_authenticated_user_id`, mais le chemin **contrat**
+    (`contract.py::get_request_roles`) lisait encore `get_user` (session dépréciée).
+  - **RÉSOLU sur `e7cc3f1a`** : `get_request_roles` **n'appelle plus** `get_user`. Il
+    lit désormais `request.roles` (point d'injection canonique sous l'auth moderne :
+    l'app pose les rôles de `current_user` sur la requête via un middleware), avec
+    repli sur la session legacy. Le RBAC contractuel natif est donc **câblable** sur
+    l'auth moderne, à condition que l'app alimente `request.roles`.
+  - **Conséquence projet** : le retrait de la couche maison RBAC (ADR-012) redevient
+    possible — via un middleware qui pose `request.roles` — mais reste un chantier à
+    part (`guard_prefix` n'a toujours pas d'équivalent natif). Voir le suivi de
+    l'[ADR-012](../adr/012-rbac-couche-fine-maison-sur-contrat.md).
+
 ### F31 — L'opt-in ne livre **aucun schéma SQL** ni commande de synchronisation contrat → base
 
 - **Symptôme** : le resolveur DB (`forge_mvc_rbac/resolver.py`) interroge

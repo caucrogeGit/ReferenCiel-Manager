@@ -2,7 +2,7 @@
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
 **Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
-**Statut :** à remonter.
+**Statut :** **RÉSOLU** côté Forge (2026-07-12, sha `6927a266`) — voir note sous F42.
 
 ## Environnement
 
@@ -59,6 +59,13 @@
   `core.auth.session.get_authenticated_user_id(request)` (comme le fait déjà
   `start_mfa_challenge` via `get_mfa_challenge_user_id`) au lieu du dict `user`
   déprécié. Fix symétrique de celui attendu au F30.
+
+- **RÉSOLU (2026-07-12, Forge sha `6927a266`)** : `_session_user_matches` lit
+  désormais `_auth_user_id` (auth moderne) en priorité, avec repli sur la session
+  legacy. `verify_mfa_revalidation` fonctionne donc avec l'auth moderne. Côté app, le
+  **contournement a été retiré** : le step-up de désactivation MFA
+  (`mvc/controllers/securite_controller.py`) rebranche l'API native
+  (`verify_mfa_revalidation` / `has_recent_mfa_revalidation`), vérifié end-to-end.
 
 ## Référence
 

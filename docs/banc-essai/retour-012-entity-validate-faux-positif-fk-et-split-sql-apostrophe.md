@@ -2,7 +2,7 @@
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
 **Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
-**Statut :** à remonter — **F26 confirmé persistant en Forge 1.0.0rc2** (2026-07-11, voir note sous F26).
+**Statut :** **F26 RÉSOLU** côté Forge (2026-07-12, sha `399db24f`) — voir note sous F26. F27 : à remonter.
 
 ## Environnement
 
@@ -69,9 +69,13 @@ néanmoins dans la chaîne — l'un dans la validation, l'autre à l'application
   individuellement (`[OK]`) ; seules les **relations** sont rejetées. Schéma en base
   **sain** (une colonne + une contrainte par FK, vérifié sur `referentiel_niveau_classe`).
   `make check` / `forge project:check` restent **verts** (cette règle n'y est pas
-  exécutée). Non corrigé côté framework à ce jour ; contrats projet **inchangés** (le
-  pattern champ + relation est l'état officiel ADR-069). Constaté lors de la vérification
-  des tickets 09–11 (chaîne référentiel).
+  exécutée). Contrats projet **inchangés** (le pattern champ + relation est l'état
+  officiel ADR-069). Constaté lors de la vérification des tickets 09–11.
+
+- **RÉSOLU (2026-07-12, Forge sha `399db24f`)** : la règle 7 n'assimile plus un champ
+  de type `foreign_key` à une collision. `forge entity:validate` remonte désormais
+  **0 erreur** (44 fichiers valides) sur les contrats du projet, **inchangés**. Le
+  correctif proposé ci-dessus a été appliqué côté framework.
 
 ### F27 — `split_sql_statements` : une apostrophe **dans un commentaire** casse le découpage des instructions
 

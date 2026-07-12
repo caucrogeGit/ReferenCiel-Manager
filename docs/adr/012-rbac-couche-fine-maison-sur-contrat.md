@@ -68,6 +68,28 @@ conception/exécution/suivi. L'élève viendra avec une UI dédiée et un accès
   dans `mvc/routes/__init__.py`) ; si l'opt-in devient compatible, on retire le
   provider et les gardes maison et on rebranche le natif.
 
+## Suivi — évaluation du retrait (2026-07-12, montée Forge `e7cc3f1a`)
+
+**F30 est corrigé côté Forge** (cf. [retour-015](../banc-essai/retour-015-rbac-resolveur-session-depreciee-et-schema-non-livre.md),
+suivi F30) : `get_request_roles` n'appelle plus la session dépréciée, il lit
+`request.roles`. Le RBAC contractuel natif est donc **câblable** sur l'auth moderne.
+Le retrait de la couche maison **redevient possible**, mais reste un **chantier à
+part** (non entrepris dans cette montée) car partiel :
+
+- **`current_user_roles` → middleware.** Le natif attend que l'app **injecte**
+  `request.roles`. Il faut donc un middleware qui, par requête, résout les slugs de
+  rôles de l'utilisateur connecté (auth moderne → `user_roles`/`roles`) et les pose
+  sur la requête. C'est le même travail que `current_user_roles`, déplacé en amont.
+- **`guard_prefix` sans équivalent natif** : le RBAC natif protège route par route
+  (décorateur sur handler), sans passe par préfixe d'URL. À **conserver** en maison.
+- **Modèle base vs contrat** : le `can()` natif base exige les tables
+  `permissions`/`role_permissions` (absentes). On reste sur le **contrat** natif
+  (`has_contract_permission` + `request.roles`), déjà utilisé.
+
+**Décision** : conserver la couche maison pour l'instant ; ouvrir un chantier dédié
+(middleware `request.roles` + bascule sur le contrat natif, `guard_prefix` conservé)
+quand on voudra réduire la surface maison.
+
 ## Alternatives écartées
 
 - **Remplir aussi la session dépréciée** au login (dict user + `roles`) pour que

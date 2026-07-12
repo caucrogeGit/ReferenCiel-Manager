@@ -26,10 +26,10 @@ from forge_mvc_mfa import (
     create_recovery_codes,
     create_totp_factor,
     decrypt_totp_secret,
+    has_recent_mfa_revalidation,
     totp_provisioning_uri,
     validate_mfa_secret_key_config,
-    verify_recovery_code,
-    verify_totp_code,
+    verify_mfa_revalidation,
 )
 
 from mvc.models.mfa_model import (
@@ -41,29 +41,8 @@ from mvc.models.mfa_model import (
     get_unused_recovery_codes,
     has_active_totp,
     insert_factor,
-    mark_recovery_used,
     remplacer_recovery_codes,
 )
-
-
-def _revalider_second_facteur(user_id: int, code: str) -> bool:
-    """Re-vérifie le 2e facteur (TOTP ou code de secours) pour une action sensible.
-
-    Contourne `verify_mfa_revalidation` de l'opt-in, qui exige une session au format
-    déprécié (cf. retour-015 F30, même limite que le RBAC ADR-012). On vérifie donc
-    directement contre les facteurs/codes du compte. Un code de secours utilisé est
-    consommé.
-    """
-    if not code.strip():
-        return False
-    for factor in get_active_totp_factors(user_id):
-        if verify_totp_code(decrypt_totp_secret(factor.totp_secret), code):
-            return True
-    for rec in get_unused_recovery_codes(user_id):
-        if verify_recovery_code(code, rec.code_hash):
-            mark_recovery_used(rec.code_hash)
-            return True
-    return False
 
 _ISSUER = "ReferenCiel-Manager"
 
@@ -184,9 +163,11 @@ class SecuriteController:
             return BaseController.redirect("/login")
         if not has_active_totp(user_id):
             return BaseController.redirect("/securite")
+        # Step-up : un code n'est demandé que s'il n'y a pas de revalidation récente.
+        besoin_code = not has_recent_mfa_revalidation(request, user_id)
         return BaseController.render(
             "app/securite/desactiver.html",
-            context={"besoin_code": True, "erreur": ""},
+            context={"besoin_code": besoin_code, "erreur": ""},
             request=request,
         )
 
@@ -196,9 +177,12 @@ class SecuriteController:
         user_id = get_authenticated_user_id(request)
         if user_id is None:
             return BaseController.redirect("/login")
-        if has_active_totp(user_id):
-            # Step-up : re-prouver le second facteur avant de retirer la MFA.
-            if not _revalider_second_facteur(user_id, request.form("code", "")):
+        if has_active_totp(user_id) and not has_recent_mfa_revalidation(request, user_id):
+            # Step-up (revalidation de l'opt-in, F42 corrigé) : re-prouver le 2e facteur.
+            code = request.form("code", "").strip()
+            factors = get_active_totp_factors(user_id)
+            recovery = get_unused_recovery_codes(user_id)
+            if verify_mfa_revalidation(request, user_id, code, factors, recovery) is None:
                 return BaseController.render(
                     "app/securite/desactiver.html",
                     status=422,
