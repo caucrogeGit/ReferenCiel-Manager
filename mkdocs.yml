@@ -123,3 +123,4 @@ nav:
       - Retour 017 — sessions:gc n'amorce pas la config & --help s'exécute: banc-essai/retour-017-sessions-gc-namorce-pas-la-config-et-help-sexecute.md
       - Retour 018 — mvc/views chemin figé par les générateurs, séparation cadre/app impossible: banc-essai/retour-018-mvc-views-chemin-fige-par-generateurs-pas-de-regroupement.md
       - Retour 019 — MFA revalidation step-up & session dépréciée: banc-essai/retour-019-mfa-revalidation-step-up-session-depreciee.md
+      - Retour 020 — fixtures, références, ordre & scénario cohérent: banc-essai/retour-020-fixtures-references-ordre-et-scenario-coherent.md
