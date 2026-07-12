@@ -1,112 +1,73 @@
-# ADR-015 — Bascule du RBAC sur le contrat natif (retrait partiel de la couche maison)
+# ADR-015 — Bascule du RBAC sur le contrat natif (retrait **total** de la couche maison)
 
-**Statut :** Accepté
-**Date :** 2026-07-12
+**Statut :** Accepté et **réalisé** (2026-07-12)
 
-> Fait suite à l'[ADR-012](012-rbac-couche-fine-maison-sur-contrat.md), qu'il
-> **amende partiellement** (il ne l'annule pas : la partie « garde par préfixe »
-> reste maison).
+> **Remplace** la couche RBAC maison de l'[ADR-012](012-rbac-couche-fine-maison-sur-contrat.md) :
+> `mvc/services/rbac.py` est **supprimé**, tout le RBAC passe par l'opt-in natif.
 
 ## Contexte
 
-L'[ADR-012](012-rbac-couche-fine-maison-sur-contrat.md) a introduit une couche RBAC
-« fine maison » (`mvc/services/rbac.py`) parce que le resolveur natif de
-`forge-mvc-rbac` lisait une **session dépréciée** (F30, [retour-015](../banc-essai/retour-015-rbac-resolveur-session-depreciee-et-schema-non-livre.md))
-et renvoyait donc toujours des rôles vides sous l'auth moderne.
+L'[ADR-012](012-rbac-couche-fine-maison-sur-contrat.md) avait introduit une couche
+RBAC « fine maison » parce que l'opt-in `forge-mvc-rbac` était, sous l'auth moderne,
+inutilisable : resolveur de rôles sur session dépréciée (F30), pas de provider Jinja
+contractuel, pas de garde par préfixe d'URL.
 
-**F30 est corrigé côté Forge** (sha `e7cc3f1a`, 2026-07-12) : `get_request_roles`
-n'appelle plus la session dépréciée — il lit **`request.roles`**, un point
-d'injection que l'application alimente. Le RBAC contractuel natif
-(`has_contract_permission`, `require_contract_permission_for_request`,
-`get_contract_permissions`) devient donc **câblable** sur l'auth moderne, à condition
-que l'app pose les rôles de l'utilisateur courant sur la requête.
+Ces trois manques ont été **corrigés côté Forge** (retour banc-essai du projet) :
 
-Le contournement de l'ADR-012 n'a plus de raison d'être **sur sa partie résolution
-des rôles / décision**. On peut réduire la couche maison et se réaligner sur le natif.
+| Manque | Correctif Forge | Ce qu'il rend inutile |
+|---|---|---|
+| **A** — résolveur de rôles autonome (`get_request_roles` résout en base via l'auth moderne, sans injection) | `67a32bcc` | `current_user_roles` + middleware d'injection |
+| **B** — garde par **préfixe** (`PrefixPermissionMiddleware`) | `5ef21fa3` | `guard_prefix` |
+| **C** — provider Jinja **contractuel** (`register_contract_rbac_provider`) | `1b1bb998` | `rbac_context` / `register_rbac_provider` |
+
+Le contournement de l'ADR-012 n'a donc **plus aucune raison d'être** : on retire la
+couche maison **en totalité**.
 
 ## Décision
 
-1. **Middleware `request.roles`.** L'app installe un middleware
-   (`check(request) → None`) qui, pour chaque requête, résout les **slugs** de rôles
-   de l'utilisateur connecté (auth moderne → `user_roles`/`roles`) et les pose sur
-   `request.roles`. C'est le maillon que le natif attend et que
-   `current_user_roles` faisait — **déplacé en amont**, résolu **une fois par
-   requête** au lieu d'une fois par garde/rendu.
+1. **Résolution des rôles = native.** On s'appuie sur `get_request_roles`
+   (auth moderne → `user_roles`/`roles`, auto-suffisant y compris sur une route
+   **publique** qui affiche du RBAC — la home connectée). Plus de `current_user_roles`.
 
-2. **Décision via le natif.** Les gardes de route et le `can()` des vues s'appuient
-   sur le chemin **contractuel** natif (`get_request_roles` → `request.roles`, puis
-   `has_contract_permission` sur `rbac.json`). On retire les équivalents maison
-   (`current_user_roles`, `can`, `require_permission`, `guarded`).
+2. **`can()` des vues = provider contractuel natif.** `register_contract_rbac_provider()`
+   (appelé dans `mvc/routes/__init__.py`, après l'import de l'opt-in, pour écraser le
+   provider « table » auto-inscrit) adosse le `can()` des templates à `rbac.json`.
 
-3. **`guard_prefix` conservé.** Le natif ne protège que **route par route**
-   (décorateur sur handler) ; il n'a **aucun** équivalent de protection **par
-   préfixe d'URL** en une passe post-enregistrement. `guard_prefix` reste donc
-   **maison**, mais enveloppe désormais la **garde native**
-   (`require_contract_permission_for_request`) au lieu de la garde maison. C'est la
-   part de l'ADR-012 qui **subsiste**.
+3. **Gardes de route = `PrefixPermissionMiddleware`.** La table préfixe → permission
+   (`RBAC_PREFIX_RULES`, dans `mvc/routes/__init__.py`) est appliquée par le
+   middleware natif, câblé dans `app.py` :
+   `Application(router, middlewares=[AuthMiddleware("/login"), PrefixPermissionMiddleware(RBAC_PREFIX_RULES)])`.
+   Le préfixe le plus spécifique gagne ; couvre les routes futures.
 
-4. **Modèle contractuel maintenu.** On reste sur `rbac.json` (chemin contrat). On
-   n'active **pas** le chemin base natif (`user_has_permission`), qui exigerait les
-   tables `permissions`/`role_permissions` absentes — hors sujet ici.
+4. **Modèle contractuel conservé** (`rbac.json`) ; le chemin base natif
+   (tables `permissions`/`role_permissions`) n'est pas utilisé.
+
+5. **`mvc/services/rbac.py` supprimé.**
 
 ## Conséquences
 
-- **Positif** : dette F30 close côté app ; moins de code maison (résolution + `can`
-  + gardes délèguent au natif) ; une seule source de vérité (contrat) et un seul
-  resolveur (natif) ; rôles résolus une fois par requête (middleware).
-- **Négatif / limites** : retrait **partiel** — `guard_prefix` reste maison (le
-  natif ne couvre pas la garde par préfixe). Le RBAC garde **toute** l'app : la
-  bascule impose une **vérification e2e par rôle** avant de committer (admin, prof,
-  élève, anonyme : nav filtrée **et** URL tapées à la main).
-- **Attention au cache contrat** : la couche maison **cachait** `rbac.json`
-  (`_contract_cache`) ; `require_contract_permission_for_request` natif **recharge et
-  revalide** le contrat à chaque requête. À mesurer / éventuellement encapsuler dans
-  un helper qui cache, pour ne pas relire le fichier à chaque garde.
-- **Réversibilité** : le middleware et `guard_prefix` restent isolés ; on peut
-  revenir à la couche maison si le natif régressait.
+- **Positif** : dette F30 close, **zéro code RBAC maison**, une seule source de
+  vérité (contrat) et un seul resolveur (natif). Résolution des rôles centralisée.
+  Alignement complet sur Forge (règle « 100 % Forge »).
+- **Vérifié** : e2e par rôle (admin / professeur / élève / anonyme) — gardes d'URL
+  **et** nav filtrée, home connectée comprise : comportement **identique** à la
+  couche maison (admin voit tout ; professeur → 403 sur le socle ; élève → seul
+  `/mon-parcours` ; anonyme → login).
+- **Réversibilité** : `RBAC_PREFIX_RULES` + le câblage `app.py` restent isolés ; on
+  pourrait revenir à une couche maison si le natif régressait.
 
 ## Alternatives écartées
 
-- **Statu quo (garder la couche maison).** Rejetée : maintient une dette
-  documentée (F30) alors que Forge l'a corrigée ; deux resolveurs de rôles pour rien.
-  (Option légitime si le coût de bascule dépassait le gain — d'où le séquencement
-  prudent ci-dessous.)
-- **Retrait total (tout natif, sans code maison).** Impossible : pas de garde par
-  préfixe native (§3). Il faudrait décorer à la main chaque handler de chaque
-  `*_routes.py` — régression d'ergonomie et de couverture (routes futures).
-- **Activer le chemin base natif** (`permissions`/`role_permissions`). Rejetée :
-  imposerait un second modèle de permission et le DDL correspondant, pour aucun
-  gain sur un contrat déjà en place.
+- **Retrait partiel** (version initiale de cet ADR, avant les correctifs A/B/C) :
+  gardait `current_user_roles` (fallback home publique) et `guard_prefix` faute
+  d'équivalents natifs. Rendu **caduc** par les correctifs Forge : le retrait total
+  est désormais possible et préférable (aucun code maison résiduel).
+- **Chemin base natif** (`permissions`/`role_permissions`) : imposerait un second
+  modèle + son DDL, pour aucun gain sur un contrat déjà en place.
 
-## Plan de mise en œuvre (tickets de suite)
+## Câblage (référence)
 
-Séquencé pour rester vérifiable à chaque étape (le RBAC est critique) :
-
-1. **T1 — Middleware `request.roles`.** Créer `RolesMiddleware.check(request)` qui
-   pose `request.roles` (slugs, auth moderne → base ; `[]` si anonyme/tables
-   absentes) et retourne `None`. Le câbler dans `app.py`
-   (`Application(router, middlewares=[AuthMiddleware(...), RolesMiddleware()])`).
-   *Validation* : `request.roles` est peuplé pour un compte connecté (log/test).
-
-2. **T2 — Bascule des gardes de route.** Adapter `guard_prefix` pour envelopper
-   `require_contract_permission_for_request` (natif, lit `request.roles`) au lieu de
-   `guarded` maison. Introduire un cache de contrat si le rechargement par requête
-   pèse. *Validation* : prof → 403 sur `/classe`, 200 sur `/mes-classes` ; anonyme
-   → redirigé ; admin → tout.
-
-3. **T3 — Bascule du `can()` Jinja.** Fournir le `can()` des vues via le contrat +
-   `request.roles` (provider natif avec `permission_checker` contractuel, ou
-   `rbac_context` maison réduit à lire `request.roles`). *Validation* : la nav
-   filtrée est identique à aujourd'hui pour chaque rôle.
-
-4. **T4 — Nettoyage.** Retirer de `mvc/services/rbac.py` les fonctions devenues
-   inutiles (`current_user_roles`, `can`, `require_permission`, `guarded`,
-   éventuellement `rbac_context`/`register_rbac_provider`). Conserver `guard_prefix`.
-   *Validation* : `make check` vert ; **e2e complet par rôle** (smoke test des routes
-   en admin/prof/élève/anonyme, réparti 200/403/302 inchangé).
-
-5. **T5 — Doc.** Marquer l'ADR-012 « amendé par ADR-015 » ; noter le retrait dans
-   [retour-015](../banc-essai/retour-015-rbac-resolveur-session-depreciee-et-schema-non-livre.md).
-
-**Garde-fou** : ne committer qu'après la vérification e2e par rôle de T4 — une
-régression RBAC est silencieuse (trop permissif) ou bloquante (trop restrictif).
+- `mvc/routes/__init__.py` : `register_contract_rbac_provider()` + table
+  `RBAC_PREFIX_RULES`.
+- `app.py` : `PrefixPermissionMiddleware(RBAC_PREFIX_RULES)` dans les middlewares.
+- Contrat : `mvc/security/rbac.json` (inchangé).

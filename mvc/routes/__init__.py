@@ -55,7 +55,7 @@ from mvc.routes.starter_welcome_routes import register_starter_welcome_routes
 from mvc.routes.suivi_routes import register_suivi_routes
 from mvc.routes.version_parcours_routes import register_version_parcours_routes
 from mvc.routes.version_starter_routes import register_version_starter_routes
-from mvc.services.rbac import guard_prefix, register_rbac_provider
+from forge_mvc_rbac import register_contract_rbac_provider
 from optins.registry import register_optins
 
 router = Router()
@@ -171,52 +171,59 @@ register_securite_routes(router)
 # Routes des opt-ins activés (ADR-061).
 register_optins(router)
 
-# RBAC applicatif (couche fine maison) : injecte `can(...)` dans tous les rendus
-# Jinja. Les rôles sont lus en base depuis la session moderne, le resolveur natif
-# de l'opt-in lisant une session dépréciée (voir docs/banc-essai).
-register_rbac_provider()
+# RBAC — modèle contrat natif (ADR-015 ; F30 + résolveur/provider/garde corrigés
+# côté Forge). Le `can(...)` des vues s'adosse au contrat `mvc/security/rbac.json`
+# via le provider Jinja contractuel natif ; appelé après l'import de l'opt-in pour
+# écraser le provider « table » auto-inscrit. Les rôles sont résolus par le natif
+# (`get_request_roles` : auth moderne → base), y compris sur la home publique connectée.
+register_contract_rbac_provider()
 
-# Gardes de route par domaine (permission du contrat mvc/security/rbac.json).
-# Masquer le menu n'est que du confort ; ces gardes protègent l'URL tapée à la
-# main. Une passe post-enregistrement (guard_prefix) enveloppe chaque handler du
-# préfixe, ce qui couvre aussi les routes futures du même domaine.
-#
-# Socle scolaire + référentiel + back-office admin : réservés à `socle.gerer`
-# (l'admin). C'est la vraie frontière de privilège : un professeur ne doit pas
-# gérer le socle même en tapant l'URL.
-for _prefix in (
-    "/annee_scolaire", "/niveau_classe", "/classe", "/eleve", "/professeur",
-    "/inscription_eleve", "/affectation_professeur_classe", "/groupe", "/admin",
-):
-    guard_prefix(router, _prefix, "socle.gerer")
-
-# Conception pédagogique : `conception.gerer` (admin + professeur).
-for _prefix in (
-    "/scenario", "/starter_welcome", "/version_starter",
-    "/parcours", "/version_parcours", "/palier",
-):
-    guard_prefix(router, _prefix, "conception.gerer")
-
-# Exécution (travail, évaluation) : `execution.gerer` (admin + professeur).
-for _prefix in (
-    "/affectation_parcours", "/progression_eleve", "/progression_palier",
-    "/qcm", "/question_qcm", "/choix_qcm", "/tentative_qcm", "/reponse_qcm",
-    "/checklist", "/section_checklist", "/item_checklist", "/item_coche",
-    "/activite", "/depot_eleve", "/evaluation_activite", "/evaluation_critere",
-    "/bilan",
-):
-    guard_prefix(router, _prefix, "execution.gerer")
-
-# Suivi (lecture seule) : `suivi.voir` (admin + professeur).
-guard_prefix(router, "/suivi", "suivi.voir")
-
-# Espace professeur « Mes classes » (lecture seule) : `suivi.voir` (admin + professeur).
-# Le socle scolaire complet reste réservé à `socle.gerer` (admin) ; cet espace
-# n'expose au professeur que SES classes, filtrées par compte (`professeur.UserId`).
-guard_prefix(router, "/mes-classes", "suivi.voir")
-
-# Évaluation professeur (écritures : valider, confirmer) : `execution.gerer`.
-guard_prefix(router, "/evaluation", "execution.gerer")
-
-# Espace élève : `espace_eleve.voir` (rôle eleve). Données filtrées par compte.
-guard_prefix(router, "/mon-parcours", "espace_eleve.voir")
+# Gardes de route par domaine (permission du contrat `mvc/security/rbac.json`).
+# Masquer le menu n'est que du confort ; ces gardes protègent l'URL tapée à la main.
+# Cette table préfixe -> permission est appliquée par `PrefixPermissionMiddleware`
+# (câblé dans `app.py`) : elle couvre chaque route sous le préfixe, y compris les
+# routes futures. Le préfixe le plus spécifique gagne. Un professeur ne gère pas le
+# socle même en tapant l'URL.
+RBAC_PREFIX_RULES: dict[str, str] = {
+    # Socle scolaire + référentiel + back-office admin : socle.gerer (admin).
+    "/annee_scolaire": "socle.gerer",
+    "/niveau_classe": "socle.gerer",
+    "/classe": "socle.gerer",
+    "/eleve": "socle.gerer",
+    "/professeur": "socle.gerer",
+    "/inscription_eleve": "socle.gerer",
+    "/affectation_professeur_classe": "socle.gerer",
+    "/groupe": "socle.gerer",
+    "/admin": "socle.gerer",
+    # Conception pédagogique : conception.gerer (admin + professeur).
+    "/scenario": "conception.gerer",
+    "/starter_welcome": "conception.gerer",
+    "/version_starter": "conception.gerer",
+    "/parcours": "conception.gerer",
+    "/version_parcours": "conception.gerer",
+    "/palier": "conception.gerer",
+    # Exécution (travail, évaluation) : execution.gerer (admin + professeur).
+    "/affectation_parcours": "execution.gerer",
+    "/progression_eleve": "execution.gerer",
+    "/progression_palier": "execution.gerer",
+    "/qcm": "execution.gerer",
+    "/question_qcm": "execution.gerer",
+    "/choix_qcm": "execution.gerer",
+    "/tentative_qcm": "execution.gerer",
+    "/reponse_qcm": "execution.gerer",
+    "/checklist": "execution.gerer",
+    "/section_checklist": "execution.gerer",
+    "/item_checklist": "execution.gerer",
+    "/item_coche": "execution.gerer",
+    "/activite": "execution.gerer",
+    "/depot_eleve": "execution.gerer",
+    "/evaluation_activite": "execution.gerer",
+    "/evaluation_critere": "execution.gerer",
+    "/bilan": "execution.gerer",
+    "/evaluation": "execution.gerer",
+    # Suivi (lecture seule) : suivi.voir (admin + professeur).
+    "/suivi": "suivi.voir",
+    "/mes-classes": "suivi.voir",
+    # Espace élève : espace_eleve.voir (rôle eleve). Données filtrées par compte.
+    "/mon-parcours": "espace_eleve.voir",
+}

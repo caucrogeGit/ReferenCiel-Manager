@@ -57,10 +57,14 @@
     l'app pose les rôles de `current_user` sur la requête via un middleware), avec
     repli sur la session legacy. Le RBAC contractuel natif est donc **câblable** sur
     l'auth moderne, à condition que l'app alimente `request.roles`.
-  - **Conséquence projet** : le retrait de la couche maison RBAC (ADR-012) redevient
-    possible — via un middleware qui pose `request.roles` — mais reste un chantier à
-    part (`guard_prefix` n'a toujours pas d'équivalent natif). Voir le suivi de
-    l'[ADR-012](../adr/012-rbac-couche-fine-maison-sur-contrat.md).
+  - **Complété côté Forge** (mêmes patchs) : résolveur `get_request_roles`
+    **autonome** (résout en base via l'auth moderne, sans injection — `67a32bcc`),
+    provider Jinja **contractuel** (`register_contract_rbac_provider`, `1b1bb998`) et
+    **garde par préfixe** (`PrefixPermissionMiddleware`, `5ef21fa3`). Les trois
+    manques qui obligeaient à garder du code maison sont levés.
+  - **Conséquence projet — RÉALISÉE** : la couche maison RBAC (`mvc/services/rbac.py`)
+    a été **entièrement supprimée** au profit du natif ([ADR-015](../adr/015-rbac-bascule-sur-le-contrat-natif.md)),
+    vérifiée e2e par rôle (home connectée comprise). Plus aucun contournement RBAC.
 
 ### F31 — L'opt-in ne livre **aucun schéma SQL** ni commande de synchronisation contrat → base
 
