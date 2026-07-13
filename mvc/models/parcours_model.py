@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT parcours.*, version_starter.Version AS version_starter_id_label FROM parcours LEFT JOIN version_starter ON parcours.version_starter_id = version_starter.Id ORDER BY parcours.Id"
 SELECT_BY_ID = "SELECT parcours.*, version_starter.Version AS version_starter_id_label FROM parcours LEFT JOIN version_starter ON parcours.version_starter_id = version_starter.Id WHERE parcours.Id = ?"
-INSERT       = "INSERT INTO parcours (Titre, version_starter_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
-UPDATE       = "UPDATE parcours SET Titre = ?, version_starter_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO parcours (Titre, version_starter_id) VALUES (?, ?)"
+UPDATE       = "UPDATE parcours SET Titre = ?, version_starter_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM parcours WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_parcours_by_id(id):
 
 
 def add_parcours(data):
-    return insert(INSERT, (data["titre"], data["version_starter_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["titre"], data["version_starter_id"], ))
 
 
 def update_parcours(id, data):
-    execute(UPDATE, (data["titre"], data["version_starter_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["titre"], data["version_starter_id"], id))
 
 
 def delete_parcours(id):

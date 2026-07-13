@@ -16,8 +16,6 @@
         {{ field(name='nom', label='Nom', type='text', value=form.value('nom'), error=form.error('nom')) }}
         {{ field(name='prenom', label='Prenom', type='text', value=form.value('prenom'), error=form.error('prenom')) }}
         {{ field(name='user_id', label='User id', type='number', value=form.value('user_id'), error=form.error('user_id')) }}
-        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
-        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label=trans('common.save'), variant='primary', type='submit') }}
             {{ button(label=trans('common.cancel'), variant='secondary', href='/professeur') }}

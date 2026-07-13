@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT progression_eleve.*, eleve.Nom AS eleve_id_label, affectation_parcours.Statut AS affectation_parcours_id_label FROM progression_eleve LEFT JOIN eleve ON progression_eleve.eleve_id = eleve.Id LEFT JOIN affectation_parcours ON progression_eleve.affectation_parcours_id = affectation_parcours.Id ORDER BY progression_eleve.Id"
 SELECT_BY_ID = "SELECT progression_eleve.*, eleve.Nom AS eleve_id_label, affectation_parcours.Statut AS affectation_parcours_id_label FROM progression_eleve LEFT JOIN eleve ON progression_eleve.eleve_id = eleve.Id LEFT JOIN affectation_parcours ON progression_eleve.affectation_parcours_id = affectation_parcours.Id WHERE progression_eleve.Id = ?"
-INSERT       = "INSERT INTO progression_eleve (Statut, DateDebut, eleve_id, affectation_parcours_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE progression_eleve SET Statut = ?, DateDebut = ?, eleve_id = ?, affectation_parcours_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO progression_eleve (Statut, DateDebut, eleve_id, affectation_parcours_id) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE progression_eleve SET Statut = ?, DateDebut = ?, eleve_id = ?, affectation_parcours_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM progression_eleve WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_progression_eleve_by_id(id):
 
 
 def add_progression_eleve(data):
-    return insert(INSERT, (data["statut"], data["date_debut"], data["eleve_id"], data["affectation_parcours_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["statut"], data["date_debut"], data["eleve_id"], data["affectation_parcours_id"], ))
 
 
 def update_progression_eleve(id, data):
-    execute(UPDATE, (data["statut"], data["date_debut"], data["eleve_id"], data["affectation_parcours_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["statut"], data["date_debut"], data["eleve_id"], data["affectation_parcours_id"], id))
 
 
 def delete_progression_eleve(id):

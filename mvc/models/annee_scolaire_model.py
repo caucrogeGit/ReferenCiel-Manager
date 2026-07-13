@@ -14,8 +14,8 @@ from core.database.db import execute, fetch_all, fetch_one, insert
 
 SELECT_ALL = "SELECT * FROM annee_scolaire ORDER BY Id"
 SELECT_BY_ID = "SELECT * FROM annee_scolaire WHERE Id = ?"
-INSERT = "INSERT INTO annee_scolaire (Libelle, DateDebut, DateFin, Active, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?)"
-UPDATE = "UPDATE annee_scolaire SET Libelle = ?, DateDebut = ?, DateFin = ?, Active = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT = "INSERT INTO annee_scolaire (Libelle, DateDebut, DateFin, Active) VALUES (?, ?, ?, ?)"
+UPDATE = "UPDATE annee_scolaire SET Libelle = ?, DateDebut = ?, DateFin = ?, Active = ? WHERE Id = ?"
 DELETE = "DELETE FROM annee_scolaire WHERE Id = ?"
 
 
@@ -30,14 +30,14 @@ def get_annee_scolaire_by_id(id: int) -> dict[str, Any] | None:
 def add_annee_scolaire(data: dict[str, Any]) -> int:
     return insert(
         INSERT,
-        (data["libelle"], data["date_debut"], data["date_fin"], data["active"], data["created_at"], data["updated_at"]),
+        (data["libelle"], data["date_debut"], data["date_fin"], data["active"]),
     )
 
 
 def update_annee_scolaire(id: int, data: dict[str, Any]) -> None:
     execute(
         UPDATE,
-        (data["libelle"], data["date_debut"], data["date_fin"], data["active"], data["created_at"], data["updated_at"], id),
+        (data["libelle"], data["date_debut"], data["date_fin"], data["active"], id),
     )
 
 

@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT palier.*, version_parcours.Version AS version_parcours_id_label FROM palier LEFT JOIN version_parcours ON palier.version_parcours_id = version_parcours.Id ORDER BY palier.Id"
 SELECT_BY_ID = "SELECT palier.*, version_parcours.Version AS version_parcours_id_label FROM palier LEFT JOIN version_parcours ON palier.version_parcours_id = version_parcours.Id WHERE palier.Id = ?"
-INSERT       = "INSERT INTO palier (Ordre, Titre, Theme, ProductionAttendue, DossierTechniqueFichier, version_parcours_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE palier SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, DossierTechniqueFichier = ?, version_parcours_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO palier (Ordre, Titre, Theme, ProductionAttendue, DossierTechniqueFichier, version_parcours_id) VALUES (?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE palier SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, DossierTechniqueFichier = ?, version_parcours_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM palier WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_palier_by_id(id):
 
 
 def add_palier(data):
-    return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["dossier_technique_fichier"], data["version_parcours_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["dossier_technique_fichier"], data["version_parcours_id"], ))
 
 
 def update_palier(id, data):
-    execute(UPDATE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["dossier_technique_fichier"], data["version_parcours_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["dossier_technique_fichier"], data["version_parcours_id"], id))
 
 
 def delete_palier(id):

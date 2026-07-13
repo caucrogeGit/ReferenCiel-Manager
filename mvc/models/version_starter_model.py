@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT version_starter.*, starter_welcome.Titre AS starter_id_label FROM version_starter LEFT JOIN starter_welcome ON version_starter.starter_id = starter_welcome.Id ORDER BY version_starter.Id"
 SELECT_BY_ID = "SELECT version_starter.*, starter_welcome.Titre AS starter_id_label FROM version_starter LEFT JOIN starter_welcome ON version_starter.starter_id = starter_welcome.Id WHERE version_starter.Id = ?"
-INSERT       = "INSERT INTO version_starter (Version, Statut, ActiviteGlissante, OrdreImpose, starter_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE version_starter SET Version = ?, Statut = ?, ActiviteGlissante = ?, OrdreImpose = ?, starter_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO version_starter (Version, Statut, ActiviteGlissante, OrdreImpose, starter_id) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE version_starter SET Version = ?, Statut = ?, ActiviteGlissante = ?, OrdreImpose = ?, starter_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM version_starter WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_version_starter_by_id(id):
 
 
 def add_version_starter(data):
-    return insert(INSERT, (data["version"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["starter_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["version"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["starter_id"], ))
 
 
 def update_version_starter(id, data):
-    execute(UPDATE, (data["version"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["starter_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["version"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["starter_id"], id))
 
 
 def delete_version_starter(id):

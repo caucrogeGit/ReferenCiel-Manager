@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT tentative_qcm.*, progression_palier.Statut AS progression_palier_id_label FROM tentative_qcm LEFT JOIN progression_palier ON tentative_qcm.progression_palier_id = progression_palier.Id ORDER BY tentative_qcm.Id"
 SELECT_BY_ID = "SELECT tentative_qcm.*, progression_palier.Statut AS progression_palier_id_label FROM tentative_qcm LEFT JOIN progression_palier ON tentative_qcm.progression_palier_id = progression_palier.Id WHERE tentative_qcm.Id = ?"
-INSERT       = "INSERT INTO tentative_qcm (NumeroTentative, Score, Validee, DateTentative, progression_palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE tentative_qcm SET NumeroTentative = ?, Score = ?, Validee = ?, DateTentative = ?, progression_palier_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO tentative_qcm (NumeroTentative, Score, Validee, DateTentative, progression_palier_id) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE tentative_qcm SET NumeroTentative = ?, Score = ?, Validee = ?, DateTentative = ?, progression_palier_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM tentative_qcm WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_tentative_qcm_by_id(id):
 
 
 def add_tentative_qcm(data):
-    return insert(INSERT, (data["numero_tentative"], data["score"], data["validee"], data["date_tentative"], data["progression_palier_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["numero_tentative"], data["score"], data["validee"], data["date_tentative"], data["progression_palier_id"], ))
 
 
 def update_tentative_qcm(id, data):
-    execute(UPDATE, (data["numero_tentative"], data["score"], data["validee"], data["date_tentative"], data["progression_palier_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["numero_tentative"], data["score"], data["validee"], data["date_tentative"], data["progression_palier_id"], id))
 
 
 def delete_tentative_qcm(id):

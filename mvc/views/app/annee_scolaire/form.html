@@ -55,30 +55,6 @@
             >
             <label class="text-sm font-medium text-gray-700">Active</label>
         </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Created at</label>
-            <input
-                type="datetime-local"
-                name="created_at"
-                value="{{ form.value('created_at') }}"
-                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-            {% if form.has_error('created_at') %}
-            <p class="text-red-600 text-sm mt-1">{{ form.error('created_at') }}</p>
-            {% endif %}
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Updated at</label>
-            <input
-                type="datetime-local"
-                name="updated_at"
-                value="{{ form.value('updated_at') }}"
-                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-            {% if form.has_error('updated_at') %}
-            <p class="text-red-600 text-sm mt-1">{{ form.error('updated_at') }}</p>
-            {% endif %}
-        </div>
         <div class="flex gap-4 pt-2">
             {% with type='submit', variant='primary', label=trans('common.save') %}
             {% include "components/button.html" %}

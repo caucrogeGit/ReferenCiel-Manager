@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT item_coche.*, item_checklist.Libelle AS item_id_label, progression_palier.Statut AS progression_palier_id_label FROM item_coche LEFT JOIN item_checklist ON item_coche.item_id = item_checklist.Id LEFT JOIN progression_palier ON item_coche.progression_palier_id = progression_palier.Id ORDER BY item_coche.Id"
 SELECT_BY_ID = "SELECT item_coche.*, item_checklist.Libelle AS item_id_label, progression_palier.Statut AS progression_palier_id_label FROM item_coche LEFT JOIN item_checklist ON item_coche.item_id = item_checklist.Id LEFT JOIN progression_palier ON item_coche.progression_palier_id = progression_palier.Id WHERE item_coche.Id = ?"
-INSERT       = "INSERT INTO item_coche (CocheEleve, CocheProfesseur, item_id, progression_palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE item_coche SET CocheEleve = ?, CocheProfesseur = ?, item_id = ?, progression_palier_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO item_coche (CocheEleve, CocheProfesseur, item_id, progression_palier_id) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE item_coche SET CocheEleve = ?, CocheProfesseur = ?, item_id = ?, progression_palier_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM item_coche WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_item_coche_by_id(id):
 
 
 def add_item_coche(data):
-    return insert(INSERT, (data["coche_eleve"], data["coche_professeur"], data["item_id"], data["progression_palier_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["coche_eleve"], data["coche_professeur"], data["item_id"], data["progression_palier_id"], ))
 
 
 def update_item_coche(id, data):
-    execute(UPDATE, (data["coche_eleve"], data["coche_professeur"], data["item_id"], data["progression_palier_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["coche_eleve"], data["coche_professeur"], data["item_id"], data["progression_palier_id"], id))
 
 
 def delete_item_coche(id):

@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT activite.*, palier.Titre AS palier_id_label FROM activite LEFT JOIN palier ON activite.palier_id = palier.Id ORDER BY activite.Id"
 SELECT_BY_ID = "SELECT activite.*, palier.Titre AS palier_id_label FROM activite LEFT JOIN palier ON activite.palier_id = palier.Id WHERE activite.Id = ?"
-INSERT       = "INSERT INTO activite (Objectif, Fichier, palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE activite SET Objectif = ?, Fichier = ?, palier_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO activite (Objectif, Fichier, palier_id) VALUES (?, ?, ?)"
+UPDATE       = "UPDATE activite SET Objectif = ?, Fichier = ?, palier_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM activite WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_activite_by_id(id):
 
 
 def add_activite(data):
-    return insert(INSERT, (data["objectif"], data["fichier"], data["palier_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["objectif"], data["fichier"], data["palier_id"], ))
 
 
 def update_activite(id, data):
-    execute(UPDATE, (data["objectif"], data["fichier"], data["palier_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["objectif"], data["fichier"], data["palier_id"], id))
 
 
 def delete_activite(id):

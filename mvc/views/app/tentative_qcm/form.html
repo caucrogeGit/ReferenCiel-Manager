@@ -18,8 +18,6 @@
         {{ checkbox(name='validee', label='Validee', checked=form.value('validee')) }}
         {{ field(name='date_tentative', label='Date tentative', type='datetime-local', value=form.value('date_tentative'), error=form.error('date_tentative')) }}
         {{ select_field(name='progression_palier_id', label='Progression palier', options=form.options.progression_palier_id_choices, selected=form.value('progression_palier_id'), error=form.error('progression_palier_id')) }}
-        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
-        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label=trans('common.save'), variant='primary', type='submit') }}
             {{ button(label=trans('common.cancel'), variant='secondary', href='/tentative_qcm') }}

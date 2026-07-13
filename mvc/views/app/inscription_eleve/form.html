@@ -17,8 +17,6 @@
         {{ select_field(name='eleve_id', label='Eleve', options=form.options.eleve_id_choices, selected=form.value('eleve_id'), error=form.error('eleve_id')) }}
         {{ select_field(name='classe_id', label='Classe', options=form.options.classe_id_choices, selected=form.value('classe_id'), error=form.error('classe_id')) }}
         {{ select_field(name='annee_scolaire_id', label='Annee scolaire', options=form.options.annee_scolaire_id_choices, selected=form.value('annee_scolaire_id'), error=form.error('annee_scolaire_id')) }}
-        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
-        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label=trans('common.save'), variant='primary', type='submit') }}
             {{ button(label=trans('common.cancel'), variant='secondary', href='/inscription_eleve') }}

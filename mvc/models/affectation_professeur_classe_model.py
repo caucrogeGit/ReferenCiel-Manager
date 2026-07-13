@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT affectation_professeur_classe.*, professeur.Nom AS professeur_id_label, classe.Libelle AS classe_id_label, annee_scolaire.Libelle AS annee_scolaire_id_label FROM affectation_professeur_classe LEFT JOIN professeur ON affectation_professeur_classe.professeur_id = professeur.Id LEFT JOIN classe ON affectation_professeur_classe.classe_id = classe.Id LEFT JOIN annee_scolaire ON affectation_professeur_classe.annee_scolaire_id = annee_scolaire.Id ORDER BY affectation_professeur_classe.Id"
 SELECT_BY_ID = "SELECT affectation_professeur_classe.*, professeur.Nom AS professeur_id_label, classe.Libelle AS classe_id_label, annee_scolaire.Libelle AS annee_scolaire_id_label FROM affectation_professeur_classe LEFT JOIN professeur ON affectation_professeur_classe.professeur_id = professeur.Id LEFT JOIN classe ON affectation_professeur_classe.classe_id = classe.Id LEFT JOIN annee_scolaire ON affectation_professeur_classe.annee_scolaire_id = annee_scolaire.Id WHERE affectation_professeur_classe.Id = ?"
-INSERT       = "INSERT INTO affectation_professeur_classe (Role, professeur_id, classe_id, annee_scolaire_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE affectation_professeur_classe SET Role = ?, professeur_id = ?, classe_id = ?, annee_scolaire_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO affectation_professeur_classe (Role, professeur_id, classe_id, annee_scolaire_id) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE affectation_professeur_classe SET Role = ?, professeur_id = ?, classe_id = ?, annee_scolaire_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM affectation_professeur_classe WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_affectation_professeur_classe_by_id(id):
 
 
 def add_affectation_professeur_classe(data):
-    return insert(INSERT, (data["role"], data["professeur_id"], data["classe_id"], data["annee_scolaire_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["role"], data["professeur_id"], data["classe_id"], data["annee_scolaire_id"], ))
 
 
 def update_affectation_professeur_classe(id, data):
-    execute(UPDATE, (data["role"], data["professeur_id"], data["classe_id"], data["annee_scolaire_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["role"], data["professeur_id"], data["classe_id"], data["annee_scolaire_id"], id))
 
 
 def delete_affectation_professeur_classe(id):

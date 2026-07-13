@@ -16,8 +16,6 @@
         {{ textarea_field(name='format_reponse', label='Format reponse', value=form.value('format_reponse'), error=form.error('format_reponse')) }}
         {{ field(name='seuil_validation', label='Seuil validation', type='text', value=form.value('seuil_validation'), error=form.error('seuil_validation')) }}
         {{ select_field(name='palier_id', label='Palier', options=form.options.palier_id_choices, selected=form.value('palier_id'), error=form.error('palier_id')) }}
-        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
-        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label=trans('common.save'), variant='primary', type='submit') }}
             {{ button(label=trans('common.cancel'), variant='secondary', href='/qcm') }}

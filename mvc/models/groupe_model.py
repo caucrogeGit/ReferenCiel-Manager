@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT groupe.*, classe.Libelle AS classe_id_label FROM groupe LEFT JOIN classe ON groupe.classe_id = classe.Id ORDER BY groupe.Id"
 SELECT_BY_ID = "SELECT groupe.*, classe.Libelle AS classe_id_label FROM groupe LEFT JOIN classe ON groupe.classe_id = classe.Id WHERE groupe.Id = ?"
-INSERT       = "INSERT INTO groupe (Nom, classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
-UPDATE       = "UPDATE groupe SET Nom = ?, classe_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO groupe (Nom, classe_id) VALUES (?, ?)"
+UPDATE       = "UPDATE groupe SET Nom = ?, classe_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM groupe WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_groupe_by_id(id):
 
 
 def add_groupe(data):
-    return insert(INSERT, (data["nom"], data["classe_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["nom"], data["classe_id"], ))
 
 
 def update_groupe(id, data):
-    execute(UPDATE, (data["nom"], data["classe_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["nom"], data["classe_id"], id))
 
 
 def delete_groupe(id):

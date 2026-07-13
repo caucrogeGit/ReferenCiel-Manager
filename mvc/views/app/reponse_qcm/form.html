@@ -17,8 +17,6 @@
         {{ select_field(name='tentative_id', label='Tentative', options=form.options.tentative_id_choices, selected=form.value('tentative_id'), error=form.error('tentative_id')) }}
         {{ select_field(name='question_id', label='Question', options=form.options.question_id_choices, selected=form.value('question_id'), error=form.error('question_id')) }}
         {{ select_field(name='choix_id', label='Choix', options=form.options.choix_id_choices, selected=form.value('choix_id'), error=form.error('choix_id')) }}
-        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
-        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label=trans('common.save'), variant='primary', type='submit') }}
             {{ button(label=trans('common.cancel'), variant='secondary', href='/reponse_qcm') }}

@@ -15,8 +15,6 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {{ field(name='nom', label='Nom', type='text', value=form.value('nom'), error=form.error('nom')) }}
         {{ select_field(name='classe_id', label='Classe', options=form.options.classe_id_choices, selected=form.value('classe_id'), error=form.error('classe_id')) }}
-        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
-        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
         <div>
             <label class="block text-sm font-medium text-gray-700">Eleve</label>
             <select

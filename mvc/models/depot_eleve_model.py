@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT depot_eleve.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label FROM depot_eleve LEFT JOIN progression_palier ON depot_eleve.progression_palier_id = progression_palier.Id LEFT JOIN activite ON depot_eleve.activite_id = activite.Id ORDER BY depot_eleve.Id"
 SELECT_BY_ID = "SELECT depot_eleve.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label FROM depot_eleve LEFT JOIN progression_palier ON depot_eleve.progression_palier_id = progression_palier.Id LEFT JOIN activite ON depot_eleve.activite_id = activite.Id WHERE depot_eleve.Id = ?"
-INSERT       = "INSERT INTO depot_eleve (Fichier, Commentaire, DateDepot, progression_palier_id, activite_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE depot_eleve SET Fichier = ?, Commentaire = ?, DateDepot = ?, progression_palier_id = ?, activite_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO depot_eleve (Fichier, Commentaire, DateDepot, progression_palier_id, activite_id) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE depot_eleve SET Fichier = ?, Commentaire = ?, DateDepot = ?, progression_palier_id = ?, activite_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM depot_eleve WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_depot_eleve_by_id(id):
 
 
 def add_depot_eleve(data):
-    return insert(INSERT, (data["fichier"], data["commentaire"], data["date_depot"], data["progression_palier_id"], data["activite_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["fichier"], data["commentaire"], data["date_depot"], data["progression_palier_id"], data["activite_id"], ))
 
 
 def update_depot_eleve(id, data):
-    execute(UPDATE, (data["fichier"], data["commentaire"], data["date_depot"], data["progression_palier_id"], data["activite_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["fichier"], data["commentaire"], data["date_depot"], data["progression_palier_id"], data["activite_id"], id))
 
 
 def delete_depot_eleve(id):

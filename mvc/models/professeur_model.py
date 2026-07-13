@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT * FROM professeur ORDER BY Id"
 SELECT_BY_ID = "SELECT * FROM professeur WHERE Id = ?"
-INSERT       = "INSERT INTO professeur (Nom, Prenom, UserId, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE professeur SET Nom = ?, Prenom = ?, UserId = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO professeur (Nom, Prenom, UserId) VALUES (?, ?, ?)"
+UPDATE       = "UPDATE professeur SET Nom = ?, Prenom = ?, UserId = ? WHERE Id = ?"
 DELETE       = "DELETE FROM professeur WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_professeur_by_id(id):
 
 
 def add_professeur(data):
-    return insert(INSERT, (data["nom"], data["prenom"], data["user_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["nom"], data["prenom"], data["user_id"], ))
 
 
 def update_professeur(id, data):
-    execute(UPDATE, (data["nom"], data["prenom"], data["user_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["nom"], data["prenom"], data["user_id"], id))
 
 
 def delete_professeur(id):

@@ -15,8 +15,6 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {{ field(name='code', label='Code', type='text', value=form.value('code'), error=form.error('code')) }}
         {{ field(name='libelle', label='Libelle', type='text', value=form.value('libelle'), error=form.error('libelle')) }}
-        {{ field(name='created_at', label='Created at', type='datetime-local', value=form.value('created_at'), error=form.error('created_at')) }}
-        {{ field(name='updated_at', label='Updated at', type='datetime-local', value=form.value('updated_at'), error=form.error('updated_at')) }}
         {{ select_field(name='annee_scolaire_id', label='Annee scolaire', options=form.options.annee_scolaire_id_choices, selected=form.value('annee_scolaire_id'), error=form.error('annee_scolaire_id')) }}
         {{ select_field(name='niveau_classe_id', label='Niveau classe', options=form.options.niveau_classe_id_choices, selected=form.value('niveau_classe_id'), error=form.error('niveau_classe_id')) }}
         <div class="flex gap-4 pt-2">

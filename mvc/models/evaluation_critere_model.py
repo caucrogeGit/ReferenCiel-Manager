@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT evaluation_critere.*, evaluation_activite.Appreciation AS evaluation_activite_id_label, critere_observable.Libelle AS critere_id_label FROM evaluation_critere LEFT JOIN evaluation_activite ON evaluation_critere.evaluation_activite_id = evaluation_activite.Id LEFT JOIN critere_observable ON evaluation_critere.critere_id = critere_observable.Id ORDER BY evaluation_critere.Id"
 SELECT_BY_ID = "SELECT evaluation_critere.*, evaluation_activite.Appreciation AS evaluation_activite_id_label, critere_observable.Libelle AS critere_id_label FROM evaluation_critere LEFT JOIN evaluation_activite ON evaluation_critere.evaluation_activite_id = evaluation_activite.Id LEFT JOIN critere_observable ON evaluation_critere.critere_id = critere_observable.Id WHERE evaluation_critere.Id = ?"
-INSERT       = "INSERT INTO evaluation_critere (Niveau, evaluation_activite_id, critere_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE evaluation_critere SET Niveau = ?, evaluation_activite_id = ?, critere_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO evaluation_critere (Niveau, evaluation_activite_id, critere_id) VALUES (?, ?, ?)"
+UPDATE       = "UPDATE evaluation_critere SET Niveau = ?, evaluation_activite_id = ?, critere_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM evaluation_critere WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_evaluation_critere_by_id(id):
 
 
 def add_evaluation_critere(data):
-    return insert(INSERT, (data["niveau"], data["evaluation_activite_id"], data["critere_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["niveau"], data["evaluation_activite_id"], data["critere_id"], ))
 
 
 def update_evaluation_critere(id, data):
-    execute(UPDATE, (data["niveau"], data["evaluation_activite_id"], data["critere_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["niveau"], data["evaluation_activite_id"], data["critere_id"], id))
 
 
 def delete_evaluation_critere(id):

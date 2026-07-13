@@ -18,11 +18,11 @@ def get_classe_by_id(id):
 
 
 def add_classe(data):
-    return insert(INSERT, (data["code"], data["libelle"], data["created_at"], data["updated_at"], data["annee_scolaire_id"], data["niveau_classe_id"],))
+    return insert(INSERT, (data["code"], data["libelle"], data["annee_scolaire_id"], data["niveau_classe_id"],))
 
 
 def update_classe(id, data):
-    execute(UPDATE, (data["code"], data["libelle"], data["created_at"], data["updated_at"], data["annee_scolaire_id"], data["niveau_classe_id"], id))
+    execute(UPDATE, (data["code"], data["libelle"], data["annee_scolaire_id"], data["niveau_classe_id"], id))
 
 
 def delete_classe(id):

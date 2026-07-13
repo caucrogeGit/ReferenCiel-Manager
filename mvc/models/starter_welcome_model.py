@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT starter_welcome.*, niveau_classe.Code AS niveau_classe_id_label FROM starter_welcome LEFT JOIN niveau_classe ON starter_welcome.niveau_classe_id = niveau_classe.Id ORDER BY starter_welcome.Id"
 SELECT_BY_ID = "SELECT starter_welcome.*, niveau_classe.Code AS niveau_classe_id_label FROM starter_welcome LEFT JOIN niveau_classe ON starter_welcome.niveau_classe_id = niveau_classe.Id WHERE starter_welcome.Id = ?"
-INSERT       = "INSERT INTO starter_welcome (Identifiant, Titre, Presentation, niveau_classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE starter_welcome SET Identifiant = ?, Titre = ?, Presentation = ?, niveau_classe_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO starter_welcome (Identifiant, Titre, Presentation, niveau_classe_id) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE starter_welcome SET Identifiant = ?, Titre = ?, Presentation = ?, niveau_classe_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM starter_welcome WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_starter_welcome_by_id(id):
 
 
 def add_starter_welcome(data):
-    return insert(INSERT, (data["identifiant"], data["titre"], data["presentation"], data["niveau_classe_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["identifiant"], data["titre"], data["presentation"], data["niveau_classe_id"], ))
 
 
 def update_starter_welcome(id, data):
-    execute(UPDATE, (data["identifiant"], data["titre"], data["presentation"], data["niveau_classe_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["identifiant"], data["titre"], data["presentation"], data["niveau_classe_id"], id))
 
 
 def delete_starter_welcome(id):

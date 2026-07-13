@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT qcm.*, palier.Titre AS palier_id_label FROM qcm LEFT JOIN palier ON qcm.palier_id = palier.Id ORDER BY qcm.Id"
 SELECT_BY_ID = "SELECT qcm.*, palier.Titre AS palier_id_label FROM qcm LEFT JOIN palier ON qcm.palier_id = palier.Id WHERE qcm.Id = ?"
-INSERT       = "INSERT INTO qcm (FormatReponse, SeuilValidation, palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE qcm SET FormatReponse = ?, SeuilValidation = ?, palier_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO qcm (FormatReponse, SeuilValidation, palier_id) VALUES (?, ?, ?)"
+UPDATE       = "UPDATE qcm SET FormatReponse = ?, SeuilValidation = ?, palier_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM qcm WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_qcm_by_id(id):
 
 
 def add_qcm(data):
-    return insert(INSERT, (data["format_reponse"], data["seuil_validation"], data["palier_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["format_reponse"], data["seuil_validation"], data["palier_id"], ))
 
 
 def update_qcm(id, data):
-    execute(UPDATE, (data["format_reponse"], data["seuil_validation"], data["palier_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["format_reponse"], data["seuil_validation"], data["palier_id"], id))
 
 
 def delete_qcm(id):

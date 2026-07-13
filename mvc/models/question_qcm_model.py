@@ -4,8 +4,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT question_qcm.*, qcm.FormatReponse AS qcm_id_label FROM question_qcm LEFT JOIN qcm ON question_qcm.qcm_id = qcm.Id ORDER BY question_qcm.Id"
 SELECT_BY_ID = "SELECT question_qcm.*, qcm.FormatReponse AS qcm_id_label FROM question_qcm LEFT JOIN qcm ON question_qcm.qcm_id = qcm.Id WHERE question_qcm.Id = ?"
-INSERT       = "INSERT INTO question_qcm (Numero, Enonce, BonneReponse, qcm_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE question_qcm SET Numero = ?, Enonce = ?, BonneReponse = ?, qcm_id = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO question_qcm (Numero, Enonce, BonneReponse, qcm_id) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE question_qcm SET Numero = ?, Enonce = ?, BonneReponse = ?, qcm_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM question_qcm WHERE Id = ?"
 
 
@@ -18,11 +18,11 @@ def get_question_qcm_by_id(id):
 
 
 def add_question_qcm(data):
-    return insert(INSERT, (data["numero"], data["enonce"], data["bonne_reponse"], data["qcm_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["numero"], data["enonce"], data["bonne_reponse"], data["qcm_id"], ))
 
 
 def update_question_qcm(id, data):
-    execute(UPDATE, (data["numero"], data["enonce"], data["bonne_reponse"], data["qcm_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["numero"], data["enonce"], data["bonne_reponse"], data["qcm_id"], id))
 
 
 def delete_question_qcm(id):

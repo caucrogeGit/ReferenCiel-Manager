@@ -1,4 +1,4 @@
-from core.forms import Form, DateTimeField, RelationField, StringField
+from core.forms import Form, RelationField, StringField
 
 
 class ScenarioForm(Form):
@@ -9,5 +9,3 @@ class ScenarioForm(Form):
     version = StringField(label="Version", required=True)
     referentiel_id = RelationField(label="Referentiel", target="ReferentielNiveauClasse", required=True, choices_key="referentiel_id_choices")
     auteur_id = RelationField(label="Auteur", target="Professeur", required=True, choices_key="auteur_id_choices")
-    created_at = DateTimeField(label="Created at", required=True)
-    updated_at = DateTimeField(label="Updated at", required=True)
