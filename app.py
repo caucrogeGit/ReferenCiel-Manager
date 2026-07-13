@@ -113,6 +113,7 @@ from core.http.helpers import html as _html
 from core.app.application import Application
 from core.security.middleware import AuthMiddleware
 from forge_mvc_rbac import PrefixPermissionMiddleware
+from mvc.middlewares.session_integrity import SessionIntegrityMiddleware
 # CORE-DROP-UPLOADS-001 (ADR-019) : le service de fichiers est un opt-in
 # (forge-mvc-files). Import lazy dans le handler /media (l'app démarre sans).
 from integrations.jinja2.renderer import Jinja2Renderer
@@ -122,12 +123,18 @@ template_manager.register(Jinja2Renderer(VIEWS_DIR))
 
 _routes = importlib.import_module(APP_ROUTES_MODULE)
 forge.configure(router=_routes.router)
-# Middlewares (évalués dans l'ordre sur les routes non publiques) : auth d'abord,
-# puis RBAC par préfixe (contrat rbac.json), ADR-015. La table préfixe -> permission
-# vit dans mvc/routes ; les rôles sont résolus par le RBAC natif (auth moderne → base).
+# Middlewares (évalués dans l'ordre sur les routes non publiques) : intégrité de
+# session d'abord (ferme une session pointant vers un compte disparu → /login),
+# puis auth, puis RBAC par préfixe (contrat rbac.json), ADR-015. La table
+# préfixe -> permission vit dans mvc/routes ; les rôles sont résolus par le RBAC
+# natif (auth moderne → base).
 _app    = Application(
     _routes.router,
-    middlewares=[AuthMiddleware("/login"), PrefixPermissionMiddleware(_routes.RBAC_PREFIX_RULES)],
+    middlewares=[
+        SessionIntegrityMiddleware("/login"),
+        AuthMiddleware("/login"),
+        PrefixPermissionMiddleware(_routes.RBAC_PREFIX_RULES),
+    ],
 )
 
 logger = logging.getLogger(__name__)
