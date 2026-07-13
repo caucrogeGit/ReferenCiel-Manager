@@ -1,5 +1,5 @@
 # pyright: strict
-"""Validation d'un JSON canonique contre son schéma (ADR-008 : la porte d'entrée).
+"""Validation d'un JSON canonique contre son schéma (ADR-009 : la porte d'entrée).
 
 Un fichier non conforme est **refusé** avec des messages lisibles avant tout import.
 Le schéma vit dans `docs/specs/json-canonique/schemas/` (ticket 04).

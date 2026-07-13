@@ -127,7 +127,7 @@ forge.configure(router=_routes.router)
 # — avec un `user_loader` (ADR-080), l'AuthMiddleware valide l'existence ET
 # l'activité du sujet et ferme une session orpheline (compte disparu/inactif :
 # logout + purge du cookie) au lieu de la croire connectée —, puis RBAC par
-# préfixe (contrat rbac.json, ADR-015). La table préfixe -> permission vit dans
+# préfixe (contrat rbac.json, ADR-017). La table préfixe -> permission vit dans
 # mvc/routes ; les rôles sont résolus par le RBAC natif (auth moderne → base).
 _app    = Application(
     _routes.router,
@@ -379,7 +379,7 @@ class TLSThreadingHTTPServer(ThreadingHTTPServer):
 
     Ne pas simplifier cette classe en réintroduisant
     `wrap_socket(server.socket)` sur le socket d'écoute : ce serait
-    exactement la régression du bug d'origine. Voir ADR-015 — Handshake TLS
+    exactement la régression du bug d'origine. Voir ADR-017 — Handshake TLS
     par thread client pour le serveur de développement
     (`docs/adr/015-dev-tls-handshake-per-thread.md`).
     """

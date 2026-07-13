@@ -1,7 +1,7 @@
 # Procédure — Monter le squelette Forge en place
 
 Procédure **rejouable** pour récupérer les apports d'une nouvelle version de Forge
-sans « tout reprendre » et sans casser le projet. Cadre : [ADR-009](../adr/009-montee-squelette-forge-en-place.md).
+sans « tout reprendre » et sans casser le projet. Cadre : [ADR-010](../adr/010-montee-squelette-forge-en-place.md).
 
 > Principe : **on ne déplace aucun dossier**. Le `.git` (historique + `origin`) et
 > le `.venv` restent en place ; on apporte les fichiers neufs *dans* le projet.

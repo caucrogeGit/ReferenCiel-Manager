@@ -35,7 +35,7 @@ from mvc.routes.inscription_eleve_routes import register_inscription_eleve_route
 from mvc.routes.mes_classes_routes import register_mes_classes_routes
 from mvc.routes.mon_parcours_routes import register_mon_parcours_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
-# CRUD des entités du référentiel (admin) — ADR-016
+# CRUD des entités du référentiel (admin) — ADR-017
 from mvc.routes.formation_routes import register_formation_routes
 from mvc.routes.pole_activite_routes import register_pole_activite_routes
 from mvc.routes.activite_professionnelle_routes import register_activite_professionnelle_routes
@@ -173,7 +173,7 @@ register_affectation_professeur_classe_routes(router)
 # Routes appliquées pour : groupe_controller
 register_groupe_routes(router)
 
-# Import de référentiel par upload admin (ticket 11, ADR-008)
+# Import de référentiel par upload admin (ticket 11, ADR-009)
 register_referentiel_import_routes(router)
 
 # Back-office admin (forge-mvc-admin) : parcourir les référentiels importés.
@@ -183,10 +183,10 @@ register_admin(router)
 # Routes appliquées pour : auth_controller
 register_auth_routes(router)
 
-# Réinitialisation de mot de passe (ADR-013 T1) : routes publiques, CSRF actif
+# Réinitialisation de mot de passe (ADR-014 T1) : routes publiques, CSRF actif
 register_password_reset_routes(router)
 
-# Espace Sécurité — MFA self-service (ADR-014) : auth requise, self-service
+# Espace Sécurité — MFA self-service (ADR-015) : auth requise, self-service
 register_securite_routes(router)
 
 # Espace Compte — profil / préférences / aide (menu profil) : auth requise
@@ -195,7 +195,7 @@ register_compte_routes(router)
 # Routes des opt-ins activés (ADR-061).
 register_optins(router)
 
-# RBAC — provider Jinja du modèle contrat natif (ADR-015), rendu LOADER-AWARE
+# RBAC — provider Jinja du modèle contrat natif (ADR-016), rendu LOADER-AWARE
 # (F55 / ADR-080). `can(...)` s'adosse au contrat `mvc/security/rbac.json` ; mais
 # `is_authenticated` / `current_user` reflètent désormais le SUJET RÉEL via le
 # loader (existence + activité) : une session orpheline est vue NON authentifiée

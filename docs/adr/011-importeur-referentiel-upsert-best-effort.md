@@ -1,4 +1,4 @@
-# ADR-010 — Importeur du référentiel : upsert par identifiant, import best-effort avec rapport
+# ADR-011 — Importeur du référentiel : upsert par identifiant, import best-effort avec rapport
 
 **Statut :** Accepté
 **Date :** 2026-07-09
@@ -7,7 +7,7 @@
 
 Le ticket 11 (phase ⑤) construit l'**importeur** qui fait entrer un référentiel
 niveau-classe en base depuis son **JSON canonique**. Le schéma (ticket 09-10) est en
-place : 12 entités + relations, 20 entités au total. L'[ADR-008](008-import-json-canonique-par-upload-admin.md)
+place : 12 entités + relations, 20 entités au total. L'[ADR-009](009-import-json-canonique-par-upload-admin.md)
 a déjà tranché le **mode d'entrée** : upload d'un JSON canonique dans l'**espace admin**,
 validé contre le [schéma JSON](../specs/json-canonique/schemas/) puis importé.
 
@@ -22,7 +22,7 @@ locaux doivent être **mappés** vers les `Id` de la base à l'import.
 
 ## Décision
 
-1. **Architecture (conforme ADR-008).** Upload dans l'**espace admin** (opt-in
+1. **Architecture (conforme ADR-009).** Upload dans l'**espace admin** (opt-in
    `forge-mvc-admin`), gestion du fichier par `forge-mvc-files`. À l'upload : (1)
    **validation** contre le schéma JSON (fichier non conforme refusé) ; (2) **routage**
    par le champ `type` de l'enveloppe ; (3) appel du **service d'import**. Le service

@@ -28,5 +28,5 @@ la même validation dans `reset_password_with_token`).
 
 ## Références
 
-[ADR-013](../../../docs/adr/013-securite-applicative-reelle.md) (T1 — durcissement
+[ADR-014](../../../docs/adr/014-securite-applicative-reelle.md) (T1 — durcissement
 des mots de passe).

@@ -1,4 +1,4 @@
-# ADR-005 — Standard de qualité, documentation mkdocs et rôle de banc d'essai
+# ADR-006 — Standard de qualité, documentation mkdocs et rôle de banc d'essai
 
 ## Statut
 
@@ -13,8 +13,8 @@ Accepté (2026-07-05).
 
 ## Contexte
 
-RéférenCiel Manager est développé à 100% avec Forge (ADR-003) et sa base est la
-vérité applicative (ADR-002). Au-delà de ces choix, le projet doit être **tenu au
+RéférenCiel Manager est développé à 100% avec Forge (ADR-004) et sa base est la
+vérité applicative (ADR-003). Au-delà de ces choix, le projet doit être **tenu au
 même standard que le framework Forge lui-même** : Forge est explicite, testable,
 documenté (mkdocs), gouverné par des ADR et une charte de principes non
 négociables. Trois exigences en découlent, formulées par le porteur du projet :

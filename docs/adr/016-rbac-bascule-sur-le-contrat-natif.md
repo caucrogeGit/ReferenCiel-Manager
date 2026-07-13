@@ -1,13 +1,13 @@
-# ADR-015 — Bascule du RBAC sur le contrat natif (retrait **total** de la couche maison)
+# ADR-016 — Bascule du RBAC sur le contrat natif (retrait **total** de la couche maison)
 
 **Statut :** Accepté et **réalisé** (2026-07-12)
 
-> **Remplace** la couche RBAC maison de l'[ADR-012](012-rbac-couche-fine-maison-sur-contrat.md) :
+> **Remplace** la couche RBAC maison de l'[ADR-013](013-rbac-couche-fine-maison-sur-contrat.md) :
 > `mvc/services/rbac.py` est **supprimé**, tout le RBAC passe par l'opt-in natif.
 
 ## Contexte
 
-L'[ADR-012](012-rbac-couche-fine-maison-sur-contrat.md) avait introduit une couche
+L'[ADR-013](013-rbac-couche-fine-maison-sur-contrat.md) avait introduit une couche
 RBAC « fine maison » parce que l'opt-in `forge-mvc-rbac` était, sous l'auth moderne,
 inutilisable : resolveur de rôles sur session dépréciée (F30), pas de provider Jinja
 contractuel, pas de garde par préfixe d'URL.
@@ -20,7 +20,7 @@ Ces trois manques ont été **corrigés côté Forge** (retour banc-essai du pro
 | **B** — garde par **préfixe** (`PrefixPermissionMiddleware`) | `5ef21fa3` | `guard_prefix` |
 | **C** — provider Jinja **contractuel** (`register_contract_rbac_provider`) | `1b1bb998` | `rbac_context` / `register_rbac_provider` |
 
-Le contournement de l'ADR-012 n'a donc **plus aucune raison d'être** : on retire la
+Le contournement de l'ADR-013 n'a donc **plus aucune raison d'être** : on retire la
 couche maison **en totalité**.
 
 ## Décision

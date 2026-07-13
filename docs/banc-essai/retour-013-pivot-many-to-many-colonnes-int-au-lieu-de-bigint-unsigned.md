@@ -1,7 +1,7 @@
 # Retour terrain 013 — Le pivot `many_to_many` généré type ses colonnes en `INT` (FK incompatible avec `BIGINT UNSIGNED`)
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** à remonter.
 
 ## Environnement

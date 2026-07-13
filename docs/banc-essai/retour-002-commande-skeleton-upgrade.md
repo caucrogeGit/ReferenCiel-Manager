@@ -1,7 +1,7 @@
 # Retour terrain 002 — Un chemin outillé pour mettre à jour le squelette d'un projet existant
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** ✅ Résolu dans forge-mvc f38d5159 (2026-07-08) — vérifié sur le banc d'essai.
 
 ## Environnement
@@ -20,7 +20,7 @@ c'est risqué : notre première tentative, par déplacement de dossier, a **cass
 `.venv`** (chemins absolus non déplaçables) et imposé un **force-push**.
 
 Nous avons formalisé une procédure sûre côté application
-([ADR-009](../adr/009-montee-squelette-forge-en-place.md) + manifeste de propriété),
+([ADR-010](../adr/010-montee-squelette-forge-en-place.md) + manifeste de propriété),
 mais elle **devrait vivre dans Forge**.
 
 ## Constat

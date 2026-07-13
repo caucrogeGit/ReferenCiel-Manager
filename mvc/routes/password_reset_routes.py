@@ -1,5 +1,5 @@
 # pyright: strict
-"""Routes de la réinitialisation de mot de passe (ADR-013 T1).
+"""Routes de la réinitialisation de mot de passe (ADR-014 T1).
 
 Publiques (un utilisateur non connecté doit pouvoir réinitialiser), mais protégées
 CSRF sur les POST (défaut Forge). Aucune permission RBAC (hors des préfixes gardés).

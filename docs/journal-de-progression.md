@@ -35,24 +35,24 @@ Base de données         = vérité applicative en fonctionnement
 
 ---
 
-## 2. Choix du backend : MariaDB (ADR-004)
+## 2. Choix du backend : MariaDB (ADR-005)
 
 Parmi les backends Forge (hors SQLite : MariaDB, PostgreSQL alpha, MSSQL alpha),
 **MariaDB** a été retenu — seul opt-in **complet**, cohérent avec la règle « 100%
 Forge », et largement suffisant pour la charge d'une application pédagogique.
 
-- Décision : [ADR-004](adr/004-backend-base-de-donnees-mariadb.md).
+- Décision : [ADR-005](adr/005-backend-base-de-donnees-mariadb.md).
 - Le porteur installe l'opt-in `forge-mvc-mariadb` lui-même.
 
 ---
 
-## 3. Montée de squelette Forge « en place » (ADR-009)
+## 3. Montée de squelette Forge « en place » (ADR-010)
 
 Le projet suit l'évolution du framework. Une première tentative de migration **par
 déplacement de dossiers** a cassé le `.venv` (chemins absolus, non déplaçable) →
 **rollback complet**. On a alors défini une méthode **en place** :
 
-- **Décision** : [ADR-009](adr/009-montee-squelette-forge-en-place.md) + procédure
+- **Décision** : [ADR-010](adr/010-montee-squelette-forge-en-place.md) + procédure
   [Montée de squelette Forge](procedures/montee-squelette-forge.md) (manifeste de
   propriété : fichiers *squelette* vs *projet*).
 - **Outillage** créé :
@@ -436,7 +436,7 @@ compétences/critères + `sync_*_ids` transactionnel. Tests de persistance (mock
 
 ### `StarterWelcome` / `VersionStarter` — tables `starter_welcome` / `version_starter` ✅ (phase ⑦)
 
-Parcours réutilisable, en **identité + versions** ([ADR-011](adr/011-versionnement-identite-plus-version.md),
+Parcours réutilisable, en **identité + versions** ([ADR-012](adr/012-versionnement-identite-plus-version.md),
 [dico](specs/data-dictionary/dictionnaire-starter-welcome.md)).
 
 | Entité | Champs | Relations |
@@ -449,7 +449,7 @@ Parcours réutilisable, en **identité + versions** ([ADR-011](adr/011-versionne
 
 ### `Parcours` / `VersionParcours` / `Palier` — phase ⑧ ✅
 
-Le parcours **organise le travail élève**, **dérivé** d'un starter ([ADR-011](adr/011-versionnement-identite-plus-version.md),
+Le parcours **organise le travail élève**, **dérivé** d'un starter ([ADR-012](adr/012-versionnement-identite-plus-version.md),
 [dico Parcours](specs/data-dictionary/dictionnaire-parcours.md)).
 
 | Entité | Champs | Relations |
@@ -496,8 +496,8 @@ L'application **exerce Forge en réel** et remonte chaque friction. Voir la
 
 Trace des arbitrages structurants (le *pourquoi*) :
 
-- **Backend** = MariaDB (ADR-004).
-- **Montée de squelette** = en place, jamais par déplacement de dossier (ADR-009).
+- **Backend** = MariaDB (ADR-005).
+- **Montée de squelette** = en place, jamais par déplacement de dossier (ADR-010).
 - **Auth** = socle de base uniquement ; **RBAC et MFA différés** (opt-ins non
   installés) — sans désactiver l'authentification.
 - **`Classe.code`** = unique **dans l'année** (composite `(année, code)`), pas
@@ -517,14 +517,14 @@ Trace des arbitrages structurants (le *pourquoi*) :
 | Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `professeur`, `inscription_eleve` (+3 FK, UNIQUE), `affectation_professeur_classe` (+3 FK, UNIQUE), `groupe` (+1 FK), `groupe_eleve` (pivot m2m), `users`, `auth_*`, `forge_migrations` |
 | **Bloc A — terminé ✅ (8/8)** | `AnneeScolaire`, `NiveauClasse`, `Classe`, `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse`, `Groupe` |
 | **⑤ Référentiel — schéma ✅ (tickets 09-10)** | 12 entités (`Formation`, `ReferentielNiveauClasse`, `PoleActivite`, `ActiviteProfessionnelle`, `Tache`, `ResultatAttendu`, `Competence`, `Connaissance`, `CritereObservable`, `IndicateurReussite`, `FamilleCompetence`, `Source`) + `NiveauClasse` réutilisée. Migration `create_referentiel` (14 tables, 13 FK, 7 UNIQUE composites, 2 pivots m2m) appliquée |
-| ✅ Référentiel — ticket 11 | **Importeur complet** : service (`referentiel_importer.py`, ADR-010 upsert + best-effort), **UI d'upload admin** (validation schéma → import → rapport, provenance) + **admin de parcours** (`forge-mvc-admin`) + tests. Vérifié bout-en-bout (CIEL 2TNE : 81 objets) |
+| ✅ Référentiel — ticket 11 | **Importeur complet** : service (`referentiel_importer.py`, ADR-011 upsert + best-effort), **UI d'upload admin** (validation schéma → import → rapport, provenance) + **admin de parcours** (`forge-mvc-admin`) + tests. Vérifié bout-en-bout (CIEL 2TNE : 81 objets) |
 | **⑥ Scénario — terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` + 2 FK + 2 m2m (compétences, critères) + **CRUD prof m2m-aware** + tests |
-| **⑦ Starter — terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-011) : `StarterWelcome` + `VersionStarter` (unique `(starter, version)`) + CRUD + tests |
-| **⑧ Parcours — terminé ✅ (tickets 15-16)** | `Parcours` (dérivé d'une `VersionStarter`) + `VersionParcours` (ADR-011) + `Palier` (découpage, rattaché à `VersionParcours`, unique `(version_parcours, ordre)`) + CRUD FK-aware + tests |
+| **⑦ Starter — terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-012) : `StarterWelcome` + `VersionStarter` (unique `(starter, version)`) + CRUD + tests |
+| **⑧ Parcours — terminé ✅ (tickets 15-16)** | `Parcours` (dérivé d'une `VersionStarter`) + `VersionParcours` (ADR-012) + `Palier` (découpage, rattaché à `VersionParcours`, unique `(version_parcours, ordre)`) + CRUD FK-aware + tests |
 | **⑨ Bloc B — TERMINÉ ✅ (17-21)** | Affectation · Progression×2 · QCM+checklist+activité+dépôt (11 ent.) · Évaluation par critères (2 ent.) · **suivi prof** (`/suivi` : tableau de bord lecture seule, requêtes d'agrégation, alerte « bloqué ») |
 | **Modèle + exécution — COMPLETS ✅** | **42 entités** : `référentiel → scénario → starter → parcours → affectation → progression → QCM/checklist/activité/dépôt → évaluation`, plus le **suivi**. `make check` vert (**43 tests**) |
 | Auth | opérationnelle (login `admin@` et `prof@`) ; **MFA différé** |
-| **Nav + RBAC — TERMINÉ ✅** | Barre à menus déroulants par domaine (`nav.html`/`nav.css`). **Rôles opérationnels** via une **couche fine maison** (`mvc/services/rbac.py`, [ADR-012](adr/012-rbac-couche-fine-maison-sur-contrat.md)) : rôles lus en base depuis la session moderne, décision au **contrat** `rbac.json`. `can()` filtre la nav, `guard_prefix` protège les routes. **admin** voit tout ; **professeur** voit Conception/Exécution/Suivi (pas Admin) ; anonyme sur route socle → **403** |
+| **Nav + RBAC — TERMINÉ ✅** | Barre à menus déroulants par domaine (`nav.html`/`nav.css`). **Rôles opérationnels** via une **couche fine maison** (`mvc/services/rbac.py`, [ADR-013](adr/013-rbac-couche-fine-maison-sur-contrat.md)) : rôles lus en base depuis la session moderne, décision au **contrat** `rbac.json`. `can()` filtre la nav, `guard_prefix` protège les routes. **admin** voit tout ; **professeur** voit Conception/Exécution/Suivi (pas Admin) ; anonyme sur route socle → **403** |
 | **Espace élève — v1 ✅** | Rôle **`eleve`** (contrat + base). Lien compte↔élève : FK 1↔1 `eleve.UserId` → `users(id)` (INT, UNIQUE, `ON DELETE SET NULL`). Vue **« Mon parcours »** (`/mon-parcours`, `espace_eleve.voir`) : lecture seule, filtrée par compte (row-level), parcours affectés + paliers. Lien de nav réservé à l'élève |
 | **Comptes élèves — flux admin ✅** | Écran **`/eleve/comptes`** (gardé `socle.gerer`) : l'admin crée un compte `users` (email + mot de passe hashé), lui pose le rôle `eleve` et le **lie** à une fiche `Eleve` — en une transaction. Validé bout-en-bout sur MariaDB (compte jetable). **Testable au navigateur** : créer un compte élève, se connecter, voir « Mon parcours » |
 | **Espace élève v2 — saisie complète ✅** | Trois écritures élève, patron commun (garde `espace_eleve.voir` + **contrôle d'appartenance** à chaque appel, palier d'autrui → 404). **QCM** (`/mon-parcours/qcm/{id}`) : correction côté serveur (`choix.Lettre` vs `BonneReponse`), score %, tentative + réponses + statut (100 % → validé, sinon en cours, pas de régression, tentatives multiples). **Checklist** (`/checklist/{id}`) : auto-cochage `CocheEleve` (upsert idempotent), `CocheProfesseur` préservé. **Dépôt** (`/depot/{id}`) : upload via `forge-mvc-files` (allowlist), chemin en base. Checklist/dépôt : validation = professeur → statut palier inchangé. Toutes requêtes validées sur MariaDB |
@@ -728,7 +728,7 @@ forge migration:apply           # → 14 tables (20 entités au total)
 #   pas de make:crud : le référentiel est peuplé par l'importeur (ticket 11)
 ```
 
-**⑮ Importeur par upload admin ✅ (phase ⑤, ticket 11 — ADR-008/010)**
+**⑮ Importeur par upload admin ✅ (phase ⑤, ticket 11 — ADR-009/010)**
 
 ```bash
 pip install forge-mvc-admin forge-mvc-files    # briques (porteur)
@@ -755,10 +755,10 @@ forge make:crud Scenario            # CRUD prof m2m-aware (multi-select competen
 #   tests : tests/test_scenario_persistance.py (mock DB)
 ```
 
-**⑰ StarterWelcome + VersionStarter ✅ (phase ⑦, ticket 14 — ADR-011)**
+**⑰ StarterWelcome + VersionStarter ✅ (phase ⑦, ticket 14 — ADR-012)**
 
 ```bash
-#   ADR-011 : versionnement identité + version ; dico Starter Welcome affiné
+#   ADR-012 : versionnement identité + version ; dico Starter Welcome affiné
 forge make:entity StarterWelcome    # identifiant (unique), titre, presentation
 forge make:entity VersionStarter    # version, statut, activite_glissante, ordre_impose
 forge make:relation                 # StarterWelcome → NiveauClasse ; VersionStarter → StarterWelcome
@@ -769,7 +769,7 @@ forge migration:apply ; forge make:crud StarterWelcome ; forge make:crud Version
 #   tests : tests/test_starter_versionnement.py (mock DB)
 ```
 
-**⑱ Parcours + VersionParcours + Palier ✅ (phase ⑧, tickets 15-16 — ADR-011)**
+**⑱ Parcours + VersionParcours + Palier ✅ (phase ⑧, tickets 15-16 — ADR-012)**
 
 ```bash
 #   cadrage porteur : Parcours dérivé d'une VersionStarter ; Palier appartient au parcours
@@ -801,7 +801,7 @@ flowchart TD
     D["④ BLOC A · Socle scolaire ✅ — ticket 07<br/>AnneeScolaire · NiveauClasse · Classe · Eleve · Professeur<br/>Inscription · Affectation · Groupe (+ m2m) — 8/8"]
     E["⑤ Référentiel ✅ (09-10-11)<br/>12 entités + 15 relations en base<br/>importeur JSON par upload admin"]
     F["⑥ Scénario ✅ (12-13)<br/>dico + entité + CRUD prof m2m-aware + tests"]
-    G["⑦ Starter ✅ (14)<br/>StarterWelcome + VersionStarter (identité + versions, ADR-011)"]
+    G["⑦ Starter ✅ (14)<br/>StarterWelcome + VersionStarter (identité + versions, ADR-012)"]
     H["⑧ Parcours ✅ (15-16)<br/>Parcours (dérivé starter) + VersionParcours + Palier"]
     I["⑨ BLOC B · Exécution pédagogique élève ✅ — tickets 17–21<br/>Affectation → Progression → QCM/checklist/dépôt → Évaluation → Suivi prof"]
     A --> B --> C --> D --> E --> F --> G --> H --> I

@@ -19,7 +19,7 @@ référentiel niveau-classe : JSON auto-contenu (données)
 starter_welcome           : JSON manifeste + bundle (contenus md + images)
 ```
 
-**Upload (ADR-008)** : un starter s'importe sous forme de **bundle** (archive)
+**Upload (ADR-009)** : un starter s'importe sous forme de **bundle** (archive)
 contenant le manifeste JSON et les fichiers référencés. L'application valide le
 manifeste (schéma) puis importe paliers/QCM/checklists en base et stocke les
 contenus/fichiers (opt-in `files`).
@@ -148,7 +148,7 @@ Extrait du palier 1 (câble T568B). **Illustration, pas un manifeste complet.**
 ## 10. Schéma de validation
 
 Outillé par [`schemas/schema-json-canonique-starter-welcome.json`](schemas/schema-json-canonique-starter-welcome.json)
-(JSON Schema 2020-12) — porte de validation des uploads (ADR-008). Le schéma valide
+(JSON Schema 2020-12) — porte de validation des uploads (ADR-009). Le schéma valide
 la structure ; les invariants sémantiques (ordre unique/contigu, `bonne_reponse` ∈
 `choix`, fichiers présents dans le bundle) sont validés par l'importeur.
 

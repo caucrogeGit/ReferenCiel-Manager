@@ -1,5 +1,5 @@
 # pyright: strict
-"""Espace « Sécurité » — MFA en self-service (ADR-014).
+"""Espace « Sécurité » — MFA en self-service (ADR-015).
 
 L'utilisateur **connecté** active/désactive sa MFA TOTP et gère ses codes de secours.
 Enrôlement : `create_totp_factor` (secret chiffré, facteur `pending`) → l'utilisateur
@@ -156,7 +156,7 @@ class SecuriteController:
         """Page de confirmation de désactivation (`GET /securite/desactiver`).
 
         Action sensible : si la MFA est active et qu'aucune revalidation récente
-        n'existe, on exige un code (TOTP ou code de secours) — step-up (ADR-014).
+        n'existe, on exige un code (TOTP ou code de secours) — step-up (ADR-015).
         """
         user_id = get_authenticated_user_id(request)
         if user_id is None:

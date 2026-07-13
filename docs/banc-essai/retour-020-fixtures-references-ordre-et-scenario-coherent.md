@@ -1,7 +1,7 @@
 # Retour terrain 020 — `forge-mvc-fixtures` : références inter-fixtures, ordre de chargement et scénario cohérent
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** F43–F52 **RÉSOLUS** (`b2463149` → `38501db6`). Cycle
 `fixtures:purge --run && fixtures:load --run` **idempotent** (≥ 2 cycles verts, callable
 multi-tables `referentiel.py` inclus). La bascule est **complète** : `tools/seed_demo.py`

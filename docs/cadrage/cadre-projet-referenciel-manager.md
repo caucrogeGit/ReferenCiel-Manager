@@ -2,7 +2,7 @@
 
 > Document de cadrage métier principal. Il complète les instructions prioritaires
 > (`docs/cadrage/instructions.md`), qui l'emportent en cas de tension.
-> Décision structurante associée : `docs/adr/002-json-canonique-et-persistance-applicative.md`.
+> Décision structurante associée : `docs/adr/003-json-canonique-et-persistance-applicative.md`.
 
 ## 1. Ce qu'est RéférenCiel Manager
 

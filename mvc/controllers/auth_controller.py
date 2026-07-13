@@ -79,7 +79,7 @@ class AuthController(BaseController):
         password = request.form("password", "")
         user = authenticate_user(email, password, load_user_by_email)
         if user is not None:
-            # MFA (ADR-014) : si le compte a un facteur TOTP actif, exiger un
+            # MFA (ADR-015) : si le compte a un facteur TOTP actif, exiger un
             # second facteur AVANT de connecter (challenge en session).
             if has_active_totp(user.id):
                 start_mfa_challenge(request, user)

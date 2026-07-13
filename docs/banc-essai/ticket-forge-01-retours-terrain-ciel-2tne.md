@@ -1,7 +1,7 @@
 # Ticket Forge — Retours terrain (banc d'essai RéférenCiel Manager)
 
 **Pour :** l'agent Claude Code travaillant sur le framework Forge (`caucrogeGit/Forge`).
-**De :** projet RéférenCiel Manager, application-banc d'essai (ADR-005).
+**De :** projet RéférenCiel Manager, application-banc d'essai (ADR-006).
 **Objet :** défauts et frictions rencontrés en construisant une **tranche verticale
 réelle** (entité → migration → CRUD → auth) sur Forge. Chaque point est **fondé sur
 une preuve reproductible** (fichier:ligne, commande, sortie) avec un **correctif

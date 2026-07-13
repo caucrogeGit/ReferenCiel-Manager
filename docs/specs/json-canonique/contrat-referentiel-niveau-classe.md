@@ -159,7 +159,7 @@ maintenance de produits électroniques », activité **E1**, compétences
 Ce contrat est outillé par un schéma JSON (JSON Schema 2020-12) :
 [`schemas/schema-json-canonique-referentiel-niveau-classe.json`](schemas/schema-json-canonique-referentiel-niveau-classe.json).
 
-C'est la **porte de validation des uploads** (ADR-008). Répartition :
+C'est la **porte de validation des uploads** (ADR-009). Répartition :
 
 - **Validé par le schéma** : présence des familles obligatoires, types, énumérations
   (`type`, `source_type`, `point_entree`, `origine`), motifs des codes

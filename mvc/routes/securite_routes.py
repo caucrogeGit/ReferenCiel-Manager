@@ -1,5 +1,5 @@
 # pyright: strict
-"""Routes de l'espace « Sécurité » — MFA self-service (ADR-014).
+"""Routes de l'espace « Sécurité » — MFA self-service (ADR-015).
 
 Protégées par la seule auth Forge (session requise) : chaque utilisateur connecté
 gère SA propre MFA. Pas de permission de domaine (hors des préfixes gardés). POST

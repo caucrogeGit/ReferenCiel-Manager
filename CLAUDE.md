@@ -25,7 +25,7 @@ Base de données         = vérité applicative en fonctionnement
 
 Documents de cadrage : `docs/cadrage/instructions.md`,
 `docs/cadrage/cadre-projet-referenciel-manager.md`,
-`docs/adr/002-json-canonique-et-persistance-applicative.md`,
+`docs/adr/003-json-canonique-et-persistance-applicative.md`,
 `docs/specs/json-canonique/README.md`,
 `docs/roadmap/roadmap-referenciel-manager.md`, `docs/tickets/README.md`.
 <!-- FIN PRIORITÉ REFERENCIEL-MANAGER -->

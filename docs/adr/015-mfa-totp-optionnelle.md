@@ -1,11 +1,11 @@
-# ADR-014 — MFA TOTP optionnelle (sécurité applicative réelle, T2)
+# ADR-015 — MFA TOTP optionnelle (sécurité applicative réelle, T2)
 
 **Statut :** Accepté
 **Date :** 2026-07-11
 
 ## Contexte
 
-L'[ADR-013](013-securite-applicative-reelle.md) trace la trajectoire de la sécurité
+L'[ADR-014](014-securite-applicative-reelle.md) trace la trajectoire de la sécurité
 applicative réelle et renvoie la **MFA** (temps T2) à un ADR dédié. Le cadrage
 l'exige : « les comptes professeur et administrateur **doivent pouvoir utiliser la
 MFA** » (instructions §20, cadre §10).
@@ -13,7 +13,7 @@ MFA** » (instructions §20, cadre §10).
 L'opt-in officiel **`forge-mvc-mfa`** 1.0.0rc2 est installé. C'est une **bibliothèque
 pure** (kind `crosscutting`) : elle fournit toute la logique (TOTP, codes de secours,
 challenge de session, chiffrement du secret, anti-rejeu) **sans** routes, commandes,
-ni accès base. Comme pour le RBAC ([ADR-012](012-rbac-couche-fine-maison-sur-contrat.md))
+ni accès base. Comme pour le RBAC ([ADR-013](013-rbac-couche-fine-maison-sur-contrat.md))
 et les sessions, **l'application câble** : persistance (SQL), routes, contrôleurs,
 vues, configuration.
 

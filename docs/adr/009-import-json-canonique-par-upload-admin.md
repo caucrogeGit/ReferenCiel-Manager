@@ -1,4 +1,4 @@
-# ADR-008 — Import des JSON canoniques niveau-classe par upload dans l'admin (importeur générique)
+# ADR-009 — Import des JSON canoniques niveau-classe par upload dans l'admin (importeur générique)
 
 ## Statut
 
@@ -15,7 +15,7 @@ Accepté (2026-07-06).
 ## Contexte
 
 Le JSON canonique est la **référence structurée de construction ou d'import**
-(ADR-002) ; la **base** est la vérité applicative en fonctionnement. Reste à décider
+(ADR-003) ; la **base** est la vérité applicative en fonctionnement. Reste à décider
 **comment** un référentiel niveau-classe (ex. CIEL 2TNE) devient exploitable dans
 l'application.
 
@@ -44,14 +44,14 @@ Le porteur retient **(b)**.
    l'enveloppe (contrat, ticket 02) route l'import : `referentiel_niveau_classe`
    aujourd'hui, `starter_welcome` demain.
 
-4. **La base reste la vérité** (ADR-002). Après import, les objets vivent en base.
+4. **La base reste la vérité** (ADR-003). Après import, les objets vivent en base.
    Le **fichier uploadé est conservé** comme trace de provenance (source), il ne
    redevient pas l'état applicatif.
 
 5. **Sécurité et opt-ins.** Fonction **réservée aux administrateurs** (rôle `admin`,
    RBAC le moment venu). Briques Forge mobilisées : `forge-mvc-admin` (espace admin),
    `forge-mvc-files` (upload), plus les entités, migrations et l'importeur. Backend
-   MariaDB (ADR-004).
+   MariaDB (ADR-005).
 
 ## Conséquences
 

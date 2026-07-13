@@ -1,6 +1,6 @@
 # Banc d'essai — retours terrain vers Forge
 
-RéférenCiel Manager sert de **banc d'essai** au framework Forge (ADR-005). Cette
+RéférenCiel Manager sert de **banc d'essai** au framework Forge (ADR-006). Cette
 rubrique consigne les **retours terrain** issus de l'usage réel : écarts,
 frictions et suggestions, destinés à l'équipe qui maintient Forge.
 

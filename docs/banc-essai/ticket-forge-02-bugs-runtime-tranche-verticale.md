@@ -1,7 +1,7 @@
 # Ticket Forge 02 — Bugs runtime de la tranche verticale (login + CRUD)
 
 **Pour :** l'agent Claude Code travaillant sur le framework Forge (`caucrogeGit/Forge`).
-**De :** projet RéférenCiel Manager, application-banc d'essai (ADR-005).
+**De :** projet RéférenCiel Manager, application-banc d'essai (ADR-006).
 **Objet :** deux défauts **bloquants** du code généré, découverts en **exécutant
 réellement** la tranche verticale (login → liste protégée → données MariaDB) après
 les correctifs du ticket 01.

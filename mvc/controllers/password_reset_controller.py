@@ -1,5 +1,5 @@
 # pyright: strict
-"""Réinitialisation de mot de passe (ADR-013 T1).
+"""Réinitialisation de mot de passe (ADR-014 T1).
 
 Flux public : **demande** (`/password/forgot`) → un jeton est créé (cœur
 `create_password_reset_token`), persisté (hash) et un lien est proposé → **reset**
@@ -8,7 +8,7 @@ Flux public : **demande** (`/password/forgot`) → un jeton est créé (cœur
 
 Anti-énumération : la demande renvoie un message **générique** quel que soit
 l'existence du compte. Faute de mailer configuré, le lien de reset est affiché à
-l'écran **uniquement si le compte existe** (compromis de développement, ADR-013).
+l'écran **uniquement si le compte existe** (compromis de développement, ADR-014).
 Routes publiques mais protégées CSRF (défaut Forge) : comme `login_form`, chaque
 rendu **garantit une session** (donc un `csrf_token`) pour un visiteur anonyme.
 """

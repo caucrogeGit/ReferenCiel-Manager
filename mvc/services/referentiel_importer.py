@@ -4,7 +4,7 @@
 Logique pure : prend un canonique **déjà validé** (dict) et le persiste via
 `core.database.db` (SQL visible et paramétré, esprit Forge). Indépendant de l'UI admin.
 
-Décisions (ADR-010) :
+Décisions (ADR-011) :
 - **Upsert par identifiant** : ré-importer un même `identifiant` remplace le contenu du
   référentiel (purge des objets rattachés puis ré-insertion).
 - **Best-effort avec rapport** : chaque élément est inséré isolément ; un échec est
@@ -32,7 +32,7 @@ def _empty_errors() -> list[str]:
 
 @dataclass
 class ImportReport:
-    """Compte-rendu best-effort d'un import (ADR-010)."""
+    """Compte-rendu best-effort d'un import (ADR-011)."""
 
     identifiant: str = ""
     referentiel_id: int | None = None
@@ -150,12 +150,12 @@ def _importer_sources(canonical: dict[str, Any], ref_id: int, rapport: ImportRep
                  src.get("source_fichier", ""), src.get("source_note"), ref_id),
             )
             rapport.compte("sources")
-        except Exception as exc:  # noqa: BLE001 (best-effort, ADR-010)
+        except Exception as exc:  # noqa: BLE001 (best-effort, ADR-011)
             rapport.echec(f"source {src.get('source_id')}", exc)
 
 
 def import_referentiel(canonical: dict[str, Any]) -> ImportReport:
-    """Importe un canonique validé en base. Retourne un rapport best-effort (ADR-010)."""
+    """Importe un canonique validé en base. Retourne un rapport best-effort (ADR-011)."""
     rapport = ImportReport(identifiant=str(canonical.get("identifiant", "")))
 
     formation = canonical["formation"]

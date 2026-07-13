@@ -1,7 +1,7 @@
 # Retour terrain 011 — `make:relation` impose une unicité **globale** du nom de relation et de la colonne FK (schémas multi-pivots inexprimables)
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** ✅ **Résolu dans forge-mvc 32f552cc** (2026-07-09) — **vérifié bout-en-bout** sur le banc d'essai.
 
 > **Correctif vérifié.** Sur `32f552cc`, `make:relation InscriptionEleve → AnneeScolaire`

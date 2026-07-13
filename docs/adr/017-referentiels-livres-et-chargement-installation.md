@@ -1,4 +1,4 @@
-# ADR-016 — Référentiels livrés avec le projet et chargement à l'installation
+# ADR-017 — Référentiels livrés avec le projet et chargement à l'installation
 
 **Statut :** Accepté
 **Date :** 2026-07-13
@@ -17,7 +17,7 @@ Deux mécanismes existants ne conviennent pas seuls :
 
 - Le **jeu de démo** (`mvc/fixtures/`, ADR-078) est **purgeable et rejouable** : il
   modélise une démonstration, pas des données de référence de production.
-- L'**import admin** (upload, ADR-008) est **interactif et unitaire** : adapté à
+- L'**import admin** (upload, ADR-009) est **interactif et unitaire** : adapté à
   l'ajout ponctuel par un utilisateur, pas à un chargement reproductible à
   l'installation.
 
@@ -33,7 +33,7 @@ réaliste, dans la lignée des outils d'exploitation du projet (`tools/`).
    depuis une copie.
 2. **Script de chargement** : `tools/charger_referentiels.py` parcourt le dossier,
    **valide** chaque JSON (`canonical_validator`) puis l'**importe**
-   (`referentiel_importer`, upsert best-effort, ADR-010). Il est **idempotent**
+   (`referentiel_importer`, upsert best-effort, ADR-011). Il est **idempotent**
    (réimporter remplace) et expose `--check` (validation sans écriture).
 3. **Exception assumée à la règle « 100 % Forge »** : ce script s'écarte des
    générateurs Forge. Il est cantonné à `tools/` (exploitation), réutilise les

@@ -1,4 +1,4 @@
-# ADR-002 — JSON canonique et persistance applicative
+# ADR-003 — JSON canonique et persistance applicative
 
 ## Statut
 

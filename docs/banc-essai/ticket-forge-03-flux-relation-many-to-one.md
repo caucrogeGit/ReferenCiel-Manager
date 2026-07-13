@@ -1,7 +1,7 @@
 # Ticket Forge 03 — Flux `make:relation` (many_to_one) inapplicable sur MariaDB
 
 **Pour :** l'agent Claude Code travaillant sur le framework Forge (`caucrogeGit/Forge`).
-**De :** projet RéférenCiel Manager, application-banc d'essai (ADR-005).
+**De :** projet RéférenCiel Manager, application-banc d'essai (ADR-006).
 **Objet :** le flux relation `many_to_one` ne produit pas un schéma **applicable**
 sur MariaDB — découvert en construisant l'entité `Classe` (FK vers `AnneeScolaire`
 et `NiveauClasse`).

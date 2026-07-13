@@ -1,7 +1,7 @@
 # Retour terrain 019 — MFA : la revalidation step-up (`verify_mfa_revalidation`) exige une session dépréciée
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** **RÉSOLU** côté Forge (2026-07-12, sha `6927a266`) — voir note sous F42.
 
 ## Environnement
@@ -10,7 +10,7 @@
   (`core.auth.session.login_user`), sessions `sessions-db` (MariaDB), Python 3.12.
 - Contexte : câblage d'un **step-up** (re-preuve du 2ᵉ facteur avant désactivation de
   la MFA), au-dessus de l'enrôlement TOTP + challenge de login déjà en place
-  ([ADR-014](../adr/014-mfa-totp-optionnelle.md)).
+  ([ADR-015](../adr/015-mfa-totp-optionnelle.md)).
 
 ## Constat
 
@@ -52,7 +52,7 @@
 
 - **Contournement (projet)** : ne pas utiliser l'API de revalidation ; vérifier le 2ᵉ
   facteur directement (`decrypt_totp_secret` + `verify_totp_code`, puis
-  `verify_recovery_code`), comme le RBAC contourne son resolveur (ADR-012). Le
+  `verify_recovery_code`), comme le RBAC contourne son resolveur (ADR-013). Le
   step-up exige alors un code à chaque action sensible (pas de fenêtre de 10 min).
 
 - **Correctif proposé** : aligner `_session_user_matches` sur l'auth moderne — lire

@@ -64,21 +64,22 @@ nav:
       - Vue d'ensemble: adr/index.md
       - Gabarit d'ADR: adr/000-template.md
       - ADR-001 — Adopter Forge: adr/001-adopter-forge.md
-      - ADR-002 — JSON canonique & persistance: adr/002-json-canonique-et-persistance-applicative.md
-      - ADR-003 — Architecture Forge: adr/003-architecture-applicative-forge.md
-      - ADR-004 — Backend MariaDB: adr/004-backend-base-de-donnees-mariadb.md
-      - ADR-005 — Qualité, doc mkdocs & banc d'essai: adr/005-standard-qualite-documentation-mkdocs-banc-essai.md
-      - ADR-006 — Stratégie de test: adr/006-strategie-de-test.md
-      - ADR-007 — Typage Python strict: adr/007-typage-python-strict.md
-      - ADR-008 — Import JSON canonique par upload admin: adr/008-import-json-canonique-par-upload-admin.md
-      - ADR-009 — Montée de squelette Forge en place: adr/009-montee-squelette-forge-en-place.md
-      - ADR-010 — Importeur référentiel (upsert, best-effort): adr/010-importeur-referentiel-upsert-best-effort.md
-      - ADR-011 — Versionnement identité + version: adr/011-versionnement-identite-plus-version.md
-      - ADR-012 — Couche RBAC fine maison sur contrat: adr/012-rbac-couche-fine-maison-sur-contrat.md
-      - ADR-013 — Sécurité applicative réelle: adr/013-securite-applicative-reelle.md
-      - ADR-014 — MFA TOTP optionnelle: adr/014-mfa-totp-optionnelle.md
-      - ADR-015 — RBAC bascule sur le contrat natif: adr/015-rbac-bascule-sur-le-contrat-natif.md
-      - ADR-016 — Référentiels livrés & chargement à l'installation: adr/016-referentiels-livres-et-chargement-installation.md
+      - ADR-002 — Style de documentation: adr/002-style-documentation.md
+      - ADR-003 — JSON canonique & persistance: adr/003-json-canonique-et-persistance-applicative.md
+      - ADR-004 — Architecture Forge: adr/004-architecture-applicative-forge.md
+      - ADR-005 — Backend MariaDB: adr/005-backend-base-de-donnees-mariadb.md
+      - ADR-006 — Qualité, doc mkdocs & banc d'essai: adr/006-standard-qualite-documentation-mkdocs-banc-essai.md
+      - ADR-007 — Stratégie de test: adr/007-strategie-de-test.md
+      - ADR-008 — Typage Python strict: adr/008-typage-python-strict.md
+      - ADR-009 — Import JSON canonique par upload admin: adr/009-import-json-canonique-par-upload-admin.md
+      - ADR-010 — Montée de squelette Forge en place: adr/010-montee-squelette-forge-en-place.md
+      - ADR-011 — Importeur référentiel (upsert, best-effort): adr/011-importeur-referentiel-upsert-best-effort.md
+      - ADR-012 — Versionnement identité + version: adr/012-versionnement-identite-plus-version.md
+      - ADR-013 — Couche RBAC fine maison sur contrat: adr/013-rbac-couche-fine-maison-sur-contrat.md
+      - ADR-014 — Sécurité applicative réelle: adr/014-securite-applicative-reelle.md
+      - ADR-015 — MFA TOTP optionnelle: adr/015-mfa-totp-optionnelle.md
+      - ADR-016 — RBAC bascule sur le contrat natif: adr/016-rbac-bascule-sur-le-contrat-natif.md
+      - ADR-017 — Référentiels livrés & chargement à l'installation: adr/017-referentiels-livres-et-chargement-installation.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md

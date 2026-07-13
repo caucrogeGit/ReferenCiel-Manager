@@ -1,7 +1,7 @@
 # Retour terrain 010 — Les relations ne sont pas intégrées à `migration:make` ni au CRUD généré
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** à remonter.
 
 ## Environnement

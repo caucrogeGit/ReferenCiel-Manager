@@ -1,5 +1,5 @@
 # pyright: strict
-"""MFA (ADR-014) : persistance des facteurs TOTP et des codes de secours.
+"""MFA (ADR-015) : persistance des facteurs TOTP et des codes de secours.
 
 Orchestration **pure** déléguée à l'opt-in `forge_mvc_mfa` ; ce module ne fait que
 la persistance en SQL visible et paramétré. Le secret TOTP est stocké **chiffré**

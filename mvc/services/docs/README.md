@@ -3,7 +3,7 @@
 Documentation des services applicatifs (fichiers `.py` à la racine de
 `mvc/services/`). Un service est un module qui orchestre une règle métier ou une
 capacité transverse ; il s'appuie sur les models / le cœur Forge, sans réimplémenter
-l'accès aux données ([ADR-003](../../../docs/adr/003-architecture-applicative-forge.md) §5).
+l'accès aux données ([ADR-004](../../../docs/adr/004-architecture-applicative-forge.md) §5).
 
 | Service | Rôle | Doc |
 |---|---|---|

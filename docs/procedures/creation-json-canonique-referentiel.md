@@ -5,7 +5,7 @@ Guide opérationnel pour produire un fichier **JSON canonique** de type
 
 > **Cadre** : le JSON canonique est la **référence structurée d'import**, pas une
 > sauvegarde ; la vérité applicative reste la base de données. Pas de « V0 fichier »
-> ([ADR-002](../adr/002-json-canonique-et-persistance-applicative.md),
+> ([ADR-003](../adr/003-json-canonique-et-persistance-applicative.md),
 > [spécification](../specs/json-canonique/README.md)).
 
 ## Vue d'ensemble
@@ -20,7 +20,7 @@ Sources officielles → JSON canonique → (dictionnaire de données) → import
 | 2 | Tracer la provenance et les décisions | fiche de trace | [traces/](../specs/json-canonique/traces/) |
 | 3 | Rédiger le JSON conforme au contrat | `mon-referentiel.json` | [contrat](../specs/json-canonique/contrat-referentiel-niveau-classe.md) |
 | 4 | Valider contre le schéma | 0 erreur | [schemas/](../specs/json-canonique/schemas/) |
-| 5 | Importer | référentiel en base | espace admin (ADR-008) |
+| 5 | Importer | référentiel en base | espace admin (ADR-009) |
 
 ## Prérequis
 
@@ -131,7 +131,7 @@ relations {
 ## Étape 4 — Valider contre le schéma
 
 Le [schéma JSON](../specs/json-canonique/schemas/schema-json-canonique-referentiel-niveau-classe.json)
-(Draft 2020-12) est la **porte de validation des uploads** (ADR-008).
+(Draft 2020-12) est la **porte de validation des uploads** (ADR-009).
 
 - **Vérifié par le schéma** : familles obligatoires, types, énumérations (`type`,
   `source_type`, `point_entree`, `origine`), motifs des codes (`E1`/`R2`/`D3`,
@@ -160,7 +160,7 @@ PY
 
 - **Référentiel livré (voie recommandée)** : dépose le JSON dans
   **`data/referentiels/`** (versionné) et charge-le avec le script
-  d'installation ([ADR-016](../adr/016-referentiels-livres-et-chargement-installation.md)) :
+  d'installation ([ADR-017](../adr/017-referentiels-livres-et-chargement-installation.md)) :
 
   ```bash
   .venv/bin/python tools/charger_referentiels.py --check   # valide seulement
@@ -168,7 +168,7 @@ PY
   ```
 
 - **Ajout ponctuel** : espace **admin → Référentiel → Importer un référentiel**
-  (upload, ADR-008). Le fichier est **validé** (étape 4) puis persisté par le
+  (upload, ADR-009). Le fichier est **validé** (étape 4) puis persisté par le
   service `referentiel_importer` (`mvc/services/referentiel_importer.py`) —
   **upsert best-effort** par `identifiant` (réimporter remplace ; un échec unitaire
   n'interrompt pas l'import et figure au rapport).
@@ -178,7 +178,7 @@ PY
 > ⚠️ Le réimport d'un référentiel **déjà utilisé** par des évaluations
 > (`evaluation_critere` référençant ses critères) échoue (contrainte FK) : le
 > chargement est prévu **à l'installation**, sur une base vierge de données
-> pédagogiques (voir ADR-016).
+> pédagogiques (voir ADR-017).
 
 ---
 
@@ -286,5 +286,5 @@ ajoute-en autant que nécessaire.
 - Schéma : [schema-json-canonique-referentiel-niveau-classe.json](../specs/json-canonique/schemas/schema-json-canonique-referentiel-niveau-classe.json)
 - Exemple : [json-canonique-ciel-2tne.json](../specs/json-canonique/examples/json-canonique-ciel-2tne.json)
 - Registre des sources : [registre-des-sources.md](../specs/json-canonique/registre-des-sources.md)
-- Décision : [ADR-002](../adr/002-json-canonique-et-persistance-applicative.md), import : ADR-008
+- Décision : [ADR-003](../adr/003-json-canonique-et-persistance-applicative.md), import : ADR-009
 - Services : `canonical_validator` (`mvc/services/canonical_validator.py`), `referentiel_importer` (`mvc/services/referentiel_importer.py`)

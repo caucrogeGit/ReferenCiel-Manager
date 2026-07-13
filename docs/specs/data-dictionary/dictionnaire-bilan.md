@@ -2,7 +2,7 @@
 
 Documentation **métier enrichie** du domaine « bilan élève » : le **document de
 synthèse** arrêté par le professeur en bout de chaîne pédagogique (ticket 21).
-Objet **persisté en base** (ADR-002).
+Objet **persisté en base** (ADR-003).
 
 > Place dans la chaîne : `… → progression élève → suivi professeur → évaluation par
 > critères → **bilan professeur**`. Le bilan **fige** une synthèse des évaluations
@@ -14,7 +14,7 @@ Objet **persisté en base** (ADR-002).
 - **Nommage** : entités en PascalCase, tables en snake_case (conventions Forge).
 - **Types** : types de champ Forge (`string`, `text`, `datetime`, `json`,
   `foreign_key`). PK `Id` gérée par Forge.
-- **Base = vérité** (ADR-002). Le bilan est **créé par le professeur**.
+- **Base = vérité** (ADR-003). Le bilan est **créé par le professeur**.
 - **Document arrêté** : un bilan **fige** un instantané des niveaux atteints
   (champ `synthese`, JSON) au moment de sa création. Un bilan publié ne se
   recalcule pas — il témoigne de l'état des évaluations à la `date_bilan`.

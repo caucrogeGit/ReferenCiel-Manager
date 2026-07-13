@@ -1,4 +1,4 @@
-# ADR-007 — Typage Python strict (pyright)
+# ADR-008 — Typage Python strict (pyright)
 
 ## Statut
 
@@ -36,7 +36,7 @@ est peu coûteux et évite toute dette de typage.
    fichier applicatif manuel. **Exclus** : les fichiers purement régénérables
    (`*_base.py`) et le framework installé (`.venv`), que nous ne maintenons pas.
    Toute lacune de typage exposée par le squelette généré est un **finding de banc
-   d'essai** (ADR-005), révélé et non contourné en silence.
+   d'essai** (ADR-006), révélé et non contourné en silence.
 4. **`pyright` fait partie de la validation avant de livrer**, aux côtés de
    `python -m pytest`, `ruff check .`, `forge project:check`, `mkdocs build --strict`.
 5. **ruff** est aligné **exactement** sur la config de Forge (`select = ["E","F"]`,

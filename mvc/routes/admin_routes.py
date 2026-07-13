@@ -3,7 +3,7 @@
 
 On expose **`ReferentielNiveauClasse`** pour consulter les référentiels importés et gérer
 leur **statut** (`brouillon`/`publie`/`archive`). Les entités-enfants (pôles, activités,
-compétences…) ne sont **pas** exposées : elles sont pilotées par l'import (ADR-010) et ne
+compétences…) ne sont **pas** exposées : elles sont pilotées par l'import (ADR-011) et ne
 se modifient pas à la main. La suppression d'un référentiel est de toute façon bloquée par
 les clés étrangères `RESTRICT` (garde-fou naturel).
 

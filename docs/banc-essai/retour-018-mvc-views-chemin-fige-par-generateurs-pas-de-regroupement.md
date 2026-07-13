@@ -1,7 +1,7 @@
 # Retour terrain 018 — `mvc/views/` : chemin de vue figé par les générateurs, séparation cadre/app impossible
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** à remonter.
 
 ## Environnement

@@ -1,9 +1,9 @@
 # pyright: strict
-"""Import d'un référentiel niveau-classe par upload admin (ticket 11, ADR-008).
+"""Import d'un référentiel niveau-classe par upload admin (ticket 11, ADR-009).
 
 Flux POST : fichier reçu → JSON lisible ? → **validation** contre le schéma (ticket 04)
 → **type d'enveloppe** attendu ? → fichier **conservé** (provenance, forge-mvc-files)
-→ **import** (`import_referentiel`) → **rapport** best-effort (ADR-010).
+→ **import** (`import_referentiel`) → **rapport** best-effort (ADR-011).
 
 Route non publique (session requise). RBAC (rôle `admin`) différé : à border quand
 l'opt-in `rbac` sera installé.

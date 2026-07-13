@@ -1,4 +1,4 @@
-# ADR-004 — Backend de base de données : MariaDB
+# ADR-005 — Backend de base de données : MariaDB
 
 ## Statut
 
@@ -64,7 +64,7 @@ Le projet adopte **`forge-mvc-mariadb`** comme backend de base de données.
 - Environnement plus riche à mettre en place (serveur MariaDB + comptes) — assumé
   par le porteur comme support d'apprentissage réel.
 - Les tests marqués **`db`** exigent une **vraie MariaDB** : sautés en local sans
-  base, requis en CI (modèle Forge : `FORGE_REQUIRE_DB=1`). Voir ADR-006.
+  base, requis en CI (modèle Forge : `FORGE_REQUIRE_DB=1`). Voir ADR-007.
 - Le choix est durable : migrer vers un autre SGBD supposerait de réécrire le SQL
   natif et ferait l'objet d'un nouvel ADR.
 
@@ -76,7 +76,7 @@ Le projet adopte **`forge-mvc-mariadb`** comme backend de base de données.
 - **`forge-mvc-postgres` / `forge-mvc-mssql`** : statut **Alpha** → écartés pour une
   application qui doit être fiable.
 - **Rester sans backend** : impossible — bloque tout `db:*` et donc la persistance,
-  vérité applicative en fonctionnement (ADR-002).
+  vérité applicative en fonctionnement (ADR-003).
 
 ## Suite
 

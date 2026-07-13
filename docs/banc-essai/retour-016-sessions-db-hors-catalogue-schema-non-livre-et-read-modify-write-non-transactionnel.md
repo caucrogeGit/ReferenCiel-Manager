@@ -1,7 +1,7 @@
 # Retour terrain 016 — `forge-mvc-sessions-db` : hors catalogue, table non provisionnée, read-modify-write non transactionnel
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** **résolu** côté Forge (6/6) ; upgrade projet appliqué (opt-in + cœur sur `5dbb382`).
 
 > ## ✅ Résolu — Forge `5dbb382` (2026-07-10)
@@ -17,7 +17,7 @@
 > | **F35** | Commande `forge sessions:gc` (purge sans dépendre de `jobs`) | ✅ |
 > | **F36** | Store durci : concurrence optimiste (colonne `version` + garde `WHERE version = ?` + retry), flash lu une seule fois | ✅ |
 > | **F37** | Horodatages en **UTC** (`timezone.utc`), Python seule autorité (plus de `DEFAULT`/`ON UPDATE` SGBD) | ✅ |
-> | **F38** | Warning squelette pointe l'opt-in `sessions-db` au lieu de l'ADR-002 fantôme (`517956f`) | ✅ |
+> | **F38** | Warning squelette pointe l'opt-in `sessions-db` au lieu de l'ADR-003 fantôme (`517956f`) | ✅ |
 >
 > **Bonus Forge** : **ADR-071** — convention unique de provisioning des opt-ins
 > adossés à la base (migration versionnée + `migration:apply`) ; le cœur retire
@@ -219,7 +219,7 @@ Les constats ci-dessous portent sur le **packaging**, le **provisioning** et la
 
   Or `docs/adr/002-session-strategy.md` **n'existe pas** dans un projet Forge, et
   le numéro **entre en collision** avec la numérotation ADR du projet (ici
-  ADR-002 = « JSON canonique et persistance applicative »). Le porteur qui suit le
+  ADR-003 = « JSON canonique et persistance applicative »). Le porteur qui suit le
   lien tombe à côté.
 
 - **Suggestion** : faire pointer le warning vers la **notice de l'opt-in

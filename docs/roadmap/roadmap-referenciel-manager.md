@@ -34,7 +34,7 @@ source -> provenance -> JSON canonique -> dictionnaire de données -> règles m�
 ### Jalon 0 — Cadrage (fait)
 
 - Installer les documents de cadrage et la méthode de travail.
-- Acter la décision JSON canonique / persistance (ADR-002).
+- Acter la décision JSON canonique / persistance (ADR-003).
 - Aucun code métier, aucune table, aucune entité.
 
 ### Jalon 1 — Chaîne de sources (documentaire)

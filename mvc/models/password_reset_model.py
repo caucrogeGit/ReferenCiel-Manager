@@ -1,5 +1,5 @@
 # pyright: strict
-"""Réinitialisation de mot de passe (ADR-013 T1) : persistance du flux de reset.
+"""Réinitialisation de mot de passe (ADR-014 T1) : persistance du flux de reset.
 
 Orchestration **pure** déléguée au cœur (`core.auth.reset`) ; ce module ne fait que
 la **persistance** en SQL visible et paramétré : écrire le jeton (`auth_tokens`), le

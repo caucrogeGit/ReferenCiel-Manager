@@ -27,5 +27,5 @@ est confiné derrière un `Any` explicite.
 
 ## Références
 
-[ADR-008](../../../docs/adr/008-import-json-canonique-par-upload-admin.md) (import par
+[ADR-009](../../../docs/adr/009-import-json-canonique-par-upload-admin.md) (import par
 upload admin) ; schéma : `docs/specs/json-canonique/schemas/` (ticket 04).

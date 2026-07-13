@@ -6,7 +6,7 @@
 officiels, de JSON canoniques métier et de starters réutilisables.
 
 > Ce site documente le projet **au fil de sa progression**. Il est généré avec
-> mkdocs (voir [ADR-005](adr/005-standard-qualite-documentation-mkdocs-banc-essai.md)).
+> mkdocs (voir [ADR-006](adr/006-standard-qualite-documentation-mkdocs-banc-essai.md)).
 
 ## Mise en route (développeur)
 
@@ -39,9 +39,9 @@ Base de données         = vérité applicative en fonctionnement
 ## Repères du projet
 
 - **Framework** : 100% Forge (structure `mvc/`, CLI `forge`, contrats d'entité,
-  opt-ins). Voir [ADR-003](adr/003-architecture-applicative-forge.md).
+  opt-ins). Voir [ADR-004](adr/004-architecture-applicative-forge.md).
 - **Base de données** : MariaDB (opt-in installé par le porteur le moment venu).
-  Voir [ADR-004](adr/004-backend-base-de-donnees-mariadb.md).
+  Voir [ADR-005](adr/005-backend-base-de-donnees-mariadb.md).
 - **Trajectoire** : [roadmap](roadmap/roadmap-referenciel-manager.md) et
   [tickets](tickets/README.md).
 - **Sources & JSON canonique** : [spécification](specs/json-canonique/README.md),
@@ -51,4 +51,4 @@ Base de données         = vérité applicative en fonctionnement
 
 RéférenCiel Manager est aussi un **banc d'essai du framework Forge** : le projet
 exerce Forge en profondeur et remonte toute friction rencontrée. Exigence de
-qualité alignée sur celle de Forge (ADR-005).
+qualité alignée sur celle de Forge (ADR-006).

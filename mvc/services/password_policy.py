@@ -1,5 +1,5 @@
 # pyright: strict
-"""Politique de mot de passe (ADR-013 T1) : source **unique** adossée au cœur Forge.
+"""Politique de mot de passe (ADR-014 T1) : source **unique** adossée au cœur Forge.
 
 Toute création ou réinitialisation de mot de passe passe par ici, pour appliquer la
 même règle (`core.auth.validate_new_password` : longueur minimale et maximale). On

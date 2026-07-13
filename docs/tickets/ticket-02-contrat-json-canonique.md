@@ -1,7 +1,7 @@
 # Ticket 02 — Contrat du JSON canonique (enveloppe commune + référentiel niveau-classe)
 
 > Ticket **documentaire** (spécification). Ne produit **pas** de JSON réel, ni de
-> schéma, ni d'entité. Prérequis architectural déjà acté (ADR-003).
+> schéma, ni d'entité. Prérequis architectural déjà acté (ADR-004).
 
 ## Objectif
 

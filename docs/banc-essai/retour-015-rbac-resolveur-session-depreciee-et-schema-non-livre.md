@@ -1,7 +1,7 @@
 # Retour terrain 015 — `forge-mvc-rbac` : resolveur adossé à une session dépréciée, schéma non livré, deux modèles de permission
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** à remonter.
 
 ## Environnement
@@ -63,7 +63,7 @@
     **garde par préfixe** (`PrefixPermissionMiddleware`, `5ef21fa3`). Les trois
     manques qui obligeaient à garder du code maison sont levés.
   - **Conséquence projet — RÉALISÉE** : la couche maison RBAC (`mvc/services/rbac.py`)
-    a été **entièrement supprimée** au profit du natif ([ADR-015](../adr/015-rbac-bascule-sur-le-contrat-natif.md)),
+    a été **entièrement supprimée** au profit du natif ([ADR-016](../adr/016-rbac-bascule-sur-le-contrat-natif.md)),
     vérifiée e2e par rôle (home connectée comprise). Plus aucun contournement RBAC.
 
 ### F31 — L'opt-in ne livre **aucun schéma SQL** ni commande de synchronisation contrat → base

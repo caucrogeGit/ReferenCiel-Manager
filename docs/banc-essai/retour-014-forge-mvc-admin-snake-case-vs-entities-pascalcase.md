@@ -1,7 +1,7 @@
 # Retour terrain 014 — `forge-mvc-admin` exige des champs snake_case, incompatibles avec les colonnes PascalCase de `forge-mvc-entities`
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** à remonter.
 
 ## Environnement

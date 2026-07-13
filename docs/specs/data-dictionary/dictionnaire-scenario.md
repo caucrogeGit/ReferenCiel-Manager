@@ -2,7 +2,7 @@
 
 Documentation **métier enrichie** du domaine « scénario pédagogique » : le premier
 **objet métier persisté** créé par le professeur (chaîne Scenario, roadmap jalon 2,
-instructions §12-14). Objets **persistés en base** (ADR-002).
+instructions §12-14). Objets **persistés en base** (ADR-003).
 
 > Place dans la chaîne pédagogique : `référentiel niveau-classe → compétences /
 > critères observables → **scénario pédagogique** → starter Welcome → parcours →
@@ -15,7 +15,7 @@ instructions §12-14). Objets **persistés en base** (ADR-002).
 - **Types** : types de champ Forge (`string`, `text`, `foreign_key`, …). PK `Id` gérée
   par Forge.
 - **Relations** : `many_to_one` et `many_to_many` (via table pivot), conformément à Forge.
-- **Base = vérité** (ADR-002). Le scénario est **créé par le professeur** via une
+- **Base = vérité** (ADR-003). Le scénario est **créé par le professeur** via une
   interface (ou importé depuis une source / un JSON canonique), pas en dur dans le dépôt.
 - **Distinction** : le scénario **définit l'intention** ; il ne contient pas le travail
   élève (paliers, activités, checklists) — cela relève du parcours/starter en aval.

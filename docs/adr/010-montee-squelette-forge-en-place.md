@@ -1,4 +1,4 @@
-# ADR-009 — Montée de squelette Forge en place, guidée par un manifeste de propriété
+# ADR-010 — Montée de squelette Forge en place, guidée par un manifeste de propriété
 
 ## Statut
 
@@ -14,7 +14,7 @@ Accepté (2026-07-06).
 ## Contexte
 
 Forge évolue régulièrement (paquet `forge-mvc` **et** squelette émis par
-`forge new`). RéférenCiel Manager, en tant que **banc d'essai** (ADR-005), doit
+`forge new`). RéférenCiel Manager, en tant que **banc d'essai** (ADR-006), doit
 récupérer ces apports fréquemment, mais **sans casser** son contenu métier, son
 historique git ni son environnement.
 

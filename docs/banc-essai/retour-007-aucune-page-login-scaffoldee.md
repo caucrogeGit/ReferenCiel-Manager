@@ -1,7 +1,7 @@
 # Retour terrain 007 — Aucune page de login fournie ni scaffoldée, alors que le cœur redirige vers `/login`
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** ✅ Résolu dans forge-mvc f38d5159 (2026-07-08) — vérifié sur le banc d'essai.
 
 ## Environnement

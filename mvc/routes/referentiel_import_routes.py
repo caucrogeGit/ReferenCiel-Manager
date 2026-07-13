@@ -1,5 +1,5 @@
 # pyright: strict
-"""Routes de l'import de référentiel par upload admin (ticket 11, ADR-008).
+"""Routes de l'import de référentiel par upload admin (ticket 11, ADR-009).
 
 Montées sous l'espace `/admin` (non public → session requise). Le rôle `admin`
 (RBAC, opt-in `rbac`) est différé : pour l'instant « admin » = utilisateur authentifié.

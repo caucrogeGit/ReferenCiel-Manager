@@ -1,7 +1,7 @@
 # Retour terrain 017 — `forge sessions:gc` n'amorce pas la config projet ; `--help` s'exécute
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** **résolu** côté Forge (2/2) ; contournement projet retiré.
 
 > ## ✅ Résolu — Forge `2f2386a` (ADR-072, 2026-07-10)

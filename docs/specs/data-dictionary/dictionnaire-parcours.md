@@ -2,7 +2,7 @@
 
 Documentation **métier enrichie** du domaine « parcours » : ce qui **organise le travail
 élève** (instructions §12), en aval du starter et en amont de l'affectation. Objets
-**persistés en base** (ADR-002).
+**persistés en base** (ADR-003).
 
 > Place dans la chaîne : `scénario → starter Welcome → **parcours** → affectation →
 > paliers → contenus`. Le starter est le **gabarit réutilisable** ; le **parcours** le met
@@ -11,9 +11,9 @@ Documentation **métier enrichie** du domaine « parcours » : ce qui **organise
 ## Principes
 
 - **Nommage / types / relations** : conventions Forge (comme les autres dictionnaires).
-- **Base = vérité** (ADR-002). Le parcours est **créé par le professeur** (dérivé d'un
+- **Base = vérité** (ADR-003). Le parcours est **créé par le professeur** (dérivé d'un
   starter publié).
-- **Versionnement (ADR-011)** : `Parcours` = identité stable ; `VersionParcours` = version
+- **Versionnement (ADR-012)** : `Parcours` = identité stable ; `VersionParcours` = version
   (cycle de vie `brouillon`/`publie`/`archive`). Un parcours **publié et affecté ne change
   pas** sous les pieds de l'élève (instructions §…, jalon 4).
 
@@ -56,14 +56,14 @@ Le **découpage du parcours** en étapes (ticket 16). Rattaché à une **version
 | Relation | Type Forge | Cardinalité |
 |---|---|---|
 | VersionStarter → Parcours | many_to_one (inverse) | 1 version de starter, n parcours dérivés |
-| Parcours → VersionParcours | many_to_one (inverse) | 1 identité, n versions (ADR-011) |
+| Parcours → VersionParcours | many_to_one (inverse) | 1 identité, n versions (ADR-012) |
 | VersionParcours → Palier | many_to_one (inverse) | 1 version, n paliers |
 
 ## Règles métier & cycle de vie
 
 - **Dérivation** : un parcours référence une `VersionStarter` (généralement `publie`).
 - **Ordre des paliers** unique et contigu (1..n) dans la version de parcours.
-- **Cycle de vie** sur `VersionParcours` (ADR-011) ; une version `publie` et **affectée**
+- **Cycle de vie** sur `VersionParcours` (ADR-012) ; une version `publie` et **affectée**
   ne se modifie pas (jalon 4).
 - **Contenus de palier** (dossier technique, QCM, activité, checklist) : tickets ultérieurs
   (19), rattachés au **Palier** — voir aussi le [dictionnaire Starter Welcome](dictionnaire-starter-welcome.md)

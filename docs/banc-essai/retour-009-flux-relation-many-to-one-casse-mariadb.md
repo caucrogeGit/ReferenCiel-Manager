@@ -1,7 +1,7 @@
 # Retour terrain 009 — Le flux `make:relation` (many_to_one) ne produit pas de schéma applicable sur MariaDB
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** ✅ Résolu dans forge-mvc 809d224f (2026-07-08) — vérifié sur le banc d'essai (table classe + FK créées).
 
 ## Environnement

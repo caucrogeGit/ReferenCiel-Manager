@@ -1,7 +1,7 @@
 # Retour terrain 008 — Deux bugs runtime du code généré (login MariaDB + composant bouton)
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** ⚠️ Partiellement résolu — F17 (is_active) corrigé dans forge-mvc 809d224f (normalize_auth_user accepte un int 0/1) ; F18 (button.html manquant) toujours en attente.
 
 ## Environnement

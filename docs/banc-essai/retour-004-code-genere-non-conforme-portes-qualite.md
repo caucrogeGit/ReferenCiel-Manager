@@ -1,7 +1,7 @@
 # Retour terrain 004 — Le code généré ne passe pas les portes qualité (pyright strict, ruff)
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** ✅ Résolu dans forge-mvc f38d5159 (2026-07-08) — vérifié sur le banc d'essai.
 
 ## Environnement
@@ -59,7 +59,7 @@ des portes **rouges** à cause du **code généré par le framework**, dès la p
 entité. Contournements appliqués localement (documentés dans `pyproject.toml`) :
 
 - **pyright** : exclusion des `**/*_base.py` (régénérables, « pas notre code »,
-  ADR-007) ;
+  ADR-008) ;
 - **ruff** : `per-file-ignores` `F401` sur les `**/__init__.py`.
 
 Ces contournements sont acceptables (ce n'est pas notre code), mais ils **masquent**

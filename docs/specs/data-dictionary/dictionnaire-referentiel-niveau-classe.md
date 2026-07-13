@@ -4,7 +4,7 @@ Documentation **métier enrichie** du domaine « référentiel niveau-classe » 
 objets **persistés en base** après import d'un JSON canonique
 (`type: referentiel_niveau_classe`, voir le
 [contrat](../json-canonique/contrat-referentiel-niveau-classe.md) et l'
-[ADR-008](../../adr/008-import-json-canonique-par-upload-admin.md)).
+[ADR-009](../../adr/009-import-json-canonique-par-upload-admin.md)).
 
 > Place dans la chaîne : `JSON canonique → **dictionnaire de données** → modèle
 > relationnel → contrats d'entité Forge → base`. Le dictionnaire **enrichit** le
@@ -17,7 +17,7 @@ objets **persistés en base** après import d'un JSON canonique
   `boolean`, `json`, …). Clé primaire `id` gérée par Forge (non déclarée).
 - **Relations** : `many_to_one`, `many_to_many` (via table pivot), conformément à
   Forge (`make:relation`, `make:pivot-crud`).
-- **Base = vérité** (ADR-002). Le JSON uploadé est conservé comme trace de
+- **Base = vérité** (ADR-003). Le JSON uploadé est conservé comme trace de
   **provenance** ; les objets vivent en base.
 - **Provenance** : chaque élément repris référence sa/ses source(s) (`Source`).
 

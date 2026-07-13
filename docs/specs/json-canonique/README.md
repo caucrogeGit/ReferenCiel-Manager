@@ -4,7 +4,7 @@ Ce dossier spécifie le **JSON canonique** de RéférenCiel Manager. Il s'agit d
 document de spécification : il décrit le rôle et les principes du JSON canonique,
 en amont de toute production de JSON réel.
 
-> Décision de référence : `docs/adr/002-json-canonique-et-persistance-applicative.md`
+> Décision de référence : `docs/adr/003-json-canonique-et-persistance-applicative.md`
 
 ## Définition
 

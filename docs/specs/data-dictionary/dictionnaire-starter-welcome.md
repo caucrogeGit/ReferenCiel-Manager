@@ -12,12 +12,12 @@ Documentation métier enrichie du domaine **parcours pédagogique** (type
 ## Contenu par référence
 
 Les contenus lourds (dossiers techniques, activités, images) sont **référencés par
-fichier** et stockés via l'opt-in `files` (bundle uploadé, ADR-008), pas embarqués
+fichier** et stockés via l'opt-in `files` (bundle uploadé, ADR-009), pas embarqués
 en base. Les **données structurées** (QCM, checklists) sont persistées.
 
 ## Entités
 
-> **Versionnement (ADR-011)** : `StarterWelcome` est l'**identité stable** du parcours
+> **Versionnement (ADR-012)** : `StarterWelcome` est l'**identité stable** du parcours
 > réutilisable ; ses **versions** vivent dans `VersionStarter`. Les contenus versionnés
 > (paliers, QCM, checklists) se rattachent à une **version**, pas à l'identité.
 
@@ -124,7 +124,7 @@ Un QCM par palier ; porte de passage (validé à 100 % avant l'activité).
 
 | Relation | Type Forge | Cardinalité |
 |---|---|---|
-| StarterWelcome → VersionStarter | many_to_one (inverse) | 1 identité, n versions (ADR-011) |
+| StarterWelcome → VersionStarter | many_to_one (inverse) | 1 identité, n versions (ADR-012) |
 | VersionStarter → Parcours | many_to_one (inverse) | 1 version de starter, n parcours dérivés (voir [dico Parcours](dictionnaire-parcours.md)) |
 | Palier → QCM / Activite / Checklist | many_to_one (inverse) | 1 palier, 0..1 de chaque |
 | QCM → QuestionQCM → ChoixQCM | one_to_many | cascade |

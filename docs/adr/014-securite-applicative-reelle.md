@@ -1,4 +1,4 @@
-# ADR-013 — Sécurité applicative réelle (trajectoire post-tunnel)
+# ADR-014 — Sécurité applicative réelle (trajectoire post-tunnel)
 
 **Statut :** Accepté
 **Date :** 2026-07-11
@@ -19,7 +19,7 @@ l'écart entre la doc (« différé ») et le code (« fait ») doit être acté
   (`core.auth.password`), rotation anti-fixation au login (`regenerate_session`).
 - **Sessions** : persistées en base (opt-in `sessions-db`, ADR-071 / retour-016),
   cookies durcis (`__Host-session_id`, HttpOnly, SameSite=Strict, Secure), TTL 1 h.
-- **RBAC** : couche fine maison ([ADR-012](012-rbac-couche-fine-maison-sur-contrat.md)),
+- **RBAC** : couche fine maison ([ADR-013](013-rbac-couche-fine-maison-sur-contrat.md)),
   routes gardées par `guard_prefix`, nav filtrée par `can()`, contrat `rbac.json`.
 - **Lien compte ↔ Eleve/Professeur** : colonne `UserId`, comptes créés par l'admin,
   **filtrage row-level** (`/mon-parcours` élève, `/mes-classes` professeur).
@@ -30,7 +30,7 @@ l'écart entre la doc (« différé ») et le code (« fait ») doit être acté
 
 - **MFA** (prof/admin) : opt-in `forge-mvc-mfa` non installé, table `auth_mfa_*`
   non migrée. Exigé par le cadrage (§20, cadre §10).
-- **Permissions fines** : le RBAC est **grossier par domaine** (assumé ADR-012),
+- **Permissions fines** : le RBAC est **grossier par domaine** (assumé ADR-013),
   alors que le cadrage §19 liste des permissions **par action**.
 - **Réinitialisation de mot de passe** : le cœur fournit tout (`core.auth.reset`,
   table `auth_tokens` provisionnée) mais **rien n'est branché** dans l'app.
@@ -41,7 +41,7 @@ l'écart entre la doc (« différé ») et le code (« fait ») doit être acté
 
 ## Décision
 
-1. **Acter l'existant.** La sécurité de base (auth, sessions durcies, RBAC ADR-012,
+1. **Acter l'existant.** La sécurité de base (auth, sessions durcies, RBAC ADR-013,
    liens comptes + row-level, CSRF, CSP) est **en place et considérée acquise**. La
    mention « différé » du README pour ces éléments est **périmée** : le README est
    mis à jour pour refléter le code.
@@ -62,7 +62,7 @@ l'écart entre la doc (« différé ») et le code (« fait ») doit être acté
    - **T3 — Permissions fines (si/quand un besoin réel émerge).** Aligner
      `rbac.json` sur le cadrage §19 (permissions par action). **Non entrepris tant
      que la granularité admin/professeur suffit** — éviter la granularité
-     spéculative (cohérent ADR-012, principe Forge « pas de couche avant besoin »).
+     spéculative (cohérent ADR-013, principe Forge « pas de couche avant besoin »).
 
 3. **Réutiliser le cœur, ne rien réimplémenter.** Le flux de reset s'appuie sur
    les fonctions **pures** du cœur (`create_password_reset_token`,

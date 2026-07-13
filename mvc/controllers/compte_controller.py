@@ -4,7 +4,7 @@
 Pages personnelles du compte **connecté**, accessibles depuis le menu profil de la
 barre de navigation. Protégées par la seule auth Forge (session requise) : chacun
 consulte SON compte ; pas de permission de domaine. La gestion sensible (mot de passe,
-MFA) reste dans l'espace « Sécurité » (ADR-013/014) — on y renvoie, on ne la duplique
+MFA) reste dans l'espace « Sécurité » (ADR-014/014) — on y renvoie, on ne la duplique
 pas.
 """
 from __future__ import annotations

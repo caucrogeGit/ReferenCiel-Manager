@@ -4,7 +4,7 @@ Persiste un JSON canonique **déjà validé** (voir `canonical_validator`) en ba
 `core.database.db` (SQL visible et paramétré, esprit Forge). Logique **pure**,
 indépendante de l'UI admin.
 
-Décisions ([ADR-010](../../../docs/adr/010-importeur-referentiel-upsert-best-effort.md)) :
+Décisions ([ADR-011](../../../docs/adr/011-importeur-referentiel-upsert-best-effort.md)) :
 
 - **Upsert par identifiant** : ré-importer un même `identifiant` **remplace** le
   contenu du référentiel (purge des objets rattachés, dans l'ordre des dépendances,
@@ -48,6 +48,6 @@ if not rapport.ok:
 
 ## Références
 
-[ADR-010](../../../docs/adr/010-importeur-referentiel-upsert-best-effort.md) ; ticket 11
+[ADR-011](../../../docs/adr/011-importeur-referentiel-upsert-best-effort.md) ; ticket 11
 (chaîne référentiel). Dictionnaire :
 `docs/specs/data-dictionary/dictionnaire-referentiel-niveau-classe.md`.

@@ -1,4 +1,4 @@
-# ADR-011 — Versionnement par entité d'identité + entité de version
+# ADR-012 — Versionnement par entité d'identité + entité de version
 
 **Statut :** Accepté
 **Date :** 2026-07-10
@@ -7,7 +7,7 @@
 
 Plusieurs objets métier sont **versionnés** (roadmap : référentiel, **starter**,
 parcours). Le cycle de vie est `brouillon` → `publie` → `archive`, et « un objet
-publié et affecté ne se modifie pas librement » (dictionnaires, [ADR-010](010-importeur-referentiel-upsert-best-effort.md)).
+publié et affecté ne se modifie pas librement » (dictionnaires, [ADR-011](011-importeur-referentiel-upsert-best-effort.md)).
 
 Le ticket 14 (`StarterWelcome` **+ `VersionStarter`**) pose la question : le
 versionnement vit-il **en ligne** (champs `version`/`statut` sur l'objet, chaque couple
@@ -59,4 +59,4 @@ starter ont des contenus différents.
   mélange identité et version, ne conserve pas proprement l'historique, et ne remplit pas
   l'intention `+VersionStarter` du ticket 14.
 - **Versionnement applicatif hors base** (fichiers/snapshots) : contraire à « base =
-  vérité » (ADR-002).
+  vérité » (ADR-003).

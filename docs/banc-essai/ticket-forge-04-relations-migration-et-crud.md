@@ -1,7 +1,7 @@
 # Ticket Forge 04 — Intégrer les relations à `migration:make` et au CRUD
 
 **Pour :** l'agent Claude Code travaillant sur le framework Forge (`caucrogeGit/Forge`).
-**De :** projet RéférenCiel Manager, application-banc d'essai (ADR-005).
+**De :** projet RéférenCiel Manager, application-banc d'essai (ADR-006).
 **Objet :** après le correctif du **schéma** des relations (ticket-03 résolu,
 `809d224f`), la **chaîne applicative** ne relie toujours pas les relations à la
 migration ni au CRUD — découvert sur l'entité `Classe`.

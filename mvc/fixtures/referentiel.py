@@ -4,7 +4,7 @@ from pathlib import Path
 from forge_mvc_fixtures import Fixture
 from mvc.services.referentiel_importer import import_referentiel
 
-# Source unique : le référentiel livré (data/referentiels/), pas une copie de démo (ADR-016).
+# Source unique : le référentiel livré (data/referentiels/), pas une copie de démo (ADR-017).
 _CANON = Path("data/referentiels/json-canonique-ciel-2tne.json")
 
 

@@ -1,7 +1,7 @@
 # pyright: strict
 """Modèle d'accès aux données de l'entité AnneeScolaire (SQL explicite, Forge).
 
-Généré par `forge make:crud`, puis typé strict (standard du projet, ADR-007).
+Généré par `forge make:crud`, puis typé strict (standard du projet, ADR-008).
 Toutes les requêtes sont paramétrées (`?`) — jamais d'interpolation.
 """
 

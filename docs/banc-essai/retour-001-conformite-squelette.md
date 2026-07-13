@@ -1,7 +1,7 @@
 # Retour terrain 001 — Conformité du squelette `forge new` aux standards Forge
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** à remonter.
 
 ## Environnement
@@ -117,7 +117,7 @@ partagé), ADR-054/060 (backend), ADR-061 (registre opt-ins).
 
 **But** — un projet démarre avec le *pourquoi* à côté du *quoi*, cohérent avec la
 discipline ADR de Forge, au lieu que chaque projet réécrive ces ADR à la main.
-C'est précisément ce que RéférenCiel Manager a dû faire (ADR-003 à 007) : une
+C'est précisément ce que RéférenCiel Manager a dû faire (ADR-004 à 007) : une
 partie de ces décisions est récurrente et gagnerait à être livrée avec le squelette.
 
 ### F6 — À vérifier : `forge opt-in:enable` préserve-t-il le typage manuel ?

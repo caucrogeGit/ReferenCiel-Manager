@@ -1,7 +1,7 @@
-# ADR-012 — Couche RBAC applicative « fine maison » adossée au contrat
+# ADR-013 — Couche RBAC applicative « fine maison » adossée au contrat
 
 **Statut :** Accepté (2026-07-10), puis **remplacé par
-[ADR-015](015-rbac-bascule-sur-le-contrat-natif.md)** (2026-07-12) : les manques du
+[ADR-016](016-rbac-bascule-sur-le-contrat-natif.md)** (2026-07-12) : les manques du
 RBAC natif (F30, provider contractuel, garde par préfixe) ayant été corrigés côté
 Forge, la couche maison décrite ici (`mvc/services/rbac.py`) a été **supprimée** au
 profit du natif. Ce document reste comme trace du *pourquoi* du contournement.

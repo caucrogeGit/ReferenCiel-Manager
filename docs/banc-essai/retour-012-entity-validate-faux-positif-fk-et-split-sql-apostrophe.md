@@ -1,7 +1,7 @@
 # Retour terrain 012 — Deux défauts du moteur d'entités : faux positif `entity:validate` (FK) et split SQL cassé par une apostrophe en commentaire
 
 **Destinataire :** équipe Forge (dépôt `caucrogeGit/Forge`).
-**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-005).
+**Émetteur :** projet RéférenCiel Manager (banc d'essai, ADR-006).
 **Statut :** **F26 RÉSOLU** côté Forge (2026-07-12, sha `399db24f`) — voir note sous F26. F27 : à remonter.
 
 ## Environnement
