@@ -78,6 +78,7 @@ nav:
       - ADR-013 — Sécurité applicative réelle: adr/013-securite-applicative-reelle.md
       - ADR-014 — MFA TOTP optionnelle: adr/014-mfa-totp-optionnelle.md
       - ADR-015 — RBAC bascule sur le contrat natif: adr/015-rbac-bascule-sur-le-contrat-natif.md
+      - ADR-016 — Référentiels livrés & chargement à l'installation: adr/016-referentiels-livres-et-chargement-installation.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
@@ -98,6 +99,7 @@ nav:
       - Capitalisation — fichier .scpro CPRO: specs/json-canonique/traces/capitalisation-fichier-scpro-cpro.md
   - Procédures:
       - Montée de squelette Forge: procedures/montee-squelette-forge.md
+      - Créer un JSON canonique de référentiel: procedures/creation-json-canonique-referentiel.md
   - Banc d'essai (retours Forge):
       - Vue d'ensemble: banc-essai/README.md
       - Ticket Forge — retours terrain: banc-essai/ticket-forge-01-retours-terrain-ciel-2tne.md

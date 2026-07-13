@@ -1,0 +1,173 @@
+{
+  "type": "referentiel_niveau_classe",
+  "identifiant": "ciel-2tne",
+  "version": "0.1.0",
+  "sources": [
+    {
+      "source_id": "referentiel-bac-pro-ciel",
+      "source_type": "pdf_officiel",
+      "source_fichier": "referenciel-bac-pro-ciel.pdf",
+      "source_note": "Référentiel officiel Bac Pro CIEL (pôles, activités, compétences, critères)."
+    },
+    {
+      "source_id": "vademecum-tne-2nde",
+      "source_type": "pdf_officiel",
+      "source_fichier": "referenciel-2tne.pdf",
+      "source_note": "Vademecum famille des métiers TNE (compétences communes CC1-CC9)."
+    }
+  ],
+  "provenance": {
+    "date_extraction": "2026-07-06",
+    "methode": "extraction manuelle representative (v0.1.0, partielle, a completer)",
+    "point_entree": "referentiel_officiel"
+  },
+  "formation": {
+    "code": "BACPRO-CIEL",
+    "intitule": "Baccalauréat professionnel Cybersécurité, Informatique et réseaux, Électronique"
+  },
+  "niveau_classe": {
+    "code": "2TNE",
+    "intitule": "Seconde professionnelle, famille des métiers des transitions numérique et énergétique"
+  },
+  "poles_activites": [
+    { "id": "pole-real-maint-elec", "intitule": "Réalisation et maintenance de produits électroniques", "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "pole-reseaux", "intitule": "Mise en œuvre de réseaux informatiques", "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "pole-donnee-cyber", "intitule": "Valorisation de la donnée et cybersécurité", "source_ids": ["referentiel-bac-pro-ciel"] }
+  ],
+  "activites_professionnelles": [
+    {
+      "id": "act-e1", "code": "E1", "intitule": "Étude et conception de produits électroniques", "pole_id": "pole-real-maint-elec",
+      "taches": [
+        "Analyse et saisie d'un schéma ou d'une carte électronique à partir d'un cahier des charges",
+        "Placement et routage d'une carte électronique et génération des fichiers de fabrication",
+        "Réalisation d'un prototype et mise au point d'une carte électronique",
+        "Intégration dans son environnement"
+      ],
+      "conditions_exercice": { "autonomie": "T1 et T3 : partielle ; T2 et T4 : complète" },
+      "resultats_attendus": [
+        { "id": "ra-e1-1", "libelle": "Le placement et le routage de la carte électronique sont conformes aux IPC" },
+        { "id": "ra-e1-2", "libelle": "Le prototype réalisé et mis au point est conforme au cahier des charges" }
+      ],
+      "source_ids": ["referentiel-bac-pro-ciel"]
+    },
+    {
+      "id": "act-e2", "code": "E2", "intitule": "Tests et essais", "pole_id": "pole-real-maint-elec",
+      "taches": [
+        "Tests et mesures nécessaires à la vérification d'une carte ou d'un système électronique communicant",
+        "Mise en place d'un environnement de tests",
+        "Application d'un protocole de tests et de mesures"
+      ],
+      "conditions_exercice": { "autonomie": "totale dans le périmètre de la procédure" },
+      "resultats_attendus": [
+        { "id": "ra-e2-1", "libelle": "Les processus de tests et de validation du produit sont mis en œuvre conformément au mode opératoire" }
+      ],
+      "source_ids": ["referentiel-bac-pro-ciel"]
+    },
+    {
+      "id": "act-r2", "code": "R2", "intitule": "Installation et qualification", "pole_id": "pole-reseaux",
+      "taches": [
+        "Prise en compte de la demande du client",
+        "Vérification du dossier, interprétation des plans d'exécution",
+        "Préparation du chantier",
+        "Réalisation des opérations avec intégration des contraintes client et contrôle",
+        "Recettage de l'installation"
+      ],
+      "conditions_exercice": { "autonomie": "partielle" },
+      "resultats_attendus": [
+        { "id": "ra-r2-1", "libelle": "Le cahier de recette (PV de livraison) est rempli et validé par le client" }
+      ],
+      "source_ids": ["referentiel-bac-pro-ciel"]
+    },
+    {
+      "id": "act-r3", "code": "R3", "intitule": "Exploitation et maintien en condition opérationnelle", "pole_id": "pole-reseaux",
+      "taches": [
+        "Réalisation d'un diagnostic de premier niveau",
+        "Configuration matérielle et logicielle des équipements",
+        "Intégration de nouveaux équipements",
+        "Mise à jour des équipements"
+      ],
+      "conditions_exercice": { "autonomie": "partielle" },
+      "resultats_attendus": [
+        { "id": "ra-r3-1", "libelle": "Le défaut est identifié, corrigé et la documentation est éventuellement mise à jour" }
+      ],
+      "source_ids": ["referentiel-bac-pro-ciel"]
+    },
+    {
+      "id": "act-d2", "code": "D2", "intitule": "Développement et validation de solutions logicielles", "pole_id": "pole-donnee-cyber",
+      "taches": [
+        "Modélisation d'une solution logicielle",
+        "Développement, utilisation ou adaptation de composants logiciels",
+        "Tests et validation"
+      ],
+      "conditions_exercice": { "autonomie": "partielle" },
+      "resultats_attendus": [
+        { "id": "ra-d2-1", "libelle": "Les composants logiciels sont développés et testés" },
+        { "id": "ra-d2-2", "libelle": "Les solutions logicielles sont conformes aux spécifications du cahier des charges" }
+      ],
+      "source_ids": ["referentiel-bac-pro-ciel"]
+    }
+  ],
+  "competences": [
+    { "id": "comp-c01", "code": "C01", "intitule": "Communiquer en situation professionnelle (français/anglais)",
+      "criteres_evaluation": [ { "id": "cr-c01-1", "libelle": "La présentation orale (support et expression) est de qualité et claire" } ],
+      "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "comp-c03", "code": "C03", "intitule": "Participer à un projet",
+      "criteres_evaluation": [ { "id": "cr-c03-1", "libelle": "Le suivi du projet est respecté" }, { "id": "cr-c03-2", "libelle": "L'espace collaboratif est correctement utilisé" } ],
+      "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "comp-c04", "code": "C04", "intitule": "Analyser une structure matérielle et logicielle",
+      "criteres_evaluation": [ { "id": "cr-c04-1", "libelle": "Les informations nécessaires sont extraites des documents réglementaires et/ou constructeurs" } ],
+      "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "comp-c06", "code": "C06", "intitule": "Valider la conformité d'une installation",
+      "criteres_evaluation": [ { "id": "cr-c06-1", "libelle": "Les résultats attendus sont vérifiés" } ],
+      "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "comp-c07", "code": "C07", "intitule": "Réaliser des maquettes et prototypes",
+      "criteres_evaluation": [ { "id": "cr-c07-1", "libelle": "Le brasage de la carte est conforme à la nomenclature et aux IPC" } ],
+      "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "comp-c08", "code": "C08", "intitule": "Coder",
+      "criteres_evaluation": [ { "id": "cr-c08-1", "libelle": "Le module logiciel est débogué et syntaxiquement correct" } ],
+      "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "comp-c09", "code": "C09", "intitule": "Installer les éléments d'un système électronique ou informatique",
+      "criteres_evaluation": [ { "id": "cr-c09-1", "libelle": "Les éléments du système sont installés et raccordés selon une procédure" } ],
+      "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "comp-c10", "code": "C10", "intitule": "Exploiter un réseau informatique",
+      "criteres_evaluation": [ { "id": "cr-c10-1", "libelle": "La mise à jour des équipements (iOS, OS, logiciel, firmware) est effectuée" } ],
+      "source_ids": ["referentiel-bac-pro-ciel"] }
+  ],
+  "famille_competences": [
+    { "code": "CC1", "intitule": "S'informer sur l'intervention ou sur la réalisation", "source_ids": ["vademecum-tne-2nde"] },
+    { "code": "CC2", "intitule": "Organiser la réalisation ou l'intervention", "source_ids": ["vademecum-tne-2nde"] },
+    { "code": "CC3", "intitule": "Analyser et exploiter les données", "source_ids": ["vademecum-tne-2nde"] },
+    { "code": "CC4", "intitule": "Réaliser une installation ou une intervention", "source_ids": ["vademecum-tne-2nde"] },
+    { "code": "CC5", "intitule": "Effectuer les opérations préalables", "source_ids": ["vademecum-tne-2nde"] },
+    { "code": "CC6", "intitule": "Mettre en service", "source_ids": ["vademecum-tne-2nde"] },
+    { "code": "CC7", "intitule": "Réaliser une opération de maintenance", "source_ids": ["vademecum-tne-2nde"] },
+    { "code": "CC8", "intitule": "Renseigner les documents", "source_ids": ["vademecum-tne-2nde"] },
+    { "code": "CC9", "intitule": "Communiquer avec le client et/ou l'usager", "source_ids": ["vademecum-tne-2nde"] }
+  ],
+  "indicateurs_reussite": [
+    { "id": "ind-1", "libelle": "L'élève produit un câble ou une carte conforme, vérifié au test", "origine": "resultat_attendu", "ref": "ra-e1-1", "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "ind-2", "libelle": "L'élève vérifie les résultats attendus d'une installation avant de conclure", "origine": "critere", "ref": "cr-c06-1", "source_ids": ["referentiel-bac-pro-ciel"] },
+    { "id": "ind-3", "libelle": "L'élève relève et interprète les informations réseau (adresse IP, masque, passerelle) d'une machine", "origine": "reformulation", "source_ids": ["vademecum-tne-2nde"] }
+  ],
+  "relations": {
+    "activites_competences": [
+      { "activite": "E1", "competences": ["C03", "C04", "C07"] },
+      { "activite": "E2", "competences": ["C01", "C03", "C06"] },
+      { "activite": "R2", "competences": ["C06", "C09", "C10"] },
+      { "activite": "R3", "competences": ["C06", "C09", "C10"] },
+      { "activite": "D2", "competences": ["C06", "C08"] }
+    ],
+    "competences_criteres": [
+      { "competence": "C03", "criteres": ["cr-c03-1", "cr-c03-2"] },
+      { "competence": "C06", "criteres": ["cr-c06-1"] }
+    ],
+    "activites_resultats_attendus": [
+      { "activite": "E1", "resultats": ["ra-e1-1", "ra-e1-2"] },
+      { "activite": "D2", "resultats": ["ra-d2-1", "ra-d2-2"] }
+    ],
+    "cc_competences": [
+      { "cc": "CC3", "competences": ["C04"] },
+      { "cc": "CC9", "competences": ["C01"] }
+    ]
+  }
+}
