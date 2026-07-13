@@ -53,13 +53,15 @@
       "name": "referentiel_id",
       "type": "foreign_key",
       "references": "ReferentielNiveauClasse",
-      "required": true
+      "required": false,
+      "nullable": true
     },
     {
       "name": "auteur_id",
       "type": "foreign_key",
       "references": "Professeur",
-      "required": true
+      "required": false,
+      "nullable": true
     }
   ],
   "options": {

@@ -298,7 +298,7 @@
       "name": "referentiel",
       "inverse_name": "scenarios",
       "foreign_key": "referentiel_id",
-      "nullable": false,
+      "nullable": true,
       "on_delete": "restrict",
       "index": true
     },
@@ -309,7 +309,7 @@
       "name": "auteur",
       "inverse_name": "scenarios",
       "foreign_key": "auteur_id",
-      "nullable": false,
+      "nullable": true,
       "on_delete": "restrict",
       "index": true
     },

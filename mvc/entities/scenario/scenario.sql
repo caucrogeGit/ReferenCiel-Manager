@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS scenario (
     Statut VARCHAR(20) NOT NULL,
     Version VARCHAR(20) NOT NULL,
     CoIntervention BOOLEAN NOT NULL DEFAULT 0,
-    referentiel_id BIGINT UNSIGNED NOT NULL,
-    auteur_id BIGINT UNSIGNED NOT NULL,
+    referentiel_id BIGINT UNSIGNED NULL,
+    auteur_id BIGINT UNSIGNED NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)
