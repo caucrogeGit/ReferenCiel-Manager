@@ -42,6 +42,7 @@ load_dotenv(f"env/{APP_ENV}", override=True) # surcharge avec l'environnement ch
 # dans env/dev selon sa documentation.
 
 APP_NAME          = os.getenv("APP_NAME",          "Forge")
+APP_VERSION       = os.getenv("APP_VERSION",       "0.1.0")
 APP_ROUTES_MODULE = os.getenv("APP_ROUTES_MODULE", "mvc.routes")
 VIEWS_DIR         = os.getenv("VIEWS_DIR",         "mvc/views")
 SQL_DIR           = os.getenv("SQL_DIR",           "mvc/models/sql")

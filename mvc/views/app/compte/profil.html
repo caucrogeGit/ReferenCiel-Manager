@@ -1,0 +1,43 @@
+{% extends "layouts/base.html" %}
+{% from "components/ui.html" import button %}
+{% block title %}Mon profil{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-1">Mon profil</h1>
+    <p class="text-gray-600 mb-6">Informations de votre compte.</p>
+
+    <section class="bg-white shadow rounded p-5">
+        <dl class="divide-y divide-gray-100">
+            <div class="flex justify-between gap-4 py-3">
+                <dt class="text-sm text-gray-500">Adresse e-mail</dt>
+                <dd class="text-sm font-medium text-gray-800">{{ email }}</dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
+                <dt class="text-sm text-gray-500">Rôle</dt>
+                <dd class="text-sm font-medium text-gray-800">
+                    {{ roles | join(", ") if roles else "—" }}
+                </dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
+                <dt class="text-sm text-gray-500">Statut</dt>
+                <dd class="text-sm font-medium">
+                    {% if actif %}
+                    <span class="text-green-700">✓ Compte actif</span>
+                    {% else %}
+                    <span class="text-gray-500">Compte inactif</span>
+                    {% endif %}
+                </dd>
+            </div>
+        </dl>
+    </section>
+
+    <section class="bg-white shadow rounded p-5 mt-5">
+        <h2 class="font-semibold text-gray-800">Sécurité du compte</h2>
+        <p class="text-sm text-gray-500 mt-1 mb-4">
+            Mot de passe et authentification à deux facteurs se gèrent dans l'espace Sécurité.
+        </p>
+        {{ button("Gérer la sécurité", variant="secondary", href="/securite") }}
+    </section>
+</div>
+{% endblock %}
