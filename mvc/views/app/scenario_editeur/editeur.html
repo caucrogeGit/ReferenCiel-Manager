@@ -14,7 +14,7 @@
   <ul class="flex flex-wrap items-center gap-1 text-sm font-medium">
     <li><a href="#titre" class="block px-4 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Titre</a></li>
     <li><a href="#contexte" class="block px-4 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Contexte</a></li>
-    <li><span class="block px-4 py-3 text-gray-400 cursor-not-allowed" title="À venir">Liaison avec le référentiel</span></li>
+    <li><a href="#liaison" class="block px-4 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Liaison avec le référentiel</a></li>
     <li><span class="block px-4 py-3 text-gray-400 cursor-not-allowed" title="À venir">Ressources</span></li>
   </ul>
 </nav>
@@ -94,5 +94,70 @@
       <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Enregistrer</button>
     </div>
   </form>
+</section>
+
+<!-- Section Liaison avec le référentiel -->
+<section id="liaison" class="bg-white shadow rounded p-6 mt-6 scroll-mt-20">
+  <h2 class="text-lg font-semibold text-gray-800 mb-4">Liaison avec le référentiel</h2>
+
+  {% if not arbre %}
+  <form method="post" action="/conception/scenario/{{ scenario.Id }}/referentiel" class="flex gap-3 items-end max-w-lg">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="flex-1">
+      <label class="block text-sm text-gray-600 mb-1" for="referentiel_id">Référentiel du scénario</label>
+      <select id="referentiel_id" name="referentiel_id" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">Choisir un référentiel</option>
+        {% for r in referentiels %}<option value="{{ r.Id }}">{{ r.Identifiant }} ({{ r.Version }})</option>{% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Rattacher</button>
+  </form>
+  <p class="text-sm text-gray-400 mt-2">Choisissez le référentiel avant de cocher les activités et les critères.</p>
+  {% else %}
+  <p class="text-sm text-gray-600 mb-4">Référentiel :
+    <span class="font-medium">{% for r in referentiels %}{% if r.Id == scenario.referentiel_id %}{{ r.Identifiant }}{% endif %}{% endfor %}</span>
+  </p>
+  <form method="post" action="/conception/scenario/{{ scenario.Id }}/liaison" class="space-y-6">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div>
+      <h3 class="font-semibold text-gray-800 mb-2">Activités professionnelles</h3>
+      {% for pole in arbre.poles %}
+      <div class="border-l-2 border-blue-200 pl-3 mb-3">
+        <p class="text-sm font-medium text-gray-700">{{ pole.Intitule }}</p>
+        <div class="mt-1 space-y-1">
+          {% for act in pole.activites %}
+          <label class="flex items-start gap-2 text-sm text-gray-700">
+            <input type="checkbox" name="activites" value="{{ act.Id }}" {% if act.Id in activite_ids %}checked{% endif %} class="mt-1">
+            <span><span class="text-xs text-gray-400">{{ act.Code }}</span> {{ act.Intitule }}</span>
+          </label>
+          {% else %}<p class="text-sm text-gray-400">Aucune activité.</p>{% endfor %}
+        </div>
+      </div>
+      {% else %}<p class="text-sm text-gray-400">Aucun pôle.</p>{% endfor %}
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-gray-800 mb-2">Critères d'évaluation</h3>
+      {% for comp in arbre.competences %}
+      <details class="border-l-2 border-green-200 pl-3 mb-2">
+        <summary class="cursor-pointer text-sm font-medium text-gray-700"><span class="text-xs text-gray-400">{{ comp.Code }}</span> {{ comp.Intitule }}</summary>
+        <div class="mt-1 pl-4 space-y-1">
+          {% for c in comp.criteres %}
+          <label class="flex items-start gap-2 text-sm text-gray-700">
+            <input type="checkbox" name="criteres" value="{{ c.Id }}" {% if c.Id in critere_ids %}checked{% endif %} class="mt-1">
+            <span><span class="text-xs text-gray-400">{{ c.Code }}</span> {{ c.Libelle }}</span>
+          </label>
+          {% else %}<p class="text-sm text-gray-400">Aucun critère.</p>{% endfor %}
+        </div>
+      </details>
+      {% else %}<p class="text-sm text-gray-400">Aucune compétence.</p>{% endfor %}
+    </div>
+
+    <div class="pt-2">
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Enregistrer la liaison</button>
+    </div>
+  </form>
+  {% endif %}
 </section>
 {% endblock %}

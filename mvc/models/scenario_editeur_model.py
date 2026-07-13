@@ -87,3 +87,47 @@ def enregistrer_contexte(
             scenario_id,
         ),
     )
+
+
+def enregistrer_referentiel(scenario_id: int, referentiel_id: int) -> None:
+    """Rattache le scénario à un référentiel (section Liaison, ADR-019)."""
+    execute(
+        "UPDATE scenario SET referentiel_id = ?, UpdatedAt = NOW() WHERE Id = ?",
+        (referentiel_id, scenario_id),
+    )
+
+
+def get_activite_ids(scenario_id: int) -> list[int]:
+    rows = fetch_all(
+        "SELECT activite_professionnelle_id FROM scenario_activite WHERE scenario_id = ?",
+        (scenario_id,),
+    )
+    return [int(r["activite_professionnelle_id"]) for r in rows]
+
+
+def get_critere_ids(scenario_id: int) -> list[int]:
+    rows = fetch_all(
+        "SELECT critere_observable_id FROM scenario_critere WHERE scenario_id = ?", (scenario_id,)
+    )
+    return [int(r["critere_observable_id"]) for r in rows]
+
+
+def enregistrer_liaison(
+    scenario_id: int, activite_ids: list[int], critere_ids: list[int]
+) -> None:
+    """Enregistre la liaison au référentiel : activités et critères cochés (m2m)."""
+    with transaction() as tx:
+        execute("DELETE FROM scenario_activite WHERE scenario_id = ?", (scenario_id,), tx=tx)
+        for aid in activite_ids:
+            execute(
+                "INSERT INTO scenario_activite (scenario_id, activite_professionnelle_id) VALUES (?, ?)",
+                (scenario_id, aid),
+                tx=tx,
+            )
+        execute("DELETE FROM scenario_critere WHERE scenario_id = ?", (scenario_id,), tx=tx)
+        for cid in critere_ids:
+            execute(
+                "INSERT INTO scenario_critere (scenario_id, critere_observable_id) VALUES (?, ?)",
+                (scenario_id, cid),
+                tx=tx,
+            )

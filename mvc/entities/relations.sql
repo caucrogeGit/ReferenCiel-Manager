@@ -280,6 +280,24 @@ CREATE TABLE IF NOT EXISTS scenario_critere (
         ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS scenario_activite (
+    id INT NOT NULL AUTO_INCREMENT,
+    scenario_id INT NOT NULL,
+    activite_professionnelle_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_scenario_activite (scenario_id, activite_professionnelle_id),
+    INDEX idx_scenario_activite_scenario_id (scenario_id),
+    INDEX idx_scenario_activite_activite_professionnelle_id (activite_professionnelle_id),
+    CONSTRAINT fk_scenario_activite_scenario_id
+        FOREIGN KEY (scenario_id)
+        REFERENCES scenario (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_scenario_activite_activite_professionnelle_id
+        FOREIGN KEY (activite_professionnelle_id)
+        REFERENCES activite_professionnelle (id)
+        ON DELETE CASCADE
+);
+
 ALTER TABLE starter_welcome
     ADD CONSTRAINT fk_starter_welcome_niveau_classe_id
     FOREIGN KEY (niveau_classe_id)

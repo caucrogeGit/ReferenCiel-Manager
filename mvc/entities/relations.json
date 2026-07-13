@@ -362,6 +362,22 @@
       }
     },
     {
+      "type": "many_to_many",
+      "from": "Scenario",
+      "to": "ActiviteProfessionnelle",
+      "name": "activites",
+      "inverse_name": "scenarios",
+      "pivot": {
+        "table": "scenario_activite",
+        "from_key": "scenario_id",
+        "to_key": "activite_professionnelle_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
+    },
+    {
       "type": "many_to_one",
       "from": "StarterWelcome",
       "to": "NiveauClasse",

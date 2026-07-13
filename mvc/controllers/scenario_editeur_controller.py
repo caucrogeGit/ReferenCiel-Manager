@@ -12,11 +12,16 @@ from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller.base_controller import BaseController
 
+from mvc.models.referentiel_atelier_model import get_arbre, list_referentiels
 from mvc.models.scenario_editeur_model import (
     creer_scenario,
     enregistrer_contexte,
+    enregistrer_liaison,
+    enregistrer_referentiel,
     enregistrer_titre,
+    get_activite_ids,
     get_co_auteur_ids,
+    get_critere_ids,
     get_scenario,
     list_professeurs,
     list_scenarios,
@@ -75,12 +80,18 @@ class ScenarioEditeurController(BaseController):
         scenario = get_scenario(scenario_id)
         if scenario is None:
             return BaseController.not_found()
+        referentiel_id = scenario.get("referentiel_id")
+        arbre = get_arbre(int(referentiel_id)) if referentiel_id else None
         return BaseController.render(
             "app/scenario_editeur/editeur.html",
             context={
                 "scenario": scenario,
                 "co_auteur_ids": get_co_auteur_ids(scenario_id),
                 "professeurs": list_professeurs(),
+                "referentiels": list_referentiels(),
+                "arbre": arbre,
+                "activite_ids": get_activite_ids(scenario_id),
+                "critere_ids": get_critere_ids(scenario_id),
             },
             request=request,
         )
@@ -117,4 +128,28 @@ class ScenarioEditeurController(BaseController):
         )
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Contexte enregistrée."
+        )
+
+    @staticmethod
+    def enregistrer_referentiel(request: Request) -> Response:
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        if scenario_id is None or get_scenario(scenario_id) is None:
+            return BaseController.not_found()
+        referentiel_id = ScenarioEditeurController._parse_id(request.form("referentiel_id", ""))
+        if referentiel_id is not None:
+            enregistrer_referentiel(scenario_id, referentiel_id)
+        return BaseController.redirect(
+            f"/conception/scenario/{scenario_id}", request=request, flash="Référentiel rattaché."
+        )
+
+    @staticmethod
+    def enregistrer_liaison(request: Request) -> Response:
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        if scenario_id is None or get_scenario(scenario_id) is None:
+            return BaseController.not_found()
+        activite_ids = ScenarioEditeurController._parse_many_ids(request, "activites")
+        critere_ids = ScenarioEditeurController._parse_many_ids(request, "criteres")
+        enregistrer_liaison(scenario_id, activite_ids, critere_ids)
+        return BaseController.redirect(
+            f"/conception/scenario/{scenario_id}", request=request, flash="Liaison au référentiel enregistrée."
         )
