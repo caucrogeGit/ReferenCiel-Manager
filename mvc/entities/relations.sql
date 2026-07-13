@@ -226,6 +226,24 @@ ALTER TABLE scenario
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
+CREATE TABLE IF NOT EXISTS scenario_professeur (
+    id INT NOT NULL AUTO_INCREMENT,
+    scenario_id INT NOT NULL,
+    professeur_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_scenario_professeur (scenario_id, professeur_id),
+    INDEX idx_scenario_professeur_scenario_id (scenario_id),
+    INDEX idx_scenario_professeur_professeur_id (professeur_id),
+    CONSTRAINT fk_scenario_professeur_scenario_id
+        FOREIGN KEY (scenario_id)
+        REFERENCES scenario (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_scenario_professeur_professeur_id
+        FOREIGN KEY (professeur_id)
+        REFERENCES professeur (id)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS scenario_competence (
     id INT NOT NULL AUTO_INCREMENT,
     scenario_id INT NOT NULL,

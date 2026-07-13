@@ -42,6 +42,14 @@
       "unique": false
     },
     {
+      "name": "co_intervention",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false,
+      "default": false
+    },
+    {
       "name": "referentiel_id",
       "type": "foreign_key",
       "references": "ReferentielNiveauClasse",

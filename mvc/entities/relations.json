@@ -316,6 +316,22 @@
     {
       "type": "many_to_many",
       "from": "Scenario",
+      "to": "Professeur",
+      "name": "co_auteurs",
+      "inverse_name": "scenarios_co_auteur",
+      "pivot": {
+        "table": "scenario_professeur",
+        "from_key": "scenario_id",
+        "to_key": "professeur_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
+    },
+    {
+      "type": "many_to_many",
+      "from": "Scenario",
       "to": "Competence",
       "name": "competences",
       "inverse_name": "scenarios",

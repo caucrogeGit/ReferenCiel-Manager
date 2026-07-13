@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS scenario (
     Objectifs TEXT NULL,
     Statut VARCHAR(20) NOT NULL,
     Version VARCHAR(20) NOT NULL,
+    CoIntervention BOOLEAN NOT NULL DEFAULT 0,
     referentiel_id BIGINT UNSIGNED NOT NULL,
     auteur_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
