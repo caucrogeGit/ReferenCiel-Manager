@@ -131,3 +131,33 @@ def enregistrer_liaison(
                 (scenario_id, cid),
                 tx=tx,
             )
+
+
+def list_ressources(scenario_id: int) -> list[dict[str, Any]]:
+    return fetch_all(
+        "SELECT Id, NomOriginal, CheminMedia, MimeType, Taille, CreatedAt "
+        "FROM scenario_ressource WHERE scenario_id = ? ORDER BY CreatedAt DESC, Id DESC",
+        (scenario_id,),
+    )
+
+
+def ajouter_ressource(
+    scenario_id: int, nom_original: str, chemin_media: str, mime_type: "str | None", taille: int
+) -> None:
+    execute(
+        "INSERT INTO scenario_ressource "
+        "(scenario_id, NomOriginal, CheminMedia, MimeType, Taille, CreatedAt) "
+        "VALUES (?, ?, ?, ?, ?, NOW())",
+        (scenario_id, nom_original, chemin_media, mime_type, taille),
+    )
+
+
+def get_ressource(ressource_id: int, scenario_id: int) -> "dict[str, Any] | None":
+    return fetch_one(
+        "SELECT Id, scenario_id, CheminMedia FROM scenario_ressource WHERE Id = ? AND scenario_id = ?",
+        (ressource_id, scenario_id),
+    )
+
+
+def supprimer_ressource(ressource_id: int) -> None:
+    execute("DELETE FROM scenario_ressource WHERE Id = ?", (ressource_id,))

@@ -12,8 +12,11 @@ from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller.base_controller import BaseController
 
+from forge_mvc_files import UploadError, delete_upload, save_upload
+
 from mvc.models.referentiel_atelier_model import get_arbre, list_referentiels
 from mvc.models.scenario_editeur_model import (
+    ajouter_ressource,
     creer_scenario,
     enregistrer_contexte,
     enregistrer_liaison,
@@ -22,9 +25,12 @@ from mvc.models.scenario_editeur_model import (
     get_activite_ids,
     get_co_auteur_ids,
     get_critere_ids,
+    get_ressource,
     get_scenario,
     list_professeurs,
+    list_ressources,
     list_scenarios,
+    supprimer_ressource,
 )
 
 
@@ -92,6 +98,7 @@ class ScenarioEditeurController(BaseController):
                 "arbre": arbre,
                 "activite_ids": get_activite_ids(scenario_id),
                 "critere_ids": get_critere_ids(scenario_id),
+                "ressources": list_ressources(scenario_id),
             },
             request=request,
         )
@@ -152,4 +159,35 @@ class ScenarioEditeurController(BaseController):
         enregistrer_liaison(scenario_id, activite_ids, critere_ids)
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Liaison au référentiel enregistrée."
+        )
+
+    @staticmethod
+    def uploader_ressource(request: Request) -> Response:
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        if scenario_id is None or get_scenario(scenario_id) is None:
+            return BaseController.not_found()
+        cible = f"/conception/scenario/{scenario_id}"
+        uploaded = request.file("fichier")
+        if uploaded is None or not uploaded.filename:
+            return BaseController.redirect_with_flash(request, cible, "Aucun fichier sélectionné.", "error")
+        try:
+            saved = save_upload(uploaded, category="scenarios")
+        except UploadError as exc:
+            return BaseController.redirect_with_flash(request, cible, f"Dépôt refusé : {exc}", "error")
+        ajouter_ressource(scenario_id, saved.original_name, saved.path, saved.mime_type, saved.size)
+        return BaseController.redirect_with_flash(request, cible, "Ressource ajoutée.", "success")
+
+    @staticmethod
+    def supprimer_ressource(request: Request) -> Response:
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        ressource_id = ScenarioEditeurController._parse_id(request.route("rid"))
+        if scenario_id is None or ressource_id is None:
+            return BaseController.not_found()
+        ressource = get_ressource(ressource_id, scenario_id)
+        if ressource is None:
+            return BaseController.not_found()
+        delete_upload(ressource["CheminMedia"])
+        supprimer_ressource(ressource_id)
+        return BaseController.redirect_with_flash(
+            request, f"/conception/scenario/{scenario_id}", "Ressource supprimée.", "success"
         )

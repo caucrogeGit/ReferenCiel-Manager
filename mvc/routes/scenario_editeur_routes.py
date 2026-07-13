@@ -14,3 +14,5 @@ def register_scenario_editeur_routes(router: Router) -> None:
         g.add("POST", "/{id}/contexte", ScenarioEditeurController.enregistrer_contexte, name="scenario_editeur-contexte")
         g.add("POST", "/{id}/referentiel", ScenarioEditeurController.enregistrer_referentiel, name="scenario_editeur-referentiel")
         g.add("POST", "/{id}/liaison", ScenarioEditeurController.enregistrer_liaison, name="scenario_editeur-liaison")
+        g.add("POST", "/{id}/ressources", ScenarioEditeurController.uploader_ressource, name="scenario_editeur-ressource-upload")
+        g.add("POST", "/{id}/ressources/{rid}/supprimer", ScenarioEditeurController.supprimer_ressource, name="scenario_editeur-ressource-supprimer")
