@@ -1,24 +1,26 @@
-# Contrat du JSON canonique — enveloppe commune + référentiel niveau-classe
+# Contrat du JSON canonique : enveloppe commune + référentiel niveau-classe
 
 Ce document **spécifie la forme** attendue des JSON canoniques (pas leur contenu).
 Il définit une **enveloppe commune** à tous les JSON canoniques, puis le **corps du
-type « référentiel niveau-classe »** en deux couches (famille TNE + cible CIEL).
+type « référentiel niveau-classe »** en deux couches (famille TNE + cible CIEL).
 
 > Ce n'est **pas** un JSON réel (ticket 03), **ni** un schéma de validation
-> (ticket 04). Le type « Starter Welcome » aura son propre contrat. Fondé sur la
+> (ticket 04).
+> Le type « Starter Welcome » aura son propre contrat.
+> Fondé sur la
 > capitalisation `.scpro` (§7 squelette, §8 provenance), la trace CIEL 2TNE
 > (deux couches) et les sources enregistrées.
 
 ## 1. Principe
 
 Tout JSON canonique partage une **enveloppe commune** et porte un **corps typé**,
-discriminé par le champ `type` :
+discriminé par le champ `type` :
 
 ```text
 enveloppe commune  +  corps( type )
 ```
 
-`type` connus : `referentiel_niveau_classe` (spécifié ici), `starter_welcome`
+`type` connus : `referentiel_niveau_classe` (spécifié ici), `starter_welcome`
 (contrat à venir).
 
 ## 2. Enveloppe commune
@@ -31,23 +33,23 @@ enveloppe commune  +  corps( type )
 | `sources` | array | oui | descripteurs des sources (voir §3) |
 | `provenance` | object | oui | contexte d'extraction (date, méthode, point d'entrée) |
 
-`provenance{}` : `{ "date_extraction": "AAAA-MM-JJ", "methode": "extraction manuelle | assistée", "point_entree": "referentiel_officiel | cpro_scpro" }`.
+`provenance{}` : `{ "date_extraction": "AAAA-MM-JJ", "methode": "extraction manuelle | assistée", "point_entree": "referentiel_officiel | cpro_scpro" }`.
 
 ## 3. Modèle de provenance (sources)
 
-Chaque entrée de `sources[]` décrit une source (modèle §8 de la capitalisation) :
+Chaque entrée de `sources[]` décrit une source (modèle §8 de la capitalisation) :
 
 | Champ | Type | Obligatoire | Exemple |
 |---|---|:--:|---|
 | `source_id` | string | oui | `referentiel-bac-pro-ciel` |
 | `source_type` | string (enum) | oui | `pdf_officiel` \| `scpro` \| `odt` \| `starter` |
 | `source_fichier` | string | oui | `referenciel-bac-pro-ciel.pdf` |
-| `source_note` | string | non | « Référentiel officiel utilisé pour validation » |
+| `source_note` | string | non | « Référentiel officiel utilisé pour validation » |
 
-**Règle** : tout élément repris, extrait, reconstruit ou adapté porte une trace de
+**Règle** : tout élément repris, extrait, reconstruit ou adapté porte une trace de
 provenance via `source_ids: [ ... ]` (références à `sources[].source_id`).
 
-## 4. Corps « référentiel niveau-classe »
+## 4. Corps « référentiel niveau-classe »
 
 ### 4.1 Cadre
 
@@ -83,14 +85,14 @@ mappe vers la cible CIEL.
 | Collection | Élément |
 |---|---|
 | `famille_competences[]` | `code` (CC1…CC9), `intitule`, `source_ids` |
-| `relations.cc_competences[]` | `{ cc: <CCx>, competences: [<C0x>...] }` — mapping famille ↔ CIEL |
+| `relations.cc_competences[]` | `{ cc: <CCx>, competences: [<C0x>...] }`, mapping famille ↔ CIEL |
 
 ## 6. Invariants
 
 - Tout `id` / `code` est **unique** dans sa collection.
 - Toute relation ne référence que des `id`/`code` **existants** (références résolues).
 - Tout élément extrait porte **`source_ids` non vide** (provenance obligatoire).
-- Les trois notions restent **distinctes** :
+- Les trois notions restent **distinctes** :
 
 ```text
 resultats_attendus   = liés aux activités professionnelles
@@ -98,14 +100,15 @@ criteres_evaluation  = liés aux compétences
 indicateurs_reussite = formulation pédagogique exploitable (dérivée)
 ```
 
-- On parle de **pôles d'activités**, jamais de « rôles » (réservés à `eleve`,
+- On parle de **pôles d'activités**, jamais de « rôles » (réservés à `eleve`,
   `professeur`, `administrateur`).
 
 ## 7. Fragment d'illustration (vérifiable)
 
-Extrait minimal illustrant la forme (trace de travail : pôle « Réalisation et
-maintenance de produits électroniques », activité **E1**, compétences
-**C03, C04, C07**). **Illustration, pas un JSON canonique complet** (ticket 03).
+Extrait minimal illustrant la forme (trace de travail : pôle « Réalisation et
+maintenance de produits électroniques », activité **E1**, compétences
+**C03, C04, C07**).
+**Illustration, pas un JSON canonique complet** (ticket 03).
 
 ```json
 {
@@ -150,21 +153,22 @@ maintenance de produits électroniques », activité **E1**, compétences
 
 - Le **JSON canonique réel complet** CIEL 2TNE (ticket 03).
 - Le **schéma JSON** de validation (ticket 04).
-- Le contrat du type **`starter_welcome`** (ticket dédié) — seule l'enveloppe
+- Le contrat du type **`starter_welcome`** (ticket dédié) ; seule l'enveloppe
   commune (§2-§3) est posée pour l'accueillir.
 - Le dictionnaire de données, les entités Forge, le SQL (tickets ultérieurs).
 
 ## 9. Schéma de validation (ticket 04)
 
-Ce contrat est outillé par un schéma JSON (JSON Schema 2020-12) :
+Ce contrat est outillé par un schéma JSON (JSON Schema 2020-12) :
 [`schemas/schema-json-canonique-referentiel-niveau-classe.json`](schemas/schema-json-canonique-referentiel-niveau-classe.json).
 
-C'est la **porte de validation des uploads** (ADR-009). Répartition :
+C'est la **porte de validation des uploads** (ADR-009).
+Répartition :
 
-- **Validé par le schéma** : présence des familles obligatoires, types, énumérations
+- **Validé par le schéma** : présence des familles obligatoires, types, énumérations
   (`type`, `source_type`, `point_entree`, `origine`), motifs des codes
   (`E1`/`R2`/`D3`, `C0x`, `CCx`), semver, niveaux taxonomiques 1–4. Les champs
-  additionnels sont tolérés (« peut être plus riche »).
-- **Validé par l'importeur** (hors schéma) : **unicité** des `id`/`code` dans chaque
+  additionnels sont tolérés (« peut être plus riche »).
+- **Validé par l'importeur** (hors schéma) : **unicité** des `id`/`code` dans chaque
   collection et **résolution** des références de `relations` vers des éléments
-  existants — invariants sémantiques non exprimables en JSON Schema pur.
+  existants, invariants sémantiques non exprimables en JSON Schema pur.

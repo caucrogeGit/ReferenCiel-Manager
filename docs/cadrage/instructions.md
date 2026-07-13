@@ -6,7 +6,9 @@ Ce fichier fixe les instructions prioritaires du projet RéférenCiel Manager.
 
 Il doit être lu et appliqué avant les autres documents du projet, sauf demande explicite contraire de l'utilisateur.
 
-Le projet doit être compris comme autonome. Ne pas supposer que les conversations précédentes existent encore. Les décisions importantes doivent être reprises depuis ce fichier et depuis les fichiers de référence présents dans le dossier projet.
+Le projet doit être compris comme autonome.
+Ne pas supposer que les conversations précédentes existent encore.
+Les décisions importantes doivent être reprises depuis ce fichier et depuis les fichiers de référence présents dans le dossier projet.
 
 ## 2. Définition du projet
 
@@ -14,49 +16,49 @@ RéférenCiel Manager est une application métier pédagogique persistée, const
 
 Elle permet de créer, organiser, affecter, suivre et évaluer des parcours pédagogiques pour différentes classes de niveau, à partir de scénarios pédagogiques, de référentiels de formation, de JSON canoniques métier et de starters Welcome réutilisables.
 
-L'application doit gérer :
+L'application doit gérer :
 
-- les référentiels de formation ;
-- les vues de référentiel par niveau de classe ;
-- les pôles d'activités ;
-- les activités professionnelles ;
-- les tâches associées ;
-- les compétences ;
-- les critères observables ;
-- les résultats attendus ;
-- les indicateurs de réussite pédagogiques ;
-- les scénarios pédagogiques ;
-- les starters Welcome ;
-- les parcours élèves ;
-- les paliers ;
-- les dossiers techniques ;
-- les QCM de compréhension ;
-- les activités ;
-- les checklists ;
-- les ressources élèves et professeur ;
-- les affectations à des classes ou à des élèves ;
-- la progression individuelle des élèves ;
-- le suivi professeur par classe, niveau, parcours, palier et compétence ;
-- les évaluations par critères ;
+- les référentiels de formation ;
+- les vues de référentiel par niveau de classe ;
+- les pôles d'activités ;
+- les activités professionnelles ;
+- les tâches associées ;
+- les compétences ;
+- les critères observables ;
+- les résultats attendus ;
+- les indicateurs de réussite pédagogiques ;
+- les scénarios pédagogiques ;
+- les starters Welcome ;
+- les parcours élèves ;
+- les paliers ;
+- les dossiers techniques ;
+- les QCM de compréhension ;
+- les activités ;
+- les checklists ;
+- les ressources élèves et professeur ;
+- les affectations à des classes ou à des élèves ;
+- la progression individuelle des élèves ;
+- le suivi professeur par classe, niveau, parcours, palier et compétence ;
+- les évaluations par critères ;
 - les bilans exploitables par le professeur.
 
 RéférenCiel Manager n'est pas seulement un outil de création de parcours. C'est une application de conception, de diffusion, de suivi et d'évaluation pédagogique.
 
 ## 3. Documents de référence
 
-Le fichier prioritaire est :
+Le fichier prioritaire est :
 
 ```text
 instructions.md
 ```
 
-Le fichier de cadrage métier principal est :
+Le fichier de cadrage métier principal est :
 
 ```text
 cadre-projet-referenciel-manager.md
 ```
 
-Les documents de référence attendus dans les sources du projet sont :
+Les documents de référence attendus dans les sources du projet sont :
 
 ```text
 instructions.md
@@ -74,37 +76,37 @@ En cas de contradiction entre un ancien document et le cadre actuel, le cadre ac
 
 Les données du projet peuvent venir de plusieurs sources.
 
-Sources institutionnelles ou officielles :
+Sources institutionnelles ou officielles :
 
-- référentiel officiel Bac Pro CIEL ;
-- référentiels de formation publiés par l'Éducation nationale ;
-- documents académiques ;
+- référentiel officiel Bac Pro CIEL ;
+- référentiels de formation publiés par l'Éducation nationale ;
+- documents académiques ;
 - documents d'accompagnement pédagogique.
 
-Sources exportées ou reconstruites :
+Sources exportées ou reconstruites :
 
-- fichiers `.scpro` exportés depuis CPRO ;
-- fichiers `.odt` obtenus par export ou conversion depuis CPRO ;
-- exports textuels ou structurés issus de CPRO ;
+- fichiers `.scpro` exportés depuis CPRO ;
+- fichiers `.odt` obtenus par export ou conversion depuis CPRO ;
+- exports textuels ou structurés issus de CPRO ;
 - JSON canoniques produits à partir de ces exports.
 
-Sources pédagogiques internes :
+Sources pédagogiques internes :
 
-- starters Welcome, notamment Welcome Réseau ;
-- dossiers techniques existants ;
-- QCM existants ;
-- checklists existantes ;
-- activités existantes ;
-- ressources créées par le professeur ;
+- starters Welcome, notamment Welcome Réseau ;
+- dossiers techniques existants ;
+- QCM existants ;
+- checklists existantes ;
+- activités existantes ;
+- ressources créées par le professeur ;
 - contenus importés depuis une autre instance RéférenCiel Manager.
 
-Règle de provenance :
+Règle de provenance :
 
 ```text
 Toute donnée reprise, extraite, reconstruite ou adaptée depuis une source doit conserver une trace de provenance.
 ```
 
-Le document `trace-creation-json-canonique-cpro-2tne.md` sert à documenter la chaîne :
+Le document `trace-creation-json-canonique-cpro-2tne.md` sert à documenter la chaîne :
 
 ```text
 fichier .scpro CPRO
@@ -122,20 +124,20 @@ Les JSON canoniques ont un statut central dans le projet.
 
 Un JSON canonique n'est pas une simple sauvegarde technique. C'est une représentation structurée, maîtrisée et stable des informations utiles au projet.
 
-Il peut servir à :
+Il peut servir à :
 
-- analyser une source ;
-- normaliser une exportation CPRO ;
-- formaliser une extraction du référentiel officiel ;
-- représenter un starter Welcome ;
-- construire des scénarios ;
-- documenter les objets métier ;
-- générer ou préremplir le dictionnaire de données ;
-- valider la cohérence d'un modèle ;
-- importer des objets en base ;
+- analyser une source ;
+- normaliser une exportation CPRO ;
+- formaliser une extraction du référentiel officiel ;
+- représenter un starter Welcome ;
+- construire des scénarios ;
+- documenter les objets métier ;
+- générer ou préremplir le dictionnaire de données ;
+- valider la cohérence d'un modèle ;
+- importer des objets en base ;
 - servir de fixture de test ou de seed contrôlé.
 
-Formule à retenir :
+Formule à retenir :
 
 ```text
 JSON canonique = référence structurée de construction ou d'import
@@ -147,13 +149,13 @@ Base de données = vérité applicative en fonctionnement
 
 Le JSON issu du traitement d'un fichier `.scpro` CPRO et d'un fichier `.odt` exporté depuis CPRO ne doit pas être considéré comme un simple JSON de scénario.
 
-Il doit être considéré comme un :
+Il doit être considéré comme un :
 
 ```text
 JSON canonique de référentiel niveau-classe
 ```
 
-Exemple :
+Exemple :
 
 ```text
 JSON canonique CIEL 2TNE
@@ -161,22 +163,22 @@ JSON canonique CIEL 2TNE
 
 Ce JSON formalise une extraction spécifique du référentiel Bac Pro CIEL pour un niveau de classe donné.
 
-Il peut contenir :
+Il peut contenir :
 
-- la formation ;
-- le niveau de classe ;
-- les pôles d'activités ;
-- les activités professionnelles ;
-- les tâches associées ;
-- les conditions d'exercice utiles ;
-- les résultats attendus ;
-- les compétences associées ;
-- les critères d'évaluation ;
-- les relations entre activités et compétences ;
-- les indicateurs de réussite exploitables pédagogiquement ;
+- la formation ;
+- le niveau de classe ;
+- les pôles d'activités ;
+- les activités professionnelles ;
+- les tâches associées ;
+- les conditions d'exercice utiles ;
+- les résultats attendus ;
+- les compétences associées ;
+- les critères d'évaluation ;
+- les relations entre activités et compétences ;
+- les indicateurs de réussite exploitables pédagogiquement ;
 - la provenance des données.
 
-Attention au vocabulaire :
+Attention au vocabulaire :
 
 ```text
 Dans le référentiel officiel, on parle de pôles d'activités, pas de rôles.
@@ -192,26 +194,26 @@ Il faut distinguer trois notions.
 
 Les résultats attendus sont liés aux activités professionnelles.
 
-Exemple : pour une activité comme E1, E2, R1 ou R2, le référentiel décrit des tâches, des conditions d'exercice, une autonomie et des résultats attendus.
+Exemple : pour une activité comme E1, E2, R1 ou R2, le référentiel décrit des tâches, des conditions d'exercice, une autonomie et des résultats attendus.
 
 ### Critères d'évaluation
 
 Les critères d'évaluation sont liés aux compétences.
 
-Exemple : une compétence comme C03, C07, C09 ou C11 possède des critères permettant d'évaluer la compétence.
+Exemple : une compétence comme C03, C07, C09 ou C11 possède des critères permettant d'évaluer la compétence.
 
 ### Indicateurs de réussite pédagogiques
 
 Les indicateurs de réussite sont des formulations exploitables dans RéférenCiel Manager.
 
-Ils peuvent être :
+Ils peuvent être :
 
-- repris directement d'un résultat attendu ;
-- repris directement d'un critère d'évaluation ;
-- adaptés pour un niveau de classe ;
+- repris directement d'un résultat attendu ;
+- repris directement d'un critère d'évaluation ;
+- adaptés pour un niveau de classe ;
 - reformulés par le professeur pour un scénario, un starter, un parcours, une activité ou une checklist.
 
-Règle :
+Règle :
 
 ```text
 resultats_attendus = liés aux activités professionnelles
@@ -221,7 +223,7 @@ indicateurs_reussite = formulation pédagogique exploitable dans RéférenCiel M
 
 ## 8. Chaîne de transformation des sources
 
-La chaîne de transformation cible est :
+La chaîne de transformation cible est :
 
 ```text
 source originelle
@@ -253,29 +255,29 @@ Le dictionnaire de données est la documentation métier enrichie du modèle.
 
 Il peut être généré ou prérempli à partir des JSON canoniques, mais il doit aller plus loin que le JSON.
 
-Il doit préciser :
+Il doit préciser :
 
-- le sens métier des objets ;
-- le sens métier des champs ;
-- les relations ;
-- les cardinalités ;
-- les règles de validation ;
-- les règles de visibilité ;
-- les règles de modification ;
-- les règles de publication ;
-- les règles de versionnement ;
-- les droits d'accès ;
-- les impacts sur l'exécution élève ;
+- le sens métier des objets ;
+- le sens métier des champs ;
+- les relations ;
+- les cardinalités ;
+- les règles de validation ;
+- les règles de visibilité ;
+- les règles de modification ;
+- les règles de publication ;
+- les règles de versionnement ;
+- les droits d'accès ;
+- les impacts sur l'exécution élève ;
 - les impacts sur le suivi professeur.
 
-Le dictionnaire de données sert ensuite à déduire :
+Le dictionnaire de données sert ensuite à déduire :
 
-- le modèle relationnel ;
-- le diagramme de classes ;
-- les contrats d'entités Forge ;
-- les migrations SQL ;
-- les repositories ;
-- les services métier ;
+- le modèle relationnel ;
+- le diagramme de classes ;
+- les contrats d'entités Forge ;
+- les migrations SQL ;
+- les repositories ;
+- les services métier ;
 - les tests.
 
 ## 10. Base de données
@@ -290,39 +292,39 @@ Tous les objets métier utilisés par l'application doivent posséder une identi
 
 ## 11. Positionnement
 
-RéférenCiel Manager n'est pas :
+RéférenCiel Manager n'est pas :
 
-- un gestionnaire de PDF ;
-- un visualiseur de Markdown ;
-- une V0 fichier ;
-- un simple dossier de fichiers YAML ;
-- un clone de CPRO ;
-- un ENT ;
-- un LMS généraliste ;
+- un gestionnaire de PDF ;
+- un visualiseur de Markdown ;
+- une V0 fichier ;
+- un simple dossier de fichiers YAML ;
+- un clone de CPRO ;
+- un ENT ;
+- un LMS généraliste ;
 - une simple interface CRUD sans métier.
 
-RéférenCiel Manager est une application métier persistée centrée sur :
+RéférenCiel Manager est une application métier persistée centrée sur :
 
-- les JSON canoniques métier ;
-- les référentiels de formation ;
-- les vues de référentiel par niveau de classe ;
-- les scénarios pédagogiques ;
-- les starters Welcome ;
-- les parcours élèves ;
-- le suivi professeur ;
-- l'évaluation par critères ;
-- la progression contrôlée ;
+- les JSON canoniques métier ;
+- les référentiels de formation ;
+- les vues de référentiel par niveau de classe ;
+- les scénarios pédagogiques ;
+- les starters Welcome ;
+- les parcours élèves ;
+- le suivi professeur ;
+- l'évaluation par critères ;
+- la progression contrôlée ;
 - la traçabilité des sources pédagogiques.
 
-Différence avec CPRO :
+Différence avec CPRO :
 
-- CPRO suit et structure l'évaluation par compétences ;
-- RéférenCiel Manager structure le parcours pédagogique qui conduit à cette évaluation ;
+- CPRO suit et structure l'évaluation par compétences ;
+- RéférenCiel Manager structure le parcours pédagogique qui conduit à cette évaluation ;
 - RéférenCiel Manager peut s'inspirer de la logique CPRO, mais ne doit pas dépendre techniquement de CPRO.
 
 ## 12. Chaîne pédagogique centrale
 
-La chaîne pédagogique centrale est :
+La chaîne pédagogique centrale est :
 
 ```text
 Référentiel
@@ -345,22 +347,22 @@ Référentiel
 -> bilan professeur
 ```
 
-Règles pédagogiques fortes :
+Règles pédagogiques fortes :
 
-- le référentiel officiel donne le cadre ;
-- le JSON canonique niveau-classe formalise la partie réellement exploitée pour une classe ou un niveau ;
-- le scénario pédagogique définit l'intention ;
-- le starter Welcome rend cette intention réutilisable ;
-- le parcours organise le travail élève ;
-- l'affectation transforme un parcours disponible en travail réel pour une classe ou un élève ;
-- le palier découpe le parcours en étapes ;
-- le dossier technique apporte les connaissances nécessaires ;
-- le QCM vérifie la compréhension du dossier technique ;
-- le QCM ne valide pas une compétence ;
-- l'activité est le lieu d'observation des compétences ;
-- l'évaluation des compétences se fait dans l'activité, à partir de critères observables ;
-- la checklist guide l'élève et le professeur ;
-- la progression garde l'état réel de l'élève ;
+- le référentiel officiel donne le cadre ;
+- le JSON canonique niveau-classe formalise la partie réellement exploitée pour une classe ou un niveau ;
+- le scénario pédagogique définit l'intention ;
+- le starter Welcome rend cette intention réutilisable ;
+- le parcours organise le travail élève ;
+- l'affectation transforme un parcours disponible en travail réel pour une classe ou un élève ;
+- le palier découpe le parcours en étapes ;
+- le dossier technique apporte les connaissances nécessaires ;
+- le QCM vérifie la compréhension du dossier technique ;
+- le QCM ne valide pas une compétence ;
+- l'activité est le lieu d'observation des compétences ;
+- l'évaluation des compétences se fait dans l'activité, à partir de critères observables ;
+- la checklist guide l'élève et le professeur ;
+- la progression garde l'état réel de l'élève ;
 - le suivi professeur permet d'identifier les élèves bloqués, en avance ou à évaluer.
 
 ## 13. Méthode de construction
@@ -371,126 +373,126 @@ Ne pas commencer par un grand diagramme de classes global.
 
 Commencer par une fonctionnalité métier évidente ou par une source canonique nécessaire à cette fonctionnalité.
 
-Ordre général :
+Ordre général :
 
-1. identifier la source originelle ;
-2. tracer la provenance ;
-3. produire ou compléter le JSON canonique ;
-4. produire ou enrichir le dictionnaire de données ;
-5. écrire les règles métier ;
-6. écrire le cycle de vie ;
-7. déduire le modèle relationnel ;
-8. déduire le diagramme de classes ;
-9. déduire le contrat d'entité Forge ;
-10. créer la migration SQL ;
-11. créer le repository ;
-12. créer le service métier ;
-13. créer l'interface métier ;
+1. identifier la source originelle ;
+2. tracer la provenance ;
+3. produire ou compléter le JSON canonique ;
+4. produire ou enrichir le dictionnaire de données ;
+5. écrire les règles métier ;
+6. écrire le cycle de vie ;
+7. déduire le modèle relationnel ;
+8. déduire le diagramme de classes ;
+9. déduire le contrat d'entité Forge ;
+10. créer la migration SQL ;
+11. créer le repository ;
+12. créer le service métier ;
+13. créer l'interface métier ;
 14. écrire les tests.
 
 ## 14. Premiers jalons
 
-Le premier jalon documentaire et source doit installer la chaîne de sources :
+Le premier jalon documentaire et source doit installer la chaîne de sources :
 
-- référentiel officiel Bac Pro CIEL ;
-- fichier `.scpro` CPRO ;
-- fichier `.odt` exporté depuis CPRO ;
-- trace de création du JSON canonique ;
-- JSON canonique CIEL 2TNE ;
-- schéma JSON associé ;
+- référentiel officiel Bac Pro CIEL ;
+- fichier `.scpro` CPRO ;
+- fichier `.odt` exporté depuis CPRO ;
+- trace de création du JSON canonique ;
+- JSON canonique CIEL 2TNE ;
+- schéma JSON associé ;
 - dictionnaire de données généré ou prérempli.
 
-Le premier jalon métier applicatif doit ensuite installer la chaîne Scenario :
+Le premier jalon métier applicatif doit ensuite installer la chaîne Scenario :
 
-- créer ou importer un scénario pédagogique à partir d'une source ou d'un JSON canonique ;
-- créer le dictionnaire de données `Scenario` ;
-- créer les règles métier `Scenario` ;
-- créer le cycle de vie `Scenario` ;
-- déduire le modèle relationnel `Scenario` ;
-- déduire le diagramme de classes `Scenario` ;
-- déduire le contrat d'entité Forge `Scenario` ;
-- créer la migration SQL `Scenario` ;
-- créer le repository `Scenario` ;
-- créer le service `Scenario` ;
-- créer une interface professeur minimale pour créer, consulter, modifier et publier un scénario ;
+- créer ou importer un scénario pédagogique à partir d'une source ou d'un JSON canonique ;
+- créer le dictionnaire de données `Scenario` ;
+- créer les règles métier `Scenario` ;
+- créer le cycle de vie `Scenario` ;
+- déduire le modèle relationnel `Scenario` ;
+- déduire le diagramme de classes `Scenario` ;
+- déduire le contrat d'entité Forge `Scenario` ;
+- créer la migration SQL `Scenario` ;
+- créer le repository `Scenario` ;
+- créer le service `Scenario` ;
+- créer une interface professeur minimale pour créer, consulter, modifier et publier un scénario ;
 - tester la persistance du scénario.
 
 Le premier jalon ne doit pas créer de parcours fichier comme source principale.
 
 ## 15. Objets métier principaux
 
-Objets principaux à prévoir :
+Objets principaux à prévoir :
 
-- SourceDocument ;
-- JSONCanonique ;
-- SchemaJSONCanonique ;
-- Formation ;
-- NiveauClasse ;
-- Référentiel ;
-- VersionRéférentiel ;
-- VueRéférentielNiveauClasse ;
-- PôleActivité ;
-- ActivitéProfessionnelle ;
-- TâcheProfessionnelle ;
-- RésultatAttendu ;
-- Compétence ;
-- CritèreObservable ;
-- IndicateurRéussite ;
-- NiveauAcquisition ;
-- Scenario ;
-- VersionScenario ;
-- StarterWelcome ;
-- VersionStarter ;
-- Parcours ;
-- VersionParcours ;
-- Palier ;
-- DocumentTechnique ;
-- QCM ;
-- QuestionQCM ;
-- ChoixQCM ;
-- Activité ;
-- Checklist ;
-- ItemChecklist ;
-- Affectation ;
-- Progression ;
-- ÉvaluationActivité ;
-- ÉvaluationCritère ;
-- Ressource ;
+- SourceDocument ;
+- JSONCanonique ;
+- SchemaJSONCanonique ;
+- Formation ;
+- NiveauClasse ;
+- Référentiel ;
+- VersionRéférentiel ;
+- VueRéférentielNiveauClasse ;
+- PôleActivité ;
+- ActivitéProfessionnelle ;
+- TâcheProfessionnelle ;
+- RésultatAttendu ;
+- Compétence ;
+- CritèreObservable ;
+- IndicateurRéussite ;
+- NiveauAcquisition ;
+- Scenario ;
+- VersionScenario ;
+- StarterWelcome ;
+- VersionStarter ;
+- Parcours ;
+- VersionParcours ;
+- Palier ;
+- DocumentTechnique ;
+- QCM ;
+- QuestionQCM ;
+- ChoixQCM ;
+- Activité ;
+- Checklist ;
+- ItemChecklist ;
+- Affectation ;
+- Progression ;
+- ÉvaluationActivité ;
+- ÉvaluationCritère ;
+- Ressource ;
 - DépôtÉlève.
 
 ## 16. Séparation obligatoire entre définition et exécution
 
-Définition pédagogique :
+Définition pédagogique :
 
-- référentiel ;
-- vue de référentiel niveau-classe ;
-- compétence ;
-- critère ;
-- indicateur de réussite ;
-- scénario ;
-- starter Welcome ;
-- parcours ;
-- palier ;
-- dossier technique ;
-- QCM ;
-- activité ;
-- checklist ;
+- référentiel ;
+- vue de référentiel niveau-classe ;
+- compétence ;
+- critère ;
+- indicateur de réussite ;
+- scénario ;
+- starter Welcome ;
+- parcours ;
+- palier ;
+- dossier technique ;
+- QCM ;
+- activité ;
+- checklist ;
 - règle de passage.
 
-Exécution élève :
+Exécution élève :
 
-- affectation ;
-- progression ;
-- tentative QCM ;
-- réponse QCM ;
-- checklist remplie ;
-- dépôt élève ;
-- validation professeur ;
-- évaluation ;
-- observation ;
+- affectation ;
+- progression ;
+- tentative QCM ;
+- réponse QCM ;
+- checklist remplie ;
+- dépôt élève ;
+- validation professeur ;
+- évaluation ;
+- observation ;
 - bilan.
 
-Règle forte :
+Règle forte :
 
 ```text
 Un parcours publié et affecté ne doit pas changer sous les pieds d'un élève.
@@ -502,7 +504,7 @@ Un objet pédagogique publié ne doit pas être modifié librement s'il est déj
 
 On affecte une version publiée, jamais un brouillon mutable.
 
-Statuts à prévoir :
+Statuts à prévoir :
 
 ```text
 brouillon
@@ -510,33 +512,33 @@ publie
 archive
 ```
 
-Objets à versionner dès que nécessaire :
+Objets à versionner dès que nécessaire :
 
-- référentiel ;
-- vue de référentiel niveau-classe ;
-- scénario ;
-- starter Welcome ;
-- parcours ;
-- palier ;
-- dossier technique ;
-- activité ;
-- QCM ;
+- référentiel ;
+- vue de référentiel niveau-classe ;
+- scénario ;
+- starter Welcome ;
+- parcours ;
+- palier ;
+- dossier technique ;
+- activité ;
+- QCM ;
 - checklist.
 
 ## 18. Architecture attendue
 
-Règles d'architecture :
+Règles d'architecture :
 
-- les contrôleurs ne contiennent pas la logique métier ;
-- les templates ne calculent pas la progression ;
-- les services métier restent indépendants du détail des opt-ins ;
-- les repositories isolent l'accès à la base ;
-- les opt-ins Forge sont appelés via des façades ;
-- les contrats d'entités Forge sont dérivés du dictionnaire de données ;
-- les migrations SQL sont dérivées du dictionnaire de données ;
+- les contrôleurs ne contiennent pas la logique métier ;
+- les templates ne calculent pas la progression ;
+- les services métier restent indépendants du détail des opt-ins ;
+- les repositories isolent l'accès à la base ;
+- les opt-ins Forge sont appelés via des façades ;
+- les contrats d'entités Forge sont dérivés du dictionnaire de données ;
+- les migrations SQL sont dérivées du dictionnaire de données ;
 - le diagramme de classes est dérivé du dictionnaire de données, pas inventé séparément.
 
-Structure logique conseillée :
+Structure logique conseillée :
 
 ```text
 app/domain/identity
@@ -563,7 +565,7 @@ app/web/teacher
 app/web/admin
 ```
 
-Dossiers documentaires conseillés :
+Dossiers documentaires conseillés :
 
 ```text
 docs/cadrage
@@ -584,85 +586,85 @@ docs/archive
 
 ## 19. Rôles et permissions
 
-Rôles minimaux :
+Rôles minimaux :
 
-- eleve ;
-- professeur ;
+- eleve ;
+- professeur ;
 - administrateur.
 
-Permissions minimales élève :
+Permissions minimales élève :
 
-- `eleve.voir_ses_parcours` ;
-- `eleve.voir_sa_progression` ;
-- `eleve.repondre_qcm` ;
-- `eleve.remplir_checklist` ;
+- `eleve.voir_ses_parcours` ;
+- `eleve.voir_sa_progression` ;
+- `eleve.repondre_qcm` ;
+- `eleve.remplir_checklist` ;
 - `eleve.deposer_travail`.
 
-Permissions minimales professeur :
+Permissions minimales professeur :
 
-- `professeur.voir_classes` ;
-- `professeur.gerer_eleves` ;
-- `professeur.creer_scenario` ;
-- `professeur.creer_starter` ;
-- `professeur.creer_parcours` ;
-- `professeur.affecter_parcours` ;
-- `professeur.evaluer_activites` ;
-- `professeur.valider_paliers` ;
+- `professeur.voir_classes` ;
+- `professeur.gerer_eleves` ;
+- `professeur.creer_scenario` ;
+- `professeur.creer_starter` ;
+- `professeur.creer_parcours` ;
+- `professeur.affecter_parcours` ;
+- `professeur.evaluer_activites` ;
+- `professeur.valider_paliers` ;
 - `professeur.voir_progression_classe`.
 
-Permissions minimales administrateur :
+Permissions minimales administrateur :
 
-- `admin.gerer_utilisateurs` ;
-- `admin.gerer_roles` ;
-- `admin.gerer_referentiels` ;
-- `admin.gerer_sources` ;
-- `admin.gerer_parcours` ;
+- `admin.gerer_utilisateurs` ;
+- `admin.gerer_roles` ;
+- `admin.gerer_referentiels` ;
+- `admin.gerer_sources` ;
+- `admin.gerer_parcours` ;
 - `admin.gerer_systeme`.
 
 ## 20. Sécurité
 
-Règles fortes :
+Règles fortes :
 
-- un élève ne voit que ses propres parcours ;
-- un professeur ne voit que ses classes ou les classes autorisées ;
-- les ressources professeur restent protégées ;
-- les accès directs par URL doivent être contrôlés ;
-- un QR code ne doit jamais contourner les droits ;
+- un élève ne voit que ses propres parcours ;
+- un professeur ne voit que ses classes ou les classes autorisées ;
+- les ressources professeur restent protégées ;
+- les accès directs par URL doivent être contrôlés ;
+- un QR code ne doit jamais contourner les droits ;
 - les comptes professeur et administrateur doivent pouvoir utiliser la MFA.
 
 ## 21. Opt-ins Forge
 
-Règle :
+Règle :
 
 ```text
 Les opt-ins servent le métier.
 Le métier ne doit pas dépendre directement du détail des opt-ins.
 ```
 
-Opt-ins critiques envisagés :
+Opt-ins critiques envisagés :
 
-- forge facades ;
-- forge rbac ;
-- forge mfa ;
-- forge markdown ;
-- forge fichier ;
-- forge pivot ;
+- forge facades ;
+- forge rbac ;
+- forge mfa ;
+- forge markdown ;
+- forge fichier ;
+- forge pivot ;
 - forge admin.
 
-Opt-ins utiles :
+Opt-ins utiles :
 
-- forge image ;
-- forge qrcode ;
-- forge notification ;
+- forge image ;
+- forge qrcode ;
+- forge notification ;
 - forge mail.
 
-Opt-ins à repousser si nécessaire :
+Opt-ins à repousser si nécessaire :
 
-- forge video ;
-- forge search ;
-- forge cache ;
-- forge export / pdf ;
-- statistiques avancées ;
+- forge video ;
+- forge search ;
+- forge cache ;
+- forge export / pdf ;
+- statistiques avancées ;
 - messagerie complète.
 
 ## 22. Interdits de dérive
@@ -697,13 +699,13 @@ Signaler les contradictions et les risques de dérive.
 
 Travailler par tickets limités.
 
-Pour les tickets destinés à Claude Code ou Codex, inclure obligatoirement :
+Pour les tickets destinés à Claude Code ou Codex, inclure obligatoirement :
 
-- objectif ;
-- périmètre autorisé ;
-- hors périmètre ;
-- boucle de travail obligatoire ;
-- test prémortem ;
+- objectif ;
+- périmètre autorisé ;
+- hors périmètre ;
+- boucle de travail obligatoire ;
+- test prémortem ;
 - critères de validation.
 
 Quand un document est demandé, fournir si possible un fichier Markdown téléchargeable.

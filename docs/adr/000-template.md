@@ -1,8 +1,7 @@
-# ADR-000 : Titre de la décision
+# ADR-000 : Titre de la décision
 
 Gabarit d'ADR.
-Copiez ce fichier en `docs/adr/<numero>-<sujet>.md`, renumérotez, puis
-remplacez chaque section.
+Copiez ce fichier en `docs/adr/<numero>-<sujet>.md`, renumérotez, puis remplacez chaque section.
 
 ## Statut
 
@@ -23,7 +22,7 @@ Ce qui est décidé, énoncé clairement et sans ambiguïté.
 
 ## Conséquences
 
-Ce que la décision implique : bénéfices, coûts, limites acceptées.
+Ce que la décision implique : bénéfices, coûts, limites acceptées.
 
 ### Alternatives écartées
 

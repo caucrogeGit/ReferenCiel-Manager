@@ -1,12 +1,13 @@
-# Tickets — RéférenCiel Manager
+# Tickets : RéférenCiel Manager
 
-Ce dossier organise la conduite du projet par **tickets**. Un ticket est une
-unité de travail à périmètre explicite : il déclare ce qu'il fait, ce qu'il ne
+Ce dossier organise la conduite du projet par **tickets**.
+Un ticket est une
+unité de travail à périmètre explicite : il déclare ce qu'il fait, ce qu'il ne
 fait pas, et ses critères de validation.
 
-Référence de méthode : `docs/cadrage/instructions.md`.
-Cadre métier : `docs/cadrage/cadre-projet-referenciel-manager.md`.
-Trajectoire : `docs/roadmap/roadmap-referenciel-manager.md`.
+Référence de méthode : `docs/cadrage/instructions.md`.
+Cadre métier : `docs/cadrage/cadre-projet-referenciel-manager.md`.
+Trajectoire : `docs/roadmap/roadmap-referenciel-manager.md`.
 
 ## Principe
 
@@ -20,49 +21,49 @@ Trajectoire : `docs/roadmap/roadmap-referenciel-manager.md`.
 
 ## Anatomie d'un ticket
 
-Un ticket destiné à Claude Code ou Codex décrit au minimum :
+Un ticket destiné à Claude Code ou Codex décrit au minimum :
 
-1. **Objectif** ;
-2. **Périmètre autorisé** ;
-3. **Hors périmètre** ;
-4. **Boucle de travail obligatoire** ;
-5. **Test prémortem** ;
+1. **Objectif** ;
+2. **Périmètre autorisé** ;
+3. **Hors périmètre** ;
+4. **Boucle de travail obligatoire** ;
+5. **Test prémortem** ;
 6. **Critères de validation**.
 
 ## Deux blocs métier à ne pas mélanger
 
-Le tunnel distingue deux blocs (voir instructions §16, cadre §8) :
+Le tunnel distingue deux blocs (voir instructions §16, cadre §8) :
 
-- **Bloc A — structure scolaire** : qui est dans quelle classe, sur quelle année,
-  à quel niveau. Objets : `AnneeScolaire`, `NiveauClasse`, `Classe`, `Groupe`,
+- **Bloc A, structure scolaire** : qui est dans quelle classe, sur quelle année,
+  à quel niveau. Objets : `AnneeScolaire`, `NiveauClasse`, `Classe`, `Groupe`,
   `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse`.
   **Ce bloc arrive tôt** (tranche verticale).
-- **Bloc B — exécution pédagogique élève** : ce que fait l'élève dans un parcours
-  affecté. Objets : `AffectationParcours`, `ProgressionEleve`,
+- **Bloc B, exécution pédagogique élève** : ce que fait l'élève dans un parcours
+  affecté. Objets : `AffectationParcours`, `ProgressionEleve`,
   `ProgressionPalier`, `TentativeQCM`, `ReponseQCM`, `ChecklistEleve`,
   `DepotEleve`, `ValidationProfesseur`, `EvaluationActivite`, `EvaluationCritere`,
-  `BilanEleve`. **Ce bloc arrive après les parcours** : on ne suit pas une
+  `BilanEleve`. **Ce bloc arrive après les parcours** : on ne suit pas une
   progression sans parcours affecté.
 
 ## Garde-fous permanents
 
-Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
+Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 
-- La base de données est la vérité applicative en fonctionnement ; le JSON
-  canonique est une référence de construction/import ; le dictionnaire de données
+- La base de données est la vérité applicative en fonctionnement ; le JSON
+  canonique est une référence de construction/import ; le dictionnaire de données
   est la documentation métier enrichie.
-- **Pas de V0 fichier** : aucun `path.yml`, `palier.yml`, `qcm.yml` ou
+- **Pas de V0 fichier** : aucun `path.yml`, `palier.yml`, `qcm.yml` ou
   `checklist.yml` comme base principale.
-- **Ne pas contourner les générateurs Forge** : entités via `forge make:entity`
+- **Ne pas contourner les générateurs Forge** : entités via `forge make:entity`
   (contrat JSON = source de vérité), migrations via `forge migration:make`. Pas
   de SQL ni de repositories écrits à la main si Forge fournit le chemin attendu
   (voir ADR-004).
-- **Différer RBAC/MFA ≠ désactiver l'auth Forge** : l'authentification, le CSRF
+- **Différer RBAC/MFA ≠ désactiver l'auth Forge** : l'authentification, le CSRF
   et les sessions restent actifs. On diffère seulement les permissions réelles,
   la MFA et le lien `CompteUtilisateur` ↔ `Eleve`.
-- **Prévoir la couture compte** : `Eleve` porte dès son dictionnaire une relation
+- **Prévoir la couture compte** : `Eleve` porte dès son dictionnaire une relation
   future vers `CompteUtilisateur` (par exemple `user_id` nullable).
-- **Emplacement des schémas** : le schéma du JSON canonique vit dans
+- **Emplacement des schémas** : le schéma du JSON canonique vit dans
   `docs/specs/json-canonique/schemas/`, **pas** dans les `schemas/` de Forge.
 - On ne supprime pas le briefing Forge de `AGENTS.md` / `CLAUDE.md`.
 - On n'élargit pas le périmètre d'un ticket sans validation.
@@ -70,49 +71,50 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 ## Tunnel de travail (ordre des tickets)
 
 > L'ADR-004 (architecture Forge) est le **prérequis architectural du code métier**.
-> Il est **accepté** : on utilise la structure Forge (`mvc/`, contrats d'entité,
-> générateurs). Le code métier commence à la tranche verticale Bloc A (ticket 07).
+> Il est **accepté** : on utilise la structure Forge (`mvc/`, contrats d'entité,
+> générateurs).
+> Le code métier commence à la tranche verticale Bloc A (ticket 07).
 
 | # | Ticket | Bloc | Statut |
 | --- | --- | --- | --- |
-| 00 | Installer le cadre projet dans le squelette Forge | — | Terminé |
-| 01 | Installer l'arborescence des sources et la traçabilité (registre + trace de provenance ; référentiels officiels Bac Pro CIEL, Vademecum TNE 2ⁿᵈᵉ, BTS CIEL enregistrés) | Sources | En cours |
-| 02 | [Contrat du JSON canonique](ticket-02-contrat-json-canonique.md) → [spécification](../specs/json-canonique/contrat-referentiel-niveau-classe.md) : enveloppe commune + référentiel niveau-classe **à deux couches** (famille TNE CC1–CC9 + cible CIEL C01–C11 + mapping) | Sources | Terminé |
+| 00 | Installer le cadre projet dans le squelette Forge | - | Terminé |
+| 01 | Installer l'arborescence des sources et la traçabilité (registre + trace de provenance ; référentiels officiels Bac Pro CIEL, Vademecum TNE 2ⁿᵈᵉ, BTS CIEL enregistrés) | Sources | En cours |
+| 02 | [Contrat du JSON canonique](ticket-02-contrat-json-canonique.md) → [spécification](../specs/json-canonique/contrat-referentiel-niveau-classe.md) : enveloppe commune + référentiel niveau-classe **à deux couches** (famille TNE CC1–CC9 + cible CIEL C01–C11 + mapping) | Sources | Terminé |
 | 04 | [Schéma JSON](../specs/json-canonique/schemas/schema-json-canonique-referentiel-niveau-classe.json) du référentiel niveau-classe (porte de validation des uploads, ADR-009) | Sources | Terminé |
 | 03 | [Exemple CIEL 2TNE](../specs/json-canonique/examples/json-canonique-ciel-2tne.json) conforme (fixture d'upload et de test, validé par un test méta) | Sources | Terminé (v0.1.0, représentatif) |
-| 02b | [Contrat JSON canonique — Starter Welcome](../specs/json-canonique/contrat-starter-welcome.md) : type `starter_welcome` (paliers → dossier / QCM / activité / checklist), manifeste + bundle | Sources | Terminé |
-| 04b | [Schéma JSON — Starter Welcome](../specs/json-canonique/schemas/schema-json-canonique-starter-welcome.json) (porte de validation des uploads) | Sources | Terminé |
-| 03b | [Manifeste canonique Welcome Réseau](../specs/json-canonique/examples/json-canonique-welcome-reseau.json) (4 paliers, 80 questions, 45 sections, 33 images) — validé par test méta | Sources | Terminé |
+| 02b | [Contrat JSON canonique : Starter Welcome](../specs/json-canonique/contrat-starter-welcome.md) : type `starter_welcome` (paliers → dossier / QCM / activité / checklist), manifeste + bundle | Sources | Terminé |
+| 04b | [Schéma JSON : Starter Welcome](../specs/json-canonique/schemas/schema-json-canonique-starter-welcome.json) (porte de validation des uploads) | Sources | Terminé |
+| 03b | [Manifeste canonique Welcome Réseau](../specs/json-canonique/examples/json-canonique-welcome-reseau.json) (4 paliers, 80 questions, 45 sections, 33 images), validé par test méta | Sources | Terminé |
 | 05 | [Dictionnaire de données du socle scolaire](../specs/data-dictionary/dictionnaire-socle-scolaire.md) (AnneeScolaire, NiveauClasse, Classe, Groupe, Eleve `user_id?`, Professeur, InscriptionEleve, AffectationProfesseurClasse) | A | Terminé |
-| 06 | **ADR-004 — Architecture Forge (mvc/ vs app/, contrats, migrations, services, repositories)** — prérequis du code | — | Terminé (Accepté) |
-| 07 | Tranche verticale Bloc A (walking skeleton) : contrats d'entité → migrations Forge → accès données → vue professeur minimale listant classes/élèves (derrière l'auth Forge). Aboutissement : espace professeur « Mes classes » (`/mes-classes`), filtré par compte (`professeur.UserId`), gardé par `suivi.voir` (le RBAC ayant été câblé depuis, ADR-013). Vérifié de bout en bout (login prof → liste). | A | Terminé |
+| 06 | **ADR-004 : Architecture Forge (mvc/ vs app/, contrats, migrations, services, repositories)**, prérequis du code | - | Terminé (Accepté) |
+| 07 | Tranche verticale Bloc A (walking skeleton) : contrats d'entité → migrations Forge → accès données → vue professeur minimale listant classes/élèves (derrière l'auth Forge). Aboutissement : espace professeur « Mes classes » (`/mes-classes`), filtré par compte (`professeur.UserId`), gardé par `suivi.voir` (le RBAC ayant été câblé depuis, ADR-013). Vérifié de bout en bout (login prof → liste). | A | Terminé |
 | 08 | [Dictionnaire de données Référentiel](../specs/data-dictionary/dictionnaire-referentiel-niveau-classe.md) (Formation, NiveauClasse, PôleActivité, ActivitéProfessionnelle + tâches/résultats, Compétence + connaissances/critères, Indicateur, FamilleCompétence, Source, relations, règles) | Référentiel | Terminé |
-| 09 | Modèle relationnel + contrats d'entité référentiel. Vérifié : 12 contrats d'entité valides + toutes les relations du dictionnaire, dont les 2 pivots M2M (`activite_competence`, `cc_competence`). | Référentiel | Terminé |
-| 10 | Migrations référentiel (via `forge`). Vérifié : `create_referentiel.sql` crée les 14 tables + contraintes FK ; tables présentes en base. | Référentiel | Terminé |
+| 09 | Modèle relationnel + contrats d'entité référentiel. Vérifié : 12 contrats d'entité valides + toutes les relations du dictionnaire, dont les 2 pivots M2M (`activite_competence`, `cc_competence`). | Référentiel | Terminé |
+| 10 | Migrations référentiel (via `forge`). Vérifié : `create_referentiel.sql` crée les 14 tables + contraintes FK ; tables présentes en base. | Référentiel | Terminé |
 | 11 | Importeur JSON canonique → base référentielle. Chaîne validation schéma → import upsert best-effort → rapport (ADR-011). Vérifié sur la fixture `ciel-2tne` (81 objets, pivots M2M compris). | Référentiel | Terminé |
 | 12 | [Dictionnaire de données `Scenario`](../specs/data-dictionary/dictionnaire-scenario.md) | Scénario | Terminé |
-| 13 | Chaîne `Scenario` (contrat, migration, service, interface prof minimale, tests de persistance). Vérifié : contrat + migration + model + controller + vues `app/scenario` ; `test_scenario_persistance.py` (4 tests) vert. | Scénario | Terminé |
-| 13b | [Dictionnaire de données Starter Welcome](../specs/data-dictionary/dictionnaire-starter-welcome.md) (StarterWelcome, Palier, QCM/Question/Choix, Activite, Checklist/Section/Item, Image, Ressource ; contenu par référence ; lien `Palier ↔ Competence` optionnel) | Starter | Terminé |
+| 13 | Chaîne `Scenario` (contrat, migration, service, interface prof minimale, tests de persistance). Vérifié : contrat + migration + model + controller + vues `app/scenario` ; `test_scenario_persistance.py` (4 tests) vert. | Scénario | Terminé |
+| 13b | [Dictionnaire de données Starter Welcome](../specs/data-dictionary/dictionnaire-starter-welcome.md) (StarterWelcome, Palier, QCM/Question/Choix, Activite, Checklist/Section/Item, Image, Ressource ; contenu par référence ; lien `Palier ↔ Competence` optionnel) | Starter | Terminé |
 | 14 | `StarterWelcome` (+ `VersionStarter`) | Starter | Terminé |
 | 15 | `Parcours` + `VersionParcours` | Parcours | Terminé |
-| 16 | `Palier` (découpage du parcours) — ticket explicite | Parcours | Terminé |
+| 16 | `Palier` (découpage du parcours), ticket explicite | Parcours | Terminé |
 | 17 | `AffectationParcours` à une classe ou à des élèves | B | Terminé |
 | 18 | `ProgressionEleve` (+ `ProgressionPalier`) | B | Terminé |
 | 19 | QCM / checklist / activité / dépôt élève (définition + tentative/réponse/dépôt) | B | Terminé |
 | 20 | Suivi professeur par classe (vue de synthèse `/suivi`, lecture seule) | B | Terminé |
-| 21 | [Évaluation par critères et bilan](../specs/data-dictionary/dictionnaire-bilan.md) | B | Terminé — évaluation par critères (`evaluation_activite`, `evaluation_critere`) + **bilan `BilanEleve`** : synthèse arrêtée (agrégation critères→compétence, snapshot JSON figé), espace prof `/bilan`. Vérifié de bout en bout (création → synthèse figée → consultation). |
+| 21 | [Évaluation par critères et bilan](../specs/data-dictionary/dictionnaire-bilan.md) | B | Terminé : évaluation par critères (`evaluation_activite`, `evaluation_critere`) + **bilan `BilanEleve`** : synthèse arrêtée (agrégation critères→compétence, snapshot JSON figé), espace prof `/bilan`. Vérifié de bout en bout (création → synthèse figée → consultation). |
 
-### Après le tunnel (sécurité applicative réelle) — ouvert par [ADR-014](../adr/014-securite-applicative-reelle.md)
+### Après le tunnel (sécurité applicative réelle), ouvert par [ADR-014](../adr/014-securite-applicative-reelle.md)
 
-**Base acquise** (livrée en cours de tunnel, actée par l'ADR-014) : connexion
+**Base acquise** (livrée en cours de tunnel, actée par l'ADR-014) : connexion
 applicative, sessions durcies (`sessions-db`), RBAC ([ADR-013](../adr/013-rbac-couche-fine-maison-sur-contrat.md)),
 lien `CompteUtilisateur` ↔ `Eleve`/`Professeur` + filtrage row-level, CSRF, CSP.
 
-Trajectoire (ADR-014) :
+Trajectoire (ADR-014) :
 
-- **T1 — durcissement des mots de passe** : ✅ *fait* — politique appliquée à la
+- **T1, durcissement des mots de passe** : ✅ *fait*, politique appliquée à la
   création de compte + flux de réinitialisation (`/password/forgot`, `/password/reset`).
-- **T2 — MFA TOTP** : ✅ *fait* ([ADR-015](../adr/015-mfa-totp-optionnelle.md)) — MFA
-  optionnelle en self-service (`/securite`) : enrôlement TOTP + codes de secours +
+- **T2, MFA TOTP** : ✅ *fait* ([ADR-015](../adr/015-mfa-totp-optionnelle.md)), MFA
+  optionnelle en self-service (`/securite`) : enrôlement TOTP + codes de secours +
   challenge au login (`/login/mfa`), secret chiffré (Fernet).
-- **T3 — permissions fines** (§19) : différé tant que la granularité par domaine suffit.
+- **T3, permissions fines** (§19) : différé tant que la granularité par domaine suffit.

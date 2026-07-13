@@ -1,12 +1,13 @@
-# Journal de progression — RéférenCiel Manager
+# Journal de progression : RéférenCiel Manager
 
 > **Objet.** Ce document raconte, chapitre par chapitre, **ce qui a été fait**
-> concrètement pour construire l'application : commandes lancées, entités créées,
-> SQL généré, décisions prises (et pourquoi), blocages rencontrés. Il sert de
+> concrètement pour construire l'application : commandes lancées, entités créées,
+> SQL généré, décisions prises (et pourquoi), blocages rencontrés.
+> Il sert de
 > **matière première** pour la future documentation du projet.
 >
 > **Comment le tenir.** À chaque nouvelle étape, on ajoute une sous-section datée
-> avec : *contexte → commandes → résultat → décisions*. On relie aux ADR
+> avec : *contexte → commandes → résultat → décisions*. On relie aux ADR
 > (`docs/adr/`) et aux retours banc d'essai (`docs/banc-essai/`) plutôt que de tout
 > recopier.
 
@@ -14,18 +15,18 @@
 
 ## 1. Fondations documentaires
 
-Avant tout code métier, le projet a posé sa **chaîne documentaire** :
+Avant tout code métier, le projet a posé sa **chaîne documentaire** :
 
-- **Cadrage** : `docs/cadrage/instructions.md` (prioritaire), `cadre-projet-referenciel-manager.md`.
-- **Décisions (ADR)** : `docs/adr/` — voir le [journal ADR](adr/index.md).
-- **JSON canonique** : contrats + schémas + exemples (`docs/specs/json-canonique/`),
-  pour deux types : `referentiel_niveau_classe` et `starter_welcome`.
-- **Dictionnaires de données** : `docs/specs/data-dictionary/` (référentiel, socle
+- **Cadrage** : `docs/cadrage/instructions.md` (prioritaire), `cadre-projet-referenciel-manager.md`.
+- **Décisions (ADR)** : `docs/adr/`, voir le [journal ADR](adr/index.md).
+- **JSON canonique** : contrats + schémas + exemples (`docs/specs/json-canonique/`),
+  pour deux types : `referentiel_niveau_classe` et `starter_welcome`.
+- **Dictionnaires de données** : `docs/specs/data-dictionary/` (référentiel, socle
   scolaire, starter welcome).
-- **Outillage qualité** : `make check` = 5 portes (pyright strict, ruff, pytest,
+- **Outillage qualité** : `make check` = 5 portes (pyright strict, ruff, pytest,
   `mkdocs --strict`, `forge project:check`).
 
-La formule de référence du projet :
+La formule de référence du projet :
 
 ```text
 JSON canonique          = référence structurée de construction / import
@@ -35,38 +36,39 @@ Base de données         = vérité applicative en fonctionnement
 
 ---
 
-## 2. Choix du backend : MariaDB (ADR-005)
+## 2. Choix du backend : MariaDB (ADR-005)
 
-Parmi les backends Forge (hors SQLite : MariaDB, PostgreSQL alpha, MSSQL alpha),
-**MariaDB** a été retenu — seul opt-in **complet**, cohérent avec la règle « 100%
-Forge », et largement suffisant pour la charge d'une application pédagogique.
+Parmi les backends Forge (hors SQLite : MariaDB, PostgreSQL alpha, MSSQL alpha),
+**MariaDB** a été retenu, seul opt-in **complet**, cohérent avec la règle « 100%
+Forge », et largement suffisant pour la charge d'une application pédagogique.
 
-- Décision : [ADR-005](adr/005-backend-base-de-donnees-mariadb.md).
+- Décision : [ADR-005](adr/005-backend-base-de-donnees-mariadb.md).
 - Le porteur installe l'opt-in `forge-mvc-mariadb` lui-même.
 
 ---
 
-## 3. Montée de squelette Forge « en place » (ADR-010)
+## 3. Montée de squelette Forge « en place » (ADR-010)
 
-Le projet suit l'évolution du framework. Une première tentative de migration **par
+Le projet suit l'évolution du framework.
+Une première tentative de migration **par
 déplacement de dossiers** a cassé le `.venv` (chemins absolus, non déplaçable) →
-**rollback complet**. On a alors défini une méthode **en place** :
+**rollback complet**. On a alors défini une méthode **en place** :
 
-- **Décision** : [ADR-010](adr/010-montee-squelette-forge-en-place.md) + procédure
+- **Décision** : [ADR-010](adr/010-montee-squelette-forge-en-place.md) + procédure
   [Montée de squelette Forge](procedures/montee-squelette-forge.md) (manifeste de
-  propriété : fichiers *squelette* vs *projet*).
-- **Outillage** créé :
+  propriété : fichiers *squelette* vs *projet*).
+- **Outillage** créé :
   ```bash
   make skeleton-check REF=../Test    # écarts entre le projet et un forge new neuf
   make forge-upgrade COMMIT=<sha>    # bump du pin + réinstall forcée + make check
   ```
-- **Piège documenté** : un pin git à version identique (`1.0.0rc2`) n'est **pas**
+- **Piège documenté** : un pin git à version identique (`1.0.0rc2`) n'est **pas**
   re-fetché par pip → `pip install --force-reinstall --no-deps` (géré par la cible).
-- **Structure des routes** (nouveauté ADR-068 côté Forge) : `mvc/routes/` est un
-  **package** ; un fichier `mvc/routes/<x>_routes.py` par contrôleur exposant
+- **Structure des routes** (nouveauté ADR-068 côté Forge) : `mvc/routes/` est un
+  **package** ; un fichier `mvc/routes/<x>_routes.py` par contrôleur exposant
   `register_<x>_routes(router)`, branché dans `mvc/routes/__init__.py`.
 
-Commits de montée : passage du pin `forge-mvc` `e3197866` → **`f38d5159`** (version
+Commits de montée : passage du pin `forge-mvc` `e3197866` → **`f38d5159`** (version
 intégrant les correctifs des retours).
 
 ---
@@ -75,8 +77,8 @@ intégrant les correctifs des retours).
 
 ### 4.1 Provisioning
 
-`forge db:init` **affiche** le SQL de provisioning (mode par défaut) ; on l'exécute
-en session admin (`sudo mariadb`) :
+`forge db:init` **affiche** le SQL de provisioning (mode par défaut) ; on l'exécute
+en session admin (`sudo mariadb`) :
 
 ```sql
 CREATE DATABASE IF NOT EXISTS `ReferenCiel_Manager`
@@ -89,31 +91,32 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON `ReferenCiel_Manager`.* TO 'app_user'@'1
 FLUSH PRIVILEGES;
 ```
 
-Config de connexion dans `env/dev` (gitignoré) : `DB_HOST=127.0.0.1`, `DB_PORT=3306`,
+Config de connexion dans `env/dev` (gitignoré) : `DB_HOST=127.0.0.1`, `DB_PORT=3306`,
 `DB_NAME=ReferenCiel_Manager`, `DB_ADMIN_*`, `DB_APP_*`.
 
-Le backend est déclaré dans `optins/registry.py` : `BACKEND = "mariadb"`.
+Le backend est déclaré dans `optins/registry.py` : `BACKEND = "mariadb"`.
 
 ### 4.2 Table `forge_migrations`
 
 Le registre des migrations n'était pas créé par le provisioning manuel
 (→ [retour-003](banc-essai/retour-003-forge-migrations-provisioning-manuel.md),
-**corrigé** dans Forge depuis). Contournement historique : création manuelle de la
+**corrigé** dans Forge depuis). Contournement historique : création manuelle de la
 table via sa DDL exacte.
 
 ### 4.3 Connexion SQLTools (piège `localhost` vs `127.0.0.1`)
 
 `localhost` fait passer le driver par le **socket Unix** (compte `@'localhost'`),
-`127.0.0.1` force le **TCP** (compte `@'127.0.0.1'`). Nos comptes sont en
+`127.0.0.1` force le **TCP** (compte `@'127.0.0.1'`).
+Nos comptes sont en
 `@'127.0.0.1'` → **Server Address = `127.0.0.1`** dans SQLTools (pas `localhost`).
-Mot de passe : mode « Ask on connect » ou « Driver Credentials » (le coffre chiffré),
-**pas** « plaintext in settings » (car `.vscode/settings.json` est versionné).
+Mot de passe : mode « Ask on connect » ou « Driver Credentials » (le coffre chiffré),
+**pas** « plaintext in settings » (car `.vscode/settings.json` est versionné).
 
 ---
 
-## 5. Ticket 07 — Tranche verticale Bloc A (walking skeleton)
+## 5. Ticket 07 : Tranche verticale Bloc A (walking skeleton)
 
-Objectif : prouver la chaîne complète **contrat → migration → base → CRUD → vue
+Objectif : prouver la chaîne complète **contrat → migration → base → CRUD → vue
 protégée par l'auth**, sur une entité, puis élargir.
 
 ### 5.1 La chaîne d'une entité (le geste de référence)
@@ -132,11 +135,12 @@ make check                                                # 6. 5 portes vertes
 
 #### Le dérouler des questions (commandes interactives)
 
-> **Astuce prompts** : dans `[O/n]` / `[o/N]`, la **majuscule est le défaut** ;
-> une valeur entre crochets `[valeur]` est le défaut. Dans les deux cas, **Entrée
+> **Astuce prompts** : dans `[O/n]` / `[o/N]`, la **majuscule est le défaut** ;
+> une valeur entre crochets `[valeur]` est le défaut.
+> Dans les deux cas, **Entrée
 > accepte le défaut**.
 
-**`forge make:entity`** — nom de table, puis une **boucle par champ**, puis les options :
+**`forge make:entity`** : nom de table, puis une **boucle par champ**, puis les options :
 
 ```text
 Nom de la table (Entrée = convention par défaut) :        → Entrée (ex. classe)
@@ -154,7 +158,7 @@ Activer soft_delete (deleted_at) ? [o/N] :                → n
 Confirmer l'écriture des fichiers ? [O/n] :               → o
 ```
 
-**`forge make:relation`** — une **relation par exécution** (relancer pour chaque FK) :
+**`forge make:relation`** : une **relation par exécution** (relancer pour chaque FK) :
 
 ```text
 Type de relation (many_to_many, many_to_one) [many_to_one] :  → Entrée
@@ -170,22 +174,22 @@ Confirmer l'écriture de mvc/entities/relations.json ? [O/n] : → o
 ```
 puis `forge sync:relations` régénère `mvc/entities/relations.sql`.
 
-**`forge make:crud <Nom>`** — **non interactif** : génère contrôleur / modèle /
+**`forge make:crud <Nom>`** : **non interactif** : génère contrôleur / modèle /
 formulaire / vues + `mvc/routes/<x>_routes.py`, et **affiche** la ligne de
 branchement à coller dans `mvc/routes/__init__.py` (étape 5).
 
-> **Deux fichiers Python par entité** : `<x>_base.py` (généré, régénéré, **jamais
-> édité**) et `<x>.py` (manuel, jumeau, **jamais écrasé** — ta logique métier va ici).
+> **Deux fichiers Python par entité** : `<x>_base.py` (généré, régénéré, **jamais
+> édité**) et `<x>.py` (manuel, jumeau, **jamais écrasé**, ta logique métier va ici).
 
 ### 5.2 Entité `AnneeScolaire`
 
 Première entité, déroulée de bout en bout (y compris l'auth et le login).
 
-- **Contrat** (`mvc/entities/annee_scolaire/annee_scolaire.json`) :
+- **Contrat** (`mvc/entities/annee_scolaire/annee_scolaire.json`) :
   `libelle` (string, unique), `date_debut`/`date_fin` (date, nullable),
-  `active` (boolean, `default: false` — ajouté à la main puis `sync:entity`),
+  `active` (boolean, `default: false`, ajouté à la main puis `sync:entity`),
   timestamps.
-- **SQL** (extrait) :
+- **SQL** (extrait) :
   ```sql
   CREATE TABLE IF NOT EXISTS annee_scolaire (
       Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -197,11 +201,11 @@ Première entité, déroulée de bout en bout (y compris l'auth et le login).
       PRIMARY KEY (Id)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   ```
-  > Note : Forge génère les **colonnes en PascalCase** (`Libelle`, `CreatedAt`…).
-- **Bugs rencontrés et corrigés** (sur l'ancien `forge-mvc`) :
+  > Note : Forge génère les **colonnes en PascalCase** (`Libelle`, `CreatedAt`…).
+- **Bugs rencontrés et corrigés** (sur l'ancien `forge-mvc`) :
   - CRUD généré cassé (helper flash manquant, modèle non typé) →
-    [retour-005](banc-essai/retour-005-make-crud-code-casse-et-non-conforme.md) ;
-  - à l'exécution : login KO (`is_active` int vs bool) et 500 (composant
+    [retour-005](banc-essai/retour-005-make-crud-code-casse-et-non-conforme.md) ;
+  - à l'exécution : login KO (`is_active` int vs bool) et 500 (composant
     `button.html` manquant) →
     [retour-008](banc-essai/retour-008-bugs-runtime-login-mariadb-et-bouton-crud.md).
 
@@ -216,26 +220,27 @@ forge auth:user:create --email prof@referenciel.local --password-prompt
 forge make:auth                 # contrôleur + vue login + auth_routes.py
 ```
 
-- Routes : `/login` **publiques** (GET+POST), `/logout` protégée ; les routes CRUD
+- Routes : `/login` **publiques** (GET+POST), `/logout` protégée ; les routes CRUD
   sont **protégées par défaut** (le cœur redirige les non-authentifiés vers `/login`).
-- **Lancer l'app** : `forge run` → serveur **HTTPS** sur `https://127.0.0.1:8000`
-  (certificat auto-signé → « continuer » dans le navigateur).
-- **Se connecter** : `prof@referenciel.local` / `prof1234`
+- **Lancer l'app** : `forge run` → serveur **HTTPS** sur `https://127.0.0.1:8000`
+  (certificat auto-signé → « continuer » dans le navigateur).
+- **Se connecter** : `prof@referenciel.local` / `prof1234`
   (mot de passe posé/réinitialisé via `forge auth:user:password`).
-- Résultat : `https://127.0.0.1:8000/annee_scolaire` → login → **liste des années**
+- Résultat : `https://127.0.0.1:8000/annee_scolaire` → login → **liste des années**
   (ex. `2025-2026`). ✅ Walking skeleton complet.
 
 ### 5.4 Entité `NiveauClasse`
 
-Deuxième entité, sur le `forge-mvc` **corrigé** (`f38d5159`) : la chaîne complète
-est passée **sans un seul correctif manuel** (contraste avec `AnneeScolaire`) —
+Deuxième entité, sur le `forge-mvc` **corrigé** (`f38d5159`) : la chaîne complète
+est passée **sans un seul correctif manuel** (contraste avec `AnneeScolaire`) :
 preuve terrain que les correctifs Forge tiennent.
 
-- Champs : `code` (string, unique), `intitule` (string), timestamps.
+- Champs : `code` (string, unique), `intitule` (string), timestamps.
 
-### 5.5 Entité `Classe` — relations ✅
+### 5.5 Entité `Classe` : relations ✅
 
-`Classe` référence `AnneeScolaire` et `NiveauClasse` (deux `many_to_one`). C'est
+`Classe` référence `AnneeScolaire` et `NiveauClasse` (deux `many_to_one`).
+C'est
 la première entité **avec relations**.
 
 ```bash
@@ -248,13 +253,13 @@ forge sync:relations            # régénère mvc/entities/relations.sql
 
 **Blocage initial puis correctif Forge.** Avec `forge-mvc f38d5159`, le flux
 relation ne produisait pas de schéma applicable sur MariaDB (colonne FK non
-générée ; nom Pascal vs snake ; type `BIGINT` vs `BIGINT UNSIGNED`) →
+générée ; nom Pascal vs snake ; type `BIGINT` vs `BIGINT UNSIGNED`) →
 [retour-009](banc-essai/retour-009-flux-relation-many-to-one-casse-mariadb.md).
-**Corrigé dans `809d224f`** : `sync:relations` génère désormais
+**Corrigé dans `809d224f`** : `sync:relations` génère désormais
 `ADD COLUMN <fk> BIGINT UNSIGNED NOT NULL` + contrainte + index, nommage cohérent.
 
 Migration (le SQL des relations est ajouté à la migration, `migration:make` ne
-l'intègre pas) :
+l'intègre pas) :
 
 ```bash
 forge migration:make create_classe --from-entity Classe   # CREATE TABLE classe
@@ -263,10 +268,11 @@ forge migration:apply                                     # → table classe + 2
 forge make:crud Classe                                    # CRUD (routes branchées)
 ```
 
-Vérifié en base — la jointure tient : `classe 2TNE-A → annee 2025-2026 → niveau 2TNE`.
+Vérifié en base, la jointure tient : `classe 2TNE-A → annee 2025-2026 → niveau 2TNE`.
 
-> **Limite connue** : le CRUD généré (depuis `classe.json`) ne gère pas les champs
-> FK → le formulaire ne propose pas encore de choisir l'année/le niveau. Piste
+> **Limite connue** : le CRUD généré (depuis `classe.json`) ne gère pas les champs
+> FK → le formulaire ne propose pas encore de choisir l'année/le niveau.
+> Piste
 > d'amélioration côté Forge (CRUD conscient des relations).
 
 ---
@@ -274,32 +280,32 @@ Vérifié en base — la jointure tient : `classe 2TNE-A → annee 2025-2026 →
 ## 6. Catalogue des entités (propriétés)
 
 > Récapitulatif des **champs métier** de chaque entité. Sont **implicites** (gérés
-> par Forge, non listés) : `id` (`BIGINT UNSIGNED`, clé primaire auto-incrémentée)
+> par Forge, non listés) : `id` (`BIGINT UNSIGNED`, clé primaire auto-incrémentée)
 > et, si l'option timestamps est active, `created_at` / `updated_at` (`DATETIME`).
-> Rappel : les **colonnes SQL sont en PascalCase** (`Libelle`, `CreatedAt`…).
+> Rappel : les **colonnes SQL sont en PascalCase** (`Libelle`, `CreatedAt`…).
 
-### `AnneeScolaire` — table `annee_scolaire` ✅
+### `AnneeScolaire` : table `annee_scolaire` ✅
 
 | Champ | Type | Contraintes | Notes |
 |---|---|---|---|
 | `libelle` | string(20) | **requis**, **unique** | ex. `2025-2026` |
 | `date_debut` | date | nullable | début d'année |
 | `date_fin` | date | nullable | fin d'année |
-| `active` | boolean | **requis**, défaut `false` | règle : une seule année active |
+| `active` | boolean | **requis**, défaut `false` | règle : une seule année active |
 
-*Options : timestamps. Table créée (migration `create_annee_scolaire`).*
+*Options : timestamps. Table créée (migration `create_annee_scolaire`).*
 
-### `NiveauClasse` — table `niveau_classe` ✅
+### `NiveauClasse` : table `niveau_classe` ✅
 
 | Champ | Type | Contraintes | Notes |
 |---|---|---|---|
 | `code` | string(20) | **requis**, **unique** | ex. `2TNE` |
 | `intitule` | string(150) | **requis** | libellé du niveau |
 
-*Options : timestamps. Table créée (migration `create_niveau_classe`). Entité
+*Options : timestamps. Table créée (migration `create_niveau_classe`). Entité
 **partagée** avec le domaine référentiel.*
 
-### `Classe` — table `classe` ✅
+### `Classe` : table `classe` ✅
 
 | Champ | Type | Contraintes | Notes |
 |---|---|---|---|
@@ -308,16 +314,16 @@ Vérifié en base — la jointure tient : `classe 2TNE-A → annee 2025-2026 →
 | `annee_scolaire_id` | big_integer (FK) | **requis** | → `AnneeScolaire` (many_to_one) |
 | `niveau_classe_id` | big_integer (FK) | **requis** | → `NiveauClasse` (many_to_one) |
 
-**Relations** (`mvc/entities/relations.json` → colonnes FK + contraintes appliquées) :
+**Relations** (`mvc/entities/relations.json` → colonnes FK + contraintes appliquées) :
 
 | Relation | Type | Clé étrangère | Politique |
 |---|---|---|---|
 | `Classe → AnneeScolaire` | many_to_one | `annee_scolaire_id` (`BIGINT UNSIGNED`) | `on_delete restrict`, indexée |
 | `Classe → NiveauClasse` | many_to_one | `niveau_classe_id` (`BIGINT UNSIGNED`) | `on_delete restrict`, indexée |
 
-*Options : timestamps. Table créée (migration `create_classe`, FK incluses).*
+*Options : timestamps. Table créée (migration `create_classe`, FK incluses).*
 
-### `Eleve` — table `eleve` ✅
+### `Eleve` : table `eleve` ✅
 
 | Champ | Type | Contraintes | Notes |
 |---|---|---|---|
@@ -325,26 +331,27 @@ Vérifié en base — la jointure tient : `classe 2TNE-A → annee 2025-2026 →
 | `prenom` | string(100) | **requis** | |
 | `identifiant` | string(100) | nullable, **unique** | unique **s'il est présent** |
 | `date_naissance` | date | nullable | |
-| `user_id` | big_integer | nullable | **couture** vers le futur compte applicatif (auth différée) — réservé, pas de relation |
+| `user_id` | big_integer | nullable | **couture** vers le futur compte applicatif (auth différée), réservé, pas de relation |
 
-*Options : timestamps. Table créée (migration `create_eleve`). Pas de relation active
+*Options : timestamps. Table créée (migration `create_eleve`). Pas de relation active
 (le lien `user_id → CompteUtilisateur` viendra avec un ADR dédié).*
 
-### `Professeur` — table `professeur` ✅
+### `Professeur` : table `professeur` ✅
 
 | Champ | Type | Contraintes | Notes |
 |---|---|---|---|
 | `nom` | string(100) | **requis** | |
 | `prenom` | string(100) | **requis** | |
-| `user_id` | big_integer | nullable | **couture** vers le futur compte applicatif (auth différée) — réservé, pas de relation |
+| `user_id` | big_integer | nullable | **couture** vers le futur compte applicatif (auth différée), réservé, pas de relation |
 
-*Options : timestamps. Table créée (migration `create_professeur`). Même schéma de
-couture `user_id` que `Eleve` : le rattachement au compte viendra avec l'ADR dédié.*
+*Options : timestamps. Table créée (migration `create_professeur`). Même schéma de
+couture `user_id` que `Eleve` : le rattachement au compte viendra avec l'ADR dédié.*
 
-### `InscriptionEleve` — table `inscription_eleve` ✅ (pivot enrichi)
+### `InscriptionEleve` : table `inscription_eleve` ✅ (pivot enrichi)
 
-Un élève inscrit dans une classe pour une année. Premier pivot construit sur le
-**nouveau modèle FK** (`32f552cc`) : chaque FK est un **champ `foreign_key`** du contrat.
+Un élève inscrit dans une classe pour une année.
+Premier pivot construit sur le
+**nouveau modèle FK** (`32f552cc`) : chaque FK est un **champ `foreign_key`** du contrat.
 
 | Champ | Type | Contraintes | Notes |
 |---|---|---|---|
@@ -357,9 +364,10 @@ Un élève inscrit dans une classe pour une année. Premier pivot construit sur 
 ajoutée à la main dans la migration. CRUD **FK-aware** (3 `<select>` peuplés). Trois
 `many_to_one` déclarées via `make:relation` (relations.json = contraintes + index).*
 
-### `AffectationProfesseurClasse` — table `affectation_professeur_classe` ✅ (pivot enrichi)
+### `AffectationProfesseurClasse` : table `affectation_professeur_classe` ✅ (pivot enrichi)
 
-Un professeur affecté à une classe pour une année. Même motif que `InscriptionEleve`.
+Un professeur affecté à une classe pour une année.
+Même motif que `InscriptionEleve`.
 
 | Champ | Type | Contraintes | Notes |
 |---|---|---|---|
@@ -371,9 +379,10 @@ Un professeur affecté à une classe pour une année. Même motif que `Inscripti
 *UNIQUE composite `(professeur_id, classe_id, annee_scolaire_id)`. CRUD FK-aware.
 Noms/colonnes fidèles au dico sans collision avec `InscriptionEleve` (F24/F25 scopés).*
 
-### `Groupe` — table `groupe` ✅ (+ pivot `groupe_eleve`)
+### `Groupe` : table `groupe` ✅ (+ pivot `groupe_eleve`)
 
-Sous-ensemble d'une classe (TP, îlots). Premier **many_to_many** du projet.
+Sous-ensemble d'une classe (TP, îlots).
+Premier **many_to_many** du projet.
 
 | Champ | Type | Contraintes | Notes |
 |---|---|---|---|
@@ -381,19 +390,19 @@ Sous-ensemble d'une classe (TP, îlots). Premier **many_to_many** du projet.
 | `classe_id` | foreign_key → `Classe` | **requis**, FK `restrict` | classe parente |
 
 *Relation **many_to_many** `eleves` ↔ `Eleve` via pivot **`groupe_eleve`** (jonction
-pure : `id`, `groupe_id`, `eleve_id`, UNIQUE `(groupe_id, eleve_id)`, `ON DELETE cascade`).
-DDL pivot corrigé à la main (retour-013 F28 : colonnes générées en `INT` au lieu de
-`BIGINT UNSIGNED`). CRUD standard pour `nom`/`classe_id` ; l'appartenance m2m n'est pas
+pure : `id`, `groupe_id`, `eleve_id`, UNIQUE `(groupe_id, eleve_id)`, `ON DELETE cascade`).
+DDL pivot corrigé à la main (retour-013 F28 : colonnes générées en `INT` au lieu de
+`BIGINT UNSIGNED`). CRUD standard pour `nom`/`classe_id` ; l'appartenance m2m n'est pas
 scaffoldée.*
 
 > **Socle Auth/User** (`users`, `auth_tokens`, `auth_audit_log`,
-> `auth_rate_limit_attempts`) : fourni par Forge (`auth:init`), non listé ici — ce
+> `auth_rate_limit_attempts`) : fourni par Forge (`auth:init`), non listé ici, ce
 > ne sont pas des entités métier du projet.
 
-### Domaine Référentiel (12 entités) — schéma ✅
+### Domaine Référentiel (12 entités) : schéma ✅
 
 Détail métier dans le [dictionnaire référentiel](specs/data-dictionary/dictionnaire-referentiel-niveau-classe.md).
-Vue d'ensemble du modèle relationnel :
+Vue d'ensemble du modèle relationnel :
 
 | Entité | Champs propres | Relations sortantes |
 |---|---|---|
@@ -411,11 +420,11 @@ Vue d'ensemble du modèle relationnel :
 | `Source` | source_id, source_type, source_fichier, source_note | → `Referentiel` (provenance) |
 
 *FK déclarées en champs `foreign_key` du contrat (modèle `32f552cc`). `one_to_many` du dico
-exprimées côté enfant (`many_to_one`). Codes « uniques dans le référentiel » = UNIQUE
-composites (comme `Classe.code`). Pivots m2m corrigés à la main (F28). Pas de CRUD :
+exprimées côté enfant (`many_to_one`). Codes « uniques dans le référentiel » = UNIQUE
+composites (comme `Classe.code`). Pivots m2m corrigés à la main (F28). Pas de CRUD :
 peuplé par l'importeur (ticket 11).*
 
-### `Scenario` — table `scenario` ✅ (phase ⑥)
+### `Scenario` : table `scenario` ✅ (phase ⑥)
 
 L'**intention pédagogique** du professeur ([dictionnaire dédié](specs/data-dictionary/dictionnaire-scenario.md)).
 Premier objet métier **créé par le prof** (CRUD), pas importé.
@@ -430,11 +439,11 @@ Premier objet métier **créé par le prof** (CRUD), pas importé.
 | `referentiel_id` | foreign_key → `ReferentielNiveauClasse` | **requis** | cadre |
 | `auteur_id` | foreign_key → `Professeur` | **requis** | prof auteur |
 
-*Relations m2m : `competences` (visées, pivot `scenario_competence`) et `criteres`
-(pivot `scenario_critere`). **CRUD prof m2m-aware** : selects FK + multi-select
+*Relations m2m : `competences` (visées, pivot `scenario_competence`) et `criteres`
+(pivot `scenario_critere`). **CRUD prof m2m-aware** : selects FK + multi-select
 compétences/critères + `sync_*_ids` transactionnel. Tests de persistance (mock DB).*
 
-### `StarterWelcome` / `VersionStarter` — tables `starter_welcome` / `version_starter` ✅ (phase ⑦)
+### `StarterWelcome` / `VersionStarter` : tables `starter_welcome` / `version_starter` ✅ (phase ⑦)
 
 Parcours réutilisable, en **identité + versions** ([ADR-012](adr/012-versionnement-identite-plus-version.md),
 [dico](specs/data-dictionary/dictionnaire-starter-welcome.md)).
@@ -445,9 +454,9 @@ Parcours réutilisable, en **identité + versions** ([ADR-012](adr/012-versionne
 | `VersionStarter` (version) | `version`, `statut` (`brouillon`/`publie`/`archive`), `activite_glissante`, `ordre_impose` | `starter_id` → StarterWelcome · **unique** `(starter, version)` |
 
 *CRUD de gestion pour les deux (select FK + checkboxes booléens). Le starter est un
-**gabarit** ; ses contenus sont instanciés dans un **parcours** dérivé (voir ci-dessous). Tests (mock DB).*
+**gabarit** ; ses contenus sont instanciés dans un **parcours** dérivé (voir ci-dessous). Tests (mock DB).*
 
-### `Parcours` / `VersionParcours` / `Palier` — phase ⑧ ✅
+### `Parcours` / `VersionParcours` / `Palier` : phase ⑧ ✅
 
 Le parcours **organise le travail élève**, **dérivé** d'un starter ([ADR-012](adr/012-versionnement-identite-plus-version.md),
 [dico Parcours](specs/data-dictionary/dictionnaire-parcours.md)).
@@ -462,31 +471,32 @@ Le parcours **organise le travail élève**, **dérivé** d'un starter ([ADR-012
 
 ---
 
-## 7. Rôle de banc d'essai — retours & tickets
+## 7. Rôle de banc d'essai : retours & tickets
 
-L'application **exerce Forge en réel** et remonte chaque friction. Voir la
+L'application **exerce Forge en réel** et remonte chaque friction.
+Voir la
 [vue d'ensemble du banc d'essai](banc-essai/README.md).
 
-- **Retours 001 → 014** : du squelette (001) aux bugs runtime (008), au flux
+- **Retours 001 → 014** : du squelette (001) aux bugs runtime (008), au flux
   relation (009), son intégration migration/CRUD (010), l'unicité globale noms/FK
   (011), les défauts du moteur d'entités (012), le pivot m2m en `INT` (013) et
   l'incompatibilité `forge-mvc-admin`/`entities` sur la casse des colonnes (014).
-  **001-009 corrigés** et **vérifiés** ; **011 corrigé** dans `32f552cc` (unicité scopée
-  par entité source, vérifié bout-en-bout) ; **010, 012, 013, 014 à remonter**.
-- **Tickets consolidés** pour l'équipe Forge :
+  **001-009 corrigés** et **vérifiés** ; **011 corrigé** dans `32f552cc` (unicité scopée
+  par entité source, vérifié bout-en-bout) ; **010, 012, 013, 014 à remonter**.
+- **Tickets consolidés** pour l'équipe Forge :
   [ticket-01](banc-essai/ticket-forge-01-retours-terrain-ciel-2tne.md) (résolu),
   [ticket-02](banc-essai/ticket-forge-02-bugs-runtime-tranche-verticale.md),
   [ticket-03](banc-essai/ticket-forge-03-flux-relation-many-to-one.md),
   [ticket-04](banc-essai/ticket-forge-04-relations-migration-et-crud.md).
-- **ADR-070 (montée `32f552cc`)** : le moteur d'entités a été **extrait du cœur** dans
+- **ADR-070 (montée `32f552cc`)** : le moteur d'entités a été **extrait du cœur** dans
   l'opt-in `forge-mvc-entities`. Une montée depuis une version pré-ADR-070 le **perd en
   silence** (toutes les commandes `make:relation`/`sync:*`/`migration:*`/`db:*`
-  deviennent « inconnues »). Corrigé : paquet ajouté à `requirements.txt` (épinglé) et
+  deviennent « inconnues »). Corrigé : paquet ajouté à `requirements.txt` (épinglé) et
   `tools/forge-upgrade.sh` le réinstalle désormais avec les deux autres.
-- **Nouveau modèle FK (bonus de 011)** : la FK est un **champ `foreign_key`** du contrat
+- **Nouveau modèle FK (bonus de 011)** : la FK est un **champ `foreign_key`** du contrat
   (`sync:entity` → colonne, `sync:relations` → contrainte/index), et `make:crud` est
   **FK-aware** (selects peuplés) → **retour-010 F23 réglé**.
-- **Enseignement clé** : `make check` (portes statiques) peut être **vert** alors que
+- **Enseignement clé** : `make check` (portes statiques) peut être **vert** alors que
   l'app **plante à l'exécution** (login, rendu, relations). Seul un **parcours
   end-to-end** avec un vrai backend révèle ces bugs.
 
@@ -494,17 +504,17 @@ L'application **exerce Forge en réel** et remonte chaque friction. Voir la
 
 ## 8. Décisions prises (réponses aux questions)
 
-Trace des arbitrages structurants (le *pourquoi*) :
+Trace des arbitrages structurants (le *pourquoi*) :
 
 - **Backend** = MariaDB (ADR-005).
 - **Montée de squelette** = en place, jamais par déplacement de dossier (ADR-010).
-- **Auth** = socle de base uniquement ; **RBAC et MFA différés** (opt-ins non
-  installés) — sans désactiver l'authentification.
+- **Auth** = socle de base uniquement ; **RBAC et MFA différés** (opt-ins non
+  installés), sans désactiver l'authentification.
 - **`Classe.code`** = unique **dans l'année** (composite `(année, code)`), pas
-  globalement — index composite à ajouter plus tard.
+  globalement : index composite à ajouter plus tard.
 - **`on_delete`** des relations = `restrict` (on ne supprime pas une année/niveau qui
   a des classes).
-- **Staging git** = explicite (jamais `git add -A`) ; **commit gaté** sur
+- **Staging git** = explicite (jamais `git add -A`) ; **commit gaté** sur
   `make check && …`.
 
 ---
@@ -515,33 +525,35 @@ Trace des arbitrages structurants (le *pourquoi*) :
 |---|---|
 | `forge-mvc` | `32f552cc` (correctifs retours 001-011) + opt-in **`forge-mvc-entities`** `32f552cc` (moteur de données, ADR-070) |
 | Tables en base | `annee_scolaire`, `niveau_classe`, `classe` (+2 FK), `eleve`, `professeur`, `inscription_eleve` (+3 FK, UNIQUE), `affectation_professeur_classe` (+3 FK, UNIQUE), `groupe` (+1 FK), `groupe_eleve` (pivot m2m), `users`, `auth_*`, `forge_migrations` |
-| **Bloc A — terminé ✅ (8/8)** | `AnneeScolaire`, `NiveauClasse`, `Classe`, `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse`, `Groupe` |
-| **⑤ Référentiel — schéma ✅ (tickets 09-10)** | 12 entités (`Formation`, `ReferentielNiveauClasse`, `PoleActivite`, `ActiviteProfessionnelle`, `Tache`, `ResultatAttendu`, `Competence`, `Connaissance`, `CritereObservable`, `IndicateurReussite`, `FamilleCompetence`, `Source`) + `NiveauClasse` réutilisée. Migration `create_referentiel` (14 tables, 13 FK, 7 UNIQUE composites, 2 pivots m2m) appliquée |
-| ✅ Référentiel — ticket 11 | **Importeur complet** : service (`referentiel_importer.py`, ADR-011 upsert + best-effort), **UI d'upload admin** (validation schéma → import → rapport, provenance) + **admin de parcours** (`forge-mvc-admin`) + tests. Vérifié bout-en-bout (CIEL 2TNE : 81 objets) |
-| **⑥ Scénario — terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` + 2 FK + 2 m2m (compétences, critères) + **CRUD prof m2m-aware** + tests |
-| **⑦ Starter — terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-012) : `StarterWelcome` + `VersionStarter` (unique `(starter, version)`) + CRUD + tests |
-| **⑧ Parcours — terminé ✅ (tickets 15-16)** | `Parcours` (dérivé d'une `VersionStarter`) + `VersionParcours` (ADR-012) + `Palier` (découpage, rattaché à `VersionParcours`, unique `(version_parcours, ordre)`) + CRUD FK-aware + tests |
-| **⑨ Bloc B — TERMINÉ ✅ (17-21)** | Affectation · Progression×2 · QCM+checklist+activité+dépôt (11 ent.) · Évaluation par critères (2 ent.) · **suivi prof** (`/suivi` : tableau de bord lecture seule, requêtes d'agrégation, alerte « bloqué ») |
-| **Modèle + exécution — COMPLETS ✅** | **42 entités** : `référentiel → scénario → starter → parcours → affectation → progression → QCM/checklist/activité/dépôt → évaluation`, plus le **suivi**. `make check` vert (**43 tests**) |
-| Auth | opérationnelle (login `admin@` et `prof@`) ; **MFA différé** |
-| **Nav + RBAC — TERMINÉ ✅** | Barre à menus déroulants par domaine (`nav.html`/`nav.css`). **Rôles opérationnels** via une **couche fine maison** (`mvc/services/rbac.py`, [ADR-013](adr/013-rbac-couche-fine-maison-sur-contrat.md)) : rôles lus en base depuis la session moderne, décision au **contrat** `rbac.json`. `can()` filtre la nav, `guard_prefix` protège les routes. **admin** voit tout ; **professeur** voit Conception/Exécution/Suivi (pas Admin) ; anonyme sur route socle → **403** |
-| **Espace élève — v1 ✅** | Rôle **`eleve`** (contrat + base). Lien compte↔élève : FK 1↔1 `eleve.UserId` → `users(id)` (INT, UNIQUE, `ON DELETE SET NULL`). Vue **« Mon parcours »** (`/mon-parcours`, `espace_eleve.voir`) : lecture seule, filtrée par compte (row-level), parcours affectés + paliers. Lien de nav réservé à l'élève |
-| **Comptes élèves — flux admin ✅** | Écran **`/eleve/comptes`** (gardé `socle.gerer`) : l'admin crée un compte `users` (email + mot de passe hashé), lui pose le rôle `eleve` et le **lie** à une fiche `Eleve` — en une transaction. Validé bout-en-bout sur MariaDB (compte jetable). **Testable au navigateur** : créer un compte élève, se connecter, voir « Mon parcours » |
-| **Espace élève v2 — saisie complète ✅** | Trois écritures élève, patron commun (garde `espace_eleve.voir` + **contrôle d'appartenance** à chaque appel, palier d'autrui → 404). **QCM** (`/mon-parcours/qcm/{id}`) : correction côté serveur (`choix.Lettre` vs `BonneReponse`), score %, tentative + réponses + statut (100 % → validé, sinon en cours, pas de régression, tentatives multiples). **Checklist** (`/checklist/{id}`) : auto-cochage `CocheEleve` (upsert idempotent), `CocheProfesseur` préservé. **Dépôt** (`/depot/{id}`) : upload via `forge-mvc-files` (allowlist), chemin en base. Checklist/dépôt : validation = professeur → statut palier inchangé. Toutes requêtes validées sur MariaDB |
-| **Évaluation prof — boucle ✅** | Écran `/evaluation/progression/{id}` (gardé `execution.gerer`) : détail d'une progression élève avec **preuves** (meilleur score QCM, cochage élève/prof, nb dépôts) ; le prof **valide un palier** (`Statut` contrôlé) et **confirme la checklist** (`CocheProfesseur`, sans toucher le cochage élève). Lien « Évaluer » par élève dans le suivi |
-| **Notation par critères ✅** | `/evaluation/activite/{id}` : noter l'activité d'un palier via les **critères observables** (groupés par compétence, référentiel), échelle **4 niveaux** (`non_atteint`/`partiellement_atteint`/`atteint`/`depasse`). `evaluation_activite` find-or-create + `evaluation_critere` upsert |
+| **Bloc A : terminé ✅ (8/8)** | `AnneeScolaire`, `NiveauClasse`, `Classe`, `Eleve`, `Professeur`, `InscriptionEleve`, `AffectationProfesseurClasse`, `Groupe` |
+| **⑤ Référentiel : schéma ✅ (tickets 09-10)** | 12 entités (`Formation`, `ReferentielNiveauClasse`, `PoleActivite`, `ActiviteProfessionnelle`, `Tache`, `ResultatAttendu`, `Competence`, `Connaissance`, `CritereObservable`, `IndicateurReussite`, `FamilleCompetence`, `Source`) + `NiveauClasse` réutilisée. Migration `create_referentiel` (14 tables, 13 FK, 7 UNIQUE composites, 2 pivots m2m) appliquée |
+| ✅ Référentiel : ticket 11 | **Importeur complet** : service (`referentiel_importer.py`, ADR-011 upsert + best-effort), **UI d'upload admin** (validation schéma → import → rapport, provenance) + **admin de parcours** (`forge-mvc-admin`) + tests. Vérifié bout-en-bout (CIEL 2TNE : 81 objets) |
+| **⑥ Scénario : terminé ✅ (tickets 12-13)** | Dictionnaire + entité `Scenario` + 2 FK + 2 m2m (compétences, critères) + **CRUD prof m2m-aware** + tests |
+| **⑦ Starter : terminé ✅ (ticket 14)** | Motif **identité + versions** (ADR-012) : `StarterWelcome` + `VersionStarter` (unique `(starter, version)`) + CRUD + tests |
+| **⑧ Parcours : terminé ✅ (tickets 15-16)** | `Parcours` (dérivé d'une `VersionStarter`) + `VersionParcours` (ADR-012) + `Palier` (découpage, rattaché à `VersionParcours`, unique `(version_parcours, ordre)`) + CRUD FK-aware + tests |
+| **⑨ Bloc B : TERMINÉ ✅ (17-21)** | Affectation · Progression×2 · QCM+checklist+activité+dépôt (11 ent.) · Évaluation par critères (2 ent.) · **suivi prof** (`/suivi` : tableau de bord lecture seule, requêtes d'agrégation, alerte « bloqué ») |
+| **Modèle + exécution : COMPLETS ✅** | **42 entités** : `référentiel → scénario → starter → parcours → affectation → progression → QCM/checklist/activité/dépôt → évaluation`, plus le **suivi**. `make check` vert (**43 tests**) |
+| Auth | opérationnelle (login `admin@` et `prof@`) ; **MFA différé** |
+| **Nav + RBAC : TERMINÉ ✅** | Barre à menus déroulants par domaine (`nav.html`/`nav.css`). **Rôles opérationnels** via une **couche fine maison** (`mvc/services/rbac.py`, [ADR-013](adr/013-rbac-couche-fine-maison-sur-contrat.md)) : rôles lus en base depuis la session moderne, décision au **contrat** `rbac.json`. `can()` filtre la nav, `guard_prefix` protège les routes. **admin** voit tout ; **professeur** voit Conception/Exécution/Suivi (pas Admin) ; anonyme sur route socle → **403** |
+| **Espace élève : v1 ✅** | Rôle **`eleve`** (contrat + base). Lien compte↔élève : FK 1↔1 `eleve.UserId` → `users(id)` (INT, UNIQUE, `ON DELETE SET NULL`). Vue **« Mon parcours »** (`/mon-parcours`, `espace_eleve.voir`) : lecture seule, filtrée par compte (row-level), parcours affectés + paliers. Lien de nav réservé à l'élève |
+| **Comptes élèves : flux admin ✅** | Écran **`/eleve/comptes`** (gardé `socle.gerer`) : l'admin crée un compte `users` (email + mot de passe hashé), lui pose le rôle `eleve` et le **lie** à une fiche `Eleve`, en une transaction. Validé bout-en-bout sur MariaDB (compte jetable). **Testable au navigateur** : créer un compte élève, se connecter, voir « Mon parcours » |
+| **Espace élève v2 : saisie complète ✅** | Trois écritures élève, patron commun (garde `espace_eleve.voir` + **contrôle d'appartenance** à chaque appel, palier d'autrui → 404). **QCM** (`/mon-parcours/qcm/{id}`) : correction côté serveur (`choix.Lettre` vs `BonneReponse`), score %, tentative + réponses + statut (100 % → validé, sinon en cours, pas de régression, tentatives multiples). **Checklist** (`/checklist/{id}`) : auto-cochage `CocheEleve` (upsert idempotent), `CocheProfesseur` préservé. **Dépôt** (`/depot/{id}`) : upload via `forge-mvc-files` (allowlist), chemin en base. Checklist/dépôt : validation = professeur → statut palier inchangé. Toutes requêtes validées sur MariaDB |
+| **Évaluation prof : boucle ✅** | Écran `/evaluation/progression/{id}` (gardé `execution.gerer`) : détail d'une progression élève avec **preuves** (meilleur score QCM, cochage élève/prof, nb dépôts) ; le prof **valide un palier** (`Statut` contrôlé) et **confirme la checklist** (`CocheProfesseur`, sans toucher le cochage élève). Lien « Évaluer » par élève dans le suivi |
+| **Notation par critères ✅** | `/evaluation/activite/{id}` : noter l'activité d'un palier via les **critères observables** (groupés par compétence, référentiel), échelle **4 niveaux** (`non_atteint`/`partiellement_atteint`/`atteint`/`depasse`). `evaluation_activite` find-or-create + `evaluation_critere` upsert |
 | **Comptes profs + évaluation nominative ✅** | FK 1↔1 `professeur.UserId` → `users(id)` (comme `eleve`). Flux admin `/professeur/comptes` (créer compte + rôle `professeur` + lier fiche). La notation est attribuée au **prof connecté** (`professeur_de_user`), repli sur le prof de l'affectation si compte non lié |
 | Qualité | `make check` vert (5 portes, **67 tests**) |
 
-> Prochaine étape : **tests terrain** (le porteur, une fois tout installé) de la boucle
-> complète — plus rien ne bloque. La **boucle pédagogique est complète et nominative** : socle
+> Prochaine étape : **tests terrain** (le porteur, une fois tout installé) de la boucle
+> complète : plus rien ne bloque.
+> La **boucle pédagogique est complète et nominative** : socle
 > → référentiel → conception → affectation → saisie élève (QCM/checklist/dépôt) → évaluation
 > prof (validation palier + `CocheProfesseur` + notation par critères, attribuée au prof
-> connecté). En place : modèle (42 entités), import, nav, **RBAC** (3 rôles), **espace élève
+> connecté).
+> En place : modèle (42 entités), import, nav, **RBAC** (3 rôles), **espace élève
 > complet**, **comptes élèves + profs** (liés aux fiches), **évaluation prof complète**.
-> Défauts Forge remontés :
-> retour-010 (F22 partiel), retour-012 (F26/F27 — **F27 re-rencontré 3×**), retour-013 (F28),
-> retour-014 (F29), **retour-015 (F30/F31/F32 — RBAC : resolveur sur session dépréciée,
+> Défauts Forge remontés :
+> retour-010 (F22 partiel), retour-012 (F26/F27, **F27 re-rencontré 3×**), retour-013 (F28),
+> retour-014 (F29), **retour-015 (F30/F31/F32, RBAC : resolveur sur session dépréciée,
 > schéma non livré, deux modèles de permission)**.
 
 ---
@@ -566,7 +578,7 @@ mysql -h 127.0.0.1 -u app_admin -papp_password ReferenCiel_Manager -e "SHOW TABL
 ### 10.2 Historique chronologique (carnet de bord)
 
 > Séquence **réelle** des commandes qui ont construit le projet, dans l'ordre.
-> Entre chaque incrément : `make check`, puis `git add <chemins> && git commit`/`push`
+> Entre chaque incrément : `make check`, puis `git add <chemins> && git commit`/`push`
 > (staging explicite, commit gaté).
 
 **① Base de données (MariaDB)**
@@ -676,7 +688,7 @@ pip install --force-reinstall --no-deps \
 #   overlay squelette : home_controller + mvc/views/pages/charte.html
 ```
 
-**⑪ Entité InscriptionEleve ✅ (pivot enrichi, nouveau modèle FK — F24/F25 corrigés)**
+**⑪ Entité InscriptionEleve ✅ (pivot enrichi, nouveau modèle FK, F24/F25 corrigés)**
 
 ```bash
 forge make:entity InscriptionEleve              # date_inscription (scalaire seul)
@@ -701,7 +713,7 @@ forge migration:make create_affectation_professeur_classe --from-entity …
 forge migration:apply && forge make:crud AffectationProfesseurClasse
 ```
 
-**⑬ Entité Groupe ✅ (many_to_one Classe + many_to_many Eleve — Bloc A complet)**
+**⑬ Entité Groupe ✅ (many_to_one Classe + many_to_many Eleve, Bloc A complet)**
 
 ```bash
 forge make:entity Groupe                        # nom (string requis)
@@ -713,7 +725,7 @@ forge migration:make create_groupe --from-entity Groupe
 forge migration:apply && forge make:crud Groupe
 ```
 
-**⑭ Schéma Référentiel ✅ (phase ⑤, tickets 09-10 — 12 entités d'un coup)**
+**⑭ Schéma Référentiel ✅ (phase ⑤, tickets 09-10, 12 entités d'un coup)**
 
 ```bash
 forge make:entity …             # ×12 (Formation, ReferentielNiveauClasse, Pole,
@@ -728,7 +740,7 @@ forge migration:apply           # → 14 tables (20 entités au total)
 #   pas de make:crud : le référentiel est peuplé par l'importeur (ticket 11)
 ```
 
-**⑮ Importeur par upload admin ✅ (phase ⑤, ticket 11 — ADR-009/010)**
+**⑮ Importeur par upload admin ✅ (phase ⑤, ticket 11, ADR-009/010)**
 
 ```bash
 pip install forge-mvc-admin forge-mvc-files    # briques (porteur)
@@ -755,7 +767,7 @@ forge make:crud Scenario            # CRUD prof m2m-aware (multi-select competen
 #   tests : tests/test_scenario_persistance.py (mock DB)
 ```
 
-**⑰ StarterWelcome + VersionStarter ✅ (phase ⑦, ticket 14 — ADR-012)**
+**⑰ StarterWelcome + VersionStarter ✅ (phase ⑦, ticket 14, ADR-012)**
 
 ```bash
 #   ADR-012 : versionnement identité + version ; dico Starter Welcome affiné
@@ -769,7 +781,7 @@ forge migration:apply ; forge make:crud StarterWelcome ; forge make:crud Version
 #   tests : tests/test_starter_versionnement.py (mock DB)
 ```
 
-**⑱ Parcours + VersionParcours + Palier ✅ (phase ⑧, tickets 15-16 — ADR-012)**
+**⑱ Parcours + VersionParcours + Palier ✅ (phase ⑧, tickets 15-16, ADR-012)**
 
 ```bash
 #   cadrage porteur : Parcours dérivé d'une VersionStarter ; Palier appartient au parcours
@@ -786,12 +798,12 @@ forge migration:apply ; forge make:crud Parcours ; forge make:crud VersionParcou
 
 ---
 
-## 11. Vue d'ensemble — le tunnel de progression
+## 11. Vue d'ensemble : le tunnel de progression
 
-> Le projet avance par un **tunnel** de phases (détail : [tickets](tickets/README.md)).
-> Deux blocs métier à ne pas mélanger : **Bloc A** (structure scolaire — *qui est où,
+> Le projet avance par un **tunnel** de phases (détail : [tickets](tickets/README.md)).
+> Deux blocs métier à ne pas mélanger : **Bloc A** (structure scolaire, *qui est où,
 > quelle année, quel niveau*) et **Bloc B** (exécution pédagogique de l'élève).
-> Statut : ✅ fait · ⏸️ en pause · ⬜ à faire.
+> Statut : ✅ fait · ⏸️ en pause · ⬜ à faire.
 
 ```mermaid
 flowchart TD
@@ -811,10 +823,10 @@ flowchart TD
     class A,B,C,D,E,F,G,H,I done
 ```
 
-> **Où on en est** : 🏁 **tunnel complet — toutes les phases ①–⑨ faites.** Toute la
-> chaîne pédagogique est **modélisée, exécutable et suivie** : `référentiel → scénario →
+> **Où on en est** : 🏁 **tunnel complet : toutes les phases ①–⑨ faites.** Toute la
+> chaîne pédagogique est **modélisée, exécutable et suivie** : `référentiel → scénario →
 > starter → parcours → affectation → progression → QCM/checklist/activité/dépôt →
 > évaluation par critères → suivi professeur`. **42 entités, 43 tests, `make check` vert.**
 > La suite relève de l'**enrichissement** (interfaces prof/élève abouties, services
-> métier — ex. valider une tentative met à jour la progression —, import starter,
+> métier, ex. valider une tentative met à jour la progression, import starter,
 > permissions RBAC, seed de démonstration), pas du **squelette** métier, désormais complet.

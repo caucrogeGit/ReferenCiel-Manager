@@ -1,13 +1,15 @@
-# Dictionnaire de données — Socle scolaire (Bloc A)
+# Dictionnaire de données : Socle scolaire (Bloc A)
 
-Documentation métier enrichie du **Bloc A** (structure scolaire) : qui est dans
-quelle classe, sur quelle année, à quel niveau. Objets **persistés en base**.
+Documentation métier enrichie du **Bloc A** (structure scolaire) : qui est dans
+quelle classe, sur quelle année, à quel niveau.
+Objets **persistés en base**.
 
 > Mêmes principes que le [dictionnaire référentiel](dictionnaire-referentiel-niveau-classe.md#principes)
 > (nommage PascalCase/snake_case, types et relations Forge, base = vérité,
-> provenance). Ce bloc arrive **tôt** (tranche verticale, ticket 07).
+> provenance).
+> Ce bloc arrive **tôt** (tranche verticale, ticket 07).
 
-## Distinction importante : élève ≠ compte utilisateur
+## Distinction importante : élève ≠ compte utilisateur
 
 `Eleve` et `Professeur` portent dès maintenant une **couture** vers un futur compte
 applicatif (`user_id` **nullable**), pour ne pas imposer de migration douloureuse
@@ -48,7 +50,7 @@ Sous-ensemble d'une classe (TP, îlots…).
 | `classe_id` | many_to_one → Classe | oui | classe parente |
 | `nom` | string | oui | ex. `Groupe 1` |
 
-Relation : `eleves` (many_to_many → Eleve, pivot `groupe_eleve`).
+Relation : `eleves` (many_to_many → Eleve, pivot `groupe_eleve`).
 
 ### Eleve
 
@@ -79,7 +81,7 @@ Un élève inscrit dans une classe pour une année.
 | `annee_scolaire_id` | many_to_one → AnneeScolaire | oui | année |
 | `date_inscription` | date | non | |
 
-Règle : `(eleve_id, classe_id, annee_scolaire_id)` **unique**.
+Règle : `(eleve_id, classe_id, annee_scolaire_id)` **unique**.
 
 ### AffectationProfesseurClasse
 
@@ -92,7 +94,7 @@ Un professeur affecté à une classe pour une année.
 | `annee_scolaire_id` | many_to_one → AnneeScolaire | oui | année |
 | `role` | string | non | ex. professeur principal |
 
-Règle : `(professeur_id, classe_id, annee_scolaire_id)` **unique**.
+Règle : `(professeur_id, classe_id, annee_scolaire_id)` **unique**.
 
 ## Relations (récapitulatif)
 
@@ -110,14 +112,16 @@ Règle : `(professeur_id, classe_id, annee_scolaire_id)` **unique**.
 
 - **Une seule `AnneeScolaire` active** (règle applicative).
 - **Unicité** des inscriptions et affectations (voir ci-dessus).
-- **Couture compte** : `user_id` nullable sur `Eleve` et `Professeur` ; le lien réel
+- **Couture compte** : `user_id` nullable sur `Eleve` et `Professeur` ; le lien réel
   vers `CompteUtilisateur` (auth/RBAC/MFA) est un domaine différé (ADR ultérieur).
-- **Sécurité applicative** (cloisonnement élève/professeur, RBAC) : hors de ce
+- **Sécurité applicative** (cloisonnement élève/professeur, RBAC) : hors de ce
   dictionnaire, traitée à l'arrivée de l'authentification réelle.
 
 ## Portée
 
-Couvre le **socle scolaire (Bloc A)**. L'**exécution** (affectation de parcours,
-progression, évaluations — Bloc B) et l'**authentification** relèvent de tickets
-ultérieurs. Les contrats d'entité Forge et migrations en découlent (tickets de
+Couvre le **socle scolaire (Bloc A)**.
+L'**exécution** (affectation de parcours,
+progression, évaluations ; Bloc B) et l'**authentification** relèvent de tickets
+ultérieurs.
+Les contrats d'entité Forge et migrations en découlent (tickets de
 programmation, à faire ensemble).

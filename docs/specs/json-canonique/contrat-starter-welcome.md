@@ -1,33 +1,38 @@
-# Contrat du JSON canonique — Starter Welcome
+# Contrat du JSON canonique : Starter Welcome
 
-Spécifie la **forme** du JSON canonique de type **`starter_welcome`** : un parcours
+Spécifie la **forme** du JSON canonique de type **`starter_welcome`** : un parcours
 pédagogique réutilisable (paliers → dossier technique / QCM / activité / checklist).
 Modelé sur le starter numérisé `sources/starters/welcome-reseau/`.
 
 > Partage l'**enveloppe commune** du [contrat référentiel](contrat-referentiel-niveau-classe.md)
-> (§2-§3). Ce document ne couvre que le **corps `starter_welcome`**. Ni schéma de
+> (§2-§3).
+> Ce document ne couvre que le **corps `starter_welcome`**.
+> Ni schéma de
 > validation ni JSON réel complet (tickets suivants).
 
 ## 1. Principe
 
-Un starter est **riche en contenu** (dossiers techniques, images ~30 Mo). Son JSON
+Un starter est **riche en contenu** (dossiers techniques, images ~30 Mo).
+Son JSON
 canonique est donc un **manifeste** qui **référence** ses contenus par chemin
-relatif, pas un fichier auto-contenu :
+relatif, pas un fichier auto-contenu :
 
 ```text
 référentiel niveau-classe : JSON auto-contenu (données)
 starter_welcome           : JSON manifeste + bundle (contenus md + images)
 ```
 
-**Upload (ADR-009)** : un starter s'importe sous forme de **bundle** (archive)
-contenant le manifeste JSON et les fichiers référencés. L'application valide le
+**Upload (ADR-009)** : un starter s'importe sous forme de **bundle** (archive)
+contenant le manifeste JSON et les fichiers référencés.
+L'application valide le
 manifeste (schéma) puis importe paliers/QCM/checklists en base et stocke les
 contenus/fichiers (opt-in `files`).
 
 ## 2. Enveloppe commune
 
-Identique au contrat référentiel : `type` (= `starter_welcome`), `identifiant`
-(ex. `welcome-reseau`), `version`, `sources[]`, `provenance{}`. Chaque élément
+Identique au contrat référentiel : `type` (= `starter_welcome`), `identifiant`
+(ex. `welcome-reseau`), `version`, `sources[]`, `provenance{}`.
+Chaque élément
 repris porte `source_ids`.
 
 ## 3. Cadre du starter
@@ -35,7 +40,7 @@ repris porte `source_ids`.
 | Champ | Type | Obligatoire | Rôle |
 |---|---|:--:|---|
 | `niveau_classe` | object `{code, intitule}` | oui | classe visée (ex. `2TNE`) |
-| `titre` | string | oui | ex. « Semaine réseau et virtualisation » |
+| `titre` | string | oui | ex. « Semaine réseau et virtualisation » |
 | `presentation` | string \| ref | non | texte d'accueil (par ref de fichier possible) |
 | `organisation` | object | oui | `{ activite_glissante: bool, ordre_impose: bool }` |
 | `paliers` | array | oui | voir §4 |
@@ -46,9 +51,9 @@ repris porte `source_ids`.
 |---|---|:--:|---|
 | `id` | string | oui | ex. `palier-1` |
 | `ordre` | integer | oui | rang (1..n), unique |
-| `titre` | string | oui | ex. « Fabriquer et tester un câble T568B » |
-| `theme` | string | non | ex. « Câble Ethernet droit » |
-| `production_attendue` | string | non | ex. « Un câble droit conforme » |
+| `titre` | string | oui | ex. « Fabriquer et tester un câble T568B » |
+| `theme` | string | non | ex. « Câble Ethernet droit » |
+| `production_attendue` | string | non | ex. « Un câble droit conforme » |
 | `dossier_technique` | ref | oui | `{ fichier: "palier-1/dossier-technique.md" }` |
 | `qcm` | object | non | voir §5 |
 | `activite` | object | non | `{ id, objectif?, fichier? , etapes?[] }` |
@@ -61,14 +66,15 @@ repris porte `source_ids`.
 | Champ | Type | Obligatoire | Rôle |
 |---|---|:--:|---|
 | `id` | string | oui | ex. `qcm-palier-1` |
-| `format_reponse` | string | non | ex. « une réponse par ligne, `1a` » |
+| `format_reponse` | string | non | ex. « une réponse par ligne, `1a` » |
 | `validation` | object | oui | `{ seuil: "100%" }` |
 | `questions` | array | oui | voir ci-dessous |
 
-`questions[]` : `{ numero: int, enonce: string, choix: [{ lettre: "A"\|"B"\|"C", texte: string }], bonne_reponse: "A"\|"B"\|"C" }`.
+`questions[]` : `{ numero: int, enonce: string, choix: [{ lettre: "A"\|"B"\|"C", texte: string }], bonne_reponse: "A"\|"B"\|"C" }`.
 
-> La `bonne_reponse` provient du **corrigé** : la canonicalisation **fusionne** le
-> QCM élève (énoncés + choix) et le corrigé (bonnes réponses + explications). Le
+> La `bonne_reponse` provient du **corrigé** : la canonicalisation **fusionne** le
+> QCM élève (énoncés + choix) et le corrigé (bonnes réponses + explications).
+> Le
 > canonique est donc plus riche que chaque source prise isolément.
 
 ## 6. Checklist
@@ -80,20 +86,21 @@ repris porte `source_ids`.
 | `decision_finale` | array | non | `[{ etat, decision }]` (validé / à reprendre / correction ciblée) |
 
 > Les colonnes de validation **élève/professeur** sont un état d'exécution
-> (`Progression` / `ÉvaluationCritère`), pas une donnée de définition : le canonique
+> (`Progression` / `ÉvaluationCritère`), pas une donnée de définition : le canonique
 > porte les **items à vérifier**, pas leurs cases cochées.
 
 ## 7. Lien optionnel au référentiel
 
 Un starter peut **aligner** ses paliers sur les compétences d'un référentiel
-niveau-classe :
+niveau-classe :
 
 ```text
 relations.palier_competences[] : { palier: <id>, competences: [<C0x>...] }
 ```
 
-**Optionnel et relevant du jugement pédagogique** (domaine du professeur) : non
-imposé, à renseigner par le professeur. Le contenu du starter ne fournit pas ce
+**Optionnel et relevant du jugement pédagogique** (domaine du professeur) : non
+imposé, à renseigner par le professeur.
+Le contenu du starter ne fournit pas ce
 mapping mécaniquement.
 
 ## 8. Invariants
@@ -102,11 +109,12 @@ mapping mécaniquement.
 - Toute `bonne_reponse` d'une question ∈ les `lettre` de ses `choix`.
 - Tout `fichier`/`ref` pointe vers un contenu **présent dans le bundle**.
 - Provenance obligatoire (`source_ids`) sur les éléments repris.
-- Vocabulaire : pôles ≠ rôles ; définition (contenus) ≠ exécution (progression).
+- Vocabulaire : pôles ≠ rôles ; définition (contenus) ≠ exécution (progression).
 
 ## 9. Fragment d'illustration (vérifiable)
 
-Extrait du palier 1 (câble T568B). **Illustration, pas un manifeste complet.**
+Extrait du palier 1 (câble T568B).
+**Illustration, pas un manifeste complet.**
 
 ```json
 {
@@ -148,8 +156,9 @@ Extrait du palier 1 (câble T568B). **Illustration, pas un manifeste complet.**
 ## 10. Schéma de validation
 
 Outillé par [`schemas/schema-json-canonique-starter-welcome.json`](schemas/schema-json-canonique-starter-welcome.json)
-(JSON Schema 2020-12) — porte de validation des uploads (ADR-009). Le schéma valide
-la structure ; les invariants sémantiques (ordre unique/contigu, `bonne_reponse` ∈
+(JSON Schema 2020-12) : porte de validation des uploads (ADR-009).
+Le schéma valide
+la structure ; les invariants sémantiques (ordre unique/contigu, `bonne_reponse` ∈
 `choix`, fichiers présents dans le bundle) sont validés par l'importeur.
 
 ## 11. Hors de ce contrat

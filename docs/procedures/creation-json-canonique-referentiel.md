@@ -1,10 +1,11 @@
-# Procédure — Créer un JSON canonique de référentiel niveau-classe
+# Procédure : Créer un JSON canonique de référentiel niveau-classe
 
 Guide opérationnel pour produire un fichier **JSON canonique** de type
 `referentiel_niveau_classe`, de la collecte des sources jusqu'à l'import en base.
 
-> **Cadre** : le JSON canonique est la **référence structurée d'import**, pas une
-> sauvegarde ; la vérité applicative reste la base de données. Pas de « V0 fichier »
+> **Cadre** : le JSON canonique est la **référence structurée d'import**, pas une
+> sauvegarde ; la vérité applicative reste la base de données.
+> Pas de « V0 fichier »
 > ([ADR-003](../adr/003-json-canonique-et-persistance-applicative.md),
 > [spécification](../specs/json-canonique/README.md)).
 
@@ -33,39 +34,40 @@ Sources officielles → JSON canonique → (dictionnaire de données) → import
 
 ---
 
-## Étape 1 — Collecter et enregistrer les sources
+## Étape 1 : Collecter et enregistrer les sources
 
 Dans [registre-des-sources.md](../specs/json-canonique/registre-des-sources.md),
-déclare **chaque** source avec un `source_id` stable. Une source, une ligne.
+déclare **chaque** source avec un `source_id` stable.
+Une source, une ligne.
 
-Champs d'une entrée `sources[]` (contrat §3) :
+Champs d'une entrée `sources[]` (contrat §3) :
 
 | Champ | Obligatoire | Exemple |
 |---|:--:|---|
 | `source_id` | oui | `referentiel-bac-pro-ciel` |
 | `source_type` | oui | `pdf_officiel` \| `scpro` \| `odt` \| `starter` |
 | `source_fichier` | oui | `referenciel-bac-pro-ciel.pdf` |
-| `source_note` | non | « Référentiel officiel utilisé pour validation » |
+| `source_note` | non | « Référentiel officiel utilisé pour validation » |
 
-> **Écart de provenance assumé** : on peut entrer dans la chaîne au nœud
-> *référentiel officiel* plutôt que *CPRO* — c'est légitime, il suffit de le tracer
+> **Écart de provenance assumé** : on peut entrer dans la chaîne au nœud
+> *référentiel officiel* plutôt que *CPRO*, c'est légitime, il suffit de le tracer
 > (étape 2, champ `provenance.point_entree = "referentiel_officiel"`).
 
-## Étape 2 — Tracer la provenance et les décisions
+## Étape 2 : Tracer la provenance et les décisions
 
 Avant d'écrire le JSON, crée une **fiche de trace** dans
-[traces/](../specs/json-canonique/traces/) (modèle :
+[traces/](../specs/json-canonique/traces/) (modèle :
 [trace CIEL 2TNE](../specs/json-canonique/traces/trace-creation-json-canonique-ciel-2tne.md)).
-Elle enregistre :
+Elle enregistre :
 
-- les **sources retenues** et leur rôle ;
-- les **décisions structurantes** (ex. l'*extraction à deux couches* : couche
-  **famille** + couche **cible diplôme**, avec le mapping entre les deux) ;
-- le **vocabulaire** (on parle de **pôles d'activités**, jamais de « rôles »).
+- les **sources retenues** et leur rôle ;
+- les **décisions structurantes** (ex. l'*extraction à deux couches* : couche
+  **famille** + couche **cible diplôme**, avec le mapping entre les deux) ;
+- le **vocabulaire** (on parle de **pôles d'activités**, jamais de « rôles »).
 
-Cette fiche est **antérieure** au JSON : elle explique le *pourquoi* des choix.
+Cette fiche est **antérieure** au JSON : elle explique le *pourquoi* des choix.
 
-## Étape 3 — Rédiger le JSON conforme au contrat
+## Étape 3 : Rédiger le JSON conforme au contrat
 
 Le document = **enveloppe commune** + **corps typé** (`type`).
 
@@ -117,7 +119,7 @@ relations {
 - Tout `id` / `code` est **unique** dans sa collection.
 - Toute relation ne référence que des `id`/`code` **existants** (références résolues).
 - Tout élément extrait porte un **`source_ids` non vide** (provenance obligatoire).
-- Garder les trois notions **distinctes** :
+- Garder les trois notions **distinctes** :
 
   ```text
   resultats_attendus   = liés aux activités professionnelles
@@ -125,23 +127,23 @@ relations {
   indicateurs_reussite = formulation pédagogique dérivée (à formuler)
   ```
 
-- On dit **pôles d'activités**, jamais « rôles » (réservés à `eleve`, `professeur`,
+- On dit **pôles d'activités**, jamais « rôles » (réservés à `eleve`, `professeur`,
   `administrateur`).
 
-## Étape 4 — Valider contre le schéma
+## Étape 4 : Valider contre le schéma
 
 Le [schéma JSON](../specs/json-canonique/schemas/schema-json-canonique-referentiel-niveau-classe.json)
 (Draft 2020-12) est la **porte de validation des uploads** (ADR-009).
 
-- **Vérifié par le schéma** : familles obligatoires, types, énumérations (`type`,
+- **Vérifié par le schéma** : familles obligatoires, types, énumérations (`type`,
   `source_type`, `point_entree`, `origine`), motifs des codes (`E1`/`R2`/`D3`,
   `C0x`, `CCx`), semver, niveaux taxonomiques 1–4. Les champs additionnels sont
-  tolérés (le document « peut être plus riche »).
-- **Vérifié par l'importeur** (hors schéma) : **unicité** des `id`/`code` et
-  **résolution** des références de `relations` — invariants non exprimables en
+  tolérés (le document « peut être plus riche »).
+- **Vérifié par l'importeur** (hors schéma) : **unicité** des `id`/`code` et
+  **résolution** des références de `relations` : invariants non exprimables en
   JSON Schema pur.
 
-Valider en ligne de commande (service `canonical_validator` (`mvc/services/canonical_validator.py`)) :
+Valider en ligne de commande (service `canonical_validator` (`mvc/services/canonical_validator.py`)) :
 
 ```bash
 .venv/bin/python - <<'PY'
@@ -153,30 +155,31 @@ print("OK — conforme au schéma" if not erreurs else "\n".join(erreurs))
 PY
 ```
 
-`validate_referentiel_canonical(data)` retourne la **liste triée** des erreurs —
+`validate_referentiel_canonical(data)` retourne la **liste triée** des erreurs :
 **vide** si le document est conforme.
 
-## Étape 5 — Importer en base
+## Étape 5 : Importer en base
 
-- **Référentiel livré (voie recommandée)** : dépose le JSON dans
+- **Référentiel livré (voie recommandée)** : dépose le JSON dans
   **`data/referentiels/`** (versionné) et charge-le avec le script
-  d'installation ([ADR-017](../adr/017-referentiels-livres-et-chargement-installation.md)) :
+  d'installation ([ADR-017](../adr/017-referentiels-livres-et-chargement-installation.md)) :
 
   ```bash
   .venv/bin/python tools/charger_referentiels.py --check   # valide seulement
   .venv/bin/python tools/charger_referentiels.py           # valide + importe (idempotent)
   ```
 
-- **Ajout ponctuel** : espace **admin → Référentiel → Importer un référentiel**
-  (upload, ADR-009). Le fichier est **validé** (étape 4) puis persisté par le
-  service `referentiel_importer` (`mvc/services/referentiel_importer.py`) —
-  **upsert best-effort** par `identifiant` (réimporter remplace ; un échec unitaire
+- **Ajout ponctuel** : espace **admin → Référentiel → Importer un référentiel**
+  (upload, ADR-009).
+  Le fichier est **validé** (étape 4) puis persisté par le
+  service `referentiel_importer` (`mvc/services/referentiel_importer.py`) :
+  **upsert best-effort** par `identifiant` (réimporter remplace ; un échec unitaire
   n'interrompt pas l'import et figure au rapport).
-- **Jeu de démo** : la fixture callable `mvc/fixtures/referentiel.py` charge le
+- **Jeu de démo** : la fixture callable `mvc/fixtures/referentiel.py` charge le
   référentiel **depuis `data/referentiels/`** (source unique) au `forge fixtures:load`.
 
 > ⚠️ Le réimport d'un référentiel **déjà utilisé** par des évaluations
-> (`evaluation_critere` référençant ses critères) échoue (contrainte FK) : le
+> (`evaluation_critere` référençant ses critères) échoue (contrainte FK) : le
 > chargement est prévu **à l'installation**, sur une base vierge de données
 > pédagogiques (voir ADR-017).
 
@@ -262,7 +265,7 @@ ajoute-en autant que nécessaire.
 }
 ```
 
-> **Modèle complet** : pour un exemple réel et riche, pars de
+> **Modèle complet** : pour un exemple réel et riche, pars de
 > [json-canonique-ciel-2tne.json](../specs/json-canonique/examples/json-canonique-ciel-2tne.json)
 > (2 sources, 3 pôles, 5 activités, 8 compétences) et adapte-le.
 
@@ -270,21 +273,21 @@ ajoute-en autant que nécessaire.
 
 - [ ] Sources déclarées au registre (`source_id` stables).
 - [ ] Fiche de trace créée (sources + décisions + vocabulaire).
-- [ ] Enveloppe complète : `type`, `identifiant`, `version`, `sources`, `provenance`.
-- [ ] Cadre : `formation`, `niveau_classe`.
-- [ ] Couches remplies : pôles, activités, compétences (+ famille et mapping).
+- [ ] Enveloppe complète : `type`, `identifiant`, `version`, `sources`, `provenance`.
+- [ ] Cadre : `formation`, `niveau_classe`.
+- [ ] Couches remplies : pôles, activités, compétences (+ famille et mapping).
 - [ ] Chaque élément extrait porte un `source_ids` **non vide**.
-- [ ] `id`/`code` uniques ; relations pointant vers des éléments existants.
+- [ ] `id`/`code` uniques ; relations pointant vers des éléments existants.
 - [ ] Distinction `resultats_attendus` / `criteres_evaluation` / `indicateurs_reussite` respectée.
-- [ ] Validation schéma : **0 erreur** (étape 4).
+- [ ] Validation schéma : **0 erreur** (étape 4).
 - [ ] Import admin réussi (rapport sans erreur).
 
 ## Références
 
-- Spécification : [README JSON canonique](../specs/json-canonique/README.md)
-- Contrat : [contrat-referentiel-niveau-classe.md](../specs/json-canonique/contrat-referentiel-niveau-classe.md)
-- Schéma : [schema-json-canonique-referentiel-niveau-classe.json](../specs/json-canonique/schemas/schema-json-canonique-referentiel-niveau-classe.json)
-- Exemple : [json-canonique-ciel-2tne.json](../specs/json-canonique/examples/json-canonique-ciel-2tne.json)
-- Registre des sources : [registre-des-sources.md](../specs/json-canonique/registre-des-sources.md)
-- Décision : [ADR-003](../adr/003-json-canonique-et-persistance-applicative.md), import : ADR-009
-- Services : `canonical_validator` (`mvc/services/canonical_validator.py`), `referentiel_importer` (`mvc/services/referentiel_importer.py`)
+- Spécification : [README JSON canonique](../specs/json-canonique/README.md)
+- Contrat : [contrat-referentiel-niveau-classe.md](../specs/json-canonique/contrat-referentiel-niveau-classe.md)
+- Schéma : [schema-json-canonique-referentiel-niveau-classe.json](../specs/json-canonique/schemas/schema-json-canonique-referentiel-niveau-classe.json)
+- Exemple : [json-canonique-ciel-2tne.json](../specs/json-canonique/examples/json-canonique-ciel-2tne.json)
+- Registre des sources : [registre-des-sources.md](../specs/json-canonique/registre-des-sources.md)
+- Décision : [ADR-003](../adr/003-json-canonique-et-persistance-applicative.md), import : ADR-009
+- Services : `canonical_validator` (`mvc/services/canonical_validator.py`), `referentiel_importer` (`mvc/services/referentiel_importer.py`)

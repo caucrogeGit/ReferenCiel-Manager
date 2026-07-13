@@ -1,25 +1,26 @@
-# Dictionnaire de données — Référentiel niveau-classe
+# Dictionnaire de données : Référentiel niveau-classe
 
-Documentation **métier enrichie** du domaine « référentiel niveau-classe » : les
+Documentation **métier enrichie** du domaine « référentiel niveau-classe » : les
 objets **persistés en base** après import d'un JSON canonique
 (`type: referentiel_niveau_classe`, voir le
 [contrat](../json-canonique/contrat-referentiel-niveau-classe.md) et l'
 [ADR-009](../../adr/009-import-json-canonique-par-upload-admin.md)).
 
-> Place dans la chaîne : `JSON canonique → **dictionnaire de données** → modèle
-> relationnel → contrats d'entité Forge → base`. Le dictionnaire **enrichit** le
-> canonique de règles métier ; il ne le recopie pas.
+> Place dans la chaîne : `JSON canonique → **dictionnaire de données** → modèle
+> relationnel → contrats d'entité Forge → base`.
+> Le dictionnaire **enrichit** le
+> canonique de règles métier ; il ne le recopie pas.
 
 ## Principes
 
-- **Nommage** : entités en PascalCase, tables en snake_case (conventions Forge).
-- **Types** : types de champ Forge (`string`, `text`, `slug`, `integer`,
+- **Nommage** : entités en PascalCase, tables en snake_case (conventions Forge).
+- **Types** : types de champ Forge (`string`, `text`, `slug`, `integer`,
   `boolean`, `json`, …). Clé primaire `id` gérée par Forge (non déclarée).
-- **Relations** : `many_to_one`, `many_to_many` (via table pivot), conformément à
+- **Relations** : `many_to_one`, `many_to_many` (via table pivot), conformément à
   Forge (`make:relation`, `make:pivot-crud`).
 - **Base = vérité** (ADR-003). Le JSON uploadé est conservé comme trace de
-  **provenance** ; les objets vivent en base.
-- **Provenance** : chaque élément repris référence sa/ses source(s) (`Source`).
+  **provenance** ; les objets vivent en base.
+- **Provenance** : chaque élément repris référence sa/ses source(s) (`Source`).
 
 ## Entités
 
@@ -36,7 +37,8 @@ Le document importé (un référentiel extrait pour une classe). Racine du domai
 | `statut` | string | oui | `brouillon` \| `publie` \| `archive` (versionnement, ADR à venir) |
 | `importe_le` | datetime | oui | date d'import (auto) |
 
-Règles : `(formation_id, niveau_classe_id, version)` unique. Un référentiel
+Règles : `(formation_id, niveau_classe_id, version)` unique.
+Un référentiel
 **publié** puis affecté n'est pas modifié librement (versionnement).
 
 ### Formation
@@ -58,9 +60,9 @@ Règles : `(formation_id, niveau_classe_id, version)` unique. Un référentiel
 | Champ | Type | Oblig. | Description |
 |---|---|:--:|---|
 | `referentiel_id` | many_to_one → ReferentielNiveauClasse | oui | rattachement |
-| `intitule` | string | oui | ex. « Réalisation et maintenance de produits électroniques » |
+| `intitule` | string | oui | ex. « Réalisation et maintenance de produits électroniques » |
 
-Vocabulaire : **pôle d'activités**, jamais « rôle ».
+Vocabulaire : **pôle d'activités**, jamais « rôle ».
 
 ### ActiviteProfessionnelle
 
@@ -72,7 +74,7 @@ Vocabulaire : **pôle d'activités**, jamais « rôle ».
 | `intitule` | string | oui | libellé |
 | `conditions_exercice` | text \| json | non | moyens, autonomie |
 
-Relations : `taches` (one_to_many → Tache), `resultats_attendus`
+Relations : `taches` (one_to_many → Tache), `resultats_attendus`
 (one_to_many → ResultatAttendu), `competences` (many_to_many → Competence).
 
 ### Tache
@@ -101,7 +103,7 @@ Lié à une **activité professionnelle** (instructions §7).
 | `code` | string | oui | `C0x` (motif `^C[0-9]{2}$`), unique dans le référentiel |
 | `intitule` | string | oui | libellé |
 
-Relations : `connaissances` (one_to_many → Connaissance),
+Relations : `connaissances` (one_to_many → Connaissance),
 `criteres` (one_to_many → CritereObservable),
 `activites` (many_to_many → ActiviteProfessionnelle).
 
@@ -146,7 +148,7 @@ Compétence commune de la famille TNE (couche 2ⁿᵈᵉ).
 | `code` | string | oui | `CCx` (motif `^CC[0-9]$`), unique dans le référentiel |
 | `intitule` | string | oui | libellé |
 
-Relation : `competences` (many_to_many → Competence) — **mapping famille ↔ CIEL**.
+Relation : `competences` (many_to_many → Competence), **mapping famille ↔ CIEL**.
 
 ### Source
 
@@ -174,20 +176,22 @@ Provenance d'un référentiel (modèle §8 de la capitalisation).
 
 ## Règles transverses
 
-- **Unicité** : codes uniques dans leur périmètre (référentiel).
-- **Références résolues** : toute relation pointe vers un objet existant (l'importeur
-  refuse un canonique dont une relation est orpheline — invariants du contrat).
+- **Unicité** : codes uniques dans leur périmètre (référentiel).
+- **Références résolues** : toute relation pointe vers un objet existant (l'importeur
+  refuse un canonique dont une relation est orpheline ; invariants du contrat).
 - **Provenance obligatoire** sur les éléments repris (au moins une `Source`).
-- **Versionnement** : un référentiel publié et affecté n'est pas modifié librement ;
+- **Versionnement** : un référentiel publié et affecté n'est pas modifié librement ;
   on affecte une version publiée (statut `brouillon`/`publie`/`archive`).
-- **Vocabulaire** : pôles ≠ rôles ; `resultats_attendus` (activités) ≠ `criteres`
+- **Vocabulaire** : pôles ≠ rôles ; `resultats_attendus` (activités) ≠ `criteres`
   (compétences) ≠ `indicateurs` (formulation pédagogique).
 
 ## Portée
 
-Ce dictionnaire couvre le **domaine référentiel niveau-classe**. Voir aussi, mêmes
-principes : le [dictionnaire du **socle scolaire**](dictionnaire-socle-scolaire.md)
+Ce dictionnaire couvre le **domaine référentiel niveau-classe**.
+Voir aussi, mêmes
+principes : le [dictionnaire du **socle scolaire**](dictionnaire-socle-scolaire.md)
 (AnneeScolaire, Classe, Eleve, Professeur, InscriptionEleve…) et celui du
 [**Starter Welcome**](dictionnaire-starter-welcome.md) (StarterWelcome, Palier,
-QCM, Checklist…). Les contrats d'entité Forge et migrations en découlent (tickets de
+QCM, Checklist…).
+Les contrats d'entité Forge et migrations en découlent (tickets de
 programmation, à faire ensemble).
