@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT evaluation_activite.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label, professeur.Nom AS professeur_id_label FROM evaluation_activite LEFT JOIN progression_palier ON evaluation_activite.progression_palier_id = progression_palier.Id LEFT JOIN activite ON evaluation_activite.activite_id = activite.Id LEFT JOIN professeur ON evaluation_activite.professeur_id = professeur.Id ORDER BY evaluation_activite.Id"
 SELECT_BY_ID = "SELECT evaluation_activite.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label, professeur.Nom AS professeur_id_label FROM evaluation_activite LEFT JOIN progression_palier ON evaluation_activite.progression_palier_id = progression_palier.Id LEFT JOIN activite ON evaluation_activite.activite_id = activite.Id LEFT JOIN professeur ON evaluation_activite.professeur_id = professeur.Id WHERE evaluation_activite.Id = ?"
-INSERT       = "INSERT INTO evaluation_activite (DateEvaluation, Appreciation, progression_palier_id, activite_id, professeur_id) VALUES (?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE evaluation_activite SET DateEvaluation = ?, Appreciation = ?, progression_palier_id = ?, activite_id = ?, professeur_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO evaluation_activite (DateEvaluation, Appreciation, progression_palier_id, activite_id, professeur_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE evaluation_activite SET DateEvaluation = ?, Appreciation = ?, progression_palier_id = ?, activite_id = ?, professeur_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM evaluation_activite WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_evaluation_activite_by_id(id):
 
 
 def add_evaluation_activite(data):
-    return insert(INSERT, (data["date_evaluation"], data["appreciation"], data["progression_palier_id"], data["activite_id"], data["professeur_id"], ))
+    return insert(INSERT, (data["date_evaluation"], data["appreciation"], data["progression_palier_id"], data["activite_id"], data["professeur_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_evaluation_activite(id, data):
-    execute(UPDATE, (data["date_evaluation"], data["appreciation"], data["progression_palier_id"], data["activite_id"], data["professeur_id"], id))
+    execute(UPDATE, (data["date_evaluation"], data["appreciation"], data["progression_palier_id"], data["activite_id"], data["professeur_id"], datetime.now(timezone.utc), id))
 
 
 def delete_evaluation_activite(id):

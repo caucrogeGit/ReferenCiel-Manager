@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT progression_palier.*, progression_eleve.Statut AS progression_eleve_id_label, palier.Titre AS palier_id_label FROM progression_palier LEFT JOIN progression_eleve ON progression_palier.progression_eleve_id = progression_eleve.Id LEFT JOIN palier ON progression_palier.palier_id = palier.Id ORDER BY progression_palier.Id"
 SELECT_BY_ID = "SELECT progression_palier.*, progression_eleve.Statut AS progression_eleve_id_label, palier.Titre AS palier_id_label FROM progression_palier LEFT JOIN progression_eleve ON progression_palier.progression_eleve_id = progression_eleve.Id LEFT JOIN palier ON progression_palier.palier_id = palier.Id WHERE progression_palier.Id = ?"
-INSERT       = "INSERT INTO progression_palier (Statut, progression_eleve_id, palier_id) VALUES (?, ?, ?)"
-UPDATE       = "UPDATE progression_palier SET Statut = ?, progression_eleve_id = ?, palier_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO progression_palier (Statut, progression_eleve_id, palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE progression_palier SET Statut = ?, progression_eleve_id = ?, palier_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM progression_palier WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_progression_palier_by_id(id):
 
 
 def add_progression_palier(data):
-    return insert(INSERT, (data["statut"], data["progression_eleve_id"], data["palier_id"], ))
+    return insert(INSERT, (data["statut"], data["progression_eleve_id"], data["palier_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_progression_palier(id, data):
-    execute(UPDATE, (data["statut"], data["progression_eleve_id"], data["palier_id"], id))
+    execute(UPDATE, (data["statut"], data["progression_eleve_id"], data["palier_id"], datetime.now(timezone.utc), id))
 
 
 def delete_progression_palier(id):

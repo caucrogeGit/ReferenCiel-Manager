@@ -8,14 +8,15 @@ Toutes les requêtes sont paramétrées (`?`) — jamais d'interpolation.
 from __future__ import annotations
 
 from collections.abc import Sequence
+from datetime import datetime, timezone
 from typing import Any
 
 from core.database.db import execute, fetch_all, fetch_one, insert
 
 SELECT_ALL = "SELECT * FROM annee_scolaire ORDER BY Id"
 SELECT_BY_ID = "SELECT * FROM annee_scolaire WHERE Id = ?"
-INSERT = "INSERT INTO annee_scolaire (Libelle, DateDebut, DateFin, Active) VALUES (?, ?, ?, ?)"
-UPDATE = "UPDATE annee_scolaire SET Libelle = ?, DateDebut = ?, DateFin = ?, Active = ? WHERE Id = ?"
+INSERT = "INSERT INTO annee_scolaire (Libelle, DateDebut, DateFin, Active, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?)"
+UPDATE = "UPDATE annee_scolaire SET Libelle = ?, DateDebut = ?, DateFin = ?, Active = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE = "DELETE FROM annee_scolaire WHERE Id = ?"
 
 
@@ -30,14 +31,16 @@ def get_annee_scolaire_by_id(id: int) -> dict[str, Any] | None:
 def add_annee_scolaire(data: dict[str, Any]) -> int:
     return insert(
         INSERT,
-        (data["libelle"], data["date_debut"], data["date_fin"], data["active"]),
+        (data["libelle"], data["date_debut"], data["date_fin"], data["active"],
+         datetime.now(timezone.utc), datetime.now(timezone.utc)),
     )
 
 
 def update_annee_scolaire(id: int, data: dict[str, Any]) -> None:
     execute(
         UPDATE,
-        (data["libelle"], data["date_debut"], data["date_fin"], data["active"], id),
+        (data["libelle"], data["date_debut"], data["date_fin"], data["active"],
+         datetime.now(timezone.utc), id),
     )
 
 

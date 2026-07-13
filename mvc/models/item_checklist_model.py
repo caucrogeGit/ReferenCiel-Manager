@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT item_checklist.*, section_checklist.Titre AS section_id_label FROM item_checklist LEFT JOIN section_checklist ON item_checklist.section_id = section_checklist.Id ORDER BY item_checklist.Id"
 SELECT_BY_ID = "SELECT item_checklist.*, section_checklist.Titre AS section_id_label FROM item_checklist LEFT JOIN section_checklist ON item_checklist.section_id = section_checklist.Id WHERE item_checklist.Id = ?"
-INSERT       = "INSERT INTO item_checklist (Libelle, section_id) VALUES (?, ?)"
-UPDATE       = "UPDATE item_checklist SET Libelle = ?, section_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO item_checklist (Libelle, section_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE item_checklist SET Libelle = ?, section_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM item_checklist WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_item_checklist_by_id(id):
 
 
 def add_item_checklist(data):
-    return insert(INSERT, (data["libelle"], data["section_id"], ))
+    return insert(INSERT, (data["libelle"], data["section_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_item_checklist(id, data):
-    execute(UPDATE, (data["libelle"], data["section_id"], id))
+    execute(UPDATE, (data["libelle"], data["section_id"], datetime.now(timezone.utc), id))
 
 
 def delete_item_checklist(id):

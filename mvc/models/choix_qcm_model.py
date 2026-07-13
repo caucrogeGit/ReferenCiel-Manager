@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT choix_qcm.*, question_qcm.Enonce AS question_id_label FROM choix_qcm LEFT JOIN question_qcm ON choix_qcm.question_id = question_qcm.Id ORDER BY choix_qcm.Id"
 SELECT_BY_ID = "SELECT choix_qcm.*, question_qcm.Enonce AS question_id_label FROM choix_qcm LEFT JOIN question_qcm ON choix_qcm.question_id = question_qcm.Id WHERE choix_qcm.Id = ?"
-INSERT       = "INSERT INTO choix_qcm (Lettre, Texte, question_id) VALUES (?, ?, ?)"
-UPDATE       = "UPDATE choix_qcm SET Lettre = ?, Texte = ?, question_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO choix_qcm (Lettre, Texte, question_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE choix_qcm SET Lettre = ?, Texte = ?, question_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM choix_qcm WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_choix_qcm_by_id(id):
 
 
 def add_choix_qcm(data):
-    return insert(INSERT, (data["lettre"], data["texte"], data["question_id"], ))
+    return insert(INSERT, (data["lettre"], data["texte"], data["question_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_choix_qcm(id, data):
-    execute(UPDATE, (data["lettre"], data["texte"], data["question_id"], id))
+    execute(UPDATE, (data["lettre"], data["texte"], data["question_id"], datetime.now(timezone.utc), id))
 
 
 def delete_choix_qcm(id):

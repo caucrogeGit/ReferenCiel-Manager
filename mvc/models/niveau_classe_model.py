@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT * FROM niveau_classe ORDER BY Id"
 SELECT_BY_ID = "SELECT * FROM niveau_classe WHERE Id = ?"
-INSERT       = "INSERT INTO niveau_classe (Code, Intitule) VALUES (?, ?)"
-UPDATE       = "UPDATE niveau_classe SET Code = ?, Intitule = ? WHERE Id = ?"
+INSERT       = "INSERT INTO niveau_classe (Code, Intitule, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE niveau_classe SET Code = ?, Intitule = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM niveau_classe WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_niveau_classe_by_id(id):
 
 
 def add_niveau_classe(data):
-    return insert(INSERT, (data["code"], data["intitule"], ))
+    return insert(INSERT, (data["code"], data["intitule"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_niveau_classe(id, data):
-    execute(UPDATE, (data["code"], data["intitule"], id))
+    execute(UPDATE, (data["code"], data["intitule"], datetime.now(timezone.utc), id))
 
 
 def delete_niveau_classe(id):

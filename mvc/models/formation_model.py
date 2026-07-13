@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT * FROM formation ORDER BY Id"
 SELECT_BY_ID = "SELECT * FROM formation WHERE Id = ?"
-INSERT       = "INSERT INTO formation (Code, Intitule) VALUES (?, ?)"
-UPDATE       = "UPDATE formation SET Code = ?, Intitule = ? WHERE Id = ?"
+INSERT       = "INSERT INTO formation (Code, Intitule, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE formation SET Code = ?, Intitule = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM formation WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_formation_by_id(id):
 
 
 def add_formation(data):
-    return insert(INSERT, (data["code"], data["intitule"], ))
+    return insert(INSERT, (data["code"], data["intitule"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_formation(id, data):
-    execute(UPDATE, (data["code"], data["intitule"], id))
+    execute(UPDATE, (data["code"], data["intitule"], datetime.now(timezone.utc), id))
 
 
 def delete_formation(id):

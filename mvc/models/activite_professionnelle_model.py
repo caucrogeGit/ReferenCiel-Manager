@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT activite_professionnelle.*, referentiel_niveau_classe.Identifiant AS referentiel_id_label, pole_activite.Intitule AS pole_id_label FROM activite_professionnelle LEFT JOIN referentiel_niveau_classe ON activite_professionnelle.referentiel_id = referentiel_niveau_classe.Id LEFT JOIN pole_activite ON activite_professionnelle.pole_id = pole_activite.Id ORDER BY activite_professionnelle.Id"
 SELECT_BY_ID = "SELECT activite_professionnelle.*, referentiel_niveau_classe.Identifiant AS referentiel_id_label, pole_activite.Intitule AS pole_id_label FROM activite_professionnelle LEFT JOIN referentiel_niveau_classe ON activite_professionnelle.referentiel_id = referentiel_niveau_classe.Id LEFT JOIN pole_activite ON activite_professionnelle.pole_id = pole_activite.Id WHERE activite_professionnelle.Id = ?"
-INSERT       = "INSERT INTO activite_professionnelle (Code, Intitule, ConditionsExercice, referentiel_id, pole_id) VALUES (?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE activite_professionnelle SET Code = ?, Intitule = ?, ConditionsExercice = ?, referentiel_id = ?, pole_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO activite_professionnelle (Code, Intitule, ConditionsExercice, referentiel_id, pole_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE activite_professionnelle SET Code = ?, Intitule = ?, ConditionsExercice = ?, referentiel_id = ?, pole_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM activite_professionnelle WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_activite_professionnelle_by_id(id):
 
 
 def add_activite_professionnelle(data):
-    return insert(INSERT, (data["code"], data["intitule"], data["conditions_exercice"], data["referentiel_id"], data["pole_id"], ))
+    return insert(INSERT, (data["code"], data["intitule"], data["conditions_exercice"], data["referentiel_id"], data["pole_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_activite_professionnelle(id, data):
-    execute(UPDATE, (data["code"], data["intitule"], data["conditions_exercice"], data["referentiel_id"], data["pole_id"], id))
+    execute(UPDATE, (data["code"], data["intitule"], data["conditions_exercice"], data["referentiel_id"], data["pole_id"], datetime.now(timezone.utc), id))
 
 
 def delete_activite_professionnelle(id):

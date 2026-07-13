@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
@@ -10,8 +12,8 @@ _SELECT_BASE = (
 )
 SELECT_ALL   = _SELECT_BASE + " ORDER BY eleve.Id"
 SELECT_BY_ID = _SELECT_BASE + " WHERE eleve.Id = ?"
-INSERT       = "INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, niveau_classe_id) VALUES (?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE eleve SET Nom = ?, Prenom = ?, Identifiant = ?, DateNaissance = ?, UserId = ?, niveau_classe_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, niveau_classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE eleve SET Nom = ?, Prenom = ?, Identifiant = ?, DateNaissance = ?, UserId = ?, niveau_classe_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM eleve WHERE Id = ?"
 
 
@@ -30,11 +32,11 @@ def get_eleve_by_id(id):
 
 
 def add_eleve(data):
-    return insert(INSERT, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["niveau_classe_id"], ))
+    return insert(INSERT, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["niveau_classe_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_eleve(id, data):
-    execute(UPDATE, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["niveau_classe_id"], id))
+    execute(UPDATE, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["niveau_classe_id"], datetime.now(timezone.utc), id))
 
 
 def delete_eleve(id):

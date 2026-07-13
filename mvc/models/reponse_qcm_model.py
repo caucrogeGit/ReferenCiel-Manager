@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT reponse_qcm.*, tentative_qcm.Id AS tentative_id_label, question_qcm.Enonce AS question_id_label, choix_qcm.Lettre AS choix_id_label FROM reponse_qcm LEFT JOIN tentative_qcm ON reponse_qcm.tentative_id = tentative_qcm.Id LEFT JOIN question_qcm ON reponse_qcm.question_id = question_qcm.Id LEFT JOIN choix_qcm ON reponse_qcm.choix_id = choix_qcm.Id ORDER BY reponse_qcm.Id"
 SELECT_BY_ID = "SELECT reponse_qcm.*, tentative_qcm.Id AS tentative_id_label, question_qcm.Enonce AS question_id_label, choix_qcm.Lettre AS choix_id_label FROM reponse_qcm LEFT JOIN tentative_qcm ON reponse_qcm.tentative_id = tentative_qcm.Id LEFT JOIN question_qcm ON reponse_qcm.question_id = question_qcm.Id LEFT JOIN choix_qcm ON reponse_qcm.choix_id = choix_qcm.Id WHERE reponse_qcm.Id = ?"
-INSERT       = "INSERT INTO reponse_qcm (EstCorrecte, tentative_id, question_id, choix_id) VALUES (?, ?, ?, ?)"
-UPDATE       = "UPDATE reponse_qcm SET EstCorrecte = ?, tentative_id = ?, question_id = ?, choix_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO reponse_qcm (EstCorrecte, tentative_id, question_id, choix_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE reponse_qcm SET EstCorrecte = ?, tentative_id = ?, question_id = ?, choix_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM reponse_qcm WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_reponse_qcm_by_id(id):
 
 
 def add_reponse_qcm(data):
-    return insert(INSERT, (data["est_correcte"], data["tentative_id"], data["question_id"], data["choix_id"], ))
+    return insert(INSERT, (data["est_correcte"], data["tentative_id"], data["question_id"], data["choix_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_reponse_qcm(id, data):
-    execute(UPDATE, (data["est_correcte"], data["tentative_id"], data["question_id"], data["choix_id"], id))
+    execute(UPDATE, (data["est_correcte"], data["tentative_id"], data["question_id"], data["choix_id"], datetime.now(timezone.utc), id))
 
 
 def delete_reponse_qcm(id):

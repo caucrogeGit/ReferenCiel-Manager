@@ -11,6 +11,7 @@ competence`. SQL visible et paramétré (esprit Forge). Voir le
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from typing import Any
 
 from core.database.db import fetch_all, fetch_one, insert
@@ -100,8 +101,9 @@ def creer_bilan(
     return insert(
         "INSERT INTO bilan_eleve (AppreciationGlobale, Statut, DateBilan, Synthese, "
         "eleve_id, professeur_id, progression_eleve_id, CreatedAt, UpdatedAt) "
-        "VALUES (?, ?, NOW(), ?, ?, ?, ?, NOW(), NOW())",
-        (appreciation, statut, synthese, eleve_id, professeur_id, progression_eleve_id),
+        "VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?)",
+        (appreciation, statut, synthese, eleve_id, professeur_id, progression_eleve_id,
+         datetime.now(timezone.utc), datetime.now(timezone.utc)),
     )
 
 

@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT critere_observable.*, competence.Code AS competence_id_label FROM critere_observable LEFT JOIN competence ON critere_observable.competence_id = competence.Id ORDER BY critere_observable.Id"
 SELECT_BY_ID = "SELECT critere_observable.*, competence.Code AS competence_id_label FROM critere_observable LEFT JOIN competence ON critere_observable.competence_id = competence.Id WHERE critere_observable.Id = ?"
-INSERT       = "INSERT INTO critere_observable (Code, Libelle, competence_id) VALUES (?, ?, ?)"
-UPDATE       = "UPDATE critere_observable SET Code = ?, Libelle = ?, competence_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO critere_observable (Code, Libelle, competence_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE critere_observable SET Code = ?, Libelle = ?, competence_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM critere_observable WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_critere_observable_by_id(id):
 
 
 def add_critere_observable(data):
-    return insert(INSERT, (data["code"], data["libelle"], data["competence_id"], ))
+    return insert(INSERT, (data["code"], data["libelle"], data["competence_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_critere_observable(id, data):
-    execute(UPDATE, (data["code"], data["libelle"], data["competence_id"], id))
+    execute(UPDATE, (data["code"], data["libelle"], data["competence_id"], datetime.now(timezone.utc), id))
 
 
 def delete_critere_observable(id):

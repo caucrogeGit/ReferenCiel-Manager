@@ -1,8 +1,10 @@
 # Retour terrain 021 — session orpheline (`AuthMiddleware`), split SQL en commentaire, cycle serveur
 
-**Statut :** à traiter. **F53** (split SQL) et **F54** (session orpheline) sont
-reproductibles et contournés côté application ; **F55** est une incohérence à
-confirmer ; la dernière section est une **piste** (non prouvée) sur `forge run`.
+**Statut :** ✅ **traité côté Forge et adopté** (montée `0aef2f01` / `1.0.0rc2`).
+**F53** (ADR-079, split SQL conscient des commentaires), **F54/F55** (ADR-080,
+`user_loader` : sujet authentifié autoritaire), **F56** (ADR-081, horodatages en
+autorité Python). Adoption applicative : REFCIEL-ADOPT-021-001 (contournements
+retirés). Seule la **piste** `forge run`/port reste non traitée (cause externe).
 
 ## Environnement
 
@@ -76,6 +78,11 @@ confirmer ; la dernière section est une **piste** (non prouvée) sur `forge run
   (vérifie l'existence en base, ferme la session, redirige) placé avant
   `AuthMiddleware`, plus un rejeu du contrôle dans le contrôleur de la racine `/`
   (publique, hors chaîne de middlewares).
+- **✅ Corrigé Forge** (ADR-080, `0aef2f01`) : `AuthMiddleware` accepte un
+  `user_loader` et valide l'existence **et** l'activité du sujet, fermant la
+  session orpheline (logout + purge cookie). Contournement **retiré** :
+  `mvc/middlewares/session_integrity.py` supprimé ; la home publique résout le
+  sujet via `current_user()` natif (REFCIEL-ADOPT-021-001, étape 2).
 
 ### F55 — Deux définitions de `is_authenticated` dans le contexte de rendu (à confirmer)
 
@@ -93,6 +100,11 @@ confirmer ; la dernière section est une **piste** (non prouvée) sur `forge run
 - **Piste** : converger vers **une** définition (idéalement adossée au loader, donc
   à l'existence réelle du sujet), pour que `is_authenticated`, `can(...)` et
   `current_user` soient toujours cohérents. À confirmer par un test dédié.
+- **✅ Corrigé Forge** (ADR-080, `0aef2f01`) : `make_contract_jinja_context` accepte
+  un `user_loader` ; le provider Jinja adossé au loader rend `is_authenticated` /
+  `current_user` **autoritaires** (une orpheline est vue non authentifiée, plus de
+  menu fantôme). Câblé dans `mvc/routes/__init__.py`, enregistré après l'opt-in
+  pour écraser le provider « table » auto-inscrit (REFCIEL-ADOPT-021-001, étape 3).
 
 ### F56 — `make:crud` expose les horodatages et `timestamps: true` ne pose pas de défaut SQL
 
@@ -121,6 +133,19 @@ confirmer ; la dernière section est une **piste** (non prouvée) sur `forge run
 - **Contournement appliqué** : migration transverse posant les défauts/`ON UPDATE`
   sur les 43 tables horodatées, puis retrait de `created_at`/`updated_at` des 36
   formulaires, modèles et vues.
+- **✅ Corrigé Forge** (ADR-081, `0aef2f01`) — **autorité Python** retenue (et non
+  la base) : le normaliseur marque `created_at`/`updated_at` `managed` ; `make:crud`
+  génère des modèles qui posent les valeurs via `datetime.now(timezone.utc)` (INSERT
+  les deux, UPDATE `updated_at` seul, `created_at` stable), formulaires exclus, DDL
+  **sans** `DEFAULT`. Adoption (REFCIEL-ADOPT-021-001, étape 4, option B) : les 37
+  modèles d'entité repassés en autorité Python (via régénération contrôlée par le
+  générateur officiel), migration corrective `timestamps_python_authority` retirant
+  les `DEFAULT`/`ON UPDATE`. **Note** : contrairement à notre premier stopgap
+  (autorité base), Forge a tranché l'autorité **Python** ; toutes les voies de seed
+  (`.sql` générés par `fixtures:generate` + `apply_timestamps`, `referentiel_importer`
+  via `NOW()`) fournissent déjà les horodatages, donc le retrait des défauts ne casse
+  rien (`make check` vert). Le bug latent `classe_model` (INSERT 6 `?` / 4 valeurs)
+  est corrigé au passage.
 
 ## Piste (non prouvée) — `forge run` : libération du port au redémarrage
 
@@ -142,9 +167,9 @@ Deux pistes tout de même, à vérifier côté framework :
 | Réf | Sujet | Gravité | État |
 |---|---|---|---|
 | F53 | Split SQL coupe sur `;` en commentaire | moyen | ✅ corrigé Forge (ADR-079, `0aef2f01`) |
-| F54 | Session orpheline non invalidée | moyen | reproductible, contourné |
-| F55 | `is_authenticated` à deux sources | faible | à confirmer |
-| F56 | `make:crud` expose les horodatages ; pas de défaut SQL | moyen | reproductible, contourné |
+| F54 | Session orpheline non invalidée | moyen | ✅ corrigé Forge (ADR-080, `0aef2f01`) |
+| F55 | `is_authenticated` à deux sources | faible | ✅ corrigé Forge (ADR-080, `0aef2f01`) |
+| F56 | `make:crud` expose les horodatages ; pas de défaut SQL | moyen | ✅ corrigé Forge (ADR-081, `0aef2f01`) — autorité Python |
 | — | `forge run` / port (SO_REUSEADDR, arrêt propre) | faible | piste, non prouvée |
 
 ## Référence

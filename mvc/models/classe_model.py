@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
@@ -5,7 +7,7 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 SELECT_ALL   = "SELECT classe.*, annee_scolaire.Libelle AS annee_scolaire_id_label, niveau_classe.Code AS niveau_classe_id_label FROM classe LEFT JOIN annee_scolaire ON classe.annee_scolaire_id = annee_scolaire.Id LEFT JOIN niveau_classe ON classe.niveau_classe_id = niveau_classe.Id ORDER BY classe.Id"
 SELECT_BY_ID = "SELECT * FROM classe WHERE Id = ?"
 INSERT       = "INSERT INTO classe (Code, Libelle, CreatedAt, UpdatedAt, annee_scolaire_id, niveau_classe_id) VALUES (?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE classe SET Code = ?, Libelle = ?, CreatedAt = ?, UpdatedAt = ?, annee_scolaire_id = ?, niveau_classe_id = ? WHERE Id = ?"
+UPDATE       = "UPDATE classe SET Code = ?, Libelle = ?, UpdatedAt = ?, annee_scolaire_id = ?, niveau_classe_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM classe WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_classe_by_id(id):
 
 
 def add_classe(data):
-    return insert(INSERT, (data["code"], data["libelle"], data["annee_scolaire_id"], data["niveau_classe_id"],))
+    return insert(INSERT, (data["code"], data["libelle"], datetime.now(timezone.utc), datetime.now(timezone.utc), data["annee_scolaire_id"], data["niveau_classe_id"],))
 
 
 def update_classe(id, data):
-    execute(UPDATE, (data["code"], data["libelle"], data["annee_scolaire_id"], data["niveau_classe_id"], id))
+    execute(UPDATE, (data["code"], data["libelle"], datetime.now(timezone.utc), data["annee_scolaire_id"], data["niveau_classe_id"], id))
 
 
 def delete_classe(id):

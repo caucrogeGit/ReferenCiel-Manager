@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT competence.*, referentiel_niveau_classe.Identifiant AS referentiel_id_label FROM competence LEFT JOIN referentiel_niveau_classe ON competence.referentiel_id = referentiel_niveau_classe.Id ORDER BY competence.Id"
 SELECT_BY_ID = "SELECT competence.*, referentiel_niveau_classe.Identifiant AS referentiel_id_label FROM competence LEFT JOIN referentiel_niveau_classe ON competence.referentiel_id = referentiel_niveau_classe.Id WHERE competence.Id = ?"
-INSERT       = "INSERT INTO competence (Code, Intitule, referentiel_id) VALUES (?, ?, ?)"
-UPDATE       = "UPDATE competence SET Code = ?, Intitule = ?, referentiel_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO competence (Code, Intitule, referentiel_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE competence SET Code = ?, Intitule = ?, referentiel_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM competence WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_competence_by_id(id):
 
 
 def add_competence(data):
-    return insert(INSERT, (data["code"], data["intitule"], data["referentiel_id"], ))
+    return insert(INSERT, (data["code"], data["intitule"], data["referentiel_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_competence(id, data):
-    execute(UPDATE, (data["code"], data["intitule"], data["referentiel_id"], id))
+    execute(UPDATE, (data["code"], data["intitule"], data["referentiel_id"], datetime.now(timezone.utc), id))
 
 
 def delete_competence(id):

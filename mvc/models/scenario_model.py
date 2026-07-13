@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT scenario.*, referentiel_niveau_classe.Identifiant AS referentiel_id_label, professeur.Nom AS auteur_id_label FROM scenario LEFT JOIN referentiel_niveau_classe ON scenario.referentiel_id = referentiel_niveau_classe.Id LEFT JOIN professeur ON scenario.auteur_id = professeur.Id ORDER BY scenario.Id"
 SELECT_BY_ID = "SELECT scenario.*, referentiel_niveau_classe.Identifiant AS referentiel_id_label, professeur.Nom AS auteur_id_label FROM scenario LEFT JOIN referentiel_niveau_classe ON scenario.referentiel_id = referentiel_niveau_classe.Id LEFT JOIN professeur ON scenario.auteur_id = professeur.Id WHERE scenario.Id = ?"
-INSERT       = "INSERT INTO scenario (Titre, Intention, Objectifs, Statut, Version, referentiel_id, auteur_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE scenario SET Titre = ?, Intention = ?, Objectifs = ?, Statut = ?, Version = ?, referentiel_id = ?, auteur_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO scenario (Titre, Intention, Objectifs, Statut, Version, referentiel_id, auteur_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE scenario SET Titre = ?, Intention = ?, Objectifs = ?, Statut = ?, Version = ?, referentiel_id = ?, auteur_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM scenario WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_scenario_by_id(id):
 
 
 def add_scenario(data):
-    return insert(INSERT, (data["titre"], data["intention"], data["objectifs"], data["statut"], data["version"], data["referentiel_id"], data["auteur_id"], ))
+    return insert(INSERT, (data["titre"], data["intention"], data["objectifs"], data["statut"], data["version"], data["referentiel_id"], data["auteur_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_scenario(id, data):
-    execute(UPDATE, (data["titre"], data["intention"], data["objectifs"], data["statut"], data["version"], data["referentiel_id"], data["auteur_id"], id))
+    execute(UPDATE, (data["titre"], data["intention"], data["objectifs"], data["statut"], data["version"], data["referentiel_id"], data["auteur_id"], datetime.now(timezone.utc), id))
 
 
 def delete_scenario(id):

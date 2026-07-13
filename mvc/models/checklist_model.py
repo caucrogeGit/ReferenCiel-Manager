@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT checklist.*, palier.Titre AS palier_id_label FROM checklist LEFT JOIN palier ON checklist.palier_id = palier.Id ORDER BY checklist.Id"
 SELECT_BY_ID = "SELECT checklist.*, palier.Titre AS palier_id_label FROM checklist LEFT JOIN palier ON checklist.palier_id = palier.Id WHERE checklist.Id = ?"
-INSERT       = "INSERT INTO checklist (DecisionFinale, palier_id) VALUES (?, ?)"
-UPDATE       = "UPDATE checklist SET DecisionFinale = ?, palier_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO checklist (DecisionFinale, palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE checklist SET DecisionFinale = ?, palier_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM checklist WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_checklist_by_id(id):
 
 
 def add_checklist(data):
-    return insert(INSERT, (data["decision_finale"], data["palier_id"], ))
+    return insert(INSERT, (data["decision_finale"], data["palier_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_checklist(id, data):
-    execute(UPDATE, (data["decision_finale"], data["palier_id"], id))
+    execute(UPDATE, (data["decision_finale"], data["palier_id"], datetime.now(timezone.utc), id))
 
 
 def delete_checklist(id):

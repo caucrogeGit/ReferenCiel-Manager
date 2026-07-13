@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT pole_activite.*, referentiel_niveau_classe.Identifiant AS referentiel_id_label FROM pole_activite LEFT JOIN referentiel_niveau_classe ON pole_activite.referentiel_id = referentiel_niveau_classe.Id ORDER BY pole_activite.Id"
 SELECT_BY_ID = "SELECT pole_activite.*, referentiel_niveau_classe.Identifiant AS referentiel_id_label FROM pole_activite LEFT JOIN referentiel_niveau_classe ON pole_activite.referentiel_id = referentiel_niveau_classe.Id WHERE pole_activite.Id = ?"
-INSERT       = "INSERT INTO pole_activite (Intitule, referentiel_id) VALUES (?, ?)"
-UPDATE       = "UPDATE pole_activite SET Intitule = ?, referentiel_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO pole_activite (Intitule, referentiel_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE pole_activite SET Intitule = ?, referentiel_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM pole_activite WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_pole_activite_by_id(id):
 
 
 def add_pole_activite(data):
-    return insert(INSERT, (data["intitule"], data["referentiel_id"], ))
+    return insert(INSERT, (data["intitule"], data["referentiel_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_pole_activite(id, data):
-    execute(UPDATE, (data["intitule"], data["referentiel_id"], id))
+    execute(UPDATE, (data["intitule"], data["referentiel_id"], datetime.now(timezone.utc), id))
 
 
 def delete_pole_activite(id):

@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT inscription_eleve.*, eleve.Nom AS eleve_id_label, classe.Libelle AS classe_id_label, annee_scolaire.Libelle AS annee_scolaire_id_label FROM inscription_eleve LEFT JOIN eleve ON inscription_eleve.eleve_id = eleve.Id LEFT JOIN classe ON inscription_eleve.classe_id = classe.Id LEFT JOIN annee_scolaire ON inscription_eleve.annee_scolaire_id = annee_scolaire.Id ORDER BY inscription_eleve.Id"
 SELECT_BY_ID = "SELECT inscription_eleve.*, eleve.Nom AS eleve_id_label, classe.Libelle AS classe_id_label, annee_scolaire.Libelle AS annee_scolaire_id_label FROM inscription_eleve LEFT JOIN eleve ON inscription_eleve.eleve_id = eleve.Id LEFT JOIN classe ON inscription_eleve.classe_id = classe.Id LEFT JOIN annee_scolaire ON inscription_eleve.annee_scolaire_id = annee_scolaire.Id WHERE inscription_eleve.Id = ?"
-INSERT       = "INSERT INTO inscription_eleve (DateInscription, eleve_id, classe_id, annee_scolaire_id) VALUES (?, ?, ?, ?)"
-UPDATE       = "UPDATE inscription_eleve SET DateInscription = ?, eleve_id = ?, classe_id = ?, annee_scolaire_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO inscription_eleve (DateInscription, eleve_id, classe_id, annee_scolaire_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE inscription_eleve SET DateInscription = ?, eleve_id = ?, classe_id = ?, annee_scolaire_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM inscription_eleve WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_inscription_eleve_by_id(id):
 
 
 def add_inscription_eleve(data):
-    return insert(INSERT, (data["date_inscription"], data["eleve_id"], data["classe_id"], data["annee_scolaire_id"], ))
+    return insert(INSERT, (data["date_inscription"], data["eleve_id"], data["classe_id"], data["annee_scolaire_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_inscription_eleve(id, data):
-    execute(UPDATE, (data["date_inscription"], data["eleve_id"], data["classe_id"], data["annee_scolaire_id"], id))
+    execute(UPDATE, (data["date_inscription"], data["eleve_id"], data["classe_id"], data["annee_scolaire_id"], datetime.now(timezone.utc), id))
 
 
 def delete_inscription_eleve(id):

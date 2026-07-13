@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT affectation_parcours.*, version_parcours.Version AS version_parcours_id_label, classe.Libelle AS classe_id_label, professeur.Nom AS professeur_id_label FROM affectation_parcours LEFT JOIN version_parcours ON affectation_parcours.version_parcours_id = version_parcours.Id LEFT JOIN classe ON affectation_parcours.classe_id = classe.Id LEFT JOIN professeur ON affectation_parcours.professeur_id = professeur.Id ORDER BY affectation_parcours.Id"
 SELECT_BY_ID = "SELECT affectation_parcours.*, version_parcours.Version AS version_parcours_id_label, classe.Libelle AS classe_id_label, professeur.Nom AS professeur_id_label FROM affectation_parcours LEFT JOIN version_parcours ON affectation_parcours.version_parcours_id = version_parcours.Id LEFT JOIN classe ON affectation_parcours.classe_id = classe.Id LEFT JOIN professeur ON affectation_parcours.professeur_id = professeur.Id WHERE affectation_parcours.Id = ?"
-INSERT       = "INSERT INTO affectation_parcours (DateAffectation, Statut, version_parcours_id, classe_id, professeur_id) VALUES (?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE affectation_parcours SET DateAffectation = ?, Statut = ?, version_parcours_id = ?, classe_id = ?, professeur_id = ? WHERE Id = ?"
+INSERT       = "INSERT INTO affectation_parcours (DateAffectation, Statut, version_parcours_id, classe_id, professeur_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE affectation_parcours SET DateAffectation = ?, Statut = ?, version_parcours_id = ?, classe_id = ?, professeur_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM affectation_parcours WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_affectation_parcours_by_id(id):
 
 
 def add_affectation_parcours(data):
-    return insert(INSERT, (data["date_affectation"], data["statut"], data["version_parcours_id"], data["classe_id"], data["professeur_id"], ))
+    return insert(INSERT, (data["date_affectation"], data["statut"], data["version_parcours_id"], data["classe_id"], data["professeur_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_affectation_parcours(id, data):
-    execute(UPDATE, (data["date_affectation"], data["statut"], data["version_parcours_id"], data["classe_id"], data["professeur_id"], id))
+    execute(UPDATE, (data["date_affectation"], data["statut"], data["version_parcours_id"], data["classe_id"], data["professeur_id"], datetime.now(timezone.utc), id))
 
 
 def delete_affectation_parcours(id):

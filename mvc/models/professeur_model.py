@@ -1,11 +1,13 @@
+from datetime import datetime, timezone
+
 from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT * FROM professeur ORDER BY Id"
 SELECT_BY_ID = "SELECT * FROM professeur WHERE Id = ?"
-INSERT       = "INSERT INTO professeur (Nom, Prenom, UserId) VALUES (?, ?, ?)"
-UPDATE       = "UPDATE professeur SET Nom = ?, Prenom = ?, UserId = ? WHERE Id = ?"
+INSERT       = "INSERT INTO professeur (Nom, Prenom, UserId, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE professeur SET Nom = ?, Prenom = ?, UserId = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM professeur WHERE Id = ?"
 
 
@@ -18,11 +20,11 @@ def get_professeur_by_id(id):
 
 
 def add_professeur(data):
-    return insert(INSERT, (data["nom"], data["prenom"], data["user_id"], ))
+    return insert(INSERT, (data["nom"], data["prenom"], data["user_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_professeur(id, data):
-    execute(UPDATE, (data["nom"], data["prenom"], data["user_id"], id))
+    execute(UPDATE, (data["nom"], data["prenom"], data["user_id"], datetime.now(timezone.utc), id))
 
 
 def delete_professeur(id):
