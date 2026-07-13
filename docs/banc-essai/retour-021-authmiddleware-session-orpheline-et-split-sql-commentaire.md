@@ -40,6 +40,12 @@ confirmer ; la dernière section est une **piste** (non prouvée) sur `forge run
   toutes (commentaires **et** chaînes).
 
 - **Contournement appliqué** : ne mettre aucun `;` dans les commentaires de migration.
+- **✅ Corrigé Forge** (ADR-079, commit `0aef2f01`, `1.0.0rc2`) : le découpeur
+  `split_sql_statements` est désormais **conscient des commentaires** (`--`, `/* … */`).
+  Vérifié dans ce projet : un commentaire contenant à la fois un `;` **et** une
+  apostrophe (le cas `retour-012` / F27) ne casse plus le découpage. **La règle
+  interne « pas de `;` ni de `'` dans les commentaires de migration » est levée**
+  (adoption REFCIEL-ADOPT-021-001, étape 1).
 
 ### F54 — `AuthMiddleware` : présence d'un `user_id` ≠ existence du compte (session orpheline)
 
@@ -135,7 +141,7 @@ Deux pistes tout de même, à vérifier côté framework :
 
 | Réf | Sujet | Gravité | État |
 |---|---|---|---|
-| F53 | Split SQL coupe sur `;` en commentaire | moyen | reproductible, contourné |
+| F53 | Split SQL coupe sur `;` en commentaire | moyen | ✅ corrigé Forge (ADR-079, `0aef2f01`) |
 | F54 | Session orpheline non invalidée | moyen | reproductible, contourné |
 | F55 | `is_authenticated` à deux sources | faible | à confirmer |
 | F56 | `make:crud` expose les horodatages ; pas de défaut SQL | moyen | reproductible, contourné |
