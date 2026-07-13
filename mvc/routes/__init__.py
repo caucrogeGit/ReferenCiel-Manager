@@ -42,6 +42,8 @@ from mvc.routes.activite_professionnelle_routes import register_activite_profess
 from mvc.routes.competence_routes import register_competence_routes
 from mvc.routes.critere_observable_routes import register_critere_observable_routes
 from mvc.routes.famille_competence_routes import register_famille_competence_routes
+# Atelier référentiel (ADR-018) : vue cohérente d'un référentiel.
+from mvc.routes.referentiel_atelier_routes import register_referentiel_atelier_routes
 from mvc.routes.password_reset_routes import register_password_reset_routes
 from mvc.routes.palier_routes import register_palier_routes
 from mvc.routes.parcours_routes import register_parcours_routes
@@ -89,6 +91,9 @@ register_activite_professionnelle_routes(router)
 register_competence_routes(router)
 register_critere_observable_routes(router)
 register_famille_competence_routes(router)
+
+# Atelier référentiel (ADR-018) : interface principale de gestion d'un référentiel.
+register_referentiel_atelier_routes(router)
 
 # Routes appliquées pour : classe_controller
 register_classe_routes(router)
@@ -225,6 +230,8 @@ RBAC_PREFIX_RULES: dict[str, str] = {
     "/affectation_professeur_classe": "socle.gerer",
     "/groupe": "socle.gerer",
     "/admin": "socle.gerer",
+    # Atelier référentiel (ADR-018) : interface principale, referentiel.gerer.
+    "/referentiel": "referentiel.gerer",
     # Entités du référentiel (CRUD admin) : referentiel.gerer (admin).
     "/formation": "referentiel.gerer",
     "/pole_activite": "referentiel.gerer",
