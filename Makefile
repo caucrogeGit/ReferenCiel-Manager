@@ -4,7 +4,7 @@
 
 VENV := .venv/bin
 
-.PHONY: help setup check type lint test docs docs-serve run stop restart forge-upgrade skeleton-check
+.PHONY: help setup check type lint test docs docs-serve run forge-upgrade skeleton-check
 
 help:
 	@echo "make setup                      — installe toutes les dépendances (prêt au dev)"
@@ -15,8 +15,6 @@ help:
 	@echo "make docs                       — build documentation (mkdocs --strict)"
 	@echo "make docs-serve                 — documentation en local (mkdocs serve)"
 	@echo "make run                        — lance l'application (forge run)"
-	@echo "make stop                       — arrête les 'forge run' de ce projet (libère le port)"
-	@echo "make restart                    — arrête puis relance proprement (évite le port occupé)"
 	@echo "make forge-upgrade COMMIT=<sha> — monte forge-mvc au commit cible + check (ADR-009)"
 	@echo "make skeleton-check REF=<dir>   — liste les écarts squelette vs un forge new neuf (ADR-009)"
 
@@ -43,17 +41,6 @@ docs-serve:
 	$(VENV)/mkdocs serve
 
 run:
-	$(VENV)/forge run
-
-# Arrêt propre : tue les 'forge run' de CE projet (évite les orphelins qui
-# gardent le port occupé). Restreint à $(CURDIR) pour ne pas toucher un autre
-# projet Forge lancé en parallèle.
-stop:
-	@pkill -f "$(CURDIR).*forge run" && echo "forge run arrêté." || echo "aucun forge run à arrêter."
-
-# Redémarrage propre : arrête l'ancien serveur, laisse le port se libérer, relance.
-restart: stop
-	@sleep 1
 	$(VENV)/forge run
 
 # --- Montée de squelette Forge (ADR-009) ---
