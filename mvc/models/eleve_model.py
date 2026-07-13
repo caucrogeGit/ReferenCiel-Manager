@@ -2,11 +2,23 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT * FROM eleve ORDER BY Id"
-SELECT_BY_ID = "SELECT * FROM eleve WHERE Id = ?"
-INSERT       = "INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE eleve SET Nom = ?, Prenom = ?, Identifiant = ?, DateNaissance = ?, UserId = ?, CreatedAt = ?, UpdatedAt = ? WHERE Id = ?"
+# Lectures : jointure vers niveau_classe pour exposer un libellé (niveau_classe_id_label).
+_SELECT_BASE = (
+    "SELECT eleve.*, niveau_classe.Code AS niveau_classe_id_label "
+    "FROM eleve "
+    "LEFT JOIN niveau_classe ON eleve.niveau_classe_id = niveau_classe.Id"
+)
+SELECT_ALL   = _SELECT_BASE + " ORDER BY eleve.Id"
+SELECT_BY_ID = _SELECT_BASE + " WHERE eleve.Id = ?"
+INSERT       = "INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, niveau_classe_id) VALUES (?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE eleve SET Nom = ?, Prenom = ?, Identifiant = ?, DateNaissance = ?, UserId = ?, niveau_classe_id = ? WHERE Id = ?"
 DELETE       = "DELETE FROM eleve WHERE Id = ?"
+
+
+def get_niveau_classe_choices() -> list[tuple[Any, str]]:
+    """Options (Id, libellé) pour le champ « Niveau de classe » du formulaire."""
+    rows = fetch_all("SELECT Id, Code, Intitule FROM niveau_classe ORDER BY Code")
+    return [(row["Id"], f"{row['Code']} — {row['Intitule']}") for row in rows]
 
 
 def get_eleves():
@@ -18,11 +30,11 @@ def get_eleve_by_id(id):
 
 
 def add_eleve(data):
-    return insert(INSERT, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["created_at"], data["updated_at"],))
+    return insert(INSERT, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["niveau_classe_id"], ))
 
 
 def update_eleve(id, data):
-    execute(UPDATE, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["created_at"], data["updated_at"], id))
+    execute(UPDATE, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["niveau_classe_id"], id))
 
 
 def delete_eleve(id):
@@ -38,9 +50,9 @@ def bulk_delete_eleves(ids):
 
 
 _SEARCH_COLS  = ['Nom', 'Prenom', 'Identifiant']
-_ALLOWED_SORT = {"nom": "Nom", "prenom": "Prenom", "identifiant": "Identifiant", "date_naissance": "DateNaissance", "user_id": "UserId", "created_at": "CreatedAt", "updated_at": "UpdatedAt", "id": "Id"}
+_ALLOWED_SORT = {"nom": "Nom", "prenom": "Prenom", "identifiant": "Identifiant", "date_naissance": "DateNaissance", "user_id": "UserId", "niveau_classe_id": "eleve.niveau_classe_id", "created_at": "CreatedAt", "updated_at": "UpdatedAt", "id": "eleve.Id"}
 _ALLOWED_FILTERS = {}
-_DEFAULT_SORT = "Id"
+_DEFAULT_SORT = "eleve.Id"
 
 
 def count_eleves(q: str | None = None, filters: dict[str, Any] | None = None) -> int:
@@ -67,7 +79,7 @@ def count_eleves(q: str | None = None, filters: dict[str, Any] | None = None) ->
 def find_eleves_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT * FROM eleve"
+    base = _SELECT_BASE
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:

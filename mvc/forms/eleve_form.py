@@ -1,4 +1,4 @@
-from core.forms import Form, DateField, DateTimeField, IntegerField, StringField
+from core.forms import Form, DateField, IntegerField, RelationField, StringField
 
 
 class EleveForm(Form):
@@ -7,5 +7,4 @@ class EleveForm(Form):
     identifiant = StringField(label="Identifiant", required=False)
     date_naissance = DateField(label="Date naissance", required=False)
     user_id = IntegerField(label="User id", required=False)
-    created_at = DateTimeField(label="Created at", required=True)
-    updated_at = DateTimeField(label="Updated at", required=True)
+    niveau_classe_id = RelationField(label="Niveau de classe", target="NiveauClasse", required=True, choices_key="niveau_classe_id_choices")

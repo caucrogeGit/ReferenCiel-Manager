@@ -7,6 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.eleve_model import (
     get_eleve_by_id, add_eleve, update_eleve, delete_eleve, bulk_delete_eleves,
     count_eleves, find_eleves_paginated, find_eleves_for_export,
+    get_niveau_classe_choices,
 )
 from mvc.forms.eleve_form import EleveForm
 from core.security.session import get_flash, get_session_id
@@ -20,9 +21,15 @@ def _form_data_from_eleve(record: dict) -> dict:
         "identifiant": record.get("Identifiant"),
         "date_naissance": record.get("DateNaissance"),
         "user_id": record.get("UserId"),
+        "niveau_classe_id": record.get("niveau_classe_id"),
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
     }
+
+
+def _eleve_form_options() -> dict:
+    """Options des champs relationnels (listes déroulantes) du formulaire élève."""
+    return {"niveau_classe_id_choices": get_niveau_classe_choices()}
 
 
 def _query_param(request, name, default=""):
@@ -108,7 +115,7 @@ class EleveController(BaseController):
 
     @staticmethod
     def new(request: Request) -> Response:
-        form = EleveForm()
+        form = EleveForm(**_eleve_form_options())
         return BaseController.render("app/eleve/form.html",
             context={
                 "form": form,
@@ -119,7 +126,7 @@ class EleveController(BaseController):
 
     @staticmethod
     def create(request: Request) -> Response:
-        form = EleveForm.from_request(request)
+        form = EleveForm.from_request(request, **_eleve_form_options())
         if not form.is_valid():
             return BaseController.validation_error("app/eleve/form.html",
                 context={
@@ -153,7 +160,7 @@ class EleveController(BaseController):
             return BaseController.not_found()
         return BaseController.render("app/eleve/form.html",
             context={
-                "form": EleveForm(_form_data_from_eleve(eleve)),
+                "form": EleveForm(_form_data_from_eleve(eleve), **_eleve_form_options()),
                 "action": f"/eleve/update/{id}",
                 "titre": "Modifier eleve",
             },
@@ -164,7 +171,7 @@ class EleveController(BaseController):
         id = EleveController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        form = EleveForm.from_request(request)
+        form = EleveForm.from_request(request, **_eleve_form_options())
         if not form.is_valid():
             return BaseController.validation_error("app/eleve/form.html",
                 context={

@@ -40,6 +40,12 @@
       "required": false,
       "nullable": true,
       "unique": true
+    },
+    {
+      "name": "niveau_classe_id",
+      "type": "foreign_key",
+      "references": "NiveauClasse",
+      "required": true
     }
   ],
   "options": {
