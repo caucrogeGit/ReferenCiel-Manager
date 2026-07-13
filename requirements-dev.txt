@@ -14,4 +14,4 @@ bandit>=1.7
 # Infrastructure de test partagée Forge (ADR-041) : FakeRequest + plugin pytest.
 # Épinglée au MÊME commit que forge-mvc (voir requirements.txt) pour garantir la
 # compatibilité de version. Outil de développement — jamais importé à l'exécution.
-forge-mvc-testing @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e#subdirectory=packages/forge-mvc-testing
+forge-mvc-testing @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-testing

@@ -1,24 +1,24 @@
 # Dependances du projet Forge.
 # Le framework et ses dependances runtime (python-dotenv, Jinja2, Argon2,
 # jsonschema) sont fournis par le paquet forge-mvc.
-forge-mvc @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e
+forge-mvc @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052
 # Couche de donnees (ADR-070) : le moteur d'entites (make:entity, make:relation,
 # make:crud, sync:*, entity:validate, migrations, db:*) est un opt-in separe depuis
 # 32f552cc. Ce projet modelise des donnees -> il est REQUIS, epingle au MEME commit
 # que forge-mvc (voir aussi tools/forge-upgrade.sh qui bumpe tous les paquets).
-forge-mvc-entities @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e#subdirectory=packages/forge-mvc-entities
+forge-mvc-entities @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-entities
 # Opt-ins actives de ce projet (ADR-061, voir optins/registry.py) : rbac, mfa,
 # admin, files, fixtures, sessions-db. Epingles au MEME commit que forge-mvc :
 # le monorepo Forge doit rester a un sha unique (melanger coeur et opt-ins est
 # fragile, cf. retour-021). Reinstalles par tools/forge-upgrade.sh (ADR-009).
-forge-mvc-rbac @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e#subdirectory=packages/forge-mvc-rbac
-forge-mvc-mfa @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e#subdirectory=packages/forge-mvc-mfa
-forge-mvc-admin @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e#subdirectory=packages/forge-mvc-admin
-forge-mvc-files @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e#subdirectory=packages/forge-mvc-files
-forge-mvc-fixtures @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e#subdirectory=packages/forge-mvc-fixtures
-forge-mvc-sessions-db @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e#subdirectory=packages/forge-mvc-sessions-db
+forge-mvc-rbac @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-rbac
+forge-mvc-mfa @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-mfa
+forge-mvc-admin @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-admin
+forge-mvc-files @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-files
+forge-mvc-fixtures @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-fixtures
+forge-mvc-sessions-db @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-sessions-db
 # Backend base de donnees (ADR-054/060) : le coeur est agnostique BDD et le
 # squelette est livre SANS backend. Ce projet a choisi MariaDB (optins/registry.py:
 # BACKEND="mariadb"), epingle ici au MEME commit. Autres backends possibles :
 #   forge-mvc-sqlite / forge-mvc-postgres / forge-mvc-mssql
-forge-mvc-mariadb @ git+https://github.com/caucrogeGit/Forge.git@40b9d7b8e93b110c5ad2a82dd13775a9dc966a2e#subdirectory=packages/forge-mvc-mariadb
+forge-mvc-mariadb @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-mariadb
