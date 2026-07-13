@@ -1,19 +1,38 @@
 {# Navigation applicative — menus déroulants par domaine (grands points d'entrée).
    Style : static/nav.css. `is_authenticated` / `csrf_token` injectés par BaseController.render ;
-   `can(permission)` injecté par la couche RBAC (mvc/services/rbac.py, provider Jinja).
-   Visibilité pilotée par le RÔLE : chaque rubrique est gardée par sa permission (contrat
-   mvc/security/rbac.json). Le masquage n'est que du confort : les routes sensibles sont
-   AUSSI protégées par `guarded(...)` (mvc/routes/…). Le bouton Connexion/Déconnexion reste
-   toujours visible. #}
+   `can(permission)` et `current_user` injectés par le provider Jinja RBAC natif
+   (forge-mvc-rbac, ADR-015). Visibilité pilotée par le RÔLE : chaque rubrique est gardée
+   par sa permission (contrat mvc/security/rbac.json). Le masquage n'est que du confort :
+   les routes sensibles sont AUSSI protégées par `guarded(...)` (mvc/routes/…). Le menu
+   profil (identité + Sécurité + Déconnexion) remplace l'ancien bouton et n'est visible
+   qu'authentifié. #}
 {% from "components/ui.html" import button %}
 <div class="app-nav">
     {# Pas de lien « Accueil » : le brand {{ app_name }} du header (base.html)
        pointe déjà vers « / ». #}
+
+    {% if can('referentiel.gerer') %}
+    <div class="nav-item">
+        <button class="nav-trigger" type="button">Référentiel ▾</button>
+        <div class="nav-menu">
+            <div class="nav-group-label">Import</div>
+            <a href="/admin/referentiel/import">Importer un référentiel</a>
+            <a href="/admin/referentiels">Référentiels importés</a>
+            <div class="nav-group-label">Objets du référentiel</div>
+            <a href="/formation">Formations</a>
+            <a href="/pole_activite">Pôles d'activités</a>
+            <a href="/activite_professionnelle">Activités professionnelles</a>
+            <a href="/competence">Compétences</a>
+            <a href="/critere_observable">Critères observables</a>
+            <a href="/famille_competence">Familles de compétences</a>
+        </div>
+    </div>
+    {% endif %}
+
     {% if can('socle.gerer') %}
     <div class="nav-item">
-        <button class="nav-trigger" type="button">Admin ▾</button>
+        <button class="nav-trigger" type="button">Structure scolaire ▾</button>
         <div class="nav-menu">
-            <div class="nav-group-label">Structure scolaire</div>
             <a href="/annee_scolaire">Années scolaires</a>
             <a href="/niveau_classe">Niveaux de classe</a>
             <a href="/classe">Classes</a>
@@ -24,14 +43,14 @@
             <a href="/inscription_eleve">Inscriptions</a>
             <a href="/affectation_professeur_classe">Affectations professeur</a>
             <a href="/groupe">Groupes</a>
-            <div class="nav-group-label">Référentiel</div>
-            <a href="/admin/referentiel/import">Importer un référentiel</a>
-            <a href="/admin/referentiels">Référentiels importés</a>
-            <div class="nav-group-label">Administration</div>
-            <a href="/admin">Tableau de bord</a>
         </div>
     </div>
+    {% endif %}
 
+    
+
+    {% if can('socle.gerer') %}
+    <a href="/admin" class="nav-link">Tableau de bord</a>
     {% endif %}
 
     {% if can('conception.gerer') %}
@@ -77,11 +96,39 @@
     {% endif %}
 
     {% if is_authenticated %}
-    <a href="/securite" class="nav-link">Sécurité</a>
-    <form method="post" action="/logout" style="display:inline">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        {{ button("Déconnexion", variant="secondary", type="submit") }}
-    </form>
+    {# Menu profil (aligné à droite) : identité + options de compte. Même mécanique
+       de déroulé que les autres menus (survol/focus, sans JS). La Déconnexion reste
+       un POST porteur du jeton CSRF. #}
+    <div class="nav-item nav-profile">
+        <button class="nav-trigger nav-profile-trigger" type="button"
+                aria-haspopup="menu" aria-label="Menu du profil">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+            </svg>
+        </button>
+        <div class="nav-menu nav-menu-right" role="menu">
+            {% if current_user and current_user.email %}
+            <div class="nav-profile-identity" title="{{ current_user.email }}">
+                <span class="nav-profile-email">{{ current_user.email }}</span>
+                <span class="nav-profile-role">
+                    {% if can('socle.gerer') %}Administrateur
+                    {% elif can('conception.gerer') %}Professeur
+                    {% elif can('espace_eleve.voir') %}Élève{% endif %}
+                </span>
+            </div>
+            {% endif %}
+            <a href="/profil" role="menuitem">Mon profil</a>
+            <a href="/preferences" role="menuitem">Préférences</a>
+            <a href="/a-propos" role="menuitem">À propos</a>
+            <form method="post" action="/logout" class="nav-profile-logout">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="nav-menu-button" role="menuitem">Déconnexion</button>
+            </form>
+        </div>
+    </div>
     {% else %}
     {{ button("Connexion", variant="primary", href="/login") }}
     {% endif %}
