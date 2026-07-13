@@ -3,7 +3,7 @@
 {% from "components/ui.html" import flash_messages %}
 {{ flash_messages(flash) }}
 
-<div class="flex justify-between items-start mb-6">
+<div class="flex justify-between items-start mb-4">
   <div>
     <a href="/referentiel" class="text-gray-600 hover:underline text-sm">← Tous les référentiels</a>
     <h1 class="text-2xl font-bold text-gray-800 mt-1">{{ ref.Identifiant }}</h1>
@@ -16,95 +16,97 @@
   <a href="/admin/referentiel/import" class="text-blue-600 hover:underline text-sm">Importer / mettre à jour</a>
 </div>
 
-<div class="grid md:grid-cols-4 gap-6">
-  <nav class="md:col-span-1 text-sm text-gray-700 md:sticky md:top-4 self-start space-y-1">
-    <a href="#poles" class="block hover:underline">Pôles d'activité ({{ arbre.poles | length }})</a>
-    <a href="#competences" class="block hover:underline">Compétences ({{ arbre.competences | length }})</a>
-    <a href="#familles" class="block hover:underline">Familles ({{ arbre.familles | length }})</a>
-    <a href="#sources" class="block hover:underline">Sources ({{ arbre.sources | length }})</a>
-    <a href="#indicateurs" class="block hover:underline">Indicateurs ({{ arbre.indicateurs | length }})</a>
-  </nav>
+<!-- Menu de navigation propre à cette page (en haut) -->
+<nav class="sticky top-0 z-10 bg-white shadow rounded mb-6 px-2">
+  <ul class="flex flex-wrap items-center gap-1 text-sm font-medium">
+    <li><a href="#poles" class="block px-3 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Pôles d'activité <span class="text-xs text-gray-400">({{ arbre.poles | length }})</span></a></li>
+    <li><a href="#competences" class="block px-3 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Compétences <span class="text-xs text-gray-400">({{ arbre.competences | length }})</span></a></li>
+    <li><a href="#familles" class="block px-3 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Familles <span class="text-xs text-gray-400">({{ arbre.familles | length }})</span></a></li>
+    <li><a href="#sources" class="block px-3 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Sources <span class="text-xs text-gray-400">({{ arbre.sources | length }})</span></a></li>
+    <li><a href="#indicateurs" class="block px-3 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Indicateurs <span class="text-xs text-gray-400">({{ arbre.indicateurs | length }})</span></a></li>
+  </ul>
+</nav>
 
-  <div class="md:col-span-3 space-y-6">
+<!-- Affichage -->
+<div class="space-y-6">
 
-    <section id="poles" class="bg-white shadow rounded p-5">
-      <h2 class="text-lg font-semibold text-gray-800 mb-3">Pôles d'activité</h2>
-      {% for pole in arbre.poles %}
-      <details class="border-l-2 border-blue-200 pl-3 mb-3" open>
-        <summary class="cursor-pointer font-medium text-gray-800">{{ pole.Intitule }}</summary>
-        {% for act in pole.activites %}
-        <details class="pl-4 mt-2 border-l border-gray-200">
-          <summary class="cursor-pointer text-gray-800">
-            <span class="text-xs text-gray-400">{{ act.Code }}</span> {{ act.Intitule }}
-          </summary>
-          <div class="pl-4 mt-1 text-sm text-gray-700 space-y-2">
-            {% if act.ConditionsExercice %}<p class="text-gray-500 italic">{{ act.ConditionsExercice }}</p>{% endif %}
-            {% if act.taches %}
-            <div>
-              <p class="text-xs uppercase text-gray-400">Tâches</p>
-              <ul class="list-disc pl-5">{% for t in act.taches %}<li>{{ t.Libelle }}</li>{% endfor %}</ul>
-            </div>
-            {% endif %}
-            {% if act.resultats %}
-            <div>
-              <p class="text-xs uppercase text-gray-400">Résultats attendus</p>
-              <ul class="list-disc pl-5">{% for r in act.resultats %}<li><span class="text-xs text-gray-400">{{ r.Code }}</span> {{ r.Libelle }}</li>{% endfor %}</ul>
-            </div>
-            {% endif %}
+  <section id="poles" class="bg-white shadow rounded p-5 scroll-mt-20">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Pôles d'activité</h2>
+    {% for pole in arbre.poles %}
+    <div class="border-l-2 border-blue-200 pl-3 mb-4">
+      <p class="font-medium text-gray-800">{{ pole.Intitule }}</p>
+      {% for act in pole.activites %}
+      <details class="pl-4 mt-2 border-l border-gray-200" open>
+        <summary class="cursor-pointer text-gray-800">
+          <span class="text-xs text-gray-400">{{ act.Code }}</span> {{ act.Intitule }}
+        </summary>
+        <div class="pl-4 mt-1 text-sm text-gray-700 space-y-2">
+          {% if act.ConditionsExercice %}<p class="text-gray-500 italic">{{ act.ConditionsExercice }}</p>{% endif %}
+          {% if act.taches %}
+          <div>
+            <p class="text-xs uppercase text-gray-400">Tâches</p>
+            <ul class="list-disc pl-5">{% for t in act.taches %}<li>{{ t.Libelle }}</li>{% endfor %}</ul>
           </div>
-        </details>
-        {% else %}<p class="pl-4 text-sm text-gray-400">Aucune activité.</p>{% endfor %}
+          {% endif %}
+          {% if act.resultats %}
+          <div>
+            <p class="text-xs uppercase text-gray-400">Résultats attendus</p>
+            <ul class="list-disc pl-5">{% for r in act.resultats %}<li><span class="text-xs text-gray-400">{{ r.Code }}</span> {{ r.Libelle }}</li>{% endfor %}</ul>
+          </div>
+          {% endif %}
+        </div>
       </details>
-      {% else %}<p class="text-sm text-gray-400">Aucun pôle.</p>{% endfor %}
-    </section>
+      {% else %}<p class="pl-4 text-sm text-gray-400">Aucune activité.</p>{% endfor %}
+    </div>
+    {% else %}<p class="text-sm text-gray-400">Aucun pôle.</p>{% endfor %}
+  </section>
 
-    <section id="competences" class="bg-white shadow rounded p-5">
-      <h2 class="text-lg font-semibold text-gray-800 mb-3">Compétences</h2>
-      {% for comp in arbre.competences %}
-      <details class="border-l-2 border-green-200 pl-3 mb-2">
-        <summary class="cursor-pointer text-gray-800"><span class="text-xs text-gray-400">{{ comp.Code }}</span> {{ comp.Intitule }}</summary>
-        {% if comp.criteres %}
-        <ul class="list-disc pl-8 mt-1 text-sm text-gray-700">
-          {% for c in comp.criteres %}<li><span class="text-xs text-gray-400">{{ c.Code }}</span> {{ c.Libelle }}</li>{% endfor %}
-        </ul>
-        {% else %}<p class="pl-6 text-sm text-gray-400">Aucun critère.</p>{% endif %}
-      </details>
-      {% else %}<p class="text-sm text-gray-400">Aucune compétence.</p>{% endfor %}
-    </section>
+  <section id="competences" class="bg-white shadow rounded p-5 scroll-mt-20">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Compétences</h2>
+    {% for comp in arbre.competences %}
+    <details class="border-l-2 border-green-200 pl-3 mb-2">
+      <summary class="cursor-pointer text-gray-800"><span class="text-xs text-gray-400">{{ comp.Code }}</span> {{ comp.Intitule }}</summary>
+      {% if comp.criteres %}
+      <ul class="list-disc pl-8 mt-1 text-sm text-gray-700">
+        {% for c in comp.criteres %}<li><span class="text-xs text-gray-400">{{ c.Code }}</span> {{ c.Libelle }}</li>{% endfor %}
+      </ul>
+      {% else %}<p class="pl-6 text-sm text-gray-400">Aucun critère.</p>{% endif %}
+    </details>
+    {% else %}<p class="text-sm text-gray-400">Aucune compétence.</p>{% endfor %}
+  </section>
 
-    <section id="familles" class="bg-white shadow rounded p-5">
-      <h2 class="text-lg font-semibold text-gray-800 mb-3">Familles de compétences</h2>
-      {% for fam in arbre.familles %}
-      <details class="mb-2">
-        <summary class="cursor-pointer text-gray-800"><span class="text-xs text-gray-400">{{ fam.Code }}</span> {{ fam.Intitule }}</summary>
-        {% if fam.competences %}
-        <ul class="list-disc pl-8 mt-1 text-sm text-gray-700">
-          {% for c in fam.competences %}<li><span class="text-xs text-gray-400">{{ c.Code }}</span> {{ c.Intitule }}</li>{% endfor %}
-        </ul>
-        {% else %}<p class="pl-6 text-sm text-gray-400">Aucune compétence rattachée.</p>{% endif %}
-      </details>
-      {% else %}<p class="text-sm text-gray-400">Aucune famille.</p>{% endfor %}
-    </section>
+  <section id="familles" class="bg-white shadow rounded p-5 scroll-mt-20">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Familles de compétences</h2>
+    {% for fam in arbre.familles %}
+    <details class="mb-2">
+      <summary class="cursor-pointer text-gray-800"><span class="text-xs text-gray-400">{{ fam.Code }}</span> {{ fam.Intitule }}</summary>
+      {% if fam.competences %}
+      <ul class="list-disc pl-8 mt-1 text-sm text-gray-700">
+        {% for c in fam.competences %}<li><span class="text-xs text-gray-400">{{ c.Code }}</span> {{ c.Intitule }}</li>{% endfor %}
+      </ul>
+      {% else %}<p class="pl-6 text-sm text-gray-400">Aucune compétence rattachée.</p>{% endif %}
+    </details>
+    {% else %}<p class="text-sm text-gray-400">Aucune famille.</p>{% endfor %}
+  </section>
 
-    <section id="sources" class="bg-white shadow rounded p-5">
-      <h2 class="text-lg font-semibold text-gray-800 mb-3">Sources</h2>
-      {% if arbre.sources %}
-      <ul class="divide-y">{% for s in arbre.sources %}
-        <li class="py-2 text-sm"><span class="font-medium">{{ s.SourceId }}</span>
-          <span class="text-gray-500">({{ s.SourceType }})</span> {{ s.SourceFichier }}{% if s.SourceNote %} · {{ s.SourceNote }}{% endif %}</li>
-      {% endfor %}</ul>
-      {% else %}<p class="text-sm text-gray-400">Aucune source.</p>{% endif %}
-    </section>
+  <section id="sources" class="bg-white shadow rounded p-5 scroll-mt-20">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Sources</h2>
+    {% if arbre.sources %}
+    <ul class="divide-y">{% for s in arbre.sources %}
+      <li class="py-2 text-sm"><span class="font-medium">{{ s.SourceId }}</span>
+        <span class="text-gray-500">({{ s.SourceType }})</span> {{ s.SourceFichier }}{% if s.SourceNote %} · {{ s.SourceNote }}{% endif %}</li>
+    {% endfor %}</ul>
+    {% else %}<p class="text-sm text-gray-400">Aucune source.</p>{% endif %}
+  </section>
 
-    <section id="indicateurs" class="bg-white shadow rounded p-5">
-      <h2 class="text-lg font-semibold text-gray-800 mb-3">Indicateurs de réussite</h2>
-      {% if arbre.indicateurs %}
-      <ul class="list-disc pl-5 text-sm text-gray-700">{% for i in arbre.indicateurs %}
-        <li><span class="text-xs text-gray-400">{{ i.Code }}</span> {{ i.Libelle }}{% if i.Origine %} <span class="text-gray-400">({{ i.Origine }})</span>{% endif %}</li>
-      {% endfor %}</ul>
-      {% else %}<p class="text-sm text-gray-400">Aucun indicateur.</p>{% endif %}
-    </section>
+  <section id="indicateurs" class="bg-white shadow rounded p-5 scroll-mt-20">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Indicateurs de réussite</h2>
+    {% if arbre.indicateurs %}
+    <ul class="list-disc pl-5 text-sm text-gray-700">{% for i in arbre.indicateurs %}
+      <li><span class="text-xs text-gray-400">{{ i.Code }}</span> {{ i.Libelle }}{% if i.Origine %} <span class="text-gray-400">({{ i.Origine }})</span>{% endif %}</li>
+    {% endfor %}</ul>
+    {% else %}<p class="text-sm text-gray-400">Aucun indicateur.</p>{% endif %}
+  </section>
 
-  </div>
 </div>
 {% endblock %}
