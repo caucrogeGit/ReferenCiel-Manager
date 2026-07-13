@@ -31,6 +31,13 @@ from mvc.routes.inscription_eleve_routes import register_inscription_eleve_route
 from mvc.routes.mes_classes_routes import register_mes_classes_routes
 from mvc.routes.mon_parcours_routes import register_mon_parcours_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
+# CRUD des entités du référentiel (admin) — ADR-016
+from mvc.routes.formation_routes import register_formation_routes
+from mvc.routes.pole_activite_routes import register_pole_activite_routes
+from mvc.routes.activite_professionnelle_routes import register_activite_professionnelle_routes
+from mvc.routes.competence_routes import register_competence_routes
+from mvc.routes.critere_observable_routes import register_critere_observable_routes
+from mvc.routes.famille_competence_routes import register_famille_competence_routes
 from mvc.routes.password_reset_routes import register_password_reset_routes
 from mvc.routes.palier_routes import register_palier_routes
 from mvc.routes.parcours_routes import register_parcours_routes
@@ -69,6 +76,13 @@ register_annee_scolaire_routes(router)
 
 # Routes appliquées pour : niveau_classe_controller
 register_niveau_classe_routes(router)
+# CRUD des entités du référentiel (admin)
+register_formation_routes(router)
+register_pole_activite_routes(router)
+register_activite_professionnelle_routes(router)
+register_competence_routes(router)
+register_critere_observable_routes(router)
+register_famille_competence_routes(router)
 
 # Routes appliquées pour : classe_controller
 register_classe_routes(router)
@@ -199,6 +213,13 @@ RBAC_PREFIX_RULES: dict[str, str] = {
     "/affectation_professeur_classe": "socle.gerer",
     "/groupe": "socle.gerer",
     "/admin": "socle.gerer",
+    # Entités du référentiel (CRUD admin) : referentiel.gerer (admin).
+    "/formation": "referentiel.gerer",
+    "/pole_activite": "referentiel.gerer",
+    "/activite_professionnelle": "referentiel.gerer",
+    "/competence": "referentiel.gerer",
+    "/critere_observable": "referentiel.gerer",
+    "/famille_competence": "referentiel.gerer",
     # Conception pédagogique : conception.gerer (admin + professeur).
     "/scenario": "conception.gerer",
     "/starter_welcome": "conception.gerer",

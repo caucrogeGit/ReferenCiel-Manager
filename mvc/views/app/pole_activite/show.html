@@ -1,0 +1,36 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail pole_activite</h1>
+    <div class="space-x-2">
+        {{ button(label=trans('crud.edit'), variant='primary', href='/pole_activite/edit/' ~ pole_activite.Id) }}
+        <a href="/pole_activite" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Intitule</p>
+        <p class="text-gray-800">{{ pole_activite.Intitule }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Referentiel</p>
+        <p class="text-gray-800">{{ pole_activite.referentiel_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Created at</p>
+        <p class="text-gray-800">{{ pole_activite.CreatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Updated at</p>
+        <p class="text-gray-800">{{ pole_activite.UpdatedAt }}</p>
+    </div>
+</div>
+
+<form method="post" action="/pole_activite/destroy/{{ pole_activite.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+</form>
+{% endblock %}

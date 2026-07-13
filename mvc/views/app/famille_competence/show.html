@@ -1,0 +1,48 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail famille_competence</h1>
+    <div class="space-x-2">
+        {{ button(label=trans('crud.edit'), variant='primary', href='/famille_competence/edit/' ~ famille_competence.Id) }}
+        <a href="/famille_competence" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Code</p>
+        <p class="text-gray-800">{{ famille_competence.Code }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Intitule</p>
+        <p class="text-gray-800">{{ famille_competence.Intitule }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Referentiel</p>
+        <p class="text-gray-800">{{ famille_competence.referentiel_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Created at</p>
+        <p class="text-gray-800">{{ famille_competence.CreatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Updated at</p>
+        <p class="text-gray-800">{{ famille_competence.UpdatedAt }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Competence</p>
+        {% if competence_labels %}
+        <p class="text-gray-800">{{ competence_labels | join(", ") }}</p>
+        {% else %}
+        <p class="text-gray-400 italic">Aucun Competence</p>
+        {% endif %}
+    </div>
+</div>
+
+<form method="post" action="/famille_competence/destroy/{{ famille_competence.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+</form>
+{% endblock %}
