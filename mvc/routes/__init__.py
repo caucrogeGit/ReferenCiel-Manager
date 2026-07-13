@@ -9,7 +9,11 @@ ces fichiers et affichent la ligne de branchement à ajouter ci-dessous.
 Ainsi le routage reste lisible quel que soit le nombre de contrôleurs : un fichier
 par contrôleur, cette racine se contentant de les brancher explicitement.
 """
+from typing import Any
+
+from core.http.request import Request
 from core.http.router import Router
+from core.mvc.controller.registry import register_jinja_context_provider
 from mvc.controllers.home_controller import HomeController
 from mvc.routes.admin_routes import register_admin
 from mvc.routes.activite_routes import register_activite_routes
@@ -63,8 +67,10 @@ from mvc.routes.starter_welcome_routes import register_starter_welcome_routes
 from mvc.routes.suivi_routes import register_suivi_routes
 from mvc.routes.version_parcours_routes import register_version_parcours_routes
 from mvc.routes.version_starter_routes import register_version_starter_routes
-from forge_mvc_rbac import register_contract_rbac_provider
+from forge_mvc_rbac import make_contract_jinja_context
 from optins.registry import register_optins
+
+from mvc.models.user_model import charger_utilisateur
 
 router = Router()
 
@@ -189,12 +195,18 @@ register_compte_routes(router)
 # Routes des opt-ins activés (ADR-061).
 register_optins(router)
 
-# RBAC — modèle contrat natif (ADR-015 ; F30 + résolveur/provider/garde corrigés
-# côté Forge). Le `can(...)` des vues s'adosse au contrat `mvc/security/rbac.json`
-# via le provider Jinja contractuel natif ; appelé après l'import de l'opt-in pour
-# écraser le provider « table » auto-inscrit. Les rôles sont résolus par le natif
-# (`get_request_roles` : auth moderne → base), y compris sur la home publique connectée.
-register_contract_rbac_provider()
+# RBAC — provider Jinja du modèle contrat natif (ADR-015), rendu LOADER-AWARE
+# (F55 / ADR-080). `can(...)` s'adosse au contrat `mvc/security/rbac.json` ; mais
+# `is_authenticated` / `current_user` reflètent désormais le SUJET RÉEL via le
+# loader (existence + activité) : une session orpheline est vue NON authentifiée
+# dans les templates (plus de menu profil fantôme), cohérent avec l'AuthMiddleware.
+# Enregistré après l'import de l'opt-in pour écraser le provider « table » auto-
+# inscrit (fusion : dernier gagnant). Rôles résolus par le natif (get_request_roles).
+def _provider_rbac_contrat(request: Request) -> "dict[str, Any]":
+    return make_contract_jinja_context(request, user_loader=charger_utilisateur)
+
+
+register_jinja_context_provider(_provider_rbac_contrat)
 
 # Gardes de route par domaine (permission du contrat `mvc/security/rbac.json`).
 # Masquer le menu n'est que du confort ; ces gardes protègent l'URL tapée à la main.
