@@ -11,7 +11,7 @@
       hx-get="/inscription_eleve" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
       class="mb-4 flex gap-2 items-center flex-wrap">
     <input type="search" name="q" value="{{ pagination.q }}"
-           placeholder="{{ trans('common.search') }}…"
+           placeholder="Rechercher…"
            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-400">
     <select name="eleve_id"
             class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -36,7 +36,7 @@
     </select>
     <button type="submit"
             class="bg-gray-100 text-gray-800 text-sm px-3 py-1.5 rounded font-medium hover:bg-gray-200">
-        {{ trans('common.search') }}</button>
+        Rechercher</button>
     {% if pagination.q or pagination.filters %}
     <a href="/inscription_eleve"
        hx-get="/inscription_eleve" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"

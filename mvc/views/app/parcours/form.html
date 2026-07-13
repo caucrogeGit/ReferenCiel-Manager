@@ -5,7 +5,7 @@
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
-    <a href="/parcours" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    <a href="/parcours" class="text-gray-600 hover:underline">← Retour</a>
 </div>
 
 {% include "partials/form_errors.html" %}
@@ -16,8 +16,8 @@
         {{ field(name='titre', label='Titre', type='text', value=form.value('titre'), error=form.error('titre')) }}
         {{ select_field(name='version_starter_id', label='Version starter', options=form.options.version_starter_id_choices, selected=form.value('version_starter_id'), error=form.error('version_starter_id')) }}
         <div class="flex gap-4 pt-2">
-            {{ button(label=trans('common.save'), variant='primary', type='submit') }}
-            {{ button(label=trans('common.cancel'), variant='secondary', href='/parcours') }}
+            {{ button(label='Enregistrer', variant='primary', type='submit') }}
+            {{ button(label='Annuler', variant='secondary', href='/parcours') }}
         </div>
     </form>
 </div>

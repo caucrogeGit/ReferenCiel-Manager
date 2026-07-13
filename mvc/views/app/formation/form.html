@@ -5,7 +5,7 @@
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
-    <a href="/formation" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    <a href="/formation" class="text-gray-600 hover:underline">← Retour</a>
 </div>
 
 {% include "partials/form_errors.html" %}
@@ -16,8 +16,8 @@
         {{ field(name='code', label='Code', type='text', value=form.value('code'), error=form.error('code')) }}
         {{ field(name='intitule', label='Intitule', type='text', value=form.value('intitule'), error=form.error('intitule')) }}
         <div class="flex gap-4 pt-2">
-            {{ button(label=trans('common.save'), variant='primary', type='submit') }}
-            {{ button(label=trans('common.cancel'), variant='secondary', href='/formation') }}
+            {{ button(label='Enregistrer', variant='primary', type='submit') }}
+            {{ button(label='Annuler', variant='secondary', href='/formation') }}
         </div>
     </form>
 </div>

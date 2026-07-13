@@ -5,7 +5,7 @@
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
-    <a href="/section_checklist" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    <a href="/section_checklist" class="text-gray-600 hover:underline">← Retour</a>
 </div>
 
 {% include "partials/form_errors.html" %}
@@ -17,8 +17,8 @@
         {{ field(name='titre', label='Titre', type='text', value=form.value('titre'), error=form.error('titre')) }}
         {{ select_field(name='checklist_id', label='Checklist', options=form.options.checklist_id_choices, selected=form.value('checklist_id'), error=form.error('checklist_id')) }}
         <div class="flex gap-4 pt-2">
-            {{ button(label=trans('common.save'), variant='primary', type='submit') }}
-            {{ button(label=trans('common.cancel'), variant='secondary', href='/section_checklist') }}
+            {{ button(label='Enregistrer', variant='primary', type='submit') }}
+            {{ button(label='Annuler', variant='secondary', href='/section_checklist') }}
         </div>
     </form>
 </div>

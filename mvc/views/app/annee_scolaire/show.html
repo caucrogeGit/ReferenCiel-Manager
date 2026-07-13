@@ -1,12 +1,12 @@
 {% extends "layouts/base.html" %}
 {% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Détail annee_scolaire</h1>
     <div class="space-x-2">
-        {% with href='/annee_scolaire/edit/{{ annee_scolaire.Id }}', variant='primary', label=trans('crud.edit') %}
-        {% include "components/button.html" %}
-        {% endwith %}
-        <a href="/annee_scolaire" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+        {{ button(label='Modifier', variant='primary', href='/annee_scolaire/edit/' ~ annee_scolaire.Id) }}
+        <a href="/annee_scolaire" class="text-gray-600 hover:underline">← Retour</a>
     </div>
 </div>
 
@@ -27,20 +27,10 @@
         <p class="text-sm text-gray-500">Active</p>
         <p class="text-gray-800">{{ annee_scolaire.Active }}</p>
     </div>
-    <div>
-        <p class="text-sm text-gray-500">Created at</p>
-        <p class="text-gray-800">{{ annee_scolaire.CreatedAt }}</p>
-    </div>
-    <div>
-        <p class="text-sm text-gray-500">Updated at</p>
-        <p class="text-gray-800">{{ annee_scolaire.UpdatedAt }}</p>
-    </div>
 </div>
 
-<form method="post" action="/annee_scolaire/destroy/{{ annee_scolaire.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+<form method="post" action="/annee_scolaire/destroy/{{ annee_scolaire.Id }}" class="mt-4" onsubmit="return confirm('Confirmer la suppression ?')">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    {% with type='submit', variant='danger', label=trans('crud.delete') %}
-    {% include "components/button.html" %}
-    {% endwith %}
+    {{ button(label='Supprimer', variant='danger', type='submit') }}
 </form>
 {% endblock %}

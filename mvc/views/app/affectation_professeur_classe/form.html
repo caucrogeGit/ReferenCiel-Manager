@@ -5,7 +5,7 @@
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
-    <a href="/affectation_professeur_classe" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    <a href="/affectation_professeur_classe" class="text-gray-600 hover:underline">← Retour</a>
 </div>
 
 {% include "partials/form_errors.html" %}
@@ -18,8 +18,8 @@
         {{ select_field(name='classe_id', label='Classe', options=form.options.classe_id_choices, selected=form.value('classe_id'), error=form.error('classe_id')) }}
         {{ select_field(name='annee_scolaire_id', label='Annee scolaire', options=form.options.annee_scolaire_id_choices, selected=form.value('annee_scolaire_id'), error=form.error('annee_scolaire_id')) }}
         <div class="flex gap-4 pt-2">
-            {{ button(label=trans('common.save'), variant='primary', type='submit') }}
-            {{ button(label=trans('common.cancel'), variant='secondary', href='/affectation_professeur_classe') }}
+            {{ button(label='Enregistrer', variant='primary', type='submit') }}
+            {{ button(label='Annuler', variant='secondary', href='/affectation_professeur_classe') }}
         </div>
     </form>
 </div>

@@ -16,9 +16,7 @@
                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600"><a href="?sort=code{% if pagination.sort == 'code' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-get="?sort=code{% if pagination.sort == 'code' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true">Code{% if pagination.sort == 'code' %} {{ '↑' if pagination.direction == 'asc' else '↓' }}{% endif %}</a></th>
                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600"><a href="?sort=libelle{% if pagination.sort == 'libelle' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-get="?sort=libelle{% if pagination.sort == 'libelle' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true">Libelle{% if pagination.sort == 'libelle' %} {{ '↑' if pagination.direction == 'asc' else '↓' }}{% endif %}</a></th>
                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600"><a href="?sort=competence_id{% if pagination.sort == 'competence_id' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-get="?sort=competence_id{% if pagination.sort == 'competence_id' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true">Competence{% if pagination.sort == 'competence_id' %} {{ '↑' if pagination.direction == 'asc' else '↓' }}{% endif %}</a></th>
-                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600"><a href="?sort=created_at{% if pagination.sort == 'created_at' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-get="?sort=created_at{% if pagination.sort == 'created_at' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true">Created at{% if pagination.sort == 'created_at' %} {{ '↑' if pagination.direction == 'asc' else '↓' }}{% endif %}</a></th>
-                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600"><a href="?sort=updated_at{% if pagination.sort == 'updated_at' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-get="?sort=updated_at{% if pagination.sort == 'updated_at' %}&amp;direction={{ 'desc' if pagination.direction == 'asc' else 'asc' }}{% else %}&amp;direction=asc{% endif %}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true">Updated at{% if pagination.sort == 'updated_at' %} {{ '↑' if pagination.direction == 'asc' else '↓' }}{% endif %}</a></th>
-                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-600">{{ trans('crud.actions') }}</th>
+                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-600">Actions</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -28,19 +26,17 @@
                 <td class="px-4 py-3 text-gray-800">{{ critere_observable.Code }}</td>
                 <td class="px-4 py-3 text-gray-800">{{ critere_observable.Libelle }}</td>
                 <td class="px-4 py-3 text-gray-800">{{ critere_observable.competence_id_label }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ critere_observable.CreatedAt }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ critere_observable.UpdatedAt }}</td>
                 <td class="px-4 py-3 text-right space-x-2">
                     <a href="/critere_observable/show/{{ critere_observable.Id }}"
-                       class="text-sm text-blue-600 hover:underline">{{ trans('crud.show') }}</a>
+                       class="text-sm text-blue-600 hover:underline">Voir</a>
                     <a href="/critere_observable/edit/{{ critere_observable.Id }}"
-                       class="text-sm text-blue-600 hover:underline">{{ trans('crud.edit') }}</a>
+                       class="text-sm text-blue-600 hover:underline">Modifier</a>
                     <form method="post" action="/critere_observable/destroy/{{ critere_observable.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
-                          hx-post="/critere_observable/destroy/{{ critere_observable.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-confirm="{{ trans('crud.confirm_delete') }}"
-                          style="display:inline" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+                          hx-post="/critere_observable/destroy/{{ critere_observable.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-confirm="Confirmer la suppression ?"
+                          style="display:inline" onsubmit="return confirm('Confirmer la suppression ?')">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <button type="submit"
-                            class="text-sm font-medium text-red-600 hover:text-red-800">{{ trans('crud.delete') }}</button>
+                            class="text-sm font-medium text-red-600 hover:text-red-800">Supprimer</button>
                     </form>
                 </td>
             </tr>
@@ -52,13 +48,13 @@
 {% else %}
 <div class="rounded-xl border border-dashed border-gray-300 bg-white p-6 text-center text-gray-600">
     {% if empty_context == "search" %}
-    {{ trans('crud.empty_search') }}
+    Aucun résultat ne correspond à votre recherche.
     {% elif empty_context == "filters" %}
-    {{ trans('crud.empty_filters') }}
+    Aucun résultat ne correspond aux filtres sélectionnés.
     {% elif empty_context == "search_filters" %}
-    {{ trans('crud.empty_search_filters') }}
+    Aucun résultat ne correspond à votre recherche et aux filtres sélectionnés.
     {% else %}
-    {{ trans('crud.empty') }}
+    Aucun élément à afficher.
     {% endif %}
 </div>
 {% endif %}

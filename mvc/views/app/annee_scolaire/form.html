@@ -1,8 +1,11 @@
 {% extends "layouts/base.html" %}
 {% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{% from "components/forms.html" import field, textarea_field, select_field, checkbox %}
+{{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
-    <a href="/annee_scolaire" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    <a href="/annee_scolaire" class="text-gray-600 hover:underline">← Retour</a>
 </div>
 
 {% include "partials/form_errors.html" %}
@@ -10,58 +13,13 @@
 <div class="bg-white shadow rounded p-6">
     <form method="post" action="{{ action }}" class="space-y-4">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Libelle</label>
-            <input
-                type="text"
-                name="libelle"
-                value="{{ form.value('libelle') }}"
-                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-            {% if form.has_error('libelle') %}
-            <p class="text-red-600 text-sm mt-1">{{ form.error('libelle') }}</p>
-            {% endif %}
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Date debut</label>
-            <input
-                type="date"
-                name="date_debut"
-                value="{{ form.value('date_debut') }}"
-                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-            {% if form.has_error('date_debut') %}
-            <p class="text-red-600 text-sm mt-1">{{ form.error('date_debut') }}</p>
-            {% endif %}
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Date fin</label>
-            <input
-                type="date"
-                name="date_fin"
-                value="{{ form.value('date_fin') }}"
-                class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-            {% if form.has_error('date_fin') %}
-            <p class="text-red-600 text-sm mt-1">{{ form.error('date_fin') }}</p>
-            {% endif %}
-        </div>
-        <div class="flex items-center gap-2">
-            <input
-                type="checkbox"
-                name="active"
-                value="1"
-                {{ 'checked' if form.value('active') else '' }}
-            >
-            <label class="text-sm font-medium text-gray-700">Active</label>
-        </div>
+        {{ field(name='libelle', label='Libelle', type='text', value=form.value('libelle'), error=form.error('libelle')) }}
+        {{ field(name='date_debut', label='Date debut', type='date', value=form.value('date_debut'), error=form.error('date_debut')) }}
+        {{ field(name='date_fin', label='Date fin', type='date', value=form.value('date_fin'), error=form.error('date_fin')) }}
+        {{ checkbox(name='active', label='Active', checked=form.value('active')) }}
         <div class="flex gap-4 pt-2">
-            {% with type='submit', variant='primary', label=trans('common.save') %}
-            {% include "components/button.html" %}
-            {% endwith %}
-            {% with href='/annee_scolaire', variant='secondary', label=trans('common.cancel') %}
-            {% include "components/button.html" %}
-            {% endwith %}
+            {{ button(label='Enregistrer', variant='primary', type='submit') }}
+            {{ button(label='Annuler', variant='secondary', href='/annee_scolaire') }}
         </div>
     </form>
 </div>

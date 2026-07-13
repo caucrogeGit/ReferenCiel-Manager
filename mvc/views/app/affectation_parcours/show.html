@@ -5,8 +5,8 @@
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Détail affectation_parcours</h1>
     <div class="space-x-2">
-        {{ button(label=trans('crud.edit'), variant='primary', href='/affectation_parcours/edit/' ~ affectation_parcours.Id) }}
-        <a href="/affectation_parcours" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+        {{ button(label='Modifier', variant='primary', href='/affectation_parcours/edit/' ~ affectation_parcours.Id) }}
+        <a href="/affectation_parcours" class="text-gray-600 hover:underline">← Retour</a>
     </div>
 </div>
 
@@ -32,14 +32,6 @@
         <p class="text-gray-800">{{ affectation_parcours.professeur_id_label }}</p>
     </div>
     <div>
-        <p class="text-sm text-gray-500">Created at</p>
-        <p class="text-gray-800">{{ affectation_parcours.CreatedAt }}</p>
-    </div>
-    <div>
-        <p class="text-sm text-gray-500">Updated at</p>
-        <p class="text-gray-800">{{ affectation_parcours.UpdatedAt }}</p>
-    </div>
-    <div>
         <p class="text-sm text-gray-500">Eleve</p>
         {% if eleve_labels %}
         <p class="text-gray-800">{{ eleve_labels | join(", ") }}</p>
@@ -49,8 +41,8 @@
     </div>
 </div>
 
-<form method="post" action="/affectation_parcours/destroy/{{ affectation_parcours.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+<form method="post" action="/affectation_parcours/destroy/{{ affectation_parcours.Id }}" class="mt-4" onsubmit="return confirm('Confirmer la suppression ?')">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+    {{ button(label='Supprimer', variant='danger', type='submit') }}
 </form>
 {% endblock %}

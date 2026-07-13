@@ -5,8 +5,8 @@
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Détail eleve</h1>
     <div class="space-x-2">
-        {{ button(label=trans('crud.edit'), variant='primary', href='/eleve/edit/' ~ eleve.Id) }}
-        <a href="/eleve" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+        {{ button(label='Modifier', variant='primary', href='/eleve/edit/' ~ eleve.Id) }}
+        <a href="/eleve" class="text-gray-600 hover:underline">← Retour</a>
     </div>
 </div>
 
@@ -35,18 +35,10 @@
         <p class="text-sm text-gray-500">Niveau de classe</p>
         <p class="text-gray-800">{{ eleve.niveau_classe_id_label }}</p>
     </div>
-    <div>
-        <p class="text-sm text-gray-500">Created at</p>
-        <p class="text-gray-800">{{ eleve.CreatedAt }}</p>
-    </div>
-    <div>
-        <p class="text-sm text-gray-500">Updated at</p>
-        <p class="text-gray-800">{{ eleve.UpdatedAt }}</p>
-    </div>
 </div>
 
-<form method="post" action="/eleve/destroy/{{ eleve.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+<form method="post" action="/eleve/destroy/{{ eleve.Id }}" class="mt-4" onsubmit="return confirm('Confirmer la suppression ?')">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+    {{ button(label='Supprimer', variant='danger', type='submit') }}
 </form>
 {% endblock %}

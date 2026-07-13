@@ -5,7 +5,7 @@
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
-    <a href="/eleve" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+    <a href="/eleve" class="text-gray-600 hover:underline">← Retour</a>
 </div>
 
 {% include "partials/form_errors.html" %}
@@ -20,8 +20,8 @@
         {{ field(name='user_id', label='User id', type='number', value=form.value('user_id'), error=form.error('user_id')) }}
         {{ select_field(name='niveau_classe_id', label='Niveau de classe', options=form.options.niveau_classe_id_choices, selected=form.value('niveau_classe_id'), error=form.error('niveau_classe_id')) }}
         <div class="flex gap-4 pt-2">
-            {{ button(label=trans('common.save'), variant='primary', type='submit') }}
-            {{ button(label=trans('common.cancel'), variant='secondary', href='/eleve') }}
+            {{ button(label='Enregistrer', variant='primary', type='submit') }}
+            {{ button(label='Annuler', variant='secondary', href='/eleve') }}
         </div>
     </form>
 </div>

@@ -5,8 +5,8 @@
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Détail famille_competence</h1>
     <div class="space-x-2">
-        {{ button(label=trans('crud.edit'), variant='primary', href='/famille_competence/edit/' ~ famille_competence.Id) }}
-        <a href="/famille_competence" class="text-gray-600 hover:underline">← {{ trans('common.back') }}</a>
+        {{ button(label='Modifier', variant='primary', href='/famille_competence/edit/' ~ famille_competence.Id) }}
+        <a href="/famille_competence" class="text-gray-600 hover:underline">← Retour</a>
     </div>
 </div>
 
@@ -24,14 +24,6 @@
         <p class="text-gray-800">{{ famille_competence.referentiel_id_label }}</p>
     </div>
     <div>
-        <p class="text-sm text-gray-500">Created at</p>
-        <p class="text-gray-800">{{ famille_competence.CreatedAt }}</p>
-    </div>
-    <div>
-        <p class="text-sm text-gray-500">Updated at</p>
-        <p class="text-gray-800">{{ famille_competence.UpdatedAt }}</p>
-    </div>
-    <div>
         <p class="text-sm text-gray-500">Competence</p>
         {% if competence_labels %}
         <p class="text-gray-800">{{ competence_labels | join(", ") }}</p>
@@ -41,8 +33,8 @@
     </div>
 </div>
 
-<form method="post" action="/famille_competence/destroy/{{ famille_competence.Id }}" class="mt-4" onsubmit="return confirm('{{ trans("crud.confirm_delete") }}')">
+<form method="post" action="/famille_competence/destroy/{{ famille_competence.Id }}" class="mt-4" onsubmit="return confirm('Confirmer la suppression ?')">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    {{ button(label=trans('crud.delete'), variant='danger', type='submit') }}
+    {{ button(label='Supprimer', variant='danger', type='submit') }}
 </form>
 {% endblock %}
