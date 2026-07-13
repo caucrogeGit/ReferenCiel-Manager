@@ -11,3 +11,4 @@ def register_scenario_editeur_routes(router: Router) -> None:
         g.add("POST", "/nouveau", ScenarioEditeurController.nouveau, name="scenario_editeur-nouveau")
         g.add("GET", "/{id}", ScenarioEditeurController.editeur, name="scenario_editeur-editeur")
         g.add("POST", "/{id}/titre", ScenarioEditeurController.enregistrer_titre, name="scenario_editeur-titre")
+        g.add("POST", "/{id}/contexte", ScenarioEditeurController.enregistrer_contexte, name="scenario_editeur-contexte")

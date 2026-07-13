@@ -63,3 +63,27 @@ def enregistrer_titre(
                 (scenario_id, pid),
                 tx=tx,
             )
+
+
+def enregistrer_contexte(
+    scenario_id: int,
+    description_contexte: str,
+    problematique: str,
+    materiels_logiciels: str,
+    liens_associes: str,
+    espaces_formation: str,
+) -> None:
+    """Enregistre la section Contexte (5 champs cpro, ADR-019)."""
+    execute(
+        "UPDATE scenario SET DescriptionContexte = ?, Problematique = ?, "
+        "MaterielsLogiciels = ?, LiensAssocies = ?, EspacesFormation = ?, UpdatedAt = NOW() "
+        "WHERE Id = ?",
+        (
+            description_contexte,
+            problematique,
+            materiels_logiciels,
+            liens_associes,
+            espaces_formation,
+            scenario_id,
+        ),
+    )

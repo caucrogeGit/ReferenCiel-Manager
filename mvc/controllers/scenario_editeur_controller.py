@@ -14,6 +14,7 @@ from core.mvc.controller.base_controller import BaseController
 
 from mvc.models.scenario_editeur_model import (
     creer_scenario,
+    enregistrer_contexte,
     enregistrer_titre,
     get_co_auteur_ids,
     get_scenario,
@@ -97,4 +98,23 @@ class ScenarioEditeurController(BaseController):
         enregistrer_titre(scenario_id, titre, co_intervention, co_auteur_ids)
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Titre enregistrée."
+        )
+
+    @staticmethod
+    def enregistrer_contexte(request: Request) -> Response:
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        if scenario_id is None:
+            return BaseController.not_found()
+        if get_scenario(scenario_id) is None:
+            return BaseController.not_found()
+        enregistrer_contexte(
+            scenario_id,
+            request.form("description_contexte", "").strip(),
+            request.form("problematique", "").strip(),
+            request.form("materiels_logiciels", "").strip(),
+            request.form("liens_associes", "").strip(),
+            request.form("espaces_formation", "").strip(),
+        )
+        return BaseController.redirect(
+            f"/conception/scenario/{scenario_id}", request=request, flash="Section Contexte enregistrée."
         )

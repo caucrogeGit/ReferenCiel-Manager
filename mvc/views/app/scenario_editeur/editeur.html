@@ -12,8 +12,8 @@
 <!-- Menu des sections (en haut, propre à la page) -->
 <nav class="sticky top-0 z-10 bg-white shadow rounded mb-6 px-2">
   <ul class="flex flex-wrap items-center gap-1 text-sm font-medium">
-    <li><a href="#titre" class="block px-4 py-3 text-blue-600 border-b-2 border-blue-500">Titre</a></li>
-    <li><span class="block px-4 py-3 text-gray-400 cursor-not-allowed" title="À venir">Contexte</span></li>
+    <li><a href="#titre" class="block px-4 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Titre</a></li>
+    <li><a href="#contexte" class="block px-4 py-3 text-gray-700 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-400">Contexte</a></li>
     <li><span class="block px-4 py-3 text-gray-400 cursor-not-allowed" title="À venir">Liaison avec le référentiel</span></li>
     <li><span class="block px-4 py-3 text-gray-400 cursor-not-allowed" title="À venir">Ressources</span></li>
   </ul>
@@ -46,6 +46,48 @@
       <input id="co_intervention" name="co_intervention" type="checkbox" value="1" {% if scenario.CoIntervention %}checked{% endif %}
              class="h-4 w-4 text-blue-600 border-gray-300 rounded">
       <label for="co_intervention" class="text-sm text-gray-700">Ce scénario s'intègre dans les enseignements de co-intervention.</label>
+    </div>
+
+    <div class="pt-2">
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Enregistrer</button>
+    </div>
+  </form>
+</section>
+
+<!-- Section Contexte -->
+<section id="contexte" class="bg-white shadow rounded p-6 max-w-3xl mt-6 scroll-mt-20">
+  <h2 class="text-lg font-semibold text-gray-800 mb-4">Contexte</h2>
+  <form method="post" action="/conception/scenario/{{ scenario.Id }}/contexte" class="space-y-5">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1" for="description_contexte">Description du contexte / mise en situation professionnelle</label>
+      <textarea id="description_contexte" name="description_contexte" rows="3"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ scenario.DescriptionContexte or "" }}</textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1" for="problematique">Problématique liée au métier / missions à réaliser</label>
+      <textarea id="problematique" name="problematique" rows="3"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ scenario.Problematique or "" }}</textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1" for="materiels_logiciels">Matériels et/ou logiciels utilisés</label>
+      <textarea id="materiels_logiciels" name="materiels_logiciels" rows="2"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ scenario.MaterielsLogiciels or "" }}</textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1" for="liens_associes">Liens associés à ce scénario</label>
+      <textarea id="liens_associes" name="liens_associes" rows="2"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ scenario.LiensAssocies or "" }}</textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1" for="espaces_formation">Espace(s) de formation</label>
+      <textarea id="espaces_formation" name="espaces_formation" rows="2"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ scenario.EspacesFormation or "" }}</textarea>
     </div>
 
     <div class="pt-2">
