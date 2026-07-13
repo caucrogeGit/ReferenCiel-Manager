@@ -1,0 +1,56 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import flash_messages %}
+{{ flash_messages(flash) }}
+
+<div class="mb-4">
+  <a href="/conception/scenario" class="text-gray-600 hover:underline text-sm">← Tous les scénarios</a>
+  <h1 class="text-2xl font-bold text-gray-800 mt-1">{{ scenario.Titre or "Scénario sans titre" }}</h1>
+  <p class="text-sm text-gray-600 mt-1">Version {{ scenario.Version }} · <span class="px-2 py-0.5 rounded bg-gray-100">{{ scenario.Statut }}</span></p>
+</div>
+
+<!-- Menu des sections (en haut, propre à la page) -->
+<nav class="sticky top-0 z-10 bg-white shadow rounded mb-6 px-2">
+  <ul class="flex flex-wrap items-center gap-1 text-sm font-medium">
+    <li><a href="#titre" class="block px-4 py-3 text-blue-600 border-b-2 border-blue-500">Titre</a></li>
+    <li><span class="block px-4 py-3 text-gray-400 cursor-not-allowed" title="À venir">Contexte</span></li>
+    <li><span class="block px-4 py-3 text-gray-400 cursor-not-allowed" title="À venir">Liaison avec le référentiel</span></li>
+    <li><span class="block px-4 py-3 text-gray-400 cursor-not-allowed" title="À venir">Ressources</span></li>
+  </ul>
+</nav>
+
+<!-- Section Titre -->
+<section id="titre" class="bg-white shadow rounded p-6 max-w-3xl scroll-mt-20">
+  <h2 class="text-lg font-semibold text-gray-800 mb-4">Titre</h2>
+  <form method="post" action="/conception/scenario/{{ scenario.Id }}/titre" class="space-y-5">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1" for="titre">Titre du scénario <span class="text-red-500">*</span></label>
+      <input id="titre" name="titre" type="text" required value="{{ scenario.Titre }}"
+             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1" for="co_auteurs">Enseignants co-auteurs</label>
+      <select id="co_auteurs" name="co_auteurs" multiple size="5"
+              class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        {% for p in professeurs %}
+        <option value="{{ p.Id }}" {% if p.Id in co_auteur_ids %}selected{% endif %}>{{ p.Nom }} {{ p.Prenom }}</option>
+        {% endfor %}
+      </select>
+      <p class="text-xs text-gray-400 mt-1">Ctrl (ou Cmd) pour en sélectionner plusieurs.</p>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <input id="co_intervention" name="co_intervention" type="checkbox" value="1" {% if scenario.CoIntervention %}checked{% endif %}
+             class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+      <label for="co_intervention" class="text-sm text-gray-700">Ce scénario s'intègre dans les enseignements de co-intervention.</label>
+    </div>
+
+    <div class="pt-2">
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Enregistrer</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
