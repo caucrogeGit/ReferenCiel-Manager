@@ -1,0 +1,42 @@
+{# Étape 1 — Titre. Formulaire simple, POST classique (pas de fragment : on
+   enregistre et on avance). Champs réhabillés aux tokens de la charte. #}
+{% from "components/tunnel_macros.html" import tunnel_pager %}
+{% from "components/ui.html" import button %}
+
+<section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
+    <form method="post" action="{{ base_url }}/titre" class="space-y-5">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div>
+            <label for="titre" class="block text-sm text-muted mb-1">
+                Titre du scénario <span class="text-red-600">*</span>
+            </label>
+            <input id="titre" name="titre" type="text" required value="{{ scenario.Titre }}"
+                   class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
+                          focus:outline-none focus:ring-2 focus:ring-forge">
+        </div>
+
+        <div>
+            <label for="co_auteurs" class="block text-sm text-muted mb-1">Enseignants co-auteurs</label>
+            <select id="co_auteurs" name="co_auteurs" multiple size="5"
+                    class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
+                           focus:outline-none focus:ring-2 focus:ring-forge">
+                {% for p in professeurs %}
+                <option value="{{ p.Id }}" {% if p.Id in co_auteur_ids %}selected{% endif %}>{{ p.Nom }} {{ p.Prenom }}</option>
+                {% endfor %}
+            </select>
+            <p class="mt-1 text-xs text-faint">Ctrl (ou Cmd) pour en sélectionner plusieurs.</p>
+        </div>
+
+        <label class="flex items-center gap-2.5 bg-cream rounded-[10px] px-3 py-2.5 cursor-pointer">
+            <input id="co_intervention" name="co_intervention" type="checkbox" value="1"
+                   {% if scenario.CoIntervention %}checked{% endif %}
+                   class="shrink-0 accent-forge rounded border-field">
+            <span class="text-sm text-ink">Ce scénario s'intègre dans les enseignements de co-intervention.</span>
+        </label>
+
+        <div class="pt-1">{{ button("Enregistrer", variant="primary", type="submit") }}</div>
+    </form>
+</section>
+
+{{ tunnel_pager(prev, next, position, total, base_url) }}

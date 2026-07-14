@@ -1,0 +1,45 @@
+{# Étape 3 — Liaison avec le référentiel.
+
+   Deux maître-détail empilés : Pôles → Activités, Compétences → Critères.
+   Chaque bloc est autonome : cocher une case ne rafraîchit QUE son bloc
+   (compteur de la colonne maître inclus). #}
+{% from "components/tunnel_macros.html" import tunnel_pager %}
+{% from "components/ui.html" import button, empty_state %}
+
+{% if not arbre %}
+{# Pas de référentiel rattaché : le tunnel ne peut pas continuer. On demande
+   le rattachement avant de montrer quoi que ce soit d'autre. #}
+<section class="bg-surface border border-line rounded-card p-7">
+    <h2 class="text-base font-semibold text-ink">Référentiel du scénario</h2>
+    <p class="mt-0.5 mb-4 text-sm text-muted">
+        Choisissez le référentiel avant de sélectionner les activités et les critères.
+    </p>
+    <form method="post" action="{{ base_url }}/referentiel"
+          class="flex gap-3 items-end max-w-lg">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="flex-1">
+            <label for="referentiel_id" class="block text-sm text-muted mb-1">Référentiel</label>
+            <select id="referentiel_id" name="referentiel_id" required
+                    class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
+                           focus:outline-none focus:ring-2 focus:ring-forge">
+                <option value="">Choisir un référentiel</option>
+                {% for r in referentiels %}
+                <option value="{{ r.Id }}">{{ r.Identifiant }} ({{ r.Version }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        {{ button("Rattacher", variant="primary", type="submit") }}
+    </form>
+</section>
+
+{% else %}
+
+{# ── Bloc 1 : Pôles → Activités ─────────────────────────────────────────── #}
+{% include "app/scenario_editeur/_bloc_poles.html" %}
+
+{# ── Bloc 2 : Compétences → Critères ────────────────────────────────────── #}
+{% include "app/scenario_editeur/_bloc_competences.html" %}
+
+{% endif %}
+
+{{ tunnel_pager(prev, next, position, total, base_url) }}

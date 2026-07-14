@@ -1,0 +1,32 @@
+{# Bloc maître-détail « Compétences → Critères ».
+   Symétrique de _bloc_poles.html : racine identifiée, cible du hx-post de
+   cochage en swap outerHTML, compteur recalculé en Jinja. #}
+{% from "components/tunnel_macros.html" import master_list %}
+
+<section id="bloc-competences" class="bg-surface border border-line rounded-card p-5">
+    <h2 class="text-base font-semibold text-ink">Compétences et critères d'évaluation</h2>
+    <p class="mt-0.5 mb-3.5 text-sm text-muted">
+        Les critères en <em>italique</em> relèvent des savoir-être.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-[minmax(0,260px)_minmax(0,1fr)] gap-4">
+
+        {%- set items = [] -%}
+        {%- for comp in arbre.competences -%}
+            {%- set n = comp.criteres | selectattr("Id", "in", critere_ids) | list | length -%}
+            {%- set _ = items.append({"id": comp.Id, "label": comp.Code, "count": n}) -%}
+        {%- endfor -%}
+        {{ master_list(
+            items,
+            competence_id,
+            base_url ~ "?etape=liaison&fragment=competence",
+            "competence",
+            "#detail-competence"
+        ) }}
+
+        <div id="detail-competence">
+            {% include "app/scenario_editeur/_detail_competence.html" %}
+        </div>
+
+    </div>
+</section>

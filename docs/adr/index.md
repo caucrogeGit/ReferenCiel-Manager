@@ -55,6 +55,10 @@ Contexte, Décision, Conséquences, Alternatives écartées.
 - `020-preline-ui-pour-la-couche-vues.md` : Preline UI adopté comme boîte à
   outils front de la **couche vues** (CSS/JS hors Forge, autorisé) ; navigation
   passée en sidebar filtrée par rôle, réhabillée à la charte.
+- `021-etat-du-tunnel-dans-l-url.md` : état du tunnel de scénario porté par
+  l'**URL** (jamais côté client), complétion **dérivée des données**,
+  régénération partielle par fragments HTMX avec **dégradation gracieuse**
+  (une seule route sert JS et sans-JS) ; Preline=chrome, HTMX=données.
 
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.

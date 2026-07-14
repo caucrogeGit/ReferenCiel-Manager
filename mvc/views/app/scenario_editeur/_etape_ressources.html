@@ -1,0 +1,44 @@
+{# Étape 4 — Ressources. Dépôt de fichiers + liste.
+   L'explorateur à dossiers de cpro est hors périmètre (ticket 23) : ici une
+   liste plate, suffisante tant que le volume reste faible. #}
+{% from "components/tunnel_macros.html" import tunnel_pager %}
+{% from "components/ui.html" import button, empty_state %}
+
+<section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
+    <form method="post" action="{{ base_url }}/ressources" enctype="multipart/form-data"
+          class="flex gap-3 items-end mb-2">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="flex-1">
+            <label for="fichier" class="block text-sm text-muted mb-1">Ajouter un fichier</label>
+            <input id="fichier" name="fichier" type="file" required
+                   class="w-full text-sm text-ink file:mr-3 file:py-1.5 file:px-3 file:rounded-[10px]
+                          file:border file:border-forge-border file:bg-forge-soft file:text-forge
+                          file:text-sm file:font-semibold hover:file:bg-forge-border">
+        </div>
+        {{ button("Déposer", variant="primary", type="submit") }}
+    </form>
+    <p class="mb-5 text-xs text-faint">Types acceptés : images et PDF (selon la configuration).</p>
+
+    {% if ressources %}
+    <ul class="divide-y divide-line border-t border-line">
+        {% for r in ressources %}
+        <li class="flex items-center justify-between gap-3 py-2.5 text-sm">
+            <a href="/media/{{ r.CheminMedia }}" target="_blank" rel="noopener"
+               class="text-forge hover:text-forge-dark hover:underline truncate">{{ r.NomOriginal }}</a>
+            <span class="flex shrink-0 items-center gap-3">
+                <span class="text-faint">{{ (r.Taille / 1024) | round(1) }} Ko</span>
+                <form method="post" action="{{ base_url }}/ressources/{{ r.Id }}/supprimer"
+                      onsubmit="return confirm('Supprimer cette ressource ?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button type="submit" class="font-semibold text-red-600 hover:text-red-700">Supprimer</button>
+                </form>
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    {{ empty_state("Aucune ressource.", hint="Déposez un premier fichier ci-dessus.") }}
+    {% endif %}
+</section>
+
+{{ tunnel_pager(prev, next, position, total, base_url) }}

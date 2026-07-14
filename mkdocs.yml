@@ -82,6 +82,8 @@ nav:
       - ADR-017 — Référentiels livrés & chargement à l'installation: adr/017-referentiels-livres-et-chargement-installation.md
       - ADR-018 — Atelier de gestion du référentiel: adr/018-gestion-referentiel-atelier-coherent.md
       - ADR-019 — Modèle du scénario (cpro-education): adr/019-modele-scenario-aligne-cpro-education.md
+      - ADR-020 — Preline UI pour la couche vues: adr/020-preline-ui-pour-la-couche-vues.md
+      - ADR-021 — État du tunnel dans l'URL: adr/021-etat-du-tunnel-dans-l-url.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md

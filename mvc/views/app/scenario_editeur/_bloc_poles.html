@@ -1,0 +1,37 @@
+{# Bloc maître-détail « Pôles → Activités ».
+
+   Racine identifiée (#bloc-poles) : c'est la cible du hx-post de cochage, en
+   swap outerHTML. On réémet donc le bloc ENTIER — colonne maître comprise —
+   pour que le compteur de sélection suive. Le compteur est calculé en Jinja
+   depuis activite_ids : aucune logique dupliquée en JS. #}
+{% from "components/tunnel_macros.html" import master_list, checkbox_row %}
+
+<section id="bloc-poles" class="bg-surface border border-line rounded-card p-5 mb-4">
+    <h2 class="text-base font-semibold text-ink">Pôles d'activités</h2>
+    <p class="mt-0.5 mb-3.5 text-sm text-muted">
+        Sélectionnez un pôle, puis cochez ses activités.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-[minmax(0,260px)_minmax(0,1fr)] gap-4">
+
+        {# Colonne maître : un item par pôle, avec le nombre d'activités cochées. #}
+        {%- set items = [] -%}
+        {%- for pole in arbre.poles -%}
+            {%- set n = pole.activites | selectattr("Id", "in", activite_ids) | list | length -%}
+            {%- set _ = items.append({"id": pole.Id, "label": pole.Intitule, "count": n}) -%}
+        {%- endfor -%}
+        {{ master_list(
+            items,
+            pole_id,
+            base_url ~ "?etape=liaison&fragment=pole",
+            "pole",
+            "#detail-pole"
+        ) }}
+
+        {# Colonne détail : les activités du pôle actif. #}
+        <div id="detail-pole">
+            {% include "app/scenario_editeur/_detail_pole.html" %}
+        </div>
+
+    </div>
+</section>

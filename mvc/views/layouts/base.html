@@ -59,6 +59,9 @@
         </footer>
     </div>
 
+    {# HTMX — régénération partielle des fragments (tunnel de scénario, CRUD).
+       Chargé AVANT Preline. Dépendance front vendue (ADR-020, pas de CDN). #}
+    <script src="/static/vendor/htmx.min.js" defer></script>
     {# Preline UI — pilote overlay mobile, repli (minify) et accordéons de la sidebar.
        Auto-init au chargement (rendu serveur, multi-pages). Dépendance front hors Forge. #}
     <script src="/static/vendor/preline.js"></script>

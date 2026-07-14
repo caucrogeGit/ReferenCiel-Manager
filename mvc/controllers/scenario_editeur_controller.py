@@ -34,6 +34,18 @@ from mvc.models.scenario_editeur_model import (
 )
 
 
+# État du tunnel (ADR-021) : les 4 étapes et leurs libellés. La complétion n'est
+# jamais persistée, elle est dérivée des données (voir _steps).
+ETAPES: tuple[str, ...] = ("titre", "contexte", "liaison", "ressources")
+
+_LIBELLES: dict[str, str] = {
+    "titre": "Titre",
+    "contexte": "Contexte",
+    "liaison": "Liaison référentiel",
+    "ressources": "Ressources",
+}
+
+
 class ScenarioEditeurController(BaseController):
 
     @staticmethod
@@ -78,6 +90,103 @@ class ScenarioEditeurController(BaseController):
         scenario_id = creer_scenario(titre)
         return BaseController.redirect(f"/conception/scenario/{scenario_id}")
 
+    # ── Helpers d'état du tunnel (ADR-021) ───────────────────────────────────
+
+    @staticmethod
+    def _is_htmx(request: Request) -> bool:
+        return request.header("HX-Request") is not None
+
+    @staticmethod
+    def _etape(request: Request) -> str:
+        """Étape demandée, bornée à la liste connue (défaut : titre)."""
+        raw = request.query("etape", "titre")
+        return raw if raw in ETAPES else "titre"
+
+    @staticmethod
+    def _steps(
+        scenario: dict[str, Any],
+        arbre: "dict[str, Any] | None",
+        referentiels: list[dict[str, Any]],
+        activite_ids: list[int],
+        critere_ids: list[int],
+        ressources: list[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
+        """Barre d'étapes : la complétion est DÉRIVÉE des données.
+
+        Rien n'est persisté pour l'UI : si le titre est rempli, l'étape est
+        faite ; si un référentiel est rattaché, la liaison est amorcée. C'est
+        ce qui rend l'état du tunnel non-falsifiable et sans migration.
+        """
+        ref_id = scenario.get("referentiel_id")
+        ref_code = ""
+        if ref_id:
+            for r in referentiels:
+                if r["Id"] == ref_id:
+                    ref_code = str(r["Identifiant"])
+                    break
+
+        contexte_rempli = any(
+            scenario.get(champ)
+            for champ in (
+                "DescriptionContexte",
+                "Problematique",
+                "MaterielsLogiciels",
+                "LiensAssocies",
+                "EspacesFormation",
+            )
+        )
+        n_liaison = len(activite_ids) + len(critere_ids)
+
+        return [
+            {
+                "key": "titre",
+                "label": _LIBELLES["titre"],
+                "badge": "",
+                "done": bool(scenario.get("Titre")),
+            },
+            {
+                "key": "contexte",
+                "label": _LIBELLES["contexte"],
+                "badge": "",
+                "done": contexte_rempli,
+            },
+            {
+                "key": "liaison",
+                "label": _LIBELLES["liaison"],
+                "badge": ref_code or "",
+                "done": bool(ref_id) and n_liaison > 0,
+            },
+            {
+                "key": "ressources",
+                "label": _LIBELLES["ressources"],
+                "badge": str(len(ressources)),
+                "done": len(ressources) > 0,
+            },
+        ]
+
+    @staticmethod
+    def _selection_courante(
+        request: Request, arbre: "dict[str, Any] | None"
+    ) -> "tuple[int | None, int | None]":
+        """Pôle et compétence actifs. Défaut : le premier de chaque liste.
+
+        Sans ce défaut, un accès direct à ?etape=liaison afficherait deux
+        colonnes de détail vides — piège classique du maître-détail.
+        """
+        if not arbre:
+            return None, None
+        pole_id = ScenarioEditeurController._parse_id(request.query("pole"))
+        comp_id = ScenarioEditeurController._parse_id(request.query("competence"))
+        poles: list[dict[str, Any]] = arbre.get("poles") or []
+        comps: list[dict[str, Any]] = arbre.get("competences") or []
+        if pole_id is None and poles:
+            pole_id = int(poles[0]["Id"])
+        if comp_id is None and comps:
+            comp_id = int(comps[0]["Id"])
+        return pole_id, comp_id
+
+    # ── Vue principale ───────────────────────────────────────────────────────
+
     @staticmethod
     def editeur(request: Request) -> Response:
         scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
@@ -86,20 +195,79 @@ class ScenarioEditeurController(BaseController):
         scenario = get_scenario(scenario_id)
         if scenario is None:
             return BaseController.not_found()
+
         referentiel_id = scenario.get("referentiel_id")
         arbre = get_arbre(int(referentiel_id)) if referentiel_id else None
+        referentiels = list_referentiels()
+        activite_ids = get_activite_ids(scenario_id)
+        critere_ids = get_critere_ids(scenario_id)
+        ressources = list_ressources(scenario_id)
+
+        etape = ScenarioEditeurController._etape(request)
+        pole_id, competence_id = ScenarioEditeurController._selection_courante(
+            request, arbre
+        )
+        steps = ScenarioEditeurController._steps(
+            scenario, arbre, referentiels, activite_ids, critere_ids, ressources
+        )
+        position = ETAPES.index(etape) + 1
+
+        context: dict[str, Any] = {
+            "scenario": scenario,
+            "co_auteur_ids": get_co_auteur_ids(scenario_id),
+            "professeurs": list_professeurs(),
+            "referentiels": referentiels,
+            "arbre": arbre,
+            "activite_ids": activite_ids,
+            "critere_ids": critere_ids,
+            "ressources": ressources,
+            # état du tunnel
+            "etape": etape,
+            "steps": steps,
+            "position": position,
+            "total": len(ETAPES),
+            "prev": (
+                {"key": ETAPES[position - 2], "label": _LIBELLES[ETAPES[position - 2]]}
+                if position > 1
+                else None
+            ),
+            "next": (
+                {"key": ETAPES[position], "label": _LIBELLES[ETAPES[position]]}
+                if position < len(ETAPES)
+                else None
+            ),
+            "base_url": f"/conception/scenario/{scenario_id}",
+            "pole_id": pole_id,
+            "competence_id": competence_id,
+        }
+
+        # Fragment HTMX : on ne renvoie que le partial, sans le layout. Rendu
+        # Jinja NORMAL (pas raw=True : dans Forge, raw sert un fichier brut, sans
+        # rendu ni contexte). Un partial ne fait pas {% extends base %}, donc le
+        # rendu normal produit le fragment seul, avec csrf_token/can() injectés.
+        if ScenarioEditeurController._is_htmx(request):
+            cible = request.query("fragment", "")
+            if cible == "pole":
+                return BaseController.render(
+                    "app/scenario_editeur/_detail_pole.html",
+                    context=context,
+                    request=request,
+                )
+            if cible == "competence":
+                return BaseController.render(
+                    "app/scenario_editeur/_detail_competence.html",
+                    context=context,
+                    request=request,
+                )
+            return BaseController.render(
+                f"app/scenario_editeur/_etape_{etape}.html",
+                context=context,
+                request=request,
+            )
+
         return BaseController.render(
             "app/scenario_editeur/editeur.html",
-            context={
-                "scenario": scenario,
-                "co_auteur_ids": get_co_auteur_ids(scenario_id),
-                "professeurs": list_professeurs(),
-                "referentiels": list_referentiels(),
-                "arbre": arbre,
-                "activite_ids": get_activite_ids(scenario_id),
-                "critere_ids": get_critere_ids(scenario_id),
-                "ressources": list_ressources(scenario_id),
-            },
+            context=context,
             request=request,
         )
 
@@ -191,3 +359,76 @@ class ScenarioEditeurController(BaseController):
         return BaseController.redirect_with_flash(
             request, f"/conception/scenario/{scenario_id}", "Ressource supprimée.", "success"
         )
+
+    # ── Cochage unitaire (activité / critère) ────────────────────────────────
+    #
+    # Le cochage ne passe plus par un gros POST « enregistrer la liaison » :
+    # chaque case bascule seule, et on renvoie le maître-détail complet pour
+    # que le compteur de la colonne de gauche suive. `enregistrer_liaison`
+    # (POST global) reste en place pour le mode sans JS.
+
+    @staticmethod
+    def _basculer(request: Request, champ: str, fragment: str) -> Response:
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        if scenario_id is None or get_scenario(scenario_id) is None:
+            return BaseController.not_found()
+
+        cible_id = ScenarioEditeurController._parse_id(request.form(champ))
+        if cible_id is None:
+            return BaseController.not_found()
+
+        activite_ids = get_activite_ids(scenario_id)
+        critere_ids = get_critere_ids(scenario_id)
+
+        if champ == "activite":
+            if cible_id in activite_ids:
+                activite_ids = [i for i in activite_ids if i != cible_id]
+            else:
+                activite_ids = [*activite_ids, cible_id]
+        else:
+            if cible_id in critere_ids:
+                critere_ids = [i for i in critere_ids if i != cible_id]
+            else:
+                critere_ids = [*critere_ids, cible_id]
+
+        enregistrer_liaison(scenario_id, activite_ids, critere_ids)
+
+        # Sans JS : on retombe sur la page, à la bonne étape et au bon endroit.
+        if not ScenarioEditeurController._is_htmx(request):
+            pole = request.form("pole", "")
+            comp = request.form("competence", "")
+            suffixe = f"&pole={pole}" if pole else ""
+            suffixe += f"&competence={comp}" if comp else ""
+            return BaseController.redirect(
+                f"/conception/scenario/{scenario_id}?etape=liaison{suffixe}",
+                request=request,
+            )
+
+        # Avec JS : on renvoie le bloc maître-détail concerné (compteur inclus).
+        scenario = cast("dict[str, Any]", get_scenario(scenario_id))
+        referentiel_id = scenario.get("referentiel_id")
+        arbre = get_arbre(int(referentiel_id)) if referentiel_id else None
+        pole_id, competence_id = ScenarioEditeurController._selection_courante(
+            request, arbre
+        )
+        return BaseController.render(
+            f"app/scenario_editeur/_bloc_{fragment}.html",
+            context={
+                "scenario": scenario,
+                "arbre": arbre,
+                "activite_ids": activite_ids,
+                "critere_ids": critere_ids,
+                "pole_id": pole_id,
+                "competence_id": competence_id,
+                "base_url": f"/conception/scenario/{scenario_id}",
+            },
+            request=request,
+        )
+
+    @staticmethod
+    def basculer_activite(request: Request) -> Response:
+        return ScenarioEditeurController._basculer(request, "activite", "poles")
+
+    @staticmethod
+    def basculer_critere(request: Request) -> Response:
+        return ScenarioEditeurController._basculer(request, "critere", "competences")

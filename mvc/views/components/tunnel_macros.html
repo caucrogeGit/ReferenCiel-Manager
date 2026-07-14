@@ -1,0 +1,146 @@
+{# Macros du tunnel de saisie (éditeur de scénario, ADR-019/ADR-021).
+
+   Modèle d'interaction : l'état du tunnel (étape, pôle actif, compétence active)
+   vit dans l'URL, pas dans le navigateur. Chaque interaction est un échange HTMX
+   qui régénère un fragment ; sans JS, le même lien fait une navigation classique
+   et la page rend l'étape demandée. Aucun état client, aucune duplication de la
+   logique de comptage (elle reste en Python).
+
+   Style : tokens de la charte (text-ink, text-muted, bg-forge-soft, border-line…).
+   Preline n'est pas utilisé ici : il porte le chrome (sidebar, overlays), pas les
+   données. #}
+
+{# --- Barre d'étapes.
+   steps : liste de dicts {key, label, badge, done}.
+     - key   : identifiant d'étape (utilisé dans l'URL, ex. "liaison")
+     - label : libellé affiché
+     - badge : texte du badge de complétion (ex. "CIEL", "3") ou "" si aucun
+     - done  : booléen, l'étape est complétée
+   current : key de l'étape active.
+   base_url : préfixe des liens (ex. "/conception/scenario/12"). --- #}
+{% macro stepper(steps, current, base_url) %}
+<nav class="flex gap-2 p-1.5 mb-6 bg-surface border border-line rounded-card"
+     aria-label="Étapes du scénario">
+    {% for step in steps %}
+    {%- set is_current = (step.key == current) -%}
+    <a href="{{ base_url }}?etape={{ step.key }}"
+       hx-get="{{ base_url }}?etape={{ step.key }}"
+       hx-target="#tunnel-etape"
+       hx-push-url="true"
+       class="flex-1 flex items-center justify-between gap-2 py-2.5 px-3 rounded-[10px] text-sm transition
+              {% if is_current %}bg-forge-soft border-l-2 border-forge font-semibold text-ink
+              {% else %}text-muted hover:bg-cream hover:text-ink{% endif %}"
+       {% if is_current %}aria-current="step"{% endif %}>
+        <span class="flex items-center gap-2 text-nowrap">
+            {%- if step.done and not is_current -%}
+            <svg class="shrink-0 size-4 text-forge" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            {%- endif -%}
+            {{ step.label }}
+        </span>
+        {% if step.badge %}
+        <span class="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full
+                     {% if step.done %}bg-forge-border text-forge-dark{% else %}bg-cream text-faint{% endif %}">
+            {{ step.badge }}
+        </span>
+        {% endif %}
+    </a>
+    {% endfor %}
+</nav>
+{% endmacro %}
+
+
+{# --- Pagination du tunnel (pied de page).
+   prev / next : dicts {key, label} ou None aux extrémités. --- #}
+{% macro tunnel_pager(prev, next, position, total, base_url) %}
+<div class="flex items-center justify-between mt-6 pt-4 border-t border-line">
+    {% if prev %}
+    <a href="{{ base_url }}?etape={{ prev.key }}"
+       hx-get="{{ base_url }}?etape={{ prev.key }}" hx-target="#tunnel-etape" hx-push-url="true"
+       class="flex items-center gap-1 text-sm text-muted hover:text-ink transition">
+        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        {{ prev.label }}
+    </a>
+    {% else %}<span></span>{% endif %}
+
+    <span class="text-xs text-faint">Étape {{ position }} sur {{ total }}</span>
+
+    {% if next %}
+    <a href="{{ base_url }}?etape={{ next.key }}"
+       hx-get="{{ base_url }}?etape={{ next.key }}" hx-target="#tunnel-etape" hx-push-url="true"
+       class="flex items-center gap-1 text-sm font-semibold text-forge hover:text-forge-dark transition">
+        {{ next.label }}
+        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+    {% else %}<span></span>{% endif %}
+</div>
+{% endmacro %}
+
+
+{# --- Colonne maître d'un maître-détail.
+   items : liste de dicts {id, label, count}.
+   current_id : id de l'item actif.
+   url : URL de base ; le paramètre `param` y est ajouté (ex. "pole").
+   target : sélecteur du fragment à remplacer (ex. "#detail-pole"). --- #}
+{% macro master_list(items, current_id, url, param, target) %}
+<ul class="flex flex-col gap-1" role="tablist">
+    {% for item in items %}
+    {%- set is_current = (item.id == current_id) -%}
+    <li>
+        <a href="{{ url }}&{{ param }}={{ item.id }}"
+           hx-get="{{ url }}&{{ param }}={{ item.id }}"
+           hx-target="{{ target }}"
+           hx-push-url="true"
+           role="tab" {% if is_current %}aria-selected="true"{% endif %}
+           class="flex items-center justify-between gap-2 py-2.5 px-3 rounded-[10px] text-sm transition
+                  {% if is_current %}bg-forge-soft border-l-2 border-forge font-semibold text-ink
+                  {% else %}text-muted hover:bg-cream hover:text-ink{% endif %}">
+            <span class="truncate">{{ item.label }}</span>
+            <span class="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full
+                         {% if item.count %}bg-forge text-white{% else %}bg-cream text-faint{% endif %}">
+                {{ item.count }}
+            </span>
+        </a>
+    </li>
+    {% else %}
+    <li class="px-3 py-2 text-sm text-faint">Aucun élément.</li>
+    {% endfor %}
+</ul>
+{% endmacro %}
+
+
+{# --- Ligne cochable (activité, critère).
+   Le POST régénère la colonne maître (compteur) ET la ligne : d'où le
+   hx-target sur le conteneur du maître-détail.
+   savoir_etre : rend le libellé en italique (convention du référentiel). --- #}
+{% macro checkbox_row(name, value, label, code="", checked=False, post_url="", target="", csrf_token="", savoir_etre=False) %}
+<form method="post" action="{{ post_url }}"
+      hx-post="{{ post_url }}" hx-target="{{ target }}" hx-swap="outerHTML"
+      class="contents">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="{{ name }}" value="{{ value }}">
+    <label class="flex items-start gap-2.5 py-2 px-2.5 rounded-[10px] text-sm cursor-pointer transition
+                  {% if checked %}bg-forge-soft{% else %}hover:bg-cream{% endif %}">
+        <input type="checkbox" {% if checked %}checked{% endif %}
+               onchange="this.form.requestSubmit()"
+               class="mt-0.5 shrink-0 accent-forge rounded border-field">
+        <span class="{% if savoir_etre %}italic text-muted{% else %}text-ink{% endif %}">
+            {%- if code %}<span class="font-mono text-xs text-faint mr-1">{{ code }}</span>{% endif -%}
+            {{ label }}
+        </span>
+        <noscript><button type="submit" class="ml-auto text-xs text-forge underline">OK</button></noscript>
+    </label>
+</form>
+{% endmacro %}
+
+
+{# --- Conteneur maître-détail (deux colonnes).
+   Le maître passe par {% call %} sur `master`, le détail sur `detail`. --- #}
+{% macro master_detail(title, hint="") %}
+<section class="bg-surface border border-line rounded-card p-5 mb-4">
+    <h2 class="text-base font-semibold text-ink">{{ title }}</h2>
+    {% if hint %}<p class="mt-0.5 mb-3.5 text-sm text-muted">{{ hint }}</p>{% endif %}
+    <div class="grid grid-cols-1 md:grid-cols-[minmax(0,260px)_minmax(0,1fr)] gap-4">
+        {{ caller() }}
+    </div>
+</section>
+{% endmacro %}

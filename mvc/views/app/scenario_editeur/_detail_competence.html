@@ -1,0 +1,35 @@
+{# Colonne de détail : critères de la compétence active.
+   L'en-tête rappelle l'intitulé complet — la colonne maître n'affiche que le
+   code (C01, C03…), trop court pour se repérer seul. #}
+{% from "components/tunnel_macros.html" import checkbox_row %}
+{% from "components/ui.html" import empty_state %}
+
+{%- set comp_active = (arbre.competences | selectattr("Id", "equalto", competence_id) | first) if competence_id else none -%}
+
+{% if comp_active %}
+<div class="bg-cream rounded-[10px] px-3 py-2.5 mb-2">
+    <p class="text-sm font-semibold text-ink">
+        <span class="font-mono text-xs text-faint mr-1">{{ comp_active.Code }}</span>
+        {{ comp_active.Intitule }}
+    </p>
+</div>
+<div class="flex flex-col gap-0.5">
+    {% for c in comp_active.criteres %}
+    {{ checkbox_row(
+        name="critere",
+        value=c.Id,
+        label=c.Libelle,
+        code=c.Code,
+        checked=(c.Id in critere_ids),
+        post_url=base_url ~ "/critere/basculer",
+        target="#bloc-competences",
+        csrf_token=csrf_token,
+        savoir_etre=(c.SavoirEtre | default(false))
+    ) }}
+    {% else %}
+    {{ empty_state("Aucun critère pour cette compétence.") }}
+    {% endfor %}
+</div>
+{% else %}
+{{ empty_state("Sélectionnez une compétence.", hint="Ses critères s'afficheront ici.") }}
+{% endif %}
