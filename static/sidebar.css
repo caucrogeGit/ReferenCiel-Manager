@@ -22,3 +22,18 @@
         padding-inline-start: 3.25rem; /* w-13, sidebar minifiée */
     }
 }
+
+/* Rubrique active (posée par nav-active.js). Tokens de charte via les variables
+   CSS exposées par Tailwind (@theme). Accent à gauche + fond doux. */
+#app-sidebar a.is-active,
+#app-sidebar .hs-accordion-toggle.is-active {
+    background-color: var(--color-forge-soft, #fff3ea);
+    color: var(--color-ink, #211f1a);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 0 var(--color-forge, #E8651A);
+}
+
+/* Info-bulles : uniquement en mode replié. Déployée, le libellé est déjà là. */
+#app-sidebar:not(.minified) .hs-tooltip-content {
+    display: none;
+}

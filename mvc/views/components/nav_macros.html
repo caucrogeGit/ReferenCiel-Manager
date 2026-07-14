@@ -27,12 +27,22 @@
 {%- endif -%}
 {% endmacro %}
 
+{# --- Info-bulle (tooltip Preline) : n'apparaît qu'en mode replié (voir
+   sidebar.css). Positionnement `fixed` pour échapper à l'overflow de l'aside. --- #}
+{% macro _tooltip(label) %}
+<span class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 invisible transition-opacity duration-150 absolute z-[80] py-1 px-2 bg-ink text-white text-xs rounded-md whitespace-nowrap shadow-lg" role="tooltip">{{ label }}</span>
+{% endmacro %}
+
 {# --- Lien de premier niveau (icône + libellé). --- #}
 {% macro nav_link(href, label, icon='dot') %}
-<a href="{{ href }}" class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-muted rounded-lg hover:bg-forge-soft hover:text-ink focus:outline-none focus:bg-forge-soft">
-    {{ nav_icon(icon) }}
-    <span class="text-nowrap hs-overlay-minified:hidden">{{ label }}</span>
-</a>
+<div class="hs-tooltip [--placement:right] [--strategy:fixed] [--trigger:hover] block">
+    <a href="{{ href }}"
+       class="hs-tooltip-toggle w-full flex items-center gap-x-3 py-2 px-2.5 text-sm text-muted rounded-lg hover:bg-forge-soft hover:text-ink focus:outline-none focus:bg-forge-soft">
+        {{ nav_icon(icon) }}
+        <span class="text-nowrap hs-overlay-minified:hidden">{{ label }}</span>
+    </a>
+    {{ _tooltip(label) }}
+</div>
 {% endmacro %}
 
 {# --- Sous-lien (dans un accordéon). Indenté, sans icône. --- #}
@@ -47,13 +57,16 @@
    via {% call %}. Masqué entièrement quand la sidebar est minifiée. --- #}
 {% macro nav_group(id, label, icon='dot') %}
 <li class="hs-accordion" id="acc-{{ id }}">
-    <button type="button"
-            class="hs-accordion-toggle w-full flex items-center gap-x-3 py-2 px-2.5 text-sm text-muted rounded-lg hover:bg-forge-soft hover:text-ink focus:outline-none focus:bg-forge-soft"
-            aria-expanded="false" aria-controls="acc-{{ id }}-content">
-        {{ nav_icon(icon) }}
-        <span class="text-nowrap hs-overlay-minified:hidden">{{ label }}</span>
-        <svg class="hs-accordion-active:rotate-180 ms-auto shrink-0 size-4 text-faint transition-transform duration-200 hs-overlay-minified:hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-    </button>
+    <div class="hs-tooltip [--placement:right] [--strategy:fixed] [--trigger:hover] block">
+        <button type="button"
+                class="hs-tooltip-toggle hs-accordion-toggle w-full flex items-center gap-x-3 py-2 px-2.5 text-sm text-muted rounded-lg hover:bg-forge-soft hover:text-ink focus:outline-none focus:bg-forge-soft"
+                aria-expanded="false" aria-controls="acc-{{ id }}-content">
+            {{ nav_icon(icon) }}
+            <span class="text-nowrap hs-overlay-minified:hidden">{{ label }}</span>
+            <svg class="hs-accordion-active:rotate-180 ms-auto shrink-0 size-4 text-faint transition-transform duration-200 hs-overlay-minified:hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        {{ _tooltip(label) }}
+    </div>
     <div id="acc-{{ id }}-content"
          class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden hs-overlay-minified:hidden"
          role="region" aria-labelledby="acc-{{ id }}">
