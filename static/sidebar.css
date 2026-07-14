@@ -1,0 +1,24 @@
+/* Décalage du contenu principal en fonction de la sidebar (Preline).
+   Tailwind gère l'essentiel ; ces règles couvrent le seul cas que les
+   utilitaires ne savent pas exprimer : pousser le <main> quand la sidebar
+   passe en mode « minifié » (classe .minified posée par Preline sur l'aside).
+   On s'appuie sur :has() (sibling → body → main), indisponible en Tailwind.
+   Chargé par layouts/base.html. */
+
+.app-main {
+    transition: padding-inline-start 300ms ease;
+}
+
+/* À partir de lg (>=1024px) la sidebar est toujours affichée : on réserve sa
+   largeur. En dessous, elle est en overlay (position fixed) : aucun décalage.
+   Le décalage ne s'applique qu'aux pages qui portent réellement une sidebar
+   (classe .has-sidebar posée par base.html) : les pages d'auth en sont exemptes. */
+@media (min-width: 1024px) {
+    .app-main.has-sidebar {
+        padding-inline-start: 16rem; /* w-64, sidebar déployée */
+    }
+
+    body:has(#app-sidebar.minified) .app-main.has-sidebar {
+        padding-inline-start: 3.25rem; /* w-13, sidebar minifiée */
+    }
+}

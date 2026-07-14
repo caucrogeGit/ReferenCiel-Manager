@@ -1,127 +1,159 @@
-{# Navigation applicative — menus déroulants par domaine (grands points d'entrée).
-   Style : static/nav.css. `is_authenticated` / `csrf_token` injectés par BaseController.render ;
-   `can(permission)` et `current_user` injectés par le provider Jinja RBAC natif
-   (forge-mvc-rbac, ADR-015). Visibilité pilotée par le RÔLE : chaque rubrique est gardée
-   par sa permission (contrat mvc/security/rbac.json). Le masquage n'est que du confort :
-   les routes sensibles sont AUSSI protégées par `guarded(...)` (mvc/routes/…). Le menu
-   profil (identité + Sécurité + Déconnexion) remplace l'ancien bouton et n'est visible
-   qu'authentifié. #}
+{# Navigation applicative — SIDEBAR (Preline UI, réhabillée à la charte projet).
+   Preline est une dépendance front (CSS/JS hors Forge, autorisée côté vues, ADR-018) :
+   le JS (static/vendor/preline.js) pilote l'overlay mobile, le repli (minify) et les
+   accordéons ; les variantes `hs-overlay-*` viennent de preline/variants.css (input.css).
+   Décision : ADR-020.
+
+   `is_authenticated` / `csrf_token` injectés par BaseController.render ; `can(permission)`
+   et `current_user` par le provider Jinja RBAC natif (forge-mvc-rbac, ADR-015).
+   Visibilité pilotée par le RÔLE : chaque rubrique est gardée par sa permission. Le
+   masquage n'est que du confort : les routes sensibles restent protégées par `guarded(...)`.
+
+   Le bouton d'ouverture (mobile) vit dans la barre supérieure de base.html ;
+   ce partial ne rend que la sidebar elle-même. #}
 {% from "components/ui.html" import button %}
-<div class="app-nav">
-    {# Pas de lien « Accueil » : le brand {{ app_name }} du header (base.html)
-       pointe déjà vers « / ». #}
+{% from "components/nav_macros.html" import nav_link, nav_sublink, nav_group %}
 
-    {% if can('referentiel.gerer') %}
-    <div class="nav-item">
-        <button class="nav-trigger" type="button">Référentiel ▾</button>
-        <div class="nav-menu">
-            <a href="/referentiel">Atelier référentiel</a>
-            <a href="/admin/referentiel/import">Importer un référentiel</a>
-        </div>
-    </div>
-    {% endif %}
+{# Sidebar. En < lg : overlay coulissant (masqué par défaut). En >= lg : toujours
+   affichée, largeur w-64, repliable en w-13 (minify). #}
+<aside id="app-sidebar"
+       class="hs-overlay [--auto-close:lg] hs-overlay-minified:w-13
+              lg:block lg:translate-x-0 lg:inset-e-auto lg:bottom-0
+              w-64 hs-overlay-open:translate-x-0 -translate-x-full
+              transition-all duration-300 transform h-full hidden overflow-x-hidden
+              fixed top-0 inset-s-0 bottom-0 z-60 bg-surface border-e border-line"
+       role="dialog" tabindex="-1" aria-label="Navigation principale">
+    <div class="relative flex flex-col h-full max-h-full">
 
-    {% if can('socle.gerer') %}
-    <div class="nav-item">
-        <button class="nav-trigger" type="button">Structure scolaire ▾</button>
-        <div class="nav-menu">
-            <a href="/annee_scolaire">Années scolaires</a>
-            <a href="/niveau_classe">Niveaux de classe</a>
-            <a href="/classe">Classes</a>
-            <a href="/eleve">Élèves</a>
-            <a href="/eleve/comptes">Comptes élèves</a>
-            <a href="/professeur">Professeurs</a>
-            <a href="/professeur/comptes">Comptes professeurs</a>
-            <a href="/inscription_eleve">Inscriptions</a>
-            <a href="/affectation_professeur_classe">Affectations professeur</a>
-            <a href="/groupe">Groupes</a>
-        </div>
-    </div>
-    {% endif %}
+        {# --- En-tête : marque + boutons repli (lg) / fermeture (mobile) --- #}
+        <header class="py-4 px-3 flex justify-between items-center gap-x-2 border-b border-line">
+            <a href="/" class="flex-none font-extrabold text-lg tracking-tight text-forge focus:outline-none focus:opacity-80 hs-overlay-minified:hidden"
+               aria-label="{{ app_name }} — accueil">{{ app_name }}</a>
 
-    
+            {# Fermeture (mobile uniquement) #}
+            <button type="button"
+                    class="lg:hidden flex justify-center items-center size-7 rounded-full text-muted hover:bg-forge-soft hover:text-ink focus:outline-none focus:bg-forge-soft"
+                    data-hs-overlay="#app-sidebar" aria-label="Fermer la navigation">
+                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                <span class="sr-only">Fermer</span>
+            </button>
 
-    {% if can('socle.gerer') %}
-    <a href="/admin" class="nav-link">Tableau de bord</a>
-    {% endif %}
+            {# Repli / dépli (desktop uniquement) #}
+            <button type="button"
+                    class="hidden lg:flex justify-center items-center flex-none size-8 rounded-full text-muted hover:bg-forge-soft hover:text-ink focus:outline-none focus:bg-forge-soft"
+                    data-hs-overlay-minifier="#app-sidebar" aria-label="Replier la navigation">
+                <svg class="hidden hs-overlay-minified:block shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/><path d="m8 9 3 3-3 3"/></svg>
+                <svg class="hs-overlay-minified:hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/><path d="m10 15-3-3 3-3"/></svg>
+                <span class="sr-only">Replier la navigation</span>
+            </button>
+        </header>
 
-    {% if can('conception.gerer') %}
-    <div class="nav-item">
-        <button class="nav-trigger" type="button">Conception ▾</button>
-        <div class="nav-menu">
-            <div class="nav-group-label">Contenus pédagogiques</div>
-            <a href="/conception/scenario">Scénarios</a>
-            <a href="/starter_welcome">Starters Welcome</a>
-            <a href="/parcours">Parcours</a>
-            <a href="/palier">Paliers</a>
-        </div>
-    </div>
+        {# --- Corps : liens et accordéons, filtrés par rôle --- #}
+        <nav class="hs-accordion-group h-full overflow-y-auto py-3 px-2
+                    [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-cream [&::-webkit-scrollbar-thumb]:bg-line [&::-webkit-scrollbar-thumb]:rounded-full"
+             data-hs-accordion-always-open>
+            <ul class="space-y-1">
 
-    {% endif %}
+                {% if can('socle.gerer') %}
+                <li>
+                    {{ nav_link('/admin', 'Tableau de bord', icon='home') }}
+                </li>
+                {% endif %}
 
-    {% if can('execution.gerer') %}
-    <div class="nav-item">
-        <button class="nav-trigger" type="button">Exécution ▾</button>
-        <div class="nav-menu">
-            <div class="nav-group-label">Travail et évaluation</div>
-            <a href="/affectation_parcours">Affectations de parcours</a>
-            <a href="/progression_eleve">Progressions</a>
-            <a href="/qcm">QCM</a>
-            <a href="/tentative_qcm">Tentatives QCM</a>
-            <a href="/checklist">Checklists</a>
-            <a href="/activite">Activités</a>
-            <a href="/depot_eleve">Dépôts élève</a>
-            <a href="/evaluation_activite">Évaluations</a>
-            <a href="/bilan">Bilans élève</a>
-        </div>
-    </div>
+                {% if can('referentiel.gerer') %}
+                {% call nav_group('referentiel', 'Référentiel', icon='layers') %}
+                    <li>{{ nav_sublink('/referentiel', 'Atelier référentiel') }}</li>
+                    <li>{{ nav_sublink('/admin/referentiel/import', 'Importer un référentiel') }}</li>
+                {% endcall %}
+                {% endif %}
 
-    {% endif %}
+                {% if can('socle.gerer') %}
+                {% call nav_group('structure', 'Structure scolaire', icon='school') %}
+                    <li>{{ nav_sublink('/annee_scolaire', 'Années scolaires') }}</li>
+                    <li>{{ nav_sublink('/niveau_classe', 'Niveaux de classe') }}</li>
+                    <li>{{ nav_sublink('/classe', 'Classes') }}</li>
+                    <li>{{ nav_sublink('/eleve', 'Élèves') }}</li>
+                    <li>{{ nav_sublink('/eleve/comptes', 'Comptes élèves') }}</li>
+                    <li>{{ nav_sublink('/professeur', 'Professeurs') }}</li>
+                    <li>{{ nav_sublink('/professeur/comptes', 'Comptes professeurs') }}</li>
+                    <li>{{ nav_sublink('/inscription_eleve', 'Inscriptions') }}</li>
+                    <li>{{ nav_sublink('/affectation_professeur_classe', 'Affectations professeur') }}</li>
+                    <li>{{ nav_sublink('/groupe', 'Groupes') }}</li>
+                {% endcall %}
+                {% endif %}
 
-    {% if can('suivi.voir') %}
-    <a href="/mes-classes" class="nav-link">Mes classes</a>
-    <a href="/suivi" class="nav-link">Suivi</a>
-    {% endif %}
+                {% if can('conception.gerer') %}
+                {% call nav_group('conception', 'Conception', icon='pen') %}
+                    <li>{{ nav_sublink('/conception/scenario', 'Scénarios') }}</li>
+                    <li>{{ nav_sublink('/starter_welcome', 'Starters Welcome') }}</li>
+                    <li>{{ nav_sublink('/parcours', 'Parcours') }}</li>
+                    <li>{{ nav_sublink('/palier', 'Paliers') }}</li>
+                {% endcall %}
+                {% endif %}
 
-    {% if can('espace_eleve.voir') %}
-    <a href="/mon-parcours" class="nav-link">Mon parcours</a>
-    {% endif %}
+                {% if can('execution.gerer') %}
+                {% call nav_group('execution', 'Exécution', icon='play') %}
+                    <li>{{ nav_sublink('/affectation_parcours', 'Affectations de parcours') }}</li>
+                    <li>{{ nav_sublink('/progression_eleve', 'Progressions') }}</li>
+                    <li>{{ nav_sublink('/qcm', 'QCM') }}</li>
+                    <li>{{ nav_sublink('/tentative_qcm', 'Tentatives QCM') }}</li>
+                    <li>{{ nav_sublink('/checklist', 'Checklists') }}</li>
+                    <li>{{ nav_sublink('/activite', 'Activités') }}</li>
+                    <li>{{ nav_sublink('/depot_eleve', 'Dépôts élève') }}</li>
+                    <li>{{ nav_sublink('/evaluation_activite', 'Évaluations') }}</li>
+                    <li>{{ nav_sublink('/bilan', 'Bilans élève') }}</li>
+                {% endcall %}
+                {% endif %}
 
-    {% if is_authenticated %}
-    {# Menu profil (aligné à droite) : identité + options de compte. Même mécanique
-       de déroulé que les autres menus (survol/focus, sans JS). La Déconnexion reste
-       un POST porteur du jeton CSRF. #}
-    <div class="nav-item nav-profile">
-        <button class="nav-trigger nav-profile-trigger" type="button"
-                aria-haspopup="menu" aria-label="Menu du profil">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                 stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="8" r="4"></circle>
-                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
-            </svg>
-        </button>
-        <div class="nav-menu nav-menu-right" role="menu">
-            {% if current_user and current_user.email %}
-            <div class="nav-profile-identity" title="{{ current_user.email }}">
-                <span class="nav-profile-email">{{ current_user.email }}</span>
-                <span class="nav-profile-role">
-                    {% if can('socle.gerer') %}Administrateur
-                    {% elif can('conception.gerer') %}Professeur
-                    {% elif can('espace_eleve.voir') %}Élève{% endif %}
-                </span>
+                {% if can('suivi.voir') %}
+                <li>{{ nav_link('/mes-classes', 'Mes classes', icon='users') }}</li>
+                <li>{{ nav_link('/suivi', 'Suivi', icon='chart') }}</li>
+                {% endif %}
+
+                {% if can('espace_eleve.voir') %}
+                <li>{{ nav_link('/mon-parcours', 'Mon parcours', icon='route') }}</li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        {# --- Pied : profil (authentifié) ou connexion --- #}
+        <footer class="mt-auto p-2 border-t border-line">
+            {% if is_authenticated %}
+            <div class="hs-dropdown [--placement:top-left] [--strategy:absolute] relative w-full">
+                <button type="button"
+                        class="hs-dropdown-toggle w-full flex items-center gap-x-3 py-2 px-2.5 text-sm text-ink rounded-lg hover:bg-forge-soft focus:outline-none focus:bg-forge-soft"
+                        aria-haspopup="menu" aria-expanded="false" aria-label="Menu du profil">
+                    <span class="shrink-0 inline-flex items-center justify-center size-8 rounded-full bg-forge-soft text-forge border border-forge-border">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+                    </span>
+                    {% if current_user and current_user.email %}
+                    <span class="min-w-0 flex flex-col items-start hs-overlay-minified:hidden">
+                        <span class="max-w-[10rem] truncate font-medium">{{ current_user.email }}</span>
+                        <span class="text-xs text-muted">
+                            {% if can('socle.gerer') %}Administrateur
+                            {% elif can('conception.gerer') %}Professeur
+                            {% elif can('espace_eleve.voir') %}Élève{% endif %}
+                        </span>
+                    </span>
+                    {% endif %}
+                </button>
+                <div class="hs-dropdown-menu hs-dropdown-open:opacity-100 opacity-0 hidden transition-[opacity,margin] duration-150 min-w-60 bg-surface border border-line rounded-card shadow-lg p-1 z-70"
+                     role="menu" aria-orientation="vertical">
+                    <a href="/profil" role="menuitem" class="flex items-center gap-x-2 py-2 px-2.5 text-sm text-ink rounded-lg hover:bg-forge-soft focus:outline-none focus:bg-forge-soft">Mon profil</a>
+                    <a href="/preferences" role="menuitem" class="flex items-center gap-x-2 py-2 px-2.5 text-sm text-ink rounded-lg hover:bg-forge-soft focus:outline-none focus:bg-forge-soft">Préférences</a>
+                    <a href="/a-propos" role="menuitem" class="flex items-center gap-x-2 py-2 px-2.5 text-sm text-ink rounded-lg hover:bg-forge-soft focus:outline-none focus:bg-forge-soft">À propos</a>
+                    <div class="my-1 border-t border-line"></div>
+                    <form method="post" action="/logout">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button type="submit" role="menuitem" class="w-full text-start flex items-center gap-x-2 py-2 px-2.5 text-sm text-forge-dark rounded-lg hover:bg-forge-soft focus:outline-none focus:bg-forge-soft">Déconnexion</button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="hs-overlay-minified:hidden px-1 py-1">
+                {{ button("Connexion", variant="primary", href="/login") }}
             </div>
             {% endif %}
-            <a href="/profil" role="menuitem">Mon profil</a>
-            <a href="/preferences" role="menuitem">Préférences</a>
-            <a href="/a-propos" role="menuitem">À propos</a>
-            <form method="post" action="/logout" class="nav-profile-logout">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <button type="submit" class="nav-menu-button" role="menuitem">Déconnexion</button>
-            </form>
-        </div>
+        </footer>
     </div>
-    {% else %}
-    {{ button("Connexion", variant="primary", href="/login") }}
-    {% endif %}
-</div>
+</aside>

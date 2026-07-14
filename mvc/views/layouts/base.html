@@ -22,30 +22,45 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/tailwind.css">
-    <link rel="stylesheet" href="/static/nav.css">
+    <link rel="stylesheet" href="/static/sidebar.css">
 </head>
-<body class="bg-cream text-ink font-sans min-h-screen flex flex-col">
+<body class="bg-cream text-ink font-sans min-h-screen">
 
-    {% block header %}
-    <header class="bg-surface border-b border-line px-8 py-4">
-        <div class="max-w-5xl mx-auto flex items-center justify-between gap-6">
-            <a href="/" class="flex items-center gap-2 text-lg font-extrabold tracking-tight text-forge">
-                {{ app_name }}
-            </a>
-            <nav class="flex items-center gap-6 text-sm font-medium text-muted">
-                {% block nav %}{% include "partials/nav.html" ignore missing %}{% endblock %}
-            </nav>
-        </div>
-    </header>
-    {% endblock %}
+    {# Navigation applicative — sidebar (partials/nav.html). Fixe à gauche en >= lg,
+       overlay coulissant en dessous. Le décalage du contenu est géré par sidebar.css
+       via la classe .app-main. #}
+    {% block nav %}{% include "partials/nav.html" ignore missing %}{% endblock %}
 
-    <main class="flex-1 w-full max-w-3xl mx-auto px-8 py-16">
-        {% block content %}{% endblock %}
-    </main>
+    <div class="app-main{% if is_authenticated %} has-sidebar{% endif %} min-h-screen flex flex-col">
 
-    <footer class="bg-ink text-white/70 px-8 py-6 text-center text-xs">
-        {% block footer %}Généré avec <a href="https://forgemvc.com/docs/forge/" target="_blank" rel="noopener noreferrer" class="text-forge hover:underline">Forge 1.0.0rc2</a>. Framework MVC Python, sans magie cachée.{% endblock %}
-    </footer>
+        {# Barre supérieure — visible seulement en < lg (la sidebar est repliée en overlay).
+           Contient la marque et le bouton d'ouverture de la sidebar. Rendue uniquement
+           quand une sidebar existe (pages authentifiées) : les pages d'auth vident le
+           bloc `nav`, il n'y aurait rien à ouvrir. #}
+        {% if is_authenticated %}
+        <header class="lg:hidden sticky top-0 z-40 bg-surface border-b border-line px-4 py-3 flex items-center gap-3">
+            <button type="button"
+                    class="w-9 h-9 inline-flex justify-center items-center rounded-lg text-muted hover:bg-forge-soft hover:text-ink focus:outline-none focus:bg-forge-soft"
+                    aria-haspopup="dialog" aria-expanded="false" aria-controls="app-sidebar"
+                    aria-label="Ouvrir la navigation" data-hs-overlay="#app-sidebar">
+                <svg class="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+                <span class="sr-only">Ouvrir la navigation</span>
+            </button>
+            <a href="/" class="font-extrabold tracking-tight text-forge">{{ app_name }}</a>
+        </header>
+        {% endif %}
 
+        <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="bg-ink text-white/70 px-8 py-6 text-center text-xs">
+            {% block footer %}Généré avec <a href="https://forgemvc.com/docs/forge/" target="_blank" rel="noopener noreferrer" class="text-forge hover:underline">Forge 1.0.0rc2</a>. Framework MVC Python, sans magie cachée.{% endblock %}
+        </footer>
+    </div>
+
+    {# Preline UI — pilote overlay mobile, repli (minify) et accordéons de la sidebar.
+       Auto-init au chargement (rendu serveur, multi-pages). Dépendance front hors Forge. #}
+    <script src="/static/vendor/preline.js"></script>
 </body>
 </html>

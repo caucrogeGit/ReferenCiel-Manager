@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
+/* Preline UI (composants front, hors Forge — autorisé côté vues CSS/JS, voir
+   ADR-020). Fournit les variantes `hs-overlay-*` (sidebar repliable/overlay).
+   Le JS est chargé séparément (static/vendor/preline.js dans base.html). */
+@import "../../node_modules/preline/variants.css";
+
 /* Tailwind scanne les templates du projet pour ne garder que les classes
-   réellement utilisées. */
+   réellement utilisées. On scanne AUSSI le bundle Preline : certaines classes
+   utilitaires ne sont injectées qu'au runtime par son JS. */
 @source "../../mvc/views";
+@source "../../node_modules/preline/dist/*.js";
 
 /* ==========================================================================
    Charte graphique du projet : « Accessible chaleureux »

@@ -45,6 +45,16 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   **retrait total** de la couche maison (`mvc/services/rbac.py` supprimé) ; remplace
   l'ADR-013.
   Vérifié e2e par rôle.
+- `017-referentiels-livres-et-chargement-installation.md` : référentiels
+  niveau-classe versionnés dans `data/referentiels/`, chargés en base à
+  l'installation via `tools/charger_referentiels.py` (idempotent).
+- `018-gestion-referentiel-atelier-coherent.md` : atelier de gestion du
+  référentiel cohérent (édition adossée aux JSON canoniques).
+- `019-modele-scenario-aligne-cpro-education.md` : modèle de scénario aligné sur
+  le cadre CPRO Éducation nationale ; base de l'éditeur de scénario.
+- `020-preline-ui-pour-la-couche-vues.md` : Preline UI adopté comme boîte à
+  outils front de la **couche vues** (CSS/JS hors Forge, autorisé) ; navigation
+  passée en sidebar filtrée par rôle, réhabillée à la charte.
 
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
