@@ -52,6 +52,20 @@
 - **Impact** : opt-ins média inutilisables en l'état ; l'activation laisse
   l'application non démarrable jusqu'au `opt-in:disable`.
 
+- **Aggravation (install-time)** : même **désactivés** (retirés de
+  `optins/registry.py`), les packages **simplement installés** cassent une
+  partie de la **CLI Forge**. Leur entry point `[forge_mvc.commands]`
+  (`forge_mvc_video = forge_mvc_video.commands:COMMANDS`) est chargé
+  *eagerly* par `dispatch_optin` → `_discovered_commands()`, ce qui importe
+  `forge_mvc_video/audio` et déclenche le même `ModuleNotFoundError`. Résultat :
+  `forge migration:status`, `migration:make`, `make:relation`, `entity:validate`,
+  `sync:relations` **plantent tous**, alors que ces commandes n'ont rien à voir
+  avec l'audio/vidéo. Seul un `pip uninstall forge-mvc-video forge-mvc-audio`
+  restaure l'outillage.
+  → Suggestion : la découverte des commandes opt-in devrait **isoler l'échec
+    d'un entry point** (try/except par entry point) au lieu de laisser un import
+    cassé neutraliser toute la CLI.
+
 - **Contournement appliqué** : `forge opt-in:disable video/audio --apply` a
   restauré l'app (registre revenu à l'identique, 86 tests verts). Les packages
   restent installés mais non câblés.
