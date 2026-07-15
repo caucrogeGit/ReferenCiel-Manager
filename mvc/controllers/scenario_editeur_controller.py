@@ -12,6 +12,7 @@ from typing import Any, cast
 from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller.base_controller import BaseController
+from core.security.session import get_flash, get_session_id
 
 from forge_mvc_files import UploadError, delete_upload, save_upload
 
@@ -88,7 +89,11 @@ class ScenarioEditeurController(BaseController):
     def index(request: Request) -> Response:
         return BaseController.render(
             "app/scenario_editeur/index.html",
-            context={"scenarios": list_scenarios(), "referentiels": list_referentiels()},
+            context={
+                "scenarios": list_scenarios(),
+                "referentiels": list_referentiels(),
+                "flash": get_flash(get_session_id(request)),
+            },
             request=request,
         )
 
@@ -244,6 +249,7 @@ class ScenarioEditeurController(BaseController):
 
         context: dict[str, Any] = {
             "scenario": scenario,
+            "flash": get_flash(get_session_id(request)),
             "co_auteur_ids": co_auteur_ids,
             "professeurs": list_professeurs(),
             "referentiels": referentiels,
