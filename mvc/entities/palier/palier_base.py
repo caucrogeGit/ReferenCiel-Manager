@@ -19,11 +19,11 @@ from core.validation import (
 class PalierBase:
     """Classe de base regenerable de Palier."""
 
-    def __init__(self, ordre, titre, dossier_technique_fichier, version_parcours_id, created_at, updated_at, id=None, theme=None, production_attendue=None):
+    def __init__(self, ordre, titre, dossier_technique_fichier, parcours_id, created_at, updated_at, id=None, theme=None, production_attendue=None):
         self.ordre = ordre
         self.titre = titre
         self.dossier_technique_fichier = dossier_technique_fichier
-        self.version_parcours_id = version_parcours_id
+        self.parcours_id = parcours_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -109,15 +109,15 @@ class PalierBase:
         self._dossier_technique_fichier = value
 
     @property
-    def version_parcours_id(self):
-        return self._version_parcours_id
+    def parcours_id(self):
+        return self._parcours_id
 
-    @version_parcours_id.setter
+    @parcours_id.setter
     @typed(int)
-    def version_parcours_id(self, value):
+    def parcours_id(self, value):
         if value is None:
-            raise ValidationError("version_parcours_id", 'La propriété "version_parcours_id" ne peut pas être nulle.')
-        self._version_parcours_id = value
+            raise ValidationError("parcours_id", 'La propriété "parcours_id" ne peut pas être nulle.')
+        self._parcours_id = value
 
     @property
     def created_at(self):
@@ -149,7 +149,7 @@ class PalierBase:
             "theme": self.theme,
             "production_attendue": self.production_attendue,
             "dossier_technique_fichier": self.dossier_technique_fichier,
-            "version_parcours_id": self.version_parcours_id,
+            "parcours_id": self.parcours_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -163,11 +163,11 @@ class PalierBase:
             theme=data["theme"],
             production_attendue=data["production_attendue"],
             dossier_technique_fichier=data["dossier_technique_fichier"],
-            version_parcours_id=data["version_parcours_id"],
+            parcours_id=data["parcours_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"PalierBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, dossier_technique_fichier={self.dossier_technique_fichier!r}, version_parcours_id={self.version_parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"PalierBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, dossier_technique_fichier={self.dossier_technique_fichier!r}, parcours_id={self.parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

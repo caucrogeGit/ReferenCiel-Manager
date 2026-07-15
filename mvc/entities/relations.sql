@@ -327,9 +327,9 @@ ALTER TABLE version_parcours
     ON UPDATE RESTRICT;
 
 ALTER TABLE palier
-    ADD CONSTRAINT fk_palier_version_parcours_id
-    FOREIGN KEY (version_parcours_id)
-    REFERENCES version_parcours (Id)
+    ADD CONSTRAINT fk_palier_parcours_id
+    FOREIGN KEY (parcours_id)
+    REFERENCES parcours (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 

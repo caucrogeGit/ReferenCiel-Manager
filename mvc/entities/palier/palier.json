@@ -43,9 +43,9 @@
       "unique": false
     },
     {
-      "name": "version_parcours_id",
+      "name": "parcours_id",
       "type": "foreign_key",
-      "references": "VersionParcours",
+      "references": "Parcours",
       "required": true
     }
   ],
