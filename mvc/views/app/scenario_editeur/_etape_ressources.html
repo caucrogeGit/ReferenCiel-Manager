@@ -28,7 +28,7 @@
             <span class="flex shrink-0 items-center gap-3">
                 <span class="text-faint">{{ (r.Taille / 1024) | round(1) }} Ko</span>
                 <form method="post" action="{{ base_url }}/ressources/{{ r.Id }}/supprimer"
-                      onsubmit="return confirm('Supprimer cette ressource ?')">
+                      data-confirm="Supprimer cette ressource ?">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <button type="submit" class="font-semibold text-red-600 hover:text-red-700">Supprimer</button>
                 </form>

@@ -118,15 +118,18 @@
    hx-target sur le conteneur du maître-détail.
    savoir_etre : rend le libellé en italique (convention du référentiel). --- #}
 {% macro checkbox_row(name, value, label, code="", checked=False, post_url="", target="", csrf_token="", savoir_etre=False) %}
+{# La soumission est déclenchée par HTMX (hx-trigger="change") et NON par un
+   handler inline onchange : la CSP (script-src 'self') bloque le JS inline.
+   L'événement change de la case remonte au formulaire, qui poste (l'id est porté
+   par le hidden ci-dessous, la case n'est qu'un interrupteur visuel). #}
 <form method="post" action="{{ post_url }}"
-      hx-post="{{ post_url }}" hx-target="{{ target }}" hx-swap="outerHTML"
+      hx-post="{{ post_url }}" hx-trigger="change" hx-target="{{ target }}" hx-swap="outerHTML"
       class="contents">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <input type="hidden" name="{{ name }}" value="{{ value }}">
     <label class="flex items-start gap-2.5 py-2 px-2.5 rounded-[10px] text-sm cursor-pointer transition
                   {% if checked %}bg-forge-soft{% else %}hover:bg-cream{% endif %}">
         <input type="checkbox" {% if checked %}checked{% endif %}
-               onchange="this.form.requestSubmit()"
                class="mt-0.5 shrink-0 accent-forge rounded border-field">
         <span class="{% if savoir_etre %}italic text-muted{% else %}text-ink{% endif %}">
             {%- if code %}<span class="font-mono text-xs text-faint mr-1">{{ code }}</span>{% endif -%}

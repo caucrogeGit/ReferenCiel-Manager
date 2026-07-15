@@ -69,5 +69,8 @@
     <script src="/static/nav-active.js"></script>
     {# Tunnel de scénario — bascule d'affichage (co-auteurs / co-intervention). Après HTMX. #}
     <script src="/static/scenario-tunnel.js" defer></script>
+    {# Comportements UI globaux (confirmations de suppression, ouverture de modale) —
+       remplacent les handlers inline interdits par la CSP. #}
+    <script src="/static/ui-behaviors.js" defer></script>
 </body>
 </html>

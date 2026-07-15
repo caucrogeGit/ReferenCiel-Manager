@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<form method="post" action="/eleve/destroy/{{ eleve.Id }}" class="mt-4" onsubmit="return confirm('Confirmer la suppression ?')">
+<form method="post" action="/eleve/destroy/{{ eleve.Id }}" class="mt-4" data-confirm="Confirmer la suppression ?">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     {{ button(label='Supprimer', variant='danger', type='submit') }}
 </form>

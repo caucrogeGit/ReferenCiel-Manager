@@ -64,7 +64,7 @@
 <!-- Formulaire --------------------------------------------------------------- -->
 <h2 class="text-xl font-bold tracking-tight mt-10 mb-4">Champs de formulaire</h2>
 {% call card() %}
-<form onsubmit="return false" class="space-y-1">
+<form data-prevent-submit class="space-y-1">
   {{ field(name="exemple_nom", label="Nom", placeholder="Votre nom", required=True) }}
   {{ field(name="exemple_email", label="Courriel", type="email", value="prof@exemple.test", help="Un champ avec valeur et aide.") }}
   {{ field(name="exemple_erreur", label="Champ en erreur", value="invalide", error="Ce champ est requis.") }}

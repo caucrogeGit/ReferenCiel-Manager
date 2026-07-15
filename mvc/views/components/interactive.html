@@ -45,7 +45,7 @@
   "secondary": "text-forge bg-forge-soft border border-forge-border hover:bg-forge-border",
   "ghost":     "text-ink bg-transparent border border-field hover:border-forge"
 } -%}
-<button type="button" onclick="document.getElementById('{{ id }}').showModal()" class="inline-flex items-center justify-center font-semibold transition rounded-[10px] px-[21px] py-3 text-sm {{ styles.get(variant) or styles['primary'] }}">{{ label }}</button>
+<button type="button" data-open-modal="{{ id }}" class="inline-flex items-center justify-center font-semibold transition rounded-[10px] px-[21px] py-3 text-sm {{ styles.get(variant) or styles['primary'] }}">{{ label }}</button>
 {% endmacro %}
 
 {# Modale native <dialog>. Fermeture par <form method="dialog"> (zéro JS).
