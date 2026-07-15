@@ -122,13 +122,13 @@ def recalculer_statut(scenario_id: int) -> None:
       - « finalise » : contexte complet ET au moins une activité ET au moins un
         critère (la compétence est impliquée par le critère) ;
       - « brouillon » : sinon.
-    Un scénario « affecte » (rattaché à des élèves) est verrouillé : on n'y touche pas.
+    Un scénario « utilise » (utilisé par des élèves) est verrouillé : on n'y touche pas.
     """
     row = fetch_one(
         "SELECT Statut, " + ", ".join(_CHAMPS_CONTEXTE) + " FROM scenario WHERE Id = ?",
         (scenario_id,),
     )
-    if row is None or row["Statut"] == "affecte":
+    if row is None or row["Statut"] == "utilise":
         return
     contexte_complet = all(row[champ] for champ in _CHAMPS_CONTEXTE)
     n_act = fetch_one(

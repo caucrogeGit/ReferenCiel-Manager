@@ -7,9 +7,9 @@
 {% from "components/ui.html" import flash_messages, badge %}
 
 {# Statut dérivé/persisté (ADR-019) : brouillon (en cours), finalisé (contexte +
-   ≥1 activité + ≥1 critère), affecté (rattaché à des élèves, verrouillé). #}
-{%- set _statut_label = {"brouillon": "Brouillon", "finalise": "Finalisé", "affecte": "Affecté"} -%}
-{%- set _statut_tone = {"brouillon": "neutral", "finalise": "success", "affecte": "warning"} -%}
+   ≥1 activité + ≥1 critère), utilisé (utilisé par des élèves, verrouillé). #}
+{%- set _statut_label = {"brouillon": "Brouillon", "finalise": "Finalisé", "utilise": "Utilisé"} -%}
+{%- set _statut_tone = {"brouillon": "neutral", "finalise": "success", "utilise": "green"} -%}
 
 {% block title %}{{ scenario.Titre or "Scénario sans titre" }} — {{ app_name }}{% endblock %}
 

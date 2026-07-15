@@ -116,7 +116,7 @@ class ScenarioEditeurController(BaseController):
             return BaseController.redirect(
                 "/conception/scenario",
                 request=request,
-                flash=f"Un scénario s'intitule déjà « {titre} ». Choisissez un autre titre.",
+                flash=f"Un scénario s'intitule déjà « {titre} ». Choisissez un autre titre !",
                 level="success",
             )
         scenario_id = creer_scenario(titre, referentiel_id)

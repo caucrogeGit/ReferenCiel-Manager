@@ -4,9 +4,9 @@
 {{ flash_messages(flash) }}
 
 {# Les trois états d'un scénario (ADR-019) : brouillon (en cours), finalisé
-   (validé, prêt à être affecté), affecté (rattaché à un élève, verrouillé). #}
-{%- set _statut_label = {"brouillon": "Brouillon", "finalise": "Finalisé", "affecte": "Affecté"} -%}
-{%- set _statut_tone = {"brouillon": "neutral", "finalise": "success", "affecte": "warning"} -%}
+   (validé, prêt à être affecté), utilisé (utilisé par des élèves, verrouillé). #}
+{%- set _statut_label = {"brouillon": "Brouillon", "finalise": "Finalisé", "utilise": "Utilisé"} -%}
+{%- set _statut_tone = {"brouillon": "neutral", "finalise": "success", "utilise": "green"} -%}
 
 <h1 class="text-2xl font-bold text-gray-800 mb-6">Scénarios pédagogiques</h1>
 

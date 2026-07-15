@@ -37,6 +37,7 @@
 {%- set tones = {
   "forge":    "text-forge bg-forge-soft",
   "success": "text-forge bg-forge-soft",
+  "green":   "text-green-700 bg-green-100",
   "warning": "text-ocre bg-orange-50",
   "danger":  "text-red-700 bg-red-50",
   "neutral": "text-subtle bg-cream"
@@ -63,7 +64,7 @@
   "warning": "bg-orange-50 text-ocre border-ocre/30",
   "info":    "bg-cream text-subtle border-line"
 } -%}
-<div class="rounded-[10px] border px-4 py-3 text-sm {{ tones.get(level) or tones['info'] }}">{{ message }}</div>
+<div class="rounded-[10px] border px-4 py-3 text-sm font-semibold {{ tones.get(level) or tones['info'] }}">{{ message }}</div>
 {% endmacro %}
 
 {# Rendu d'un message flash de session. flash : dict {message, level} ou None.
