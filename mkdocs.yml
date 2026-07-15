@@ -84,6 +84,7 @@ nav:
       - ADR-019 — Modèle du scénario (cpro-education): adr/019-modele-scenario-aligne-cpro-education.md
       - ADR-020 — Preline UI pour la couche vues: adr/020-preline-ui-pour-la-couche-vues.md
       - ADR-021 — État du tunnel dans l'URL: adr/021-etat-du-tunnel-dans-l-url.md
+      - ADR-022 — Parcours objet canonique (aplatissement): adr/022-parcours-objet-canonique-aplatissement.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
@@ -132,3 +133,4 @@ nav:
       - Retour 019 — MFA revalidation step-up & session dépréciée: banc-essai/retour-019-mfa-revalidation-step-up-session-depreciee.md
       - Retour 020 — fixtures, références, ordre & scénario cohérent: banc-essai/retour-020-fixtures-references-ordre-et-scenario-coherent.md
       - Retour 021 — session orpheline, split SQL en commentaire & cycle serveur: banc-essai/retour-021-authmiddleware-session-orpheline-et-split-sql-commentaire.md
+      - Retour 022 — opt-ins média, core.http.bearer absent & audio sans BDD: banc-essai/retour-022-optins-media-core-http-bearer-absent-et-audio-sans-bdd.md

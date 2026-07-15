@@ -59,6 +59,11 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   l'**URL** (jamais côté client), complétion **dérivée des données**,
   régénération partielle par fragments HTMX avec **dégradation gracieuse**
   (une seule route sert JS et sans-JS) ; Preline=chrome, HTMX=données.
+- `022-parcours-objet-canonique-aplatissement.md` (**Accepté**) : **Parcours**
+  devient l'objet canonique unique ; suppression des couches
+  starter/version-starter/version-parcours et des affectations ; paliers
+  directement sous le parcours ; nouvelles cardinalités (Scénario 1-1 Parcours
+  via pivot, ProgressionParcours associative). Révise ADR-019.
 
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
