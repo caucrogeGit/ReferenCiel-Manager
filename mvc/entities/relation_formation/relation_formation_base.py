@@ -1,5 +1,5 @@
 """FICHIER GENERE PAR FORGE.
-Base regenerable de l'entite Formation.
+Base regenerable de l'entite RelationFormation.
 Ne pas y ajouter de logique metier manuelle.
 """
 
@@ -16,17 +16,16 @@ from core.validation import (
 )
 
 
-class FormationBase:
-    """Classe de base regenerable de Formation."""
+class RelationFormationBase:
+    """Classe de base regenerable de RelationFormation."""
 
-    def __init__(self, code, type, intitule, created_at, updated_at, id=None, certification_id=None):
-        self.code = code
-        self.type = type
-        self.intitule = intitule
+    def __init__(self, type_relation, formation_source_id, formation_cible_id, created_at, updated_at, id=None):
+        self.type_relation = type_relation
+        self.formation_source_id = formation_source_id
+        self.formation_cible_id = formation_cible_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
-        self.certification_id = certification_id
 
     @staticmethod
     def _coerce_datetime(value):
@@ -48,50 +47,37 @@ class FormationBase:
         self._id = value
 
     @property
-    def code(self):
-        return self._code
+    def type_relation(self):
+        return self._type_relation
 
-    @code.setter
+    @type_relation.setter
     @typed(str)
-    def code(self, value):
+    def type_relation(self, value):
         if value is None:
-            raise ValidationError("code", 'La propriété "code" ne peut pas être nulle.')
-        self._code = value
+            raise ValidationError("type_relation", 'La propriété "type_relation" ne peut pas être nulle.')
+        self._type_relation = value
 
     @property
-    def type(self):
-        return self._type
+    def formation_source_id(self):
+        return self._formation_source_id
 
-    @type.setter
-    @typed(str)
-    def type(self, value):
-        if value is None:
-            raise ValidationError("type", 'La propriété "type" ne peut pas être nulle.')
-        self._type = value
-
-    @property
-    def intitule(self):
-        return self._intitule
-
-    @intitule.setter
-    @typed(str)
-    def intitule(self, value):
-        if value is None:
-            raise ValidationError("intitule", 'La propriété "intitule" ne peut pas être nulle.')
-        self._intitule = value
-
-    @property
-    def certification_id(self):
-        return self._certification_id
-
-    @certification_id.setter
+    @formation_source_id.setter
     @typed(int)
-    @nullable
-    def certification_id(self, value):
+    def formation_source_id(self, value):
         if value is None:
-            self._certification_id = None
-            return
-        self._certification_id = value
+            raise ValidationError("formation_source_id", 'La propriété "formation_source_id" ne peut pas être nulle.')
+        self._formation_source_id = value
+
+    @property
+    def formation_cible_id(self):
+        return self._formation_cible_id
+
+    @formation_cible_id.setter
+    @typed(int)
+    def formation_cible_id(self, value):
+        if value is None:
+            raise ValidationError("formation_cible_id", 'La propriété "formation_cible_id" ne peut pas être nulle.')
+        self._formation_cible_id = value
 
     @property
     def created_at(self):
@@ -118,26 +104,24 @@ class FormationBase:
     def to_dict(self) -> dict:
         return {
             "id": self.id,
-            "code": self.code,
-            "type": self.type,
-            "intitule": self.intitule,
-            "certification_id": self.certification_id,
+            "type_relation": self.type_relation,
+            "formation_source_id": self.formation_source_id,
+            "formation_cible_id": self.formation_cible_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "FormationBase":
+    def from_dict(cls, data: dict[str, Any]) -> "RelationFormationBase":
         return cls(
             id=data["id"],
-            code=data["code"],
-            type=data["type"],
-            intitule=data["intitule"],
-            certification_id=data["certification_id"],
+            type_relation=data["type_relation"],
+            formation_source_id=data["formation_source_id"],
+            formation_cible_id=data["formation_cible_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"FormationBase(id={self.id!r}, code={self.code!r}, type={self.type!r}, intitule={self.intitule!r}, certification_id={self.certification_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"RelationFormationBase(id={self.id!r}, type_relation={self.type_relation!r}, formation_source_id={self.formation_source_id!r}, formation_cible_id={self.formation_cible_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

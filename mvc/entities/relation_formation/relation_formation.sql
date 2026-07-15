@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS relation_formation (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    TypeRelation VARCHAR(40) NOT NULL,
+    formation_source_id BIGINT UNSIGNED NOT NULL,
+    formation_cible_id BIGINT UNSIGNED NOT NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

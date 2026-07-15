@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "name": "RelationFormation",
+  "table": "relation_formation",
+  "fields": [
+    {
+      "name": "type_relation",
+      "type": "string",
+      "max_length": 40,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "formation_source_id",
+      "type": "foreign_key",
+      "references": "Formation",
+      "required": true
+    },
+    {
+      "name": "formation_cible_id",
+      "type": "foreign_key",
+      "references": "Formation",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

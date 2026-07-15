@@ -1,10 +1,12 @@
-CREATE TABLE IF NOT EXISTS formation (
+CREATE TABLE IF NOT EXISTS certification (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     Code VARCHAR(50) NOT NULL,
-    UNIQUE KEY uk_formation_code (Code),
+    UNIQUE KEY uk_certification_code (Code),
+    Libelle VARCHAR(200) NOT NULL,
     Type VARCHAR(40) NOT NULL,
-    Intitule VARCHAR(200) NOT NULL,
-    certification_id BIGINT UNSIGNED NULL,
+    NiveauRncp VARCHAR(10) NULL,
+    AutoriteCertificatrice VARCHAR(200) NULL,
+    Statut VARCHAR(20) NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

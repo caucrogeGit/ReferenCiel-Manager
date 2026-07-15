@@ -26,6 +26,13 @@
       "required": true,
       "nullable": false,
       "unique": false
+    },
+    {
+      "name": "certification_id",
+      "type": "foreign_key",
+      "references": "Certification",
+      "required": false,
+      "nullable": true
     }
   ],
   "options": {

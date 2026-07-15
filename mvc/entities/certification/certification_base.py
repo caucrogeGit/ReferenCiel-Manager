@@ -1,5 +1,5 @@
 """FICHIER GENERE PAR FORGE.
-Base regenerable de l'entite Formation.
+Base regenerable de l'entite Certification.
 Ne pas y ajouter de logique metier manuelle.
 """
 
@@ -16,17 +16,19 @@ from core.validation import (
 )
 
 
-class FormationBase:
-    """Classe de base regenerable de Formation."""
+class CertificationBase:
+    """Classe de base regenerable de Certification."""
 
-    def __init__(self, code, type, intitule, created_at, updated_at, id=None, certification_id=None):
+    def __init__(self, code, libelle, type, statut, created_at, updated_at, id=None, niveau_rncp=None, autorite_certificatrice=None):
         self.code = code
+        self.libelle = libelle
         self.type = type
-        self.intitule = intitule
+        self.statut = statut
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
-        self.certification_id = certification_id
+        self.niveau_rncp = niveau_rncp
+        self.autorite_certificatrice = autorite_certificatrice
 
     @staticmethod
     def _coerce_datetime(value):
@@ -59,6 +61,17 @@ class FormationBase:
         self._code = value
 
     @property
+    def libelle(self):
+        return self._libelle
+
+    @libelle.setter
+    @typed(str)
+    def libelle(self, value):
+        if value is None:
+            raise ValidationError("libelle", 'La propriété "libelle" ne peut pas être nulle.')
+        self._libelle = value
+
+    @property
     def type(self):
         return self._type
 
@@ -70,28 +83,41 @@ class FormationBase:
         self._type = value
 
     @property
-    def intitule(self):
-        return self._intitule
+    def niveau_rncp(self):
+        return self._niveau_rncp
 
-    @intitule.setter
+    @niveau_rncp.setter
     @typed(str)
-    def intitule(self, value):
+    @nullable
+    def niveau_rncp(self, value):
         if value is None:
-            raise ValidationError("intitule", 'La propriété "intitule" ne peut pas être nulle.')
-        self._intitule = value
+            self._niveau_rncp = None
+            return
+        self._niveau_rncp = value
 
     @property
-    def certification_id(self):
-        return self._certification_id
+    def autorite_certificatrice(self):
+        return self._autorite_certificatrice
 
-    @certification_id.setter
-    @typed(int)
+    @autorite_certificatrice.setter
+    @typed(str)
     @nullable
-    def certification_id(self, value):
+    def autorite_certificatrice(self, value):
         if value is None:
-            self._certification_id = None
+            self._autorite_certificatrice = None
             return
-        self._certification_id = value
+        self._autorite_certificatrice = value
+
+    @property
+    def statut(self):
+        return self._statut
+
+    @statut.setter
+    @typed(str)
+    def statut(self, value):
+        if value is None:
+            raise ValidationError("statut", 'La propriété "statut" ne peut pas être nulle.')
+        self._statut = value
 
     @property
     def created_at(self):
@@ -119,25 +145,29 @@ class FormationBase:
         return {
             "id": self.id,
             "code": self.code,
+            "libelle": self.libelle,
             "type": self.type,
-            "intitule": self.intitule,
-            "certification_id": self.certification_id,
+            "niveau_rncp": self.niveau_rncp,
+            "autorite_certificatrice": self.autorite_certificatrice,
+            "statut": self.statut,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "FormationBase":
+    def from_dict(cls, data: dict[str, Any]) -> "CertificationBase":
         return cls(
             id=data["id"],
             code=data["code"],
+            libelle=data["libelle"],
             type=data["type"],
-            intitule=data["intitule"],
-            certification_id=data["certification_id"],
+            niveau_rncp=data["niveau_rncp"],
+            autorite_certificatrice=data["autorite_certificatrice"],
+            statut=data["statut"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"FormationBase(id={self.id!r}, code={self.code!r}, type={self.type!r}, intitule={self.intitule!r}, certification_id={self.certification_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"CertificationBase(id={self.id!r}, code={self.code!r}, libelle={self.libelle!r}, type={self.type!r}, niveau_rncp={self.niveau_rncp!r}, autorite_certificatrice={self.autorite_certificatrice!r}, statut={self.statut!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 
