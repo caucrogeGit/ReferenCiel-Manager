@@ -89,6 +89,18 @@ def enregistrer_contexte(
     )
 
 
+def finaliser_scenario(scenario_id: int) -> None:
+    """Marque le scénario comme enregistré (toutes les étapes saisies, ADR-019).
+
+    L'état de complétion reste dérivé des données (voir le contrôleur) ; seul le
+    statut est persisté ici, une fois le gate serveur franchi.
+    """
+    execute(
+        "UPDATE scenario SET Statut = 'finalise', UpdatedAt = NOW() WHERE Id = ?",
+        (scenario_id,),
+    )
+
+
 def enregistrer_referentiel(scenario_id: int, referentiel_id: int) -> None:
     """Rattache le scénario à un référentiel (section Liaison, ADR-019)."""
     execute(

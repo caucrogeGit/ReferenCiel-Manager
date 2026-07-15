@@ -23,6 +23,14 @@
         </h1>
         {{ badge(scenario.Statut, tone="neutral") }}
     </div>
+    {% if referentiel %}
+    <p class="mt-1 text-sm text-muted">
+        Référentiel :
+        <span class="font-medium text-ink">{{ referentiel.formation_intitule }}</span>
+        {% if referentiel.niveau_code %}<span class="text-faint">({{ referentiel.niveau_code }})</span>{% endif %}
+        <span class="font-mono text-xs text-faint">· {{ referentiel.Identifiant }}</span>
+    </p>
+    {% endif %}
     <p class="mt-1 text-sm text-muted">Version {{ scenario.Version }}</p>
 </div>
 

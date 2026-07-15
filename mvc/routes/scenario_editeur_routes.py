@@ -14,6 +14,8 @@ def register_scenario_editeur_routes(router: Router) -> None:
         g.add("POST", "/{id}/contexte", ScenarioEditeurController.enregistrer_contexte, name="scenario_editeur-contexte")
         g.add("POST", "/{id}/referentiel", ScenarioEditeurController.enregistrer_referentiel, name="scenario_editeur-referentiel")
         g.add("POST", "/{id}/liaison", ScenarioEditeurController.enregistrer_liaison, name="scenario_editeur-liaison")
+        # Enregistrement final : n'aboutit que si les 4 étapes sont saisies (gate serveur).
+        g.add("POST", "/{id}/finaliser", ScenarioEditeurController.finaliser, name="scenario_editeur-finaliser")
         # Cochage unitaire (tunnel maître-détail, ADR-021). Sert HTMX et le POST
         # sans JS. Gardé par le préfixe /conception -> conception.gerer (routes/__init__.py).
         g.add("POST", "/{id}/activite/basculer", ScenarioEditeurController.basculer_activite, name="scenario_editeur-activite-basculer")

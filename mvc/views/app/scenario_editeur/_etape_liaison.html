@@ -4,7 +4,7 @@
    Chaque bloc est autonome : cocher une case ne rafraîchit QUE son bloc
    (compteur de la colonne maître inclus). #}
 {% from "components/tunnel_macros.html" import tunnel_pager %}
-{% from "components/ui.html" import button, empty_state %}
+{% from "components/ui.html" import button, empty_state, obligation %}
 
 {% if not arbre %}
 {# Pas de référentiel rattaché : le tunnel ne peut pas continuer. On demande
@@ -18,7 +18,7 @@
           class="flex gap-3 items-end max-w-lg">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div class="flex-1">
-            <label for="referentiel_id" class="block text-sm text-muted mb-1">Référentiel</label>
+            <label for="referentiel_id" class="block text-sm text-muted mb-1">Référentiel {{ obligation(false) }}</label>
             <select id="referentiel_id" name="referentiel_id" required
                     class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
                            focus:outline-none focus:ring-2 focus:ring-forge">

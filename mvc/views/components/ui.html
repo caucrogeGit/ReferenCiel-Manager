@@ -44,6 +44,17 @@
 <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full {{ tones.get(tone) or tones['forge'] }}">{{ label }}</span>
 {% endmacro %}
 
+{# Marqueur d'obligation d'un champ, à placer juste après son libellé (ADR-019).
+   obligatoire=True -> « (obligatoire) », sinon « (facultatif) ». Sert de repère
+   visuel : seuls les champs obligatoires conditionnent l'enregistrement du scénario. #}
+{% macro obligation(obligatoire=false) %}
+{%- if obligatoire -%}
+<span class="ml-1 text-xs font-medium text-forge">(obligatoire)</span>
+{%- else -%}
+<span class="ml-1 text-xs font-normal text-faint">(facultatif)</span>
+{%- endif -%}
+{% endmacro %}
+
 {# Message contextuel. level : success | error | warning | info. #}
 {% macro alert(message, level="info") %}
 {%- set tones = {

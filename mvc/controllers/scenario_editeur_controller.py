@@ -28,6 +28,7 @@ from mvc.models.scenario_editeur_model import (
     enregistrer_liaison,
     enregistrer_referentiel,
     enregistrer_titre,
+    finaliser_scenario,
     get_activite_ids,
     get_co_auteur_ids,
     get_critere_ids,
@@ -123,15 +124,12 @@ class ScenarioEditeurController(BaseController):
         faite ; si un référentiel est rattaché, la liaison est amorcée. C'est
         ce qui rend l'état du tunnel non-falsifiable et sans migration.
         """
-        ref_id = scenario.get("referentiel_id")
-        ref_code = ""
-        if ref_id:
-            for r in referentiels:
-                if r["Id"] == ref_id:
-                    ref_code = str(r["Identifiant"])
-                    break
-
-        contexte_rempli = any(
+        # « done » = tous les champs OBLIGATOIRES de l'étape sont renseignés. C'est
+        # ce qui conditionne l'enregistrement du scénario (voir tous_complets).
+        #  - Titre : le titre est obligatoire.
+        #  - Contexte : les 5 champs cpro sont tous obligatoires (d'où all()).
+        #  - Liaison / Ressources : rien d'obligatoire -> l'étape ne bloque jamais.
+        contexte_complet = all(
             scenario.get(champ)
             for champ in (
                 "DescriptionContexte",
@@ -141,7 +139,6 @@ class ScenarioEditeurController(BaseController):
                 "EspacesFormation",
             )
         )
-        n_liaison = len(activite_ids) + len(critere_ids)
 
         return [
             {
@@ -154,19 +151,21 @@ class ScenarioEditeurController(BaseController):
                 "key": "contexte",
                 "label": _LIBELLES["contexte"],
                 "badge": "",
-                "done": contexte_rempli,
+                "done": contexte_complet,
             },
             {
                 "key": "liaison",
                 "label": _LIBELLES["liaison"],
-                "badge": ref_code or "",
-                "done": bool(ref_id) and n_liaison > 0,
+                # Le code du référentiel (ex. « ciel-2tne ») est rappelé sous le titre
+                # du scénario (éditeur.html) : pas de badge ici. Aucun champ obligatoire.
+                "badge": "",
+                "done": True,
             },
             {
                 "key": "ressources",
                 "label": _LIBELLES["ressources"],
                 "badge": str(len(ressources)),
-                "done": len(ressources) > 0,
+                "done": True,
             },
         ]
 
@@ -217,12 +216,20 @@ class ScenarioEditeurController(BaseController):
             scenario, arbre, referentiels, activite_ids, critere_ids, ressources
         )
         position = ETAPES.index(etape) + 1
+        # Référentiel courant (rappelé sous le titre) et gate d'enregistrement :
+        # le scénario n'est enregistrable que si les 4 étapes sont saisies (ADR-019).
+        referentiel = next(
+            (r for r in referentiels if r["Id"] == referentiel_id), None
+        )
+        tous_complets = all(s["done"] for s in steps)
 
         context: dict[str, Any] = {
             "scenario": scenario,
             "co_auteur_ids": get_co_auteur_ids(scenario_id),
             "professeurs": list_professeurs(),
             "referentiels": referentiels,
+            "referentiel": referentiel,
+            "tous_complets": tous_complets,
             "arbre": arbre,
             "activite_ids": activite_ids,
             "critere_ids": critere_ids,
@@ -277,6 +284,42 @@ class ScenarioEditeurController(BaseController):
             "app/scenario_editeur/editeur.html",
             context=context,
             request=request,
+        )
+
+    @staticmethod
+    def finaliser(request: Request) -> Response:
+        """Enregistre le scénario : passe le statut à « finalise ».
+
+        Gate serveur : on ne finalise que si les 4 étapes sont dérivées « done »
+        (l'UI grise déjà le bouton, mais l'état n'est jamais falsifiable, ADR-021).
+        """
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        if scenario_id is None:
+            return BaseController.not_found()
+        scenario = get_scenario(scenario_id)
+        if scenario is None:
+            return BaseController.not_found()
+
+        referentiel_id = scenario.get("referentiel_id")
+        arbre = get_arbre(int(referentiel_id)) if referentiel_id else None
+        steps = ScenarioEditeurController._steps(
+            scenario,
+            arbre,
+            list_referentiels(),
+            get_activite_ids(scenario_id),
+            get_critere_ids(scenario_id),
+            list_ressources(scenario_id),
+        )
+        if not all(s["done"] for s in steps):
+            return BaseController.redirect(
+                f"/conception/scenario/{scenario_id}",
+                request=request,
+                flash="Toutes les étapes doivent être saisies avant d'enregistrer le scénario.",
+                level="warning",
+            )
+        finaliser_scenario(scenario_id)
+        return BaseController.redirect(
+            f"/conception/scenario/{scenario_id}", request=request, flash="Scénario enregistré."
         )
 
     @staticmethod

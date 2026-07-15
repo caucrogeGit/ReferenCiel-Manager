@@ -32,8 +32,13 @@
               {% else %}text-muted hover:bg-cream hover:text-ink{% endif %}"
        {% if is_current %}aria-current="step"{% endif %}>
         <span class="flex items-center gap-2 text-nowrap">
-            {%- if step.done and not is_current -%}
-            <svg class="shrink-0 size-4 text-forge" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            {# Indicateur de saisie de l'étape : coche pleine si saisie, cercle vide
+               sinon. Toujours visible (chaque étape), pour situer d'un coup d'œil
+               ce qui reste à remplir dans le tunnel (ADR-021, état dérivé). #}
+            {%- if step.done -%}
+            <svg class="shrink-0 size-4 text-forge" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Étape saisie"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            {%- else -%}
+            <svg class="shrink-0 size-4 text-faint" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Étape à saisir"><circle cx="12" cy="12" r="9"/></svg>
             {%- endif -%}
             {{ step.label }}
         </span>

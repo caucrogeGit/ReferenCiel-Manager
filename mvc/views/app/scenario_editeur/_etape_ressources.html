@@ -2,14 +2,14 @@
    L'explorateur à dossiers de cpro est hors périmètre (ticket 23) : ici une
    liste plate, suffisante tant que le volume reste faible. #}
 {% from "components/tunnel_macros.html" import tunnel_pager %}
-{% from "components/ui.html" import button, empty_state %}
+{% from "components/ui.html" import button, empty_state, obligation %}
 
 <section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
     <form method="post" action="{{ base_url }}/ressources" enctype="multipart/form-data"
           class="flex gap-3 items-end mb-2">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div class="flex-1">
-            <label for="fichier" class="block text-sm text-muted mb-1">Ajouter un fichier</label>
+            <label for="fichier" class="block text-sm text-muted mb-1">Ajouter un fichier {{ obligation(false) }}</label>
             <input id="fichier" name="fichier" type="file" required
                    class="w-full text-sm text-ink file:mr-3 file:py-1.5 file:px-3 file:rounded-[10px]
                           file:border file:border-forge-border file:bg-forge-soft file:text-forge

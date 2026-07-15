@@ -1,6 +1,6 @@
 {# Étape 2 — Contexte. Cinq champs libres, un seul POST. #}
 {% from "components/tunnel_macros.html" import tunnel_pager %}
-{% from "components/ui.html" import button %}
+{% from "components/ui.html" import button, obligation %}
 
 {%- set champs = [
     ("description_contexte", "Description du contexte / mise en situation professionnelle", scenario.DescriptionContexte, 3),
@@ -15,7 +15,7 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {% for nom, libelle, valeur, lignes in champs %}
         <div>
-            <label for="{{ nom }}" class="block text-sm text-muted mb-1">{{ libelle }}</label>
+            <label for="{{ nom }}" class="block text-sm text-muted mb-1">{{ libelle }} {{ obligation(true) }}</label>
             <textarea id="{{ nom }}" name="{{ nom }}" rows="{{ lignes }}"
                       class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
                              focus:outline-none focus:ring-2 focus:ring-forge">{{ valeur or "" }}</textarea>

@@ -3,6 +3,38 @@
    reflète l'étape sélectionnée. Sans JS, il est simplement inclus dans editeur.html. #}
 {% from "components/tunnel_macros.html" import stepper %}
 {{ stepper(steps, etape, base_url) }}
+
+{# Enregistrement du scénario : autorisé seulement quand les 4 étapes sont saisies
+   (tous_complets, dérivé des données). Le gate est revérifié côté serveur dans le
+   contrôleur finaliser — l'état n'est jamais falsifiable (ADR-021). POST classique
+   (pas HTMX) : recharge la page pour rafraîchir aussi le statut affiché en tête. #}
+<div class="flex items-center justify-between gap-3 mb-6 px-4 py-3 rounded-card border border-line bg-surface">
+    {% if scenario.Statut == "finalise" %}
+    <span class="flex items-center gap-2 text-sm font-medium text-forge">
+        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Scénario enregistré
+    </span>
+    {% elif tous_complets %}
+    <span class="text-sm text-muted">Toutes les étapes sont saisies.</span>
+    <form method="post" action="{{ base_url }}/finaliser" class="shrink-0">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit"
+                class="text-sm font-semibold py-2 px-4 rounded-[10px] bg-forge text-white hover:bg-forge-dark transition">
+            Enregistrer le scénario
+        </button>
+    </form>
+    {% else %}
+    <span class="flex items-center gap-2 text-sm text-muted">
+        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Complétez toutes les étapes pour enregistrer le scénario.
+    </span>
+    <button type="button" disabled
+            class="shrink-0 text-sm font-semibold py-2 px-4 rounded-[10px] bg-cream text-faint cursor-not-allowed">
+        Enregistrer le scénario
+    </button>
+    {% endif %}
+</div>
+
 <div id="tunnel-etape">
     {% include "app/scenario_editeur/_etape_" ~ etape ~ ".html" %}
 </div>
