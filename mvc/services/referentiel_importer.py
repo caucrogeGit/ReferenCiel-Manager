@@ -55,15 +55,30 @@ def _as_int(value: Any) -> int:
     return int(cast("int", value))
 
 
-def _upsert_par_code(table: str, code: str, intitule: str) -> int:
-    """Insère ou met à jour une entité identifiée par sa colonne `Code` unique."""
+def _upsert_par_code(table: str, code: str, intitule: str, type_: "str | None" = None) -> int:
+    """Insère ou met à jour une entité identifiée par sa colonne `Code` unique.
+
+    `type_` alimente la colonne `Type` (formation, ADR-023) quand elle existe ;
+    laissé à None pour les tables sans cette colonne (ex. niveau_classe).
+    """
     existant = db.fetch_one(f"SELECT Id FROM {table} WHERE Code = ?", (code,))
     if existant is not None:
-        db.execute(
-            f"UPDATE {table} SET Intitule = ?, UpdatedAt = NOW() WHERE Id = ?",
-            (intitule, existant["Id"]),
-        )
+        if type_ is not None:
+            db.execute(
+                f"UPDATE {table} SET Type = ?, Intitule = ?, UpdatedAt = NOW() WHERE Id = ?",
+                (type_, intitule, existant["Id"]),
+            )
+        else:
+            db.execute(
+                f"UPDATE {table} SET Intitule = ?, UpdatedAt = NOW() WHERE Id = ?",
+                (intitule, existant["Id"]),
+            )
         return _as_int(existant["Id"])
+    if type_ is not None:
+        return db.insert(
+            f"INSERT INTO {table} (Code, Type, Intitule, CreatedAt, UpdatedAt) VALUES (?, ?, ?, NOW(), NOW())",
+            (code, type_, intitule),
+        )
     return db.insert(
         f"INSERT INTO {table} (Code, Intitule, CreatedAt, UpdatedAt) VALUES (?, ?, NOW(), NOW())",
         (code, intitule),
@@ -160,7 +175,10 @@ def import_referentiel(canonical: dict[str, Any]) -> ImportReport:
 
     formation = canonical["formation"]
     niveau = canonical["niveau_classe"]
-    formation_id = _upsert_par_code("formation", str(formation["code"]), str(formation["intitule"]))
+    formation_id = _upsert_par_code(
+        "formation", str(formation["code"]), str(formation["intitule"]),
+        type_=str(formation.get("type", "AUTRE")),
+    )
     niveau_id = _upsert_par_code("niveau_classe", str(niveau["code"]), str(niveau["intitule"]))
 
     ref_id, remplacement = _upsert_referentiel(canonical, formation_id, niveau_id)

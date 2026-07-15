@@ -12,6 +12,14 @@
       "unique": true
     },
     {
+      "name": "type",
+      "type": "string",
+      "max_length": 40,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
       "name": "intitule",
       "type": "string",
       "max_length": 200,

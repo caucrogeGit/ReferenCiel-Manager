@@ -19,8 +19,9 @@ from core.validation import (
 class FormationBase:
     """Classe de base regenerable de Formation."""
 
-    def __init__(self, code, intitule, created_at, updated_at, id=None):
+    def __init__(self, code, type, intitule, created_at, updated_at, id=None):
         self.code = code
+        self.type = type
         self.intitule = intitule
         self.created_at = created_at
         self.updated_at = updated_at
@@ -55,6 +56,17 @@ class FormationBase:
         if value is None:
             raise ValidationError("code", 'La propriété "code" ne peut pas être nulle.')
         self._code = value
+
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    @typed(str)
+    def type(self, value):
+        if value is None:
+            raise ValidationError("type", 'La propriété "type" ne peut pas être nulle.')
+        self._type = value
 
     @property
     def intitule(self):
@@ -93,6 +105,7 @@ class FormationBase:
         return {
             "id": self.id,
             "code": self.code,
+            "type": self.type,
             "intitule": self.intitule,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
@@ -103,11 +116,12 @@ class FormationBase:
         return cls(
             id=data["id"],
             code=data["code"],
+            type=data["type"],
             intitule=data["intitule"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"FormationBase(id={self.id!r}, code={self.code!r}, intitule={self.intitule!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"FormationBase(id={self.id!r}, code={self.code!r}, type={self.type!r}, intitule={self.intitule!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS formation (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     Code VARCHAR(50) NOT NULL,
     UNIQUE KEY uk_formation_code (Code),
+    Type VARCHAR(40) NOT NULL,
     Intitule VARCHAR(200) NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
