@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://referenciel-manager/schemas/json-canonique-starter-welcome.json",
-  "title": "JSON canonique — Starter Welcome",
-  "description": "Valide la STRUCTURE d'un manifeste canonique de type 'starter_welcome' (parcours → paliers → dossier technique / QCM / activité / checklist). Les invariants sémantiques (ordre unique et contigu, bonne_reponse ∈ choix, fichiers présents dans le bundle) sont validés par l'importeur. Champs additionnels tolérés.",
+  "$id": "https://referenciel-manager/schemas/json-canonique-parcours.json",
+  "title": "JSON canonique — Parcours",
+  "description": "Valide la STRUCTURE d'un manifeste canonique de type 'parcours' (parcours → paliers → dossier technique / QCM / activité / checklist). Les invariants sémantiques (ordre unique et contigu, bonne_reponse ∈ choix, fichiers présents dans le bundle) sont validés par l'importeur. Champs additionnels tolérés.",
   "type": "object",
   "required": ["type", "identifiant", "version", "sources", "provenance", "niveau_classe", "titre", "organisation", "paliers"],
   "properties": {
-    "type": { "const": "starter_welcome" },
+    "type": { "const": "parcours" },
     "identifiant": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
     "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
     "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source" } },
@@ -85,7 +85,28 @@
         "titre": { "type": "string" },
         "theme": { "type": "string" },
         "production_attendue": { "type": "string" },
-        "dossier_technique": { "$ref": "#/$defs/ref" },
+        "dossier_technique": {
+          "type": "object",
+          "required": ["ressources"],
+          "properties": {
+            "titre": { "type": "string" },
+            "ressources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["type", "titre", "ordre"],
+                "properties": {
+                  "type": { "enum": ["markdown", "video", "audio", "lien"] },
+                  "titre": { "type": "string" },
+                  "ordre": { "type": "integer" },
+                  "contenu": { "type": "string" },
+                  "fichier": { "type": "string" },
+                  "url": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
         "qcm": { "$ref": "#/$defs/qcm" },
         "activite": {
           "type": "object",

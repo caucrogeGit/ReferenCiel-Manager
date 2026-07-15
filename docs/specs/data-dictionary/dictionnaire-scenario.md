@@ -72,7 +72,7 @@ Relations :
 ## Portée
 
 Ce dictionnaire couvre l'objet **Scénario pédagogique** (chaîne Scenario, tickets 12-13).
-En aval : **Starter Welcome** ([dictionnaire dédié](dictionnaire-starter-welcome.md) :
+En aval : **Starter Welcome** ([dictionnaire dédié](dictionnaire-parcours.md) :
 Palier, QCM, Checklist…) et le **parcours** (exécution élève, Bloc B).
 En amont : le
 [**référentiel niveau-classe**](dictionnaire-referentiel-niveau-classe.md) (compétences,

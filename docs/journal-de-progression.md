@@ -446,7 +446,7 @@ compétences/critères + `sync_*_ids` transactionnel. Tests de persistance (mock
 ### `StarterWelcome` / `VersionStarter` : tables `starter_welcome` / `version_starter` ✅ (phase ⑦)
 
 Parcours réutilisable, en **identité + versions** ([ADR-012](adr/012-versionnement-identite-plus-version.md),
-[dico](specs/data-dictionary/dictionnaire-starter-welcome.md)).
+[dico](specs/data-dictionary/dictionnaire-parcours.md)).
 
 | Entité | Champs | Relations |
 |---|---|---|

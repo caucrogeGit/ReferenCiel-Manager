@@ -93,11 +93,10 @@ nav:
   - Spécifications:
       - JSON canonique: specs/json-canonique/README.md
       - Contrat — référentiel niveau-classe: specs/json-canonique/contrat-referentiel-niveau-classe.md
-      - Contrat — Starter Welcome: specs/json-canonique/contrat-starter-welcome.md
+      - Contrat — Parcours: specs/json-canonique/contrat-parcours.md
       - Dictionnaire — référentiel niveau-classe: specs/data-dictionary/dictionnaire-referentiel-niveau-classe.md
       - Dictionnaire — socle scolaire: specs/data-dictionary/dictionnaire-socle-scolaire.md
       - Dictionnaire — Scénario pédagogique: specs/data-dictionary/dictionnaire-scenario.md
-      - Dictionnaire — Starter Welcome: specs/data-dictionary/dictionnaire-starter-welcome.md
       - Dictionnaire — Parcours: specs/data-dictionary/dictionnaire-parcours.md
       - Dictionnaire — Bilan élève: specs/data-dictionary/dictionnaire-bilan.md
       - Registre des sources: specs/json-canonique/registre-des-sources.md

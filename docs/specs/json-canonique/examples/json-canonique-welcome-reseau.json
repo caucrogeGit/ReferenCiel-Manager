@@ -1,5 +1,5 @@
 {
-  "type": "starter_welcome",
+  "type": "parcours",
   "identifiant": "welcome-reseau",
   "version": "0.1.0",
   "sources": [
@@ -32,7 +32,15 @@
       "theme": "Câble Ethernet droit",
       "production_attendue": "Un câble droit conforme",
       "dossier_technique": {
-        "fichier": "palier-1/dossier-technique.md"
+        "titre": "Dossier technique",
+        "ressources": [
+          {
+            "type": "markdown",
+            "titre": "Dossier technique",
+            "ordre": 1,
+            "fichier": "palier-1/dossier-technique.md"
+          }
+        ]
       },
       "qcm": {
         "id": "qcm-palier-1",
@@ -739,7 +747,15 @@
       "theme": "Machines virtuelles",
       "production_attendue": "Deux machines virtuelles fonctionnelles avec un instantané",
       "dossier_technique": {
-        "fichier": "palier-2/dossier-technique.md"
+        "titre": "Dossier technique",
+        "ressources": [
+          {
+            "type": "markdown",
+            "titre": "Dossier technique",
+            "ordre": 1,
+            "fichier": "palier-2/dossier-technique.md"
+          }
+        ]
       },
       "qcm": {
         "id": "qcm-palier-2",
@@ -1545,7 +1561,15 @@
       "theme": "Modes réseau simples",
       "production_attendue": "Un tableau de tests des deux modes",
       "dossier_technique": {
-        "fichier": "palier-3/dossier-technique.md"
+        "titre": "Dossier technique",
+        "ressources": [
+          {
+            "type": "markdown",
+            "titre": "Dossier technique",
+            "ordre": 1,
+            "fichier": "palier-3/dossier-technique.md"
+          }
+        ]
       },
       "qcm": {
         "id": "qcm-palier-3",
@@ -2450,7 +2474,15 @@
       "theme": "Réseau interne",
       "production_attendue": "Un réseau interne fonctionnel et un diagnostic",
       "dossier_technique": {
-        "fichier": "palier-4/dossier-technique.md"
+        "titre": "Dossier technique",
+        "ressources": [
+          {
+            "type": "markdown",
+            "titre": "Dossier technique",
+            "ordre": 1,
+            "fichier": "palier-4/dossier-technique.md"
+          }
+        ]
       },
       "qcm": {
         "id": "qcm-palier-4",

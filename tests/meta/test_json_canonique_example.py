@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SPEC = ROOT / "docs" / "specs" / "json-canonique"
 SCHEMA = SPEC / "schemas" / "schema-json-canonique-referentiel-niveau-classe.json"
 EXAMPLE = SPEC / "examples" / "json-canonique-ciel-2tne.json"
-STARTER_SCHEMA = SPEC / "schemas" / "schema-json-canonique-starter-welcome.json"
+STARTER_SCHEMA = SPEC / "schemas" / "schema-json-canonique-parcours.json"
 STARTER_EXAMPLE = SPEC / "examples" / "json-canonique-welcome-reseau.json"
 STARTER_BUNDLE = ROOT / "sources" / "starters" / "welcome-reseau"
 
@@ -89,7 +89,12 @@ def test_starter_invariants_semantiques() -> None:
     assert ordres == list(range(1, len(ordres) + 1))
 
     for p in paliers:
-        assert (STARTER_BUNDLE / cast(str, p["dossier_technique"]["fichier"])).is_file()
+        # ADR-022 : le dossier technique est un conteneur de ressources typées ;
+        # les ressources référençant un fichier doivent exister dans le bundle.
+        for ressource in p["dossier_technique"]["ressources"]:
+            fichier = ressource.get("fichier")
+            if fichier is not None:
+                assert (STARTER_BUNDLE / cast(str, fichier)).is_file()
         qcm = p.get("qcm")
         if qcm is not None:
             for question in qcm["questions"]:
