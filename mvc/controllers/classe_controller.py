@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.classe_model import (
     get_classe_by_id, add_classe, update_classe, delete_classe, bulk_delete_classes,
     count_classes, find_classes_paginated, find_classes_for_export,
-    get_annee_scolaire_choices, get_niveau_classe_choices,
+    get_annee_scolaire_choices, get_formation_niveau_choices,
 )
 from mvc.forms.classe_form import ClasseForm
 from core.security.session import get_flash, get_session_id
@@ -21,14 +21,14 @@ def _form_data_from_classe(record: dict) -> dict:
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
         "annee_scolaire_id": record.get("annee_scolaire_id"),
-        "niveau_classe_id": record.get("niveau_classe_id"),
+        "formation_niveau_id": record.get("formation_niveau_id"),
     }
 
 
 def _classe_form_options():
     return {
         "annee_scolaire_id_choices": get_annee_scolaire_choices(),
-        "niveau_classe_id_choices": get_niveau_classe_choices(),
+        "formation_niveau_id_choices": get_formation_niveau_choices(),
     }
 
 
@@ -43,7 +43,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Code', 'Code'), ('Libelle', 'Libelle'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt'), ('Annee scolaire id', 'annee_scolaire_id_label'), ('Niveau classe id', 'niveau_classe_id_label')]
+_CSV_COLS = [('Code', 'Code'), ('Libelle', 'Libelle'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt'), ('Annee scolaire id', 'annee_scolaire_id_label'), ('Formation-niveau', 'formation_niveau_id_label')]
 
 
 class ClasseController(BaseController):
@@ -78,7 +78,7 @@ class ClasseController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"code", "libelle", "created_at", "updated_at", "annee_scolaire_id", "niveau_classe_id", "id"}:
+        if sort not in {"code", "libelle", "created_at", "updated_at", "annee_scolaire_id", "formation_niveau_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
@@ -91,21 +91,21 @@ class ClasseController(BaseController):
                 annee_scolaire_id_f = int(annee_scolaire_id_raw)
             except (TypeError, ValueError):
                 annee_scolaire_id_f = ""
-        niveau_classe_id_raw = _query_param(request, "niveau_classe_id").strip()
-        niveau_classe_id_f = ""
-        if niveau_classe_id_raw:
+        formation_niveau_id_raw = _query_param(request, "formation_niveau_id").strip()
+        formation_niveau_id_f = ""
+        if formation_niveau_id_raw:
             try:
-                niveau_classe_id_f = int(niveau_classe_id_raw)
+                formation_niveau_id_f = int(formation_niveau_id_raw)
             except (TypeError, ValueError):
-                niveau_classe_id_f = ""
+                formation_niveau_id_f = ""
         relation_filters = {}
         relation_filters["annee_scolaire_id"] = {"options": [{"id": value, "label": label} for value, label in get_annee_scolaire_choices()]}
-        relation_filters["niveau_classe_id"] = {"options": [{"id": value, "label": label} for value, label in get_niveau_classe_choices()]}
+        relation_filters["formation_niveau_id"] = {"options": [{"id": value, "label": label} for value, label in get_formation_niveau_choices()]}
         _filters = {}
         if annee_scolaire_id_f != "":
             _filters["annee_scolaire_id"] = annee_scolaire_id_f
-        if niveau_classe_id_f != "":
-            _filters["niveau_classe_id"] = niveau_classe_id_f
+        if formation_niveau_id_f != "":
+            _filters["formation_niveau_id"] = formation_niveau_id_f
         total    = count_classes(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -118,7 +118,7 @@ class ClasseController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"annee_scolaire_id": annee_scolaire_id_f, "niveau_classe_id": niveau_classe_id_f},
+            "filters": {"annee_scolaire_id": annee_scolaire_id_f, "formation_niveau_id": formation_niveau_id_f},
         })
         return {
                 "classes": classes,
@@ -248,7 +248,7 @@ class ClasseController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"code", "libelle", "created_at", "updated_at", "annee_scolaire_id", "niveau_classe_id", "id"}:
+        if sort not in {"code", "libelle", "created_at", "updated_at", "annee_scolaire_id", "formation_niveau_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
@@ -260,18 +260,18 @@ class ClasseController(BaseController):
                 annee_scolaire_id_f = int(annee_scolaire_id_raw)
             except (TypeError, ValueError):
                 annee_scolaire_id_f = ""
-        niveau_classe_id_raw = _query_param(request, "niveau_classe_id").strip()
-        niveau_classe_id_f = ""
-        if niveau_classe_id_raw:
+        formation_niveau_id_raw = _query_param(request, "formation_niveau_id").strip()
+        formation_niveau_id_f = ""
+        if formation_niveau_id_raw:
             try:
-                niveau_classe_id_f = int(niveau_classe_id_raw)
+                formation_niveau_id_f = int(formation_niveau_id_raw)
             except (TypeError, ValueError):
-                niveau_classe_id_f = ""
+                formation_niveau_id_f = ""
         _filters = {}
         if annee_scolaire_id_f != "":
             _filters["annee_scolaire_id"] = annee_scolaire_id_f
-        if niveau_classe_id_f != "":
-            _filters["niveau_classe_id"] = niveau_classe_id_f
+        if formation_niveau_id_f != "":
+            _filters["formation_niveau_id"] = formation_niveau_id_f
         rows = find_classes_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

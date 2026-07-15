@@ -27,7 +27,8 @@ def list_classes(professeur_id: int) -> list[dict[str, Any]]:
         "COUNT(DISTINCT pe.Id) AS nb_progressions "
         "FROM classe_professeur cp "
         "JOIN classe c ON c.Id = cp.classe_id "
-        "JOIN niveau_classe nc ON nc.Id = c.niveau_classe_id "
+        "JOIN formation_niveau fn ON fn.Id = c.formation_niveau_id "
+        "JOIN niveau_classe nc ON nc.Id = fn.niveau_classe_id "
         "JOIN annee_scolaire asc2 ON asc2.Id = c.annee_scolaire_id "
         "LEFT JOIN eleve e ON e.classe_id = c.Id "
         "LEFT JOIN progression_parcours pe ON pe.eleve_id = e.Id "
@@ -44,7 +45,8 @@ def get_classe(classe_id: int) -> dict[str, Any] | None:
         "SELECT c.Id AS id, c.Code AS classe_code, c.Libelle AS classe_libelle, "
         "nc.Code AS niveau_code, asc2.Libelle AS annee_libelle "
         "FROM classe c "
-        "JOIN niveau_classe nc ON nc.Id = c.niveau_classe_id "
+        "JOIN formation_niveau fn ON fn.Id = c.formation_niveau_id "
+        "JOIN niveau_classe nc ON nc.Id = fn.niveau_classe_id "
         "JOIN annee_scolaire asc2 ON asc2.Id = c.annee_scolaire_id "
         "WHERE c.Id = ?",
         (classe_id,),

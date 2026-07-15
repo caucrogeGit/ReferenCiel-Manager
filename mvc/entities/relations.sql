@@ -9,14 +9,14 @@ ALTER TABLE classe
 CREATE INDEX idx_classe_annee_scolaire_id ON classe (annee_scolaire_id);
 
 ALTER TABLE classe
-    ADD COLUMN niveau_classe_id BIGINT UNSIGNED NOT NULL;
+    ADD COLUMN formation_niveau_id BIGINT UNSIGNED NOT NULL;
 ALTER TABLE classe
-    ADD CONSTRAINT fk_classe_niveau_classe_id
-    FOREIGN KEY (niveau_classe_id)
-    REFERENCES niveau_classe (Id)
+    ADD CONSTRAINT fk_classe_formation_niveau_id
+    FOREIGN KEY (formation_niveau_id)
+    REFERENCES formation_niveau (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
-CREATE INDEX idx_classe_niveau_classe_id ON classe (niveau_classe_id);
+CREATE INDEX idx_classe_formation_niveau_id ON classe (formation_niveau_id);
 
 ALTER TABLE groupe
     ADD CONSTRAINT fk_groupe_classe_id

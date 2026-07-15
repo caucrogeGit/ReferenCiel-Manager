@@ -16,7 +16,7 @@
         {{ field(name='code', label='Code', type='text', value=form.value('code'), error=form.error('code')) }}
         {{ field(name='libelle', label='Libelle', type='text', value=form.value('libelle'), error=form.error('libelle')) }}
         {{ select_field(name='annee_scolaire_id', label='Annee scolaire', options=form.options.annee_scolaire_id_choices, selected=form.value('annee_scolaire_id'), error=form.error('annee_scolaire_id')) }}
-        {{ select_field(name='niveau_classe_id', label='Niveau classe', options=form.options.niveau_classe_id_choices, selected=form.value('niveau_classe_id'), error=form.error('niveau_classe_id')) }}
+        {{ select_field(name='formation_niveau_id', label='Formation-niveau', options=form.options.formation_niveau_id_choices, selected=form.value('formation_niveau_id'), error=form.error('formation_niveau_id')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
             {{ button(label='Annuler', variant='secondary', href='/classe') }}
