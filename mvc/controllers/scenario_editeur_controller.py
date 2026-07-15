@@ -340,6 +340,11 @@ class ScenarioEditeurController(BaseController):
             else []
         )
         enregistrer_titre(scenario_id, titre, co_intervention, co_auteur_ids)
+        # Auto-enregistrement HTMX (à la saisie) : pas de bouton dédié, pas de
+        # rechargement. On répond 204 (rien à échanger, hx-swap="none" côté vue).
+        # Sans JS, le <noscript> soumet le formulaire et on retombe sur la redirection.
+        if ScenarioEditeurController._is_htmx(request):
+            return Response(status=204)
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Titre enregistrée."
         )
