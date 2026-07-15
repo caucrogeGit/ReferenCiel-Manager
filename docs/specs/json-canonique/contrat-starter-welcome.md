@@ -4,6 +4,12 @@ Spécifie la **forme** du JSON canonique de type **`starter_welcome`** : un pa
 pédagogique réutilisable (paliers → dossier technique / QCM / activité / checklist).
 Modelé sur le starter numérisé `sources/starters/welcome-reseau/`.
 
+> **Superseded (ADR-022, 2026-07-15).** Le modele applicatif a ete aplati : le
+> **Parcours** est desormais l'objet canonique (rattache au NiveauClasse) ; la
+> couche starter / version-starter / version-parcours a ete supprimee. Ce contrat
+> decrit l'ancien modele et sera reecrit en contrat parcours (suivi). Voir
+> [ADR-022](../../adr/022-parcours-objet-canonique-aplatissement.md).
+
 > Partage l'**enveloppe commune** du [contrat référentiel](contrat-referentiel-niveau-classe.md)
 > (§2-§3).
 > Ce document ne couvre que le **corps `starter_welcome`**.

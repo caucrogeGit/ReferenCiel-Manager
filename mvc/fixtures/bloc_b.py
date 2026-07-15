@@ -1,8 +1,11 @@
-"""Fixture callable : chaîne pédagogique (starter → parcours → progression → évaluations).
+"""Fixture callable : chaîne pédagogique (parcours → palier → dossier → progression → évaluations).
 
-Enchaînement d'entités du Bloc B sans clé naturelle simple : on résout les Id au fil
-de l'eau via core.database.db (ADR-078). Dépend du socle (classe, élève, professeur)
-et du référentiel (niveau_classe, critères).
+Modèle canonique aplati (ADR-022) : le Parcours est l'objet racine (rattaché au
+NiveauClasse), il contient des Paliers ; chaque palier porte un DossierTechnique
+(ressources + QCM de validation). L'élève a une ProgressionParcours (directe, sans
+affectation) déclinée en ProgressionPalier. On résout les Id au fil de l'eau via
+core.database.db (ADR-078). Dépend du socle (classe, élève, professeur) et du
+référentiel (niveau_classe, critères).
 """
 from typing import Any
 from forge_mvc_fixtures import Fixture
@@ -17,8 +20,9 @@ def _id(row: "dict[str, Any] | None") -> int:
 
 class BlocBFixture(Fixture):
     tables = (
-        "starter_welcome", "version_starter", "parcours", "version_parcours", "palier",
-        "affectation_parcours", "progression_parcours", "progression_palier", "activite",
+        "parcours", "palier", "dossier_technique", "ressource_dossier", "qcm",
+        "classe_professeur", "professeur_parcours",
+        "progression_parcours", "progression_palier", "activite",
         "evaluation_activite", "evaluation_critere",
     )
     depends_on = ("niveau_classe", "classe", "eleve", "professeur", "critere_observable")
@@ -30,16 +34,58 @@ class BlocBFixture(Fixture):
         eleve = _id(db.fetch_one("SELECT Id FROM eleve WHERE Identifiant = ?", ("dupont-marie",)))
         crit = [int(r["Id"]) for r in db.fetch_all("SELECT Id FROM critere_observable ORDER BY Id LIMIT 4")]
 
-        sw = db.insert("INSERT INTO starter_welcome (Identifiant, Titre, Presentation, niveau_classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, NOW(), NOW())",
-                       ("welcome-reseau", "Welcome Réseau", "Découverte réseau", niveau))
-        vs = db.insert("INSERT INTO version_starter (Version, Statut, ActiviteGlissante, OrdreImpose, starter_id, CreatedAt, UpdatedAt) VALUES ('1.0.0','publie',0,1,?,NOW(),NOW())", (sw,))
-        parc = db.insert("INSERT INTO parcours (Titre, version_starter_id, CreatedAt, UpdatedAt) VALUES (?, ?, NOW(), NOW())", ("Parcours Welcome Réseau", vs))
-        vp = db.insert("INSERT INTO version_parcours (Version, Statut, parcours_id, CreatedAt, UpdatedAt) VALUES ('1.0.0','publie',?,NOW(),NOW())", (parc,))
-        pal = db.insert("INSERT INTO palier (Ordre, Titre, Theme, ProductionAttendue, DossierTechniqueFichier, version_parcours_id, CreatedAt, UpdatedAt) VALUES (1,'Palier 1 — Câblage','Réseau','Câble testé','dossier-p1.pdf',?,NOW(),NOW())", (vp,))
-        aff = db.insert("INSERT INTO affectation_parcours (DateAffectation, Statut, version_parcours_id, classe_id, professeur_id, CreatedAt, UpdatedAt) VALUES (CURDATE(),'active',?,?,?,NOW(),NOW())", (vp, classe, prof))
-        pe = db.insert("INSERT INTO progression_parcours (Statut, DateDebut, eleve_id, affectation_parcours_id, CreatedAt, UpdatedAt) VALUES ('en_cours',CURDATE(),?,?,NOW(),NOW())", (eleve, aff))
-        pp = db.insert("INSERT INTO progression_palier (Statut, progression_parcours_id, palier_id, CreatedAt, UpdatedAt) VALUES ('en_cours',?,?,NOW(),NOW())", (pe, pal))
-        act = db.insert("INSERT INTO activite (Objectif, palier_id, CreatedAt, UpdatedAt) VALUES ('Câbler et mesurer une liaison',?,NOW(),NOW())", (pal,))
-        ea = db.insert("INSERT INTO evaluation_activite (DateEvaluation, Appreciation, progression_palier_id, activite_id, professeur_id, CreatedAt, UpdatedAt) VALUES (NOW(),'Bon travail global',?,?,?,NOW(),NOW())", (pp, act, prof))
+        # Parcours canonique (rattaché au niveau de classe) et ses liens n-n.
+        parc = db.insert(
+            "INSERT INTO parcours (Identifiant, Titre, Presentation, Statut, ActiviteGlissante, OrdreImpose, niveau_classe_id, CreatedAt, UpdatedAt) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+            ("welcome-reseau", "Parcours Welcome Réseau", "Découverte du réseau et du câblage.", "publie", 0, 1, niveau),
+        )
+        db.execute("INSERT INTO professeur_parcours (professeur_id, parcours_id) VALUES (?, ?)", (prof, parc))
+        db.execute("INSERT INTO classe_professeur (classe_id, professeur_id) VALUES (?, ?)", (classe, prof))
+
+        # Palier -> dossier technique (ressource markdown + QCM de validation).
+        pal = db.insert(
+            "INSERT INTO palier (Ordre, Titre, Theme, ProductionAttendue, parcours_id, CreatedAt, UpdatedAt) "
+            "VALUES (1, 'Palier 1 — Câblage', 'Réseau', 'Câble testé et validé', ?, NOW(), NOW())",
+            (parc,),
+        )
+        dt = db.insert(
+            "INSERT INTO dossier_technique (Titre, palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, NOW(), NOW())",
+            ("Dossier technique — Câblage", pal),
+        )
+        db.execute(
+            "INSERT INTO ressource_dossier (Type, Titre, Ordre, Contenu, dossier_technique_id, CreatedAt, UpdatedAt) "
+            "VALUES ('markdown', 'Consignes de câblage', 1, ?, ?, NOW(), NOW())",
+            ("# Câblage RJ45\n\nRespecter la norme **T568B** et tester la continuité.", dt),
+        )
+        db.insert(
+            "INSERT INTO qcm (FormatReponse, SeuilValidation, dossier_technique_id, CreatedAt, UpdatedAt) "
+            "VALUES ('qcm', '70', ?, NOW(), NOW())",
+            (dt,),
+        )
+
+        # Progression directe de l'élève sur le parcours, déclinée par palier.
+        pe = db.insert(
+            "INSERT INTO progression_parcours (Statut, DateDebut, eleve_id, parcours_id, CreatedAt, UpdatedAt) "
+            "VALUES ('en_cours', CURDATE(), ?, ?, NOW(), NOW())",
+            (eleve, parc),
+        )
+        pp = db.insert(
+            "INSERT INTO progression_palier (Statut, progression_parcours_id, palier_id, CreatedAt, UpdatedAt) "
+            "VALUES ('en_cours', ?, ?, NOW(), NOW())",
+            (pe, pal),
+        )
+        act = db.insert(
+            "INSERT INTO activite (Objectif, palier_id, CreatedAt, UpdatedAt) VALUES ('Câbler et mesurer une liaison', ?, NOW(), NOW())",
+            (pal,),
+        )
+        ea = db.insert(
+            "INSERT INTO evaluation_activite (DateEvaluation, Appreciation, progression_palier_id, activite_id, professeur_id, CreatedAt, UpdatedAt) "
+            "VALUES (NOW(), 'Bon travail global', ?, ?, ?, NOW(), NOW())",
+            (pp, act, prof),
+        )
         for crit_id, niv in zip(crit, ["atteint", "depasse", "atteint", "partiellement_atteint"]):
-            db.execute("INSERT INTO evaluation_critere (Niveau, evaluation_activite_id, critere_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, NOW(), NOW())", (niv, ea, crit_id))
+            db.execute(
+                "INSERT INTO evaluation_critere (Niveau, evaluation_activite_id, critere_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, NOW(), NOW())",
+                (niv, ea, crit_id),
+            )

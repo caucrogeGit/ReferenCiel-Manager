@@ -4,6 +4,11 @@ Documentation métier enrichie du domaine **parcours pédagogique** (type
 `starter_welcome`), objets **persistés en base** après import du manifeste canonique
 (voir le [contrat](../json-canonique/contrat-starter-welcome.md)).
 
+> **Superseded (ADR-022, 2026-07-15).** Aplatissement du modele : le **Parcours**
+> devient l'objet canonique (rattache au NiveauClasse) ; starter, version-starter,
+> version-parcours et affectation ont ete supprimes. Ce dictionnaire decrit
+> l'ancien modele. Voir [ADR-022](../../adr/022-parcours-objet-canonique-aplatissement.md).
+
 > Mêmes principes que le [dictionnaire référentiel](dictionnaire-referentiel-niveau-classe.md#principes).
 > **Définition ≠ exécution** : ce dictionnaire décrit les **contenus définis** ; les
 > cases cochées, tentatives et progressions relèvent du **Bloc B** (exécution), non
