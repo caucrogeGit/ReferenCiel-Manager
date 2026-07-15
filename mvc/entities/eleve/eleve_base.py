@@ -19,9 +19,10 @@ from core.validation import (
 class EleveBase:
     """Classe de base regenerable de Eleve."""
 
-    def __init__(self, nom, prenom, created_at, updated_at, id=None, identifiant=None, date_naissance=None, user_id=None):
+    def __init__(self, nom, prenom, classe_id, created_at, updated_at, id=None, identifiant=None, date_naissance=None, user_id=None):
         self.nom = nom
         self.prenom = prenom
+        self.classe_id = classe_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -116,6 +117,17 @@ class EleveBase:
         self._user_id = value
 
     @property
+    def classe_id(self):
+        return self._classe_id
+
+    @classe_id.setter
+    @typed(int)
+    def classe_id(self, value):
+        if value is None:
+            raise ValidationError("classe_id", 'La propriété "classe_id" ne peut pas être nulle.')
+        self._classe_id = value
+
+    @property
     def created_at(self):
         return self._created_at
 
@@ -145,6 +157,7 @@ class EleveBase:
             "identifiant": self.identifiant,
             "date_naissance": None if self.date_naissance is None else self.date_naissance.isoformat(),
             "user_id": self.user_id,
+            "classe_id": self.classe_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -158,10 +171,11 @@ class EleveBase:
             identifiant=data["identifiant"],
             date_naissance=cls._coerce_date(data.get("date_naissance")),
             user_id=data["user_id"],
+            classe_id=data["classe_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"EleveBase(id={self.id!r}, nom={self.nom!r}, prenom={self.prenom!r}, identifiant={self.identifiant!r}, date_naissance={self.date_naissance!r}, user_id={self.user_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"EleveBase(id={self.id!r}, nom={self.nom!r}, prenom={self.prenom!r}, identifiant={self.identifiant!r}, date_naissance={self.date_naissance!r}, user_id={self.user_id!r}, classe_id={self.classe_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

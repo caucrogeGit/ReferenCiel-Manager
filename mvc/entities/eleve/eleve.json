@@ -42,9 +42,9 @@
       "unique": true
     },
     {
-      "name": "niveau_classe_id",
+      "name": "classe_id",
       "type": "foreign_key",
-      "references": "NiveauClasse",
+      "references": "Classe",
       "required": true
     }
   ],

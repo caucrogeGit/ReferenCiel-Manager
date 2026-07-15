@@ -799,6 +799,54 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_many",
+      "from": "Scenario",
+      "to": "Parcours",
+      "name": "parcours",
+      "inverse_name": "scenario",
+      "pivot": {
+        "table": "scenario_parcours",
+        "from_key": "scenario_id",
+        "to_key": "parcours_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
+    },
+    {
+      "type": "many_to_many",
+      "from": "Classe",
+      "to": "Professeur",
+      "name": "professeurs",
+      "inverse_name": "classes",
+      "pivot": {
+        "table": "classe_professeur",
+        "from_key": "classe_id",
+        "to_key": "professeur_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
+    },
+    {
+      "type": "many_to_many",
+      "from": "Professeur",
+      "to": "Parcours",
+      "name": "parcours",
+      "inverse_name": "professeurs",
+      "pivot": {
+        "table": "professeur_parcours",
+        "from_key": "professeur_id",
+        "to_key": "parcours_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
     }
   ]
 }

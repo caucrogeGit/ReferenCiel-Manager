@@ -574,3 +574,57 @@ ALTER TABLE bilan_eleve
     REFERENCES progression_eleve (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+CREATE TABLE IF NOT EXISTS scenario_parcours (
+    id INT NOT NULL AUTO_INCREMENT,
+    scenario_id INT NOT NULL,
+    parcours_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_scenario_parcours (scenario_id, parcours_id),
+    INDEX idx_scenario_parcours_scenario_id (scenario_id),
+    INDEX idx_scenario_parcours_parcours_id (parcours_id),
+    CONSTRAINT fk_scenario_parcours_scenario_id
+        FOREIGN KEY (scenario_id)
+        REFERENCES scenario (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_scenario_parcours_parcours_id
+        FOREIGN KEY (parcours_id)
+        REFERENCES parcours (id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS classe_professeur (
+    id INT NOT NULL AUTO_INCREMENT,
+    classe_id INT NOT NULL,
+    professeur_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_classe_professeur (classe_id, professeur_id),
+    INDEX idx_classe_professeur_classe_id (classe_id),
+    INDEX idx_classe_professeur_professeur_id (professeur_id),
+    CONSTRAINT fk_classe_professeur_classe_id
+        FOREIGN KEY (classe_id)
+        REFERENCES classe (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_classe_professeur_professeur_id
+        FOREIGN KEY (professeur_id)
+        REFERENCES professeur (id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS professeur_parcours (
+    id INT NOT NULL AUTO_INCREMENT,
+    professeur_id INT NOT NULL,
+    parcours_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_professeur_parcours (professeur_id, parcours_id),
+    INDEX idx_professeur_parcours_professeur_id (professeur_id),
+    INDEX idx_professeur_parcours_parcours_id (parcours_id),
+    CONSTRAINT fk_professeur_parcours_professeur_id
+        FOREIGN KEY (professeur_id)
+        REFERENCES professeur (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_professeur_parcours_parcours_id
+        FOREIGN KEY (parcours_id)
+        REFERENCES parcours (id)
+        ON DELETE CASCADE
+);
