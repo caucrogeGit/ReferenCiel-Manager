@@ -26,18 +26,4 @@
         sync();
     }
     document.addEventListener('htmx:afterSwap', sync);
-
-    // Retour visuel de l'auto-enregistrement de la section Titre : après chaque
-    // POST /titre réussi, on révèle « Modifications enregistrées » quelques secondes.
-    var savedTimer;
-    document.addEventListener('htmx:afterRequest', function (e) {
-        var elt = e.detail && e.detail.elt;
-        if (!elt || !elt.matches || !elt.matches('form[action$="/titre"]')) return;
-        if (!e.detail.successful) return;
-        var status = document.getElementById('titre-status');
-        if (!status) return;
-        status.classList.remove('hidden');
-        clearTimeout(savedTimer);
-        savedTimer = setTimeout(function () { status.classList.add('hidden'); }, 2500);
-    });
 })();

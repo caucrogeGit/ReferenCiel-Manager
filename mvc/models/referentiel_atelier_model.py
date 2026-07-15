@@ -20,7 +20,8 @@ def list_referentiels() -> list[dict[str, Any]]:
     """Tous les référentiels, avec le libellé de formation et le niveau."""
     return fetch_all(
         "SELECT r.Id, r.Identifiant, r.Version, r.Statut, r.ImporteLe, "
-        "f.Intitule AS formation_intitule, nc.Code AS niveau_code "
+        "f.Intitule AS formation_intitule, "
+        "nc.Code AS niveau_code, nc.Intitule AS niveau_intitule "
         "FROM referentiel_niveau_classe r "
         "LEFT JOIN formation f ON f.Id = r.formation_id "
         "LEFT JOIN niveau_classe nc ON nc.Id = r.niveau_classe_id "

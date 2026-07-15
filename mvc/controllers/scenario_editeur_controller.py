@@ -117,6 +117,7 @@ class ScenarioEditeurController(BaseController):
         activite_ids: list[int],
         critere_ids: list[int],
         ressources: list[dict[str, Any]],
+        co_auteur_ids: list[int],
     ) -> list[dict[str, Any]]:
         """Barre d'étapes : la complétion est DÉRIVÉE des données.
 
@@ -126,9 +127,13 @@ class ScenarioEditeurController(BaseController):
         """
         # « done » = tous les champs OBLIGATOIRES de l'étape sont renseignés. C'est
         # ce qui conditionne l'enregistrement du scénario (voir tous_complets).
-        #  - Titre : le titre est obligatoire.
+        #  - Titre : le titre est obligatoire ; en co-intervention, au moins un
+        #    enseignant co-auteur devient obligatoire.
         #  - Contexte : les 5 champs cpro sont tous obligatoires (d'où all()).
         #  - Liaison / Ressources : rien d'obligatoire -> l'étape ne bloque jamais.
+        titre_complet = bool(scenario.get("Titre")) and (
+            not scenario.get("CoIntervention") or len(co_auteur_ids) > 0
+        )
         contexte_complet = all(
             scenario.get(champ)
             for champ in (
@@ -145,7 +150,7 @@ class ScenarioEditeurController(BaseController):
                 "key": "titre",
                 "label": _LIBELLES["titre"],
                 "badge": "",
-                "done": bool(scenario.get("Titre")),
+                "done": titre_complet,
             },
             {
                 "key": "contexte",
@@ -207,13 +212,14 @@ class ScenarioEditeurController(BaseController):
         activite_ids = get_activite_ids(scenario_id)
         critere_ids = get_critere_ids(scenario_id)
         ressources = list_ressources(scenario_id)
+        co_auteur_ids = get_co_auteur_ids(scenario_id)
 
         etape = ScenarioEditeurController._etape(request)
         pole_id, competence_id = ScenarioEditeurController._selection_courante(
             request, arbre
         )
         steps = ScenarioEditeurController._steps(
-            scenario, arbre, referentiels, activite_ids, critere_ids, ressources
+            scenario, arbre, referentiels, activite_ids, critere_ids, ressources, co_auteur_ids
         )
         position = ETAPES.index(etape) + 1
         # Référentiel courant (rappelé sous le titre) et gate d'enregistrement :
@@ -225,7 +231,7 @@ class ScenarioEditeurController(BaseController):
 
         context: dict[str, Any] = {
             "scenario": scenario,
-            "co_auteur_ids": get_co_auteur_ids(scenario_id),
+            "co_auteur_ids": co_auteur_ids,
             "professeurs": list_professeurs(),
             "referentiels": referentiels,
             "referentiel": referentiel,
@@ -309,6 +315,7 @@ class ScenarioEditeurController(BaseController):
             get_activite_ids(scenario_id),
             get_critere_ids(scenario_id),
             list_ressources(scenario_id),
+            get_co_auteur_ids(scenario_id),
         )
         if not all(s["done"] for s in steps):
             return BaseController.redirect(
@@ -364,6 +371,10 @@ class ScenarioEditeurController(BaseController):
             request.form("liens_associes", "").strip(),
             request.form("espaces_formation", "").strip(),
         )
+        # Auto-enregistrement HTMX (à la saisie) : 204, pas de rechargement. Sans JS,
+        # le <noscript> soumet le formulaire et on retombe sur la redirection.
+        if ScenarioEditeurController._is_htmx(request):
+            return Response(status=204)
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Contexte enregistrée."
         )
