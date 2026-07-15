@@ -26,4 +26,16 @@
         var dlg = document.getElementById(trigger.getAttribute('data-open-modal'));
         if (dlg && typeof dlg.showModal === 'function') dlg.showModal();
     });
+
+    // Flash éphémère : consommé côté serveur, mais son <div> vit hors des zones
+    // rafraîchies par HTMX (ex. #tunnel-corps). On le retire après quelques secondes
+    // et dès qu'une requête HTMX part (navigation), pour qu'il ne traîne pas.
+    function hideFlash() {
+        var flashes = document.querySelectorAll('[data-flash]');
+        for (var i = 0; i < flashes.length; i++) flashes[i].remove();
+    }
+    if (document.querySelector('[data-flash]')) {
+        window.setTimeout(hideFlash, 5000);
+    }
+    document.addEventListener('htmx:beforeRequest', hideFlash);
 })();

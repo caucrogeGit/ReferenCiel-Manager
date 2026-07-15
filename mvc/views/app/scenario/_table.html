@@ -1,3 +1,4 @@
+{% from "components/ui.html" import statut_scenario %}
 <form id="bulk-delete-form"
       method="post" action="/scenario/bulk-delete"
       class="mb-3 flex items-center gap-3">
@@ -32,7 +33,7 @@
                 <td class="px-4 py-3 text-gray-800">{{ scenario.Titre }}</td>
                 <td class="px-4 py-3 text-gray-800">{{ scenario.Intention }}</td>
                 <td class="px-4 py-3 text-gray-800">{{ scenario.Objectifs }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ scenario.Statut }}</td>
+                <td class="px-4 py-3">{{ statut_scenario(scenario.Statut) }}</td>
                 <td class="px-4 py-3 text-gray-800">{{ scenario.Version }}</td>
                 <td class="px-4 py-3 text-gray-800">{{ scenario.referentiel_id_label }}</td>
                 <td class="px-4 py-3 text-gray-800">{{ scenario.auteur_id_label }}</td>

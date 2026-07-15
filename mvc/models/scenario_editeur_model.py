@@ -51,7 +51,18 @@ def creer_scenario(titre: str, referentiel_id: int) -> int:
     )
 
 
-def list_professeurs() -> list[dict[str, Any]]:
+def list_professeurs(exclure_user_id: "int | None" = None) -> list[dict[str, Any]]:
+    """Professeurs sélectionnables comme co-auteurs.
+
+    On exclut le professeur du compte courant (`exclure_user_id`) : l'auteur du
+    scénario ne peut pas être son propre co-enseignant.
+    """
+    if exclure_user_id is not None:
+        return fetch_all(
+            "SELECT Id, Nom, Prenom FROM professeur "
+            "WHERE UserId IS NULL OR UserId <> ? ORDER BY Nom, Prenom",
+            (exclure_user_id,),
+        )
     return fetch_all("SELECT Id, Nom, Prenom FROM professeur ORDER BY Nom, Prenom")
 
 

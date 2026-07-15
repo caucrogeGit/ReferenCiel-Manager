@@ -4,12 +4,7 @@
    pôle, de compétence, cochage) régénère un fragment via HTMX. Sans JS, les
    mêmes liens font une navigation classique et la page rend l'étape demandée. #}
 {% extends "layouts/base.html" %}
-{% from "components/ui.html" import flash_messages, badge %}
-
-{# Statut dérivé/persisté (ADR-019) : brouillon (en cours), finalisé (contexte +
-   ≥1 activité + ≥1 critère), utilisé (utilisé par des élèves, verrouillé). #}
-{%- set _statut_label = {"brouillon": "Brouillon", "finalise": "Finalisé", "utilise": "Utilisé"} -%}
-{%- set _statut_tone = {"brouillon": "neutral", "finalise": "success", "utilise": "green"} -%}
+{% from "components/ui.html" import flash_messages, statut_scenario %}
 
 {% block title %}{{ scenario.Titre or "Scénario sans titre" }} — {{ app_name }}{% endblock %}
 
@@ -17,16 +12,11 @@
 {{ flash_messages(flash) }}
 
 <div class="mb-6">
-    <a href="/conception/scenario"
-       class="inline-flex items-center gap-1 text-sm text-muted hover:text-ink transition">
-        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        Tous les scénarios
-    </a>
-    <div class="mt-1 flex items-center gap-3">
+    <div class="flex items-center gap-3">
         <h1 class="text-[28px] font-extrabold tracking-tight text-ink">
             {{ scenario.Titre or "Scénario sans titre" }}
         </h1>
-        {{ badge(_statut_label.get(scenario.Statut, scenario.Statut), tone=_statut_tone.get(scenario.Statut, "neutral")) }}
+        {{ statut_scenario(scenario.Statut) }}
     </div>
     {% if referentiel %}
     {# Le référentiel appartient à une FORMATION (ADR-023) : ici la famille de
@@ -35,10 +25,9 @@
     <p class="mt-1 text-sm text-muted">
         Référentiel :
         <span class="font-medium text-ink">{{ referentiel.formation_intitule }}</span>
-        <span class="font-mono text-xs text-faint">· {{ referentiel.Identifiant }}</span>
+        <span class="font-medium text-ink">· {{ referentiel.Identifiant }}</span>
     </p>
     {% endif %}
-    <p class="mt-1 text-sm text-muted">Version {{ scenario.Version }}</p>
 </div>
 
 {# Cible HTMX de la navigation d'étape : le stepper ET le contenu de l'étape sont

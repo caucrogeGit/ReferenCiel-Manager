@@ -12,6 +12,7 @@ from typing import Any, cast
 from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller.base_controller import BaseController
+from core.auth.session import get_authenticated_user_id
 from core.security.session import get_flash, get_session_id
 
 from forge_mvc_files import UploadError, delete_upload, save_upload
@@ -188,7 +189,7 @@ class ScenarioEditeurController(BaseController):
             {
                 "key": "ressources",
                 "label": _LIBELLES["ressources"],
-                "badge": str(len(ressources)),
+                "badge": "",
                 "done": True,
             },
         ]
@@ -251,7 +252,9 @@ class ScenarioEditeurController(BaseController):
             "scenario": scenario,
             "flash": get_flash(get_session_id(request)),
             "co_auteur_ids": co_auteur_ids,
-            "professeurs": list_professeurs(),
+            # Co-auteurs possibles : tous les professeurs SAUF le compte courant
+            # (l'auteur ne peut pas être son propre co-enseignant).
+            "professeurs": list_professeurs(exclure_user_id=get_authenticated_user_id(request)),
             "referentiels": referentiels,
             "referentiel": referentiel,
             "arbre": arbre,
@@ -317,13 +320,18 @@ class ScenarioEditeurController(BaseController):
             return BaseController.not_found()
         if get_scenario(scenario_id) is None:
             return BaseController.not_found()
+        htmx = ScenarioEditeurController._is_htmx(request)
         titre = request.form("titre", "").strip()
         co_intervention = request.form("co_intervention", "") != ""
-        # Les co-auteurs n'ont de sens qu'en co-intervention (le bloc est masqué
-        # sinon côté vue) : hors co-intervention, on n'en persiste aucun, même si
-        # le select masqué renvoyait encore une sélection.
+        # Pool des co-auteurs possibles : tous les professeurs SAUF le compte courant.
+        pool = {
+            int(p["Id"])
+            for p in list_professeurs(exclure_user_id=get_authenticated_user_id(request))
+        }
+        # Ceinture-bretelles : en co-intervention, on ne persiste que des co-auteurs
+        # DU pool (donc jamais le prof courant, même si le formulaire était forgé).
         co_auteur_ids = (
-            ScenarioEditeurController._parse_many_ids(request, "co_auteurs")
+            [i for i in ScenarioEditeurController._parse_many_ids(request, "co_auteurs") if i in pool]
             if co_intervention
             else []
         )
@@ -331,7 +339,7 @@ class ScenarioEditeurController(BaseController):
         # à un autre scénario, plutôt que de heurter la contrainte (500). La réponse
         # HTMX alimente la zone d'erreur #titre-erreur (message si collision, sinon vide).
         if titre and titre_existe_autre(titre, scenario_id):
-            if ScenarioEditeurController._is_htmx(request):
+            if htmx:
                 return Response(
                     body=f"Un autre scénario s'intitule déjà « {html.escape(titre)} »."
                 )
@@ -341,10 +349,21 @@ class ScenarioEditeurController(BaseController):
                 flash=f"Un autre scénario s'intitule déjà « {titre} ».",
                 level="success",
             )
+        # Co-intervention demandée mais aucun co-auteur possible : l'option est
+        # indisponible, on ne l'active pas et on prévient (flash, page rechargée).
+        if co_intervention and not pool:
+            enregistrer_titre(scenario_id, titre, False, [])
+            msg = "L'option co-intervention est indisponible : aucun autre professeur enregistré."
+            if htmx:
+                BaseController.set_flash(request, msg, "success")
+                return Response(headers={"HX-Refresh": "true"})
+            return BaseController.redirect(
+                f"/conception/scenario/{scenario_id}", request=request, flash=msg, level="success"
+            )
         enregistrer_titre(scenario_id, titre, co_intervention, co_auteur_ids)
         # Auto-enregistrement HTMX : on renvoie une zone d'erreur vide (efface un
         # message précédent). Sans JS, le <noscript> soumet le formulaire (redirection).
-        if ScenarioEditeurController._is_htmx(request):
+        if htmx:
             return Response(body="")
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Titre enregistrée."

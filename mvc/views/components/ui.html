@@ -13,7 +13,7 @@
    Passe href pour un lien <a>, sinon un <button type=...>. #}
 {% macro button(label, variant="primary", href=none, type="button", extra="") %}
 {%- set styles = {
-  "primary":   "text-ink bg-forge hover:bg-forge-dark active:translate-y-px",
+  "primary":   "text-white bg-forge hover:bg-forge-dark active:translate-y-px",
   "secondary": "text-forge bg-forge-soft border border-forge-border hover:bg-forge-border",
   "ghost":     "text-ink bg-transparent border border-field hover:border-forge",
   "danger":    "text-white bg-red-600 hover:bg-red-700 active:translate-y-px"
@@ -35,14 +35,22 @@
 {# Pastille / étiquette courte. tone : forge | success | warning | danger | neutral. #}
 {% macro badge(label, tone="forge") %}
 {%- set tones = {
-  "forge":    "text-forge bg-forge-soft",
-  "success": "text-forge bg-forge-soft",
-  "green":   "text-green-700 bg-green-100",
-  "warning": "text-ocre bg-orange-50",
-  "danger":  "text-red-700 bg-red-50",
-  "neutral": "text-subtle bg-cream"
+  "forge":    "text-forge bg-forge-soft border-forge-border",
+  "success": "text-forge bg-forge-soft border-forge-border",
+  "green":   "text-green-700 bg-green-100 border-green-300",
+  "warning": "text-ocre bg-orange-50 border-ocre/30",
+  "danger":  "text-red-700 bg-red-50 border-red-200",
+  "neutral": "text-subtle bg-cream border-line"
 } -%}
-<span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full {{ tones.get(tone) or tones['forge'] }}">{{ label }}</span>
+<span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border {{ tones.get(tone) or tones['forge'] }}">{{ label }}</span>
+{% endmacro %}
+
+{# Badge du statut d'un scénario (ADR-019). Source unique du libellé et de la
+   couleur : brouillon (gris) / finalisé (orange forge) / utilisé (vert). #}
+{% macro statut_scenario(statut) %}
+{%- set _labels = {"brouillon": "Brouillon", "finalise": "Finalisé", "utilise": "Utilisé"} -%}
+{%- set _tones = {"brouillon": "neutral", "finalise": "success", "utilise": "green"} -%}
+{{ badge(_labels.get(statut, statut), tone=_tones.get(statut, "neutral")) }}
 {% endmacro %}
 
 {# Marqueur d'obligation d'un champ, à placer juste après son libellé (ADR-019).
@@ -70,7 +78,7 @@
 {# Rendu d'un message flash de session. flash : dict {message, level} ou None.
    La page passe flash en contexte (ex. via un context provider applicatif). #}
 {% macro flash_messages(flash) %}
-{% if flash %}<div class="mb-4">{{ alert(flash.message, level=flash.level | default("info")) }}</div>{% endif %}
+{% if flash %}<div class="mb-4" data-flash>{{ alert(flash.message, level=flash.level | default("info")) }}</div>{% endif %}
 {% endmacro %}
 
 {# En-tête de page : titre, sous-titre optionnel, bouton d'action optionnel. #}
