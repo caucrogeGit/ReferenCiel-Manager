@@ -13,9 +13,9 @@
     <h1 class="text-2xl font-bold text-gray-800 mb-1">Mes classes</h1>
     <p class="text-gray-600 mb-6">{{ data.professeur.prenom }} {{ data.professeur.nom }}</p>
 
-    {% if data.affectations %}
+    {% if data.classes %}
     <div class="space-y-6">
-        {% for aff in data.affectations %}
+        {% for aff in data.classes %}
         <section class="bg-white shadow rounded overflow-hidden">
             <header class="px-4 py-3 border-b border-gray-100 flex items-center justify-between gap-4">
                 <div>
