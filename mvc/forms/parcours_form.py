@@ -1,6 +1,11 @@
-from core.forms import Form, RelationField, StringField
+from core.forms import Form, BooleanField, RelationField, StringField
 
 
 class ParcoursForm(Form):
+    identifiant = StringField(label="Identifiant", required=True)
     titre = StringField(label="Titre", required=True)
-    version_starter_id = RelationField(label="Version starter", target="VersionStarter", required=True, choices_key="version_starter_id_choices")
+    presentation = StringField(label="Presentation", required=False)
+    statut = StringField(label="Statut", required=True)
+    activite_glissante = BooleanField(label="Activite glissante")
+    ordre_impose = BooleanField(label="Ordre impose")
+    niveau_classe_id = RelationField(label="Niveau classe", target="NiveauClasse", required=True, choices_key="niveau_classe_id_choices")

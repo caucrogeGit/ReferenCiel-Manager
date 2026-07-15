@@ -25,72 +25,6 @@
     },
     {
       "type": "many_to_one",
-      "from": "InscriptionEleve",
-      "to": "Eleve",
-      "name": "eleve",
-      "inverse_name": "inscriptions",
-      "foreign_key": "eleve_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "InscriptionEleve",
-      "to": "Classe",
-      "name": "classe",
-      "inverse_name": "inscriptions",
-      "foreign_key": "classe_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "InscriptionEleve",
-      "to": "AnneeScolaire",
-      "name": "annee_scolaire",
-      "inverse_name": "inscriptions",
-      "foreign_key": "annee_scolaire_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "AffectationProfesseurClasse",
-      "to": "Professeur",
-      "name": "professeur",
-      "inverse_name": "affectations",
-      "foreign_key": "professeur_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "AffectationProfesseurClasse",
-      "to": "Classe",
-      "name": "classe",
-      "inverse_name": "affectations",
-      "foreign_key": "classe_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "AffectationProfesseurClasse",
-      "to": "AnneeScolaire",
-      "name": "annee_scolaire",
-      "inverse_name": "affectations",
-      "foreign_key": "annee_scolaire_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
       "from": "Groupe",
       "to": "Classe",
       "name": "classe",
@@ -379,44 +313,11 @@
     },
     {
       "type": "many_to_one",
-      "from": "StarterWelcome",
-      "to": "NiveauClasse",
-      "name": "niveau_classe",
-      "inverse_name": "starters",
-      "foreign_key": "niveau_classe_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "VersionStarter",
-      "to": "StarterWelcome",
-      "name": "starter",
-      "inverse_name": "versions",
-      "foreign_key": "starter_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
       "from": "Parcours",
       "to": "NiveauClasse",
       "name": "niveau_classe",
       "inverse_name": "parcours",
       "foreign_key": "niveau_classe_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "VersionParcours",
-      "to": "Parcours",
-      "name": "parcours",
-      "inverse_name": "versions",
-      "foreign_key": "parcours_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true
@@ -431,55 +332,6 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "AffectationParcours",
-      "to": "VersionParcours",
-      "name": "version_parcours",
-      "inverse_name": "affectations",
-      "foreign_key": "version_parcours_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "AffectationParcours",
-      "to": "Classe",
-      "name": "classe",
-      "inverse_name": "affectations_parcours",
-      "foreign_key": "classe_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
-      "from": "AffectationParcours",
-      "to": "Professeur",
-      "name": "professeur",
-      "inverse_name": "affectations_parcours",
-      "foreign_key": "professeur_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_many",
-      "from": "AffectationParcours",
-      "to": "Eleve",
-      "name": "eleves",
-      "inverse_name": "affectations_parcours",
-      "pivot": {
-        "table": "affectation_parcours_eleve",
-        "from_key": "affectation_parcours_id",
-        "to_key": "eleve_id",
-        "id": true,
-        "unique_pair": true,
-        "on_delete": "cascade",
-        "fields": []
-      }
     },
     {
       "type": "many_to_one",

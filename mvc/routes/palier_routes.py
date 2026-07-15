@@ -1,4 +1,3 @@
-# pyright: strict
 """Routes du contrôleur PalierController (ADR-068)."""
 from core.http.router import Router
 from mvc.controllers.palier_controller import PalierController

@@ -1,4 +1,3 @@
-# pyright: strict
 """Routes du contrôleur ProgressionEleveController (ADR-068)."""
 from core.http.router import Router
 from mvc.controllers.progression_eleve_controller import ProgressionEleveController

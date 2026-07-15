@@ -1,1 +1,0 @@
-from .affectation_parcours import AffectationParcours as AffectationParcours

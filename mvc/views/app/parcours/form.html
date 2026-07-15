@@ -13,8 +13,13 @@
 <div class="bg-white shadow rounded p-6">
     <form method="post" action="{{ action }}" class="space-y-4">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {{ field(name='identifiant', label='Identifiant', type='text', value=form.value('identifiant'), error=form.error('identifiant')) }}
         {{ field(name='titre', label='Titre', type='text', value=form.value('titre'), error=form.error('titre')) }}
-        {{ select_field(name='version_starter_id', label='Version starter', options=form.options.version_starter_id_choices, selected=form.value('version_starter_id'), error=form.error('version_starter_id')) }}
+        {{ textarea_field(name='presentation', label='Presentation', value=form.value('presentation'), error=form.error('presentation')) }}
+        {{ field(name='statut', label='Statut', type='text', value=form.value('statut'), error=form.error('statut')) }}
+        {{ checkbox(name='activite_glissante', label='Activite glissante', checked=form.value('activite_glissante')) }}
+        {{ checkbox(name='ordre_impose', label='Ordre impose', checked=form.value('ordre_impose')) }}
+        {{ select_field(name='niveau_classe_id', label='Niveau classe', options=form.options.niveau_classe_id_choices, selected=form.value('niveau_classe_id'), error=form.error('niveau_classe_id')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
             {{ button(label='Annuler', variant='secondary', href='/parcours') }}

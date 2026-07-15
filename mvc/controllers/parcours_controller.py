@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.parcours_model import (
     get_parcours_by_id, add_parcours, update_parcours, delete_parcours, bulk_delete_parcourss,
     count_parcourss, find_parcourss_paginated, find_parcourss_for_export,
-    get_version_starter_choices,
+    get_niveau_classe_choices,
 )
 from mvc.forms.parcours_form import ParcoursForm
 from core.security.session import get_flash, get_session_id
@@ -16,16 +16,19 @@ from core.security.session import get_flash, get_session_id
 def _form_data_from_parcours(record: dict) -> dict:
     """Convertit les colonnes SQL vers les noms de champs du formulaire."""
     return {
+        "identifiant": record.get("Identifiant"),
         "titre": record.get("Titre"),
-        "version_starter_id": record.get("version_starter_id"),
-        "created_at": record.get("CreatedAt"),
-        "updated_at": record.get("UpdatedAt"),
+        "presentation": record.get("Presentation"),
+        "statut": record.get("Statut"),
+        "activite_glissante": record.get("ActiviteGlissante"),
+        "ordre_impose": record.get("OrdreImpose"),
+        "niveau_classe_id": record.get("niveau_classe_id"),
     }
 
 
 def _parcours_form_options():
     return {
-        "version_starter_id_choices": get_version_starter_choices(),
+        "niveau_classe_id_choices": get_niveau_classe_choices(),
     }
 
 
@@ -40,7 +43,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Titre', 'Titre'), ('Version starter id', 'version_starter_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Identifiant', 'Identifiant'), ('Titre', 'Titre'), ('Presentation', 'Presentation'), ('Statut', 'Statut'), ('Activite glissante', 'ActiviteGlissante'), ('Ordre impose', 'OrdreImpose'), ('Niveau classe id', 'niveau_classe_id_label')]
 
 
 class ParcoursController(BaseController):
@@ -75,24 +78,24 @@ class ParcoursController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"titre", "version_starter_id", "created_at", "updated_at", "id"}:
+        if sort not in {"identifiant", "titre", "presentation", "statut", "activite_glissante", "ordre_impose", "niveau_classe_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        version_starter_id_raw = _query_param(request, "version_starter_id").strip()
-        version_starter_id_f = ""
-        if version_starter_id_raw:
+        niveau_classe_id_raw = _query_param(request, "niveau_classe_id").strip()
+        niveau_classe_id_f = ""
+        if niveau_classe_id_raw:
             try:
-                version_starter_id_f = int(version_starter_id_raw)
+                niveau_classe_id_f = int(niveau_classe_id_raw)
             except (TypeError, ValueError):
-                version_starter_id_f = ""
+                niveau_classe_id_f = ""
         relation_filters = {}
-        relation_filters["version_starter_id"] = {"options": [{"id": value, "label": label} for value, label in get_version_starter_choices()]}
+        relation_filters["niveau_classe_id"] = {"options": [{"id": value, "label": label} for value, label in get_niveau_classe_choices()]}
         _filters = {}
-        if version_starter_id_f != "":
-            _filters["version_starter_id"] = version_starter_id_f
+        if niveau_classe_id_f != "":
+            _filters["niveau_classe_id"] = niveau_classe_id_f
         total    = count_parcourss(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -105,7 +108,7 @@ class ParcoursController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"version_starter_id": version_starter_id_f},
+            "filters": {"niveau_classe_id": niveau_classe_id_f},
         })
         return {
                 "parcourss": parcourss,
@@ -235,21 +238,21 @@ class ParcoursController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"titre", "version_starter_id", "created_at", "updated_at", "id"}:
+        if sort not in {"identifiant", "titre", "presentation", "statut", "activite_glissante", "ordre_impose", "niveau_classe_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        version_starter_id_raw = _query_param(request, "version_starter_id").strip()
-        version_starter_id_f = ""
-        if version_starter_id_raw:
+        niveau_classe_id_raw = _query_param(request, "niveau_classe_id").strip()
+        niveau_classe_id_f = ""
+        if niveau_classe_id_raw:
             try:
-                version_starter_id_f = int(version_starter_id_raw)
+                niveau_classe_id_f = int(niveau_classe_id_raw)
             except (TypeError, ValueError):
-                version_starter_id_f = ""
+                niveau_classe_id_f = ""
         _filters = {}
-        if version_starter_id_f != "":
-            _filters["version_starter_id"] = version_starter_id_f
+        if niveau_classe_id_f != "":
+            _filters["niveau_classe_id"] = niveau_classe_id_f
         rows = find_parcourss_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

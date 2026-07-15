@@ -17,11 +17,7 @@ from core.mvc.controller.registry import register_jinja_context_provider
 from mvc.controllers.home_controller import HomeController
 from mvc.routes.admin_routes import register_admin
 from mvc.routes.activite_routes import register_activite_routes
-from mvc.routes.affectation_parcours_routes import register_affectation_parcours_routes
 from mvc.routes.bilan_eleve_routes import register_bilan_eleve_routes
-from mvc.routes.affectation_professeur_classe_routes import (
-    register_affectation_professeur_classe_routes,
-)
 from mvc.routes.annee_scolaire_routes import register_annee_scolaire_routes
 from mvc.routes.auth_routes import register_auth_routes
 from mvc.routes.classe_routes import register_classe_routes
@@ -31,7 +27,6 @@ from mvc.routes.evaluation_activite_routes import register_evaluation_activite_r
 from mvc.routes.evaluation_critere_routes import register_evaluation_critere_routes
 from mvc.routes.evaluation_prof_routes import register_evaluation_prof_routes
 from mvc.routes.groupe_routes import register_groupe_routes
-from mvc.routes.inscription_eleve_routes import register_inscription_eleve_routes
 from mvc.routes.mes_classes_routes import register_mes_classes_routes
 from mvc.routes.mon_parcours_routes import register_mon_parcours_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
@@ -67,10 +62,7 @@ from mvc.routes.referentiel_import_routes import register_referentiel_import_rou
 from mvc.routes.scenario_routes import register_scenario_routes
 from mvc.routes.securite_routes import register_securite_routes
 from mvc.routes.compte_routes import register_compte_routes
-from mvc.routes.starter_welcome_routes import register_starter_welcome_routes
 from mvc.routes.suivi_routes import register_suivi_routes
-from mvc.routes.version_parcours_routes import register_version_parcours_routes
-from mvc.routes.version_starter_routes import register_version_starter_routes
 from forge_mvc_rbac import make_contract_jinja_context
 from optins.registry import register_optins
 
@@ -117,23 +109,17 @@ register_professeur_compte_routes(router)
 # Routes appliquées pour : professeur_controller
 register_professeur_routes(router)
 
-# Routes appliquées pour : inscription_eleve_controller
-register_inscription_eleve_routes(router)
 
 # Routes appliquées pour : scenario_controller (chaîne Scenario, ticket 13)
 register_scenario_routes(router)
 
 # Routes StarterWelcome + VersionStarter (phase ⑦, ticket 14)
-register_starter_welcome_routes(router)
-register_version_starter_routes(router)
 
 # Routes Parcours + VersionParcours + Palier (phase ⑧, tickets 15-16)
 register_parcours_routes(router)
-register_version_parcours_routes(router)
 register_palier_routes(router)
 
 # Bloc B — AffectationParcours (ticket 17)
-register_affectation_parcours_routes(router)
 
 # Bloc B — ProgressionEleve + ProgressionPalier (ticket 18)
 register_progression_eleve_routes(router)
@@ -177,8 +163,6 @@ register_mon_parcours_routes(router)
 # Évaluation professeur — détail progression, validation palier, checklist prof
 register_evaluation_prof_routes(router)
 
-# Routes appliquées pour : affectation_professeur_classe_controller
-register_affectation_professeur_classe_routes(router)
 
 # Routes appliquées pour : groupe_controller
 register_groupe_routes(router)
@@ -231,8 +215,6 @@ RBAC_PREFIX_RULES: dict[str, str] = {
     "/classe": "socle.gerer",
     "/eleve": "socle.gerer",
     "/professeur": "socle.gerer",
-    "/inscription_eleve": "socle.gerer",
-    "/affectation_professeur_classe": "socle.gerer",
     "/groupe": "socle.gerer",
     "/admin": "socle.gerer",
     # Atelier référentiel (ADR-018) : interface principale, referentiel.gerer.
@@ -248,13 +230,9 @@ RBAC_PREFIX_RULES: dict[str, str] = {
     # Éditeur de scénario sur mesure (ADR-019), avant le CRUD plat /scenario.
     "/conception": "conception.gerer",
     "/scenario": "conception.gerer",
-    "/starter_welcome": "conception.gerer",
-    "/version_starter": "conception.gerer",
     "/parcours": "conception.gerer",
-    "/version_parcours": "conception.gerer",
     "/palier": "conception.gerer",
     # Exécution (travail, évaluation) : execution.gerer (admin + professeur).
-    "/affectation_parcours": "execution.gerer",
     "/progression_eleve": "execution.gerer",
     "/progression_palier": "execution.gerer",
     "/qcm": "execution.gerer",

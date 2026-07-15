@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.palier_model import (
     get_palier_by_id, add_palier, update_palier, delete_palier, bulk_delete_paliers,
     count_paliers, find_paliers_paginated, find_paliers_for_export,
-    get_version_parcours_choices,
+    get_parcours_choices,
 )
 from mvc.forms.palier_form import PalierForm
 from core.security.session import get_flash, get_session_id
@@ -20,16 +20,13 @@ def _form_data_from_palier(record: dict) -> dict:
         "titre": record.get("Titre"),
         "theme": record.get("Theme"),
         "production_attendue": record.get("ProductionAttendue"),
-        "dossier_technique_fichier": record.get("DossierTechniqueFichier"),
-        "version_parcours_id": record.get("version_parcours_id"),
-        "created_at": record.get("CreatedAt"),
-        "updated_at": record.get("UpdatedAt"),
+        "parcours_id": record.get("parcours_id"),
     }
 
 
 def _palier_form_options():
     return {
-        "version_parcours_id_choices": get_version_parcours_choices(),
+        "parcours_id_choices": get_parcours_choices(),
     }
 
 
@@ -44,7 +41,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Ordre', 'Ordre'), ('Titre', 'Titre'), ('Theme', 'Theme'), ('Production attendue', 'ProductionAttendue'), ('Dossier technique fichier', 'DossierTechniqueFichier'), ('Version parcours id', 'version_parcours_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Ordre', 'Ordre'), ('Titre', 'Titre'), ('Theme', 'Theme'), ('Production attendue', 'ProductionAttendue'), ('Parcours id', 'parcours_id_label')]
 
 
 class PalierController(BaseController):
@@ -79,24 +76,24 @@ class PalierController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"ordre", "titre", "theme", "production_attendue", "dossier_technique_fichier", "version_parcours_id", "created_at", "updated_at", "id"}:
+        if sort not in {"ordre", "titre", "theme", "production_attendue", "parcours_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        version_parcours_id_raw = _query_param(request, "version_parcours_id").strip()
-        version_parcours_id_f = ""
-        if version_parcours_id_raw:
+        parcours_id_raw = _query_param(request, "parcours_id").strip()
+        parcours_id_f = ""
+        if parcours_id_raw:
             try:
-                version_parcours_id_f = int(version_parcours_id_raw)
+                parcours_id_f = int(parcours_id_raw)
             except (TypeError, ValueError):
-                version_parcours_id_f = ""
+                parcours_id_f = ""
         relation_filters = {}
-        relation_filters["version_parcours_id"] = {"options": [{"id": value, "label": label} for value, label in get_version_parcours_choices()]}
+        relation_filters["parcours_id"] = {"options": [{"id": value, "label": label} for value, label in get_parcours_choices()]}
         _filters = {}
-        if version_parcours_id_f != "":
-            _filters["version_parcours_id"] = version_parcours_id_f
+        if parcours_id_f != "":
+            _filters["parcours_id"] = parcours_id_f
         total    = count_paliers(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -109,7 +106,7 @@ class PalierController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"version_parcours_id": version_parcours_id_f},
+            "filters": {"parcours_id": parcours_id_f},
         })
         return {
                 "paliers": paliers,
@@ -239,21 +236,21 @@ class PalierController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"ordre", "titre", "theme", "production_attendue", "dossier_technique_fichier", "version_parcours_id", "created_at", "updated_at", "id"}:
+        if sort not in {"ordre", "titre", "theme", "production_attendue", "parcours_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        version_parcours_id_raw = _query_param(request, "version_parcours_id").strip()
-        version_parcours_id_f = ""
-        if version_parcours_id_raw:
+        parcours_id_raw = _query_param(request, "parcours_id").strip()
+        parcours_id_f = ""
+        if parcours_id_raw:
             try:
-                version_parcours_id_f = int(version_parcours_id_raw)
+                parcours_id_f = int(parcours_id_raw)
             except (TypeError, ValueError):
-                version_parcours_id_f = ""
+                parcours_id_f = ""
         _filters = {}
-        if version_parcours_id_f != "":
-            _filters["version_parcours_id"] = version_parcours_id_f
+        if parcours_id_f != "":
+            _filters["parcours_id"] = parcours_id_f
         rows = find_paliers_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

@@ -13,11 +13,11 @@
     <input type="search" name="q" value="{{ pagination.q }}"
            placeholder="Rechercher…"
            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-400">
-    <select name="version_parcours_id"
+    <select name="parcours_id"
             class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-        <option value="">Tous les VersionParcours</option>
-        {% for option in relation_filters.version_parcours_id.options %}
-        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.version_parcours_id|string == option.id|string else '' }}>{{ option.label }}</option>
+        <option value="">Tous les Parcours</option>
+        {% for option in relation_filters.parcours_id.options %}
+        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.parcours_id|string == option.id|string else '' }}>{{ option.label }}</option>
         {% endfor %}
     </select>
     <button type="submit"

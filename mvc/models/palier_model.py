@@ -4,10 +4,10 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT palier.*, version_parcours.Version AS version_parcours_id_label FROM palier LEFT JOIN version_parcours ON palier.version_parcours_id = version_parcours.Id ORDER BY palier.Id"
-SELECT_BY_ID = "SELECT palier.*, version_parcours.Version AS version_parcours_id_label FROM palier LEFT JOIN version_parcours ON palier.version_parcours_id = version_parcours.Id WHERE palier.Id = ?"
-INSERT       = "INSERT INTO palier (Ordre, Titre, Theme, ProductionAttendue, DossierTechniqueFichier, version_parcours_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE palier SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, DossierTechniqueFichier = ?, version_parcours_id = ?, UpdatedAt = ? WHERE Id = ?"
+SELECT_ALL   = "SELECT palier.*, parcours.Titre AS parcours_id_label FROM palier LEFT JOIN parcours ON palier.parcours_id = parcours.Id ORDER BY palier.Id"
+SELECT_BY_ID = "SELECT palier.*, parcours.Titre AS parcours_id_label FROM palier LEFT JOIN parcours ON palier.parcours_id = parcours.Id WHERE palier.Id = ?"
+INSERT       = "INSERT INTO palier (Ordre, Titre, Theme, ProductionAttendue, parcours_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE palier SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, parcours_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM palier WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_palier_by_id(id):
 
 
 def add_palier(data):
-    return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["dossier_technique_fichier"], data["version_parcours_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["parcours_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_palier(id, data):
-    execute(UPDATE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["dossier_technique_fichier"], data["version_parcours_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["parcours_id"], datetime.now(timezone.utc), id))
 
 
 def delete_palier(id):
@@ -39,9 +39,9 @@ def bulk_delete_paliers(ids):
     execute("DELETE FROM palier WHERE Id IN (" + placeholders + ")", list(ids))
 
 
-_SEARCH_COLS  = ['palier.Titre', 'palier.Theme', 'palier.ProductionAttendue', 'palier.DossierTechniqueFichier']
-_ALLOWED_SORT = {"ordre": "palier.Ordre", "titre": "palier.Titre", "theme": "palier.Theme", "production_attendue": "palier.ProductionAttendue", "dossier_technique_fichier": "palier.DossierTechniqueFichier", "version_parcours_id": "palier.version_parcours_id", "created_at": "palier.CreatedAt", "updated_at": "palier.UpdatedAt", "id": "palier.Id"}
-_ALLOWED_FILTERS = {"version_parcours_id": "palier.version_parcours_id"}
+_SEARCH_COLS  = ['palier.Titre', 'palier.Theme', 'palier.ProductionAttendue']
+_ALLOWED_SORT = {"ordre": "palier.Ordre", "titre": "palier.Titre", "theme": "palier.Theme", "production_attendue": "palier.ProductionAttendue", "parcours_id": "palier.parcours_id", "id": "palier.Id"}
+_ALLOWED_FILTERS = {"parcours_id": "palier.parcours_id"}
 _DEFAULT_SORT = "palier.Id"
 
 
@@ -69,7 +69,7 @@ def count_paliers(q: str | None = None, filters: dict[str, Any] | None = None) -
 def find_paliers_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT palier.*, version_parcours.Version AS version_parcours_id_label FROM palier LEFT JOIN version_parcours ON palier.version_parcours_id = version_parcours.Id"
+    base = "SELECT palier.*, parcours.Titre AS parcours_id_label FROM palier LEFT JOIN parcours ON palier.parcours_id = parcours.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -102,6 +102,6 @@ def find_paliers_for_export(q: str | None = None, sort: str | None = None, direc
 
 
 
-def get_version_parcours_choices():
-    rows = fetch_all("SELECT Id, Version FROM version_parcours ORDER BY Version")
-    return [(row["Id"], row["Version"]) for row in rows]
+def get_parcours_choices():
+    rows = fetch_all("SELECT Id, Titre FROM parcours ORDER BY Titre")
+    return [(row["Id"], row["Titre"]) for row in rows]

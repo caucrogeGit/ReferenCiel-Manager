@@ -20,11 +20,11 @@
         <option value="{{ option.id }}" {{ 'selected' if pagination.filters.eleve_id|string == option.id|string else '' }}>{{ option.label }}</option>
         {% endfor %}
     </select>
-    <select name="affectation_parcours_id"
+    <select name="parcours_id"
             class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-        <option value="">Tous les AffectationParcours</option>
-        {% for option in relation_filters.affectation_parcours_id.options %}
-        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.affectation_parcours_id|string == option.id|string else '' }}>{{ option.label }}</option>
+        <option value="">Tous les Parcours</option>
+        {% for option in relation_filters.parcours_id.options %}
+        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.parcours_id|string == option.id|string else '' }}>{{ option.label }}</option>
         {% endfor %}
     </select>
     <button type="submit"

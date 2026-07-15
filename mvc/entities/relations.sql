@@ -18,48 +18,6 @@ ALTER TABLE classe
     ON UPDATE RESTRICT;
 CREATE INDEX idx_classe_niveau_classe_id ON classe (niveau_classe_id);
 
-ALTER TABLE inscription_eleve
-    ADD CONSTRAINT fk_inscription_eleve_eleve_id
-    FOREIGN KEY (eleve_id)
-    REFERENCES eleve (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-ALTER TABLE inscription_eleve
-    ADD CONSTRAINT fk_inscription_eleve_classe_id
-    FOREIGN KEY (classe_id)
-    REFERENCES classe (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-ALTER TABLE inscription_eleve
-    ADD CONSTRAINT fk_inscription_eleve_annee_scolaire_id
-    FOREIGN KEY (annee_scolaire_id)
-    REFERENCES annee_scolaire (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-ALTER TABLE affectation_professeur_classe
-    ADD CONSTRAINT fk_affectation_professeur_classe_professeur_id
-    FOREIGN KEY (professeur_id)
-    REFERENCES professeur (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-ALTER TABLE affectation_professeur_classe
-    ADD CONSTRAINT fk_affectation_professeur_classe_classe_id
-    FOREIGN KEY (classe_id)
-    REFERENCES classe (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-ALTER TABLE affectation_professeur_classe
-    ADD CONSTRAINT fk_affectation_professeur_classe_annee_scolaire_id
-    FOREIGN KEY (annee_scolaire_id)
-    REFERENCES annee_scolaire (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
 ALTER TABLE groupe
     ADD CONSTRAINT fk_groupe_classe_id
     FOREIGN KEY (classe_id)
@@ -298,31 +256,10 @@ CREATE TABLE IF NOT EXISTS scenario_activite (
         ON DELETE CASCADE
 );
 
-ALTER TABLE starter_welcome
-    ADD CONSTRAINT fk_starter_welcome_niveau_classe_id
-    FOREIGN KEY (niveau_classe_id)
-    REFERENCES niveau_classe (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-ALTER TABLE version_starter
-    ADD CONSTRAINT fk_version_starter_starter_id
-    FOREIGN KEY (starter_id)
-    REFERENCES starter_welcome (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
 ALTER TABLE parcours
     ADD CONSTRAINT fk_parcours_niveau_classe_id
     FOREIGN KEY (niveau_classe_id)
     REFERENCES niveau_classe (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-ALTER TABLE version_parcours
-    ADD CONSTRAINT fk_version_parcours_parcours_id
-    FOREIGN KEY (parcours_id)
-    REFERENCES parcours (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -332,45 +269,6 @@ ALTER TABLE palier
     REFERENCES parcours (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
-
-ALTER TABLE affectation_parcours
-    ADD CONSTRAINT fk_affectation_parcours_version_parcours_id
-    FOREIGN KEY (version_parcours_id)
-    REFERENCES version_parcours (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-ALTER TABLE affectation_parcours
-    ADD CONSTRAINT fk_affectation_parcours_classe_id
-    FOREIGN KEY (classe_id)
-    REFERENCES classe (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-ALTER TABLE affectation_parcours
-    ADD CONSTRAINT fk_affectation_parcours_professeur_id
-    FOREIGN KEY (professeur_id)
-    REFERENCES professeur (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-CREATE TABLE IF NOT EXISTS affectation_parcours_eleve (
-    id INT NOT NULL AUTO_INCREMENT,
-    affectation_parcours_id INT NOT NULL,
-    eleve_id INT NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY uq_affectation_parcours_eleve (affectation_parcours_id, eleve_id),
-    INDEX idx_affectation_parcours_eleve_affectation_parcours_id (affectation_parcours_id),
-    INDEX idx_affectation_parcours_eleve_eleve_id (eleve_id),
-    CONSTRAINT fk_affectation_parcours_eleve_affectation_parcours_id
-        FOREIGN KEY (affectation_parcours_id)
-        REFERENCES affectation_parcours (id)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_affectation_parcours_eleve_eleve_id
-        FOREIGN KEY (eleve_id)
-        REFERENCES eleve (id)
-        ON DELETE CASCADE
-);
 
 ALTER TABLE progression_eleve
     ADD CONSTRAINT fk_progression_eleve_eleve_id

@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.progression_eleve_model import (
     get_progression_eleve_by_id, add_progression_eleve, update_progression_eleve, delete_progression_eleve, bulk_delete_progression_eleves,
     count_progression_eleves, find_progression_eleves_paginated, find_progression_eleves_for_export,
-    get_eleve_choices, get_affectation_parcours_choices,
+    get_eleve_choices, get_parcours_choices,
 )
 from mvc.forms.progression_eleve_form import ProgressionEleveForm
 from core.security.session import get_flash, get_session_id
@@ -19,16 +19,14 @@ def _form_data_from_progression_eleve(record: dict) -> dict:
         "statut": record.get("Statut"),
         "date_debut": record.get("DateDebut"),
         "eleve_id": record.get("eleve_id"),
-        "affectation_parcours_id": record.get("affectation_parcours_id"),
-        "created_at": record.get("CreatedAt"),
-        "updated_at": record.get("UpdatedAt"),
+        "parcours_id": record.get("parcours_id"),
     }
 
 
 def _progression_eleve_form_options():
     return {
         "eleve_id_choices": get_eleve_choices(),
-        "affectation_parcours_id_choices": get_affectation_parcours_choices(),
+        "parcours_id_choices": get_parcours_choices(),
     }
 
 
@@ -43,7 +41,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Statut', 'Statut'), ('Date debut', 'DateDebut'), ('Eleve id', 'eleve_id_label'), ('Affectation parcours id', 'affectation_parcours_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Statut', 'Statut'), ('Date debut', 'DateDebut'), ('Eleve id', 'eleve_id_label'), ('Parcours id', 'parcours_id_label')]
 
 
 class ProgressionEleveController(BaseController):
@@ -78,7 +76,7 @@ class ProgressionEleveController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"statut", "date_debut", "eleve_id", "affectation_parcours_id", "created_at", "updated_at", "id"}:
+        if sort not in {"statut", "date_debut", "eleve_id", "parcours_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
@@ -91,21 +89,21 @@ class ProgressionEleveController(BaseController):
                 eleve_id_f = int(eleve_id_raw)
             except (TypeError, ValueError):
                 eleve_id_f = ""
-        affectation_parcours_id_raw = _query_param(request, "affectation_parcours_id").strip()
-        affectation_parcours_id_f = ""
-        if affectation_parcours_id_raw:
+        parcours_id_raw = _query_param(request, "parcours_id").strip()
+        parcours_id_f = ""
+        if parcours_id_raw:
             try:
-                affectation_parcours_id_f = int(affectation_parcours_id_raw)
+                parcours_id_f = int(parcours_id_raw)
             except (TypeError, ValueError):
-                affectation_parcours_id_f = ""
+                parcours_id_f = ""
         relation_filters = {}
         relation_filters["eleve_id"] = {"options": [{"id": value, "label": label} for value, label in get_eleve_choices()]}
-        relation_filters["affectation_parcours_id"] = {"options": [{"id": value, "label": label} for value, label in get_affectation_parcours_choices()]}
+        relation_filters["parcours_id"] = {"options": [{"id": value, "label": label} for value, label in get_parcours_choices()]}
         _filters = {}
         if eleve_id_f != "":
             _filters["eleve_id"] = eleve_id_f
-        if affectation_parcours_id_f != "":
-            _filters["affectation_parcours_id"] = affectation_parcours_id_f
+        if parcours_id_f != "":
+            _filters["parcours_id"] = parcours_id_f
         total    = count_progression_eleves(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -118,7 +116,7 @@ class ProgressionEleveController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"eleve_id": eleve_id_f, "affectation_parcours_id": affectation_parcours_id_f},
+            "filters": {"eleve_id": eleve_id_f, "parcours_id": parcours_id_f},
         })
         return {
                 "progression_eleves": progression_eleves,
@@ -248,7 +246,7 @@ class ProgressionEleveController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"statut", "date_debut", "eleve_id", "affectation_parcours_id", "created_at", "updated_at", "id"}:
+        if sort not in {"statut", "date_debut", "eleve_id", "parcours_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
@@ -260,18 +258,18 @@ class ProgressionEleveController(BaseController):
                 eleve_id_f = int(eleve_id_raw)
             except (TypeError, ValueError):
                 eleve_id_f = ""
-        affectation_parcours_id_raw = _query_param(request, "affectation_parcours_id").strip()
-        affectation_parcours_id_f = ""
-        if affectation_parcours_id_raw:
+        parcours_id_raw = _query_param(request, "parcours_id").strip()
+        parcours_id_f = ""
+        if parcours_id_raw:
             try:
-                affectation_parcours_id_f = int(affectation_parcours_id_raw)
+                parcours_id_f = int(parcours_id_raw)
             except (TypeError, ValueError):
-                affectation_parcours_id_f = ""
+                parcours_id_f = ""
         _filters = {}
         if eleve_id_f != "":
             _filters["eleve_id"] = eleve_id_f
-        if affectation_parcours_id_f != "":
-            _filters["affectation_parcours_id"] = affectation_parcours_id_f
+        if parcours_id_f != "":
+            _filters["parcours_id"] = parcours_id_f
         rows = find_progression_eleves_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

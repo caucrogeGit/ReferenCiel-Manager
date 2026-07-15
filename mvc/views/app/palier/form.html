@@ -17,8 +17,7 @@
         {{ field(name='titre', label='Titre', type='text', value=form.value('titre'), error=form.error('titre')) }}
         {{ field(name='theme', label='Theme', type='text', value=form.value('theme'), error=form.error('theme')) }}
         {{ field(name='production_attendue', label='Production attendue', type='text', value=form.value('production_attendue'), error=form.error('production_attendue')) }}
-        {{ field(name='dossier_technique_fichier', label='Dossier technique fichier', type='text', value=form.value('dossier_technique_fichier'), error=form.error('dossier_technique_fichier')) }}
-        {{ select_field(name='version_parcours_id', label='Version parcours', options=form.options.version_parcours_id_choices, selected=form.value('version_parcours_id'), error=form.error('version_parcours_id')) }}
+        {{ select_field(name='parcours_id', label='Parcours', options=form.options.parcours_id_choices, selected=form.value('parcours_id'), error=form.error('parcours_id')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
             {{ button(label='Annuler', variant='secondary', href='/palier') }}
