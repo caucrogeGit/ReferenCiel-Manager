@@ -19,9 +19,9 @@ from core.validation import (
 class ProgressionPalierBase:
     """Classe de base regenerable de ProgressionPalier."""
 
-    def __init__(self, statut, progression_eleve_id, palier_id, created_at, updated_at, id=None):
+    def __init__(self, statut, progression_parcours_id, palier_id, created_at, updated_at, id=None):
         self.statut = statut
-        self.progression_eleve_id = progression_eleve_id
+        self.progression_parcours_id = progression_parcours_id
         self.palier_id = palier_id
         self.created_at = created_at
         self.updated_at = updated_at
@@ -58,15 +58,15 @@ class ProgressionPalierBase:
         self._statut = value
 
     @property
-    def progression_eleve_id(self):
-        return self._progression_eleve_id
+    def progression_parcours_id(self):
+        return self._progression_parcours_id
 
-    @progression_eleve_id.setter
+    @progression_parcours_id.setter
     @typed(int)
-    def progression_eleve_id(self, value):
+    def progression_parcours_id(self, value):
         if value is None:
-            raise ValidationError("progression_eleve_id", 'La propriété "progression_eleve_id" ne peut pas être nulle.')
-        self._progression_eleve_id = value
+            raise ValidationError("progression_parcours_id", 'La propriété "progression_parcours_id" ne peut pas être nulle.')
+        self._progression_parcours_id = value
 
     @property
     def palier_id(self):
@@ -105,7 +105,7 @@ class ProgressionPalierBase:
         return {
             "id": self.id,
             "statut": self.statut,
-            "progression_eleve_id": self.progression_eleve_id,
+            "progression_parcours_id": self.progression_parcours_id,
             "palier_id": self.palier_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
@@ -116,12 +116,12 @@ class ProgressionPalierBase:
         return cls(
             id=data["id"],
             statut=data["statut"],
-            progression_eleve_id=data["progression_eleve_id"],
+            progression_parcours_id=data["progression_parcours_id"],
             palier_id=data["palier_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"ProgressionPalierBase(id={self.id!r}, statut={self.statut!r}, progression_eleve_id={self.progression_eleve_id!r}, palier_id={self.palier_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"ProgressionPalierBase(id={self.id!r}, statut={self.statut!r}, progression_parcours_id={self.progression_parcours_id!r}, palier_id={self.palier_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

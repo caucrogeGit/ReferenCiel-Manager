@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.progression_palier_model import (
     get_progression_palier_by_id, add_progression_palier, update_progression_palier, delete_progression_palier, bulk_delete_progression_paliers,
     count_progression_paliers, find_progression_paliers_paginated, find_progression_paliers_for_export,
-    get_progression_eleve_choices, get_palier_choices,
+    get_progression_parcours_choices, get_palier_choices,
 )
 from mvc.forms.progression_palier_form import ProgressionPalierForm
 from core.security.session import get_flash, get_session_id
@@ -17,7 +17,7 @@ def _form_data_from_progression_palier(record: dict) -> dict:
     """Convertit les colonnes SQL vers les noms de champs du formulaire."""
     return {
         "statut": record.get("Statut"),
-        "progression_eleve_id": record.get("progression_eleve_id"),
+        "progression_parcours_id": record.get("progression_parcours_id"),
         "palier_id": record.get("palier_id"),
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
@@ -26,7 +26,7 @@ def _form_data_from_progression_palier(record: dict) -> dict:
 
 def _progression_palier_form_options():
     return {
-        "progression_eleve_id_choices": get_progression_eleve_choices(),
+        "progression_parcours_id_choices": get_progression_parcours_choices(),
         "palier_id_choices": get_palier_choices(),
     }
 
@@ -42,7 +42,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Statut', 'Statut'), ('Progression eleve id', 'progression_eleve_id_label'), ('Palier id', 'palier_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Statut', 'Statut'), ('Progression eleve id', 'progression_parcours_id_label'), ('Palier id', 'palier_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
 
 
 class ProgressionPalierController(BaseController):
@@ -77,19 +77,19 @@ class ProgressionPalierController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"statut", "progression_eleve_id", "palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"statut", "progression_parcours_id", "palier_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        progression_eleve_id_raw = _query_param(request, "progression_eleve_id").strip()
-        progression_eleve_id_f = ""
-        if progression_eleve_id_raw:
+        progression_parcours_id_raw = _query_param(request, "progression_parcours_id").strip()
+        progression_parcours_id_f = ""
+        if progression_parcours_id_raw:
             try:
-                progression_eleve_id_f = int(progression_eleve_id_raw)
+                progression_parcours_id_f = int(progression_parcours_id_raw)
             except (TypeError, ValueError):
-                progression_eleve_id_f = ""
+                progression_parcours_id_f = ""
         palier_id_raw = _query_param(request, "palier_id").strip()
         palier_id_f = ""
         if palier_id_raw:
@@ -98,11 +98,11 @@ class ProgressionPalierController(BaseController):
             except (TypeError, ValueError):
                 palier_id_f = ""
         relation_filters = {}
-        relation_filters["progression_eleve_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_eleve_choices()]}
+        relation_filters["progression_parcours_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_parcours_choices()]}
         relation_filters["palier_id"] = {"options": [{"id": value, "label": label} for value, label in get_palier_choices()]}
         _filters = {}
-        if progression_eleve_id_f != "":
-            _filters["progression_eleve_id"] = progression_eleve_id_f
+        if progression_parcours_id_f != "":
+            _filters["progression_parcours_id"] = progression_parcours_id_f
         if palier_id_f != "":
             _filters["palier_id"] = palier_id_f
         total    = count_progression_paliers(q or None, filters=_filters or None)
@@ -117,7 +117,7 @@ class ProgressionPalierController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"progression_eleve_id": progression_eleve_id_f, "palier_id": palier_id_f},
+            "filters": {"progression_parcours_id": progression_parcours_id_f, "palier_id": palier_id_f},
         })
         return {
                 "progression_paliers": progression_paliers,
@@ -247,18 +247,18 @@ class ProgressionPalierController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"statut", "progression_eleve_id", "palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"statut", "progression_parcours_id", "palier_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        progression_eleve_id_raw = _query_param(request, "progression_eleve_id").strip()
-        progression_eleve_id_f = ""
-        if progression_eleve_id_raw:
+        progression_parcours_id_raw = _query_param(request, "progression_parcours_id").strip()
+        progression_parcours_id_f = ""
+        if progression_parcours_id_raw:
             try:
-                progression_eleve_id_f = int(progression_eleve_id_raw)
+                progression_parcours_id_f = int(progression_parcours_id_raw)
             except (TypeError, ValueError):
-                progression_eleve_id_f = ""
+                progression_parcours_id_f = ""
         palier_id_raw = _query_param(request, "palier_id").strip()
         palier_id_f = ""
         if palier_id_raw:
@@ -267,8 +267,8 @@ class ProgressionPalierController(BaseController):
             except (TypeError, ValueError):
                 palier_id_f = ""
         _filters = {}
-        if progression_eleve_id_f != "":
-            _filters["progression_eleve_id"] = progression_eleve_id_f
+        if progression_parcours_id_f != "":
+            _filters["progression_parcours_id"] = progression_parcours_id_f
         if palier_id_f != "":
             _filters["palier_id"] = palier_id_f
         rows = find_progression_paliers_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)

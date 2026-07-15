@@ -335,7 +335,7 @@
     },
     {
       "type": "many_to_one",
-      "from": "ProgressionEleve",
+      "from": "ProgressionParcours",
       "to": "Eleve",
       "name": "eleve",
       "inverse_name": "progressions",
@@ -346,7 +346,7 @@
     },
     {
       "type": "many_to_one",
-      "from": "ProgressionEleve",
+      "from": "ProgressionParcours",
       "to": "Parcours",
       "name": "parcours",
       "inverse_name": "progressions",
@@ -358,10 +358,10 @@
     {
       "type": "many_to_one",
       "from": "ProgressionPalier",
-      "to": "ProgressionEleve",
-      "name": "progression_eleve",
+      "to": "ProgressionParcours",
+      "name": "progression_parcours",
       "inverse_name": "paliers",
-      "foreign_key": "progression_eleve_id",
+      "foreign_key": "progression_parcours_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true
@@ -644,10 +644,10 @@
     {
       "type": "many_to_one",
       "from": "BilanEleve",
-      "to": "ProgressionEleve",
+      "to": "ProgressionParcours",
       "name": "progression",
       "inverse_name": "bilans",
-      "foreign_key": "progression_eleve_id",
+      "foreign_key": "progression_parcours_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true

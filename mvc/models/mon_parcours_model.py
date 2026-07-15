@@ -26,7 +26,7 @@ def mes_progressions(eleve_id: int) -> list[dict[str, Any]]:
     return fetch_all(
         "SELECT pe.Id AS progression_id, pe.Statut AS statut, "
         "p.Titre AS parcours_titre, vp.Version AS version "
-        "FROM progression_eleve pe "
+        "FROM progression_parcours pe "
         "JOIN affectation_parcours ap ON ap.Id = pe.affectation_parcours_id "
         "JOIN version_parcours vp ON vp.Id = ap.version_parcours_id "
         "JOIN parcours p ON p.Id = vp.parcours_id "
@@ -50,7 +50,7 @@ def paliers_progression(progression_id: int) -> list[dict[str, Any]]:
         "(SELECT MIN(Id) FROM activite WHERE palier_id = pa.Id) AS activite_id "
         "FROM progression_palier pp "
         "JOIN palier pa ON pa.Id = pp.palier_id "
-        "WHERE pp.progression_eleve_id = ? "
+        "WHERE pp.progression_parcours_id = ? "
         "ORDER BY pa.Ordre",
         (progression_id,),
     )

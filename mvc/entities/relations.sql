@@ -270,24 +270,24 @@ ALTER TABLE palier
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
-ALTER TABLE progression_eleve
-    ADD CONSTRAINT fk_progression_eleve_eleve_id
+ALTER TABLE progression_parcours
+    ADD CONSTRAINT fk_progression_parcours_eleve_id
     FOREIGN KEY (eleve_id)
     REFERENCES eleve (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
-ALTER TABLE progression_eleve
-    ADD CONSTRAINT fk_progression_eleve_parcours_id
+ALTER TABLE progression_parcours
+    ADD CONSTRAINT fk_progression_parcours_parcours_id
     FOREIGN KEY (parcours_id)
     REFERENCES parcours (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
 ALTER TABLE progression_palier
-    ADD CONSTRAINT fk_progression_palier_progression_eleve_id
-    FOREIGN KEY (progression_eleve_id)
-    REFERENCES progression_eleve (Id)
+    ADD CONSTRAINT fk_progression_palier_progression_parcours_id
+    FOREIGN KEY (progression_parcours_id)
+    REFERENCES progression_parcours (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -467,9 +467,9 @@ ALTER TABLE bilan_eleve
     ON UPDATE RESTRICT;
 
 ALTER TABLE bilan_eleve
-    ADD CONSTRAINT fk_bilan_eleve_progression_eleve_id
-    FOREIGN KEY (progression_eleve_id)
-    REFERENCES progression_eleve (Id)
+    ADD CONSTRAINT fk_bilan_eleve_progression_parcours_id
+    FOREIGN KEY (progression_parcours_id)
+    REFERENCES progression_parcours (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 

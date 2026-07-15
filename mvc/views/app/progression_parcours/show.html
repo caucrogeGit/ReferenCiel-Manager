@@ -3,33 +3,33 @@
 {% from "components/ui.html" import button, flash_messages %}
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Détail progression_eleve</h1>
+    <h1 class="text-2xl font-bold text-gray-800">Détail progression_parcours</h1>
     <div class="space-x-2">
-        {{ button(label='Modifier', variant='primary', href='/progression_eleve/edit/' ~ progression_eleve.Id) }}
-        <a href="/progression_eleve" class="text-gray-600 hover:underline">← Retour</a>
+        {{ button(label='Modifier', variant='primary', href='/progression_parcours/edit/' ~ progression_parcours.Id) }}
+        <a href="/progression_parcours" class="text-gray-600 hover:underline">← Retour</a>
     </div>
 </div>
 
 <div class="bg-white shadow rounded p-6 space-y-4">
     <div>
         <p class="text-sm text-gray-500">Statut</p>
-        <p class="text-gray-800">{{ progression_eleve.Statut }}</p>
+        <p class="text-gray-800">{{ progression_parcours.Statut }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Date debut</p>
-        <p class="text-gray-800">{{ progression_eleve.DateDebut }}</p>
+        <p class="text-gray-800">{{ progression_parcours.DateDebut }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Eleve</p>
-        <p class="text-gray-800">{{ progression_eleve.eleve_id_label }}</p>
+        <p class="text-gray-800">{{ progression_parcours.eleve_id_label }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Parcours</p>
-        <p class="text-gray-800">{{ progression_eleve.parcours_id_label }}</p>
+        <p class="text-gray-800">{{ progression_parcours.parcours_id_label }}</p>
     </div>
 </div>
 
-<form method="post" action="/progression_eleve/destroy/{{ progression_eleve.Id }}" class="mt-4" onsubmit="return confirm('Confirmer la suppression ?')">
+<form method="post" action="/progression_parcours/destroy/{{ progression_parcours.Id }}" class="mt-4" onsubmit="return confirm('Confirmer la suppression ?')">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     {{ button(label='Supprimer', variant='danger', type='submit') }}
 </form>

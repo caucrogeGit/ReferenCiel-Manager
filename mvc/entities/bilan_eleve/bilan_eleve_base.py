@@ -19,13 +19,13 @@ from core.validation import (
 class BilanEleveBase:
     """Classe de base regenerable de BilanEleve."""
 
-    def __init__(self, appreciation_globale, statut, date_bilan, eleve_id, professeur_id, progression_eleve_id, created_at, updated_at, id=None, synthese=None):
+    def __init__(self, appreciation_globale, statut, date_bilan, eleve_id, professeur_id, progression_parcours_id, created_at, updated_at, id=None, synthese=None):
         self.appreciation_globale = appreciation_globale
         self.statut = statut
         self.date_bilan = date_bilan
         self.eleve_id = eleve_id
         self.professeur_id = professeur_id
-        self.progression_eleve_id = progression_eleve_id
+        self.progression_parcours_id = progression_parcours_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -119,15 +119,15 @@ class BilanEleveBase:
         self._professeur_id = value
 
     @property
-    def progression_eleve_id(self):
-        return self._progression_eleve_id
+    def progression_parcours_id(self):
+        return self._progression_parcours_id
 
-    @progression_eleve_id.setter
+    @progression_parcours_id.setter
     @typed(int)
-    def progression_eleve_id(self, value):
+    def progression_parcours_id(self, value):
         if value is None:
-            raise ValidationError("progression_eleve_id", 'La propriété "progression_eleve_id" ne peut pas être nulle.')
-        self._progression_eleve_id = value
+            raise ValidationError("progression_parcours_id", 'La propriété "progression_parcours_id" ne peut pas être nulle.')
+        self._progression_parcours_id = value
 
     @property
     def created_at(self):
@@ -160,7 +160,7 @@ class BilanEleveBase:
             "synthese": self.synthese,
             "eleve_id": self.eleve_id,
             "professeur_id": self.professeur_id,
-            "progression_eleve_id": self.progression_eleve_id,
+            "progression_parcours_id": self.progression_parcours_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -175,11 +175,11 @@ class BilanEleveBase:
             synthese=data["synthese"],
             eleve_id=data["eleve_id"],
             professeur_id=data["professeur_id"],
-            progression_eleve_id=data["progression_eleve_id"],
+            progression_parcours_id=data["progression_parcours_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"BilanEleveBase(id={self.id!r}, appreciation_globale={self.appreciation_globale!r}, statut={self.statut!r}, date_bilan={self.date_bilan!r}, synthese={self.synthese!r}, eleve_id={self.eleve_id!r}, professeur_id={self.professeur_id!r}, progression_eleve_id={self.progression_eleve_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"BilanEleveBase(id={self.id!r}, appreciation_globale={self.appreciation_globale!r}, statut={self.statut!r}, date_bilan={self.date_bilan!r}, synthese={self.synthese!r}, eleve_id={self.eleve_id!r}, professeur_id={self.professeur_id!r}, progression_parcours_id={self.progression_parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

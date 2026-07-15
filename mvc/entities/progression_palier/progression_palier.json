@@ -12,9 +12,9 @@
       "unique": false
     },
     {
-      "name": "progression_eleve_id",
+      "name": "progression_parcours_id",
       "type": "foreign_key",
-      "references": "ProgressionEleve",
+      "references": "ProgressionParcours",
       "required": true
     },
     {

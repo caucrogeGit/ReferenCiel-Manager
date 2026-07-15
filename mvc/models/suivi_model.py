@@ -22,7 +22,7 @@ def list_affectations() -> list[dict[str, Any]]:
         "COUNT(DISTINCT pe.Id) AS nb_progressions "
         "FROM affectation_parcours ap "
         "JOIN classe c ON c.Id = ap.classe_id "
-        "LEFT JOIN progression_eleve pe ON pe.affectation_parcours_id = ap.Id "
+        "LEFT JOIN progression_parcours pe ON pe.affectation_parcours_id = ap.Id "
         "GROUP BY ap.Id, ap.DateAffectation, ap.Statut, c.Code, c.Libelle "
         "ORDER BY ap.DateAffectation DESC"
     )
@@ -50,9 +50,9 @@ def suivi_eleves(affectation_id: int) -> list[dict[str, Any]]:
         "SUM(pp.Statut = ?) AS nb_bloque, "
         "SUM(pp.Statut = ?) AS nb_en_cours, "
         "COUNT(pp.Id) AS nb_paliers "
-        "FROM progression_eleve pe "
+        "FROM progression_parcours pe "
         "JOIN eleve e ON e.Id = pe.eleve_id "
-        "LEFT JOIN progression_palier pp ON pp.progression_eleve_id = pe.Id "
+        "LEFT JOIN progression_palier pp ON pp.progression_parcours_id = pe.Id "
         "WHERE pe.affectation_parcours_id = ? "
         "GROUP BY pe.Id, e.Nom, e.Prenom, pe.Statut "
         "ORDER BY e.Nom, e.Prenom",

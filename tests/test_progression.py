@@ -1,7 +1,7 @@
 """Tests de persistance de la Progression (ticket 18, Bloc B) sans backend BDD.
 
 `core.database` est mocké : on vérifie que l'état réel de l'élève est persisté —
-`ProgressionEleve` (par élève et affectation, statut global) et `ProgressionPalier`
+`ProgressionParcours` (par élève et affectation, statut global) et `ProgressionPalier`
 (état par palier : non_commence/en_cours/valide/bloque). CI-safe (ADR-006).
 """
 from __future__ import annotations
@@ -11,7 +11,7 @@ from typing import Any
 
 import pytest
 
-from mvc.models import progression_eleve_model as pe
+from mvc.models import progression_parcours_model as pe
 from mvc.models import progression_palier_model as pp
 
 
@@ -27,9 +27,9 @@ def _capture_insert(monkeypatch: pytest.MonkeyPatch, module: Any) -> dict[str, A
     return captured
 
 
-def test_progression_eleve_par_eleve_et_parcours(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_progression_parcours_par_eleve_et_parcours(monkeypatch: pytest.MonkeyPatch) -> None:
     cap = _capture_insert(monkeypatch, pe)
-    pe.add_progression_eleve({
+    pe.add_progression_parcours({
         "statut": "en_cours",
         "date_debut": "2026-09-02",
         "eleve_id": 3,
@@ -37,7 +37,7 @@ def test_progression_eleve_par_eleve_et_parcours(monkeypatch: pytest.MonkeyPatch
         "created_at": "2026-07-10 00:00:00",
         "updated_at": "2026-07-10 00:00:00",
     })
-    assert "INSERT INTO progression_eleve" in cap["sql"]
+    assert "INSERT INTO progression_parcours" in cap["sql"]
     assert 3 in cap["params"] and 8 in cap["params"]  # eleve + parcours
     assert "en_cours" in cap["params"]
 
@@ -46,7 +46,7 @@ def test_progression_palier_porte_l_etat_du_palier(monkeypatch: pytest.MonkeyPat
     cap = _capture_insert(monkeypatch, pp)
     pp.add_progression_palier({
         "statut": "valide",  # porte de passage franchie
-        "progression_eleve_id": 1,
+        "progression_parcours_id": 1,
         "palier_id": 5,
         "created_at": "2026-07-10 00:00:00",
         "updated_at": "2026-07-10 00:00:00",

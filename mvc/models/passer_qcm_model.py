@@ -24,7 +24,7 @@ def _palier_de_l_eleve(progression_palier_id: int, user_id: int) -> dict[str, An
     return fetch_one(
         "SELECT pp.Id AS progression_palier_id, pp.palier_id AS palier_id, pa.Titre AS palier_titre "
         "FROM progression_palier pp "
-        "JOIN progression_eleve pe ON pe.Id = pp.progression_eleve_id "
+        "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
         "JOIN palier pa ON pa.Id = pp.palier_id "
         "WHERE pp.Id = ? AND e.UserId = ?",

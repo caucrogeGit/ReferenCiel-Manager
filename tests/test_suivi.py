@@ -24,7 +24,7 @@ def test_list_affectations_agrege_par_affectation(monkeypatch: pytest.MonkeyPatc
     rows = s.list_affectations()
 
     assert "FROM affectation_parcours" in captured["sql"]
-    assert "progression_eleve" in captured["sql"]
+    assert "progression_parcours" in captured["sql"]
     assert rows[0]["nb_progressions"] == 3
 
 
@@ -39,7 +39,7 @@ def test_suivi_eleves_filtre_sur_l_affectation(monkeypatch: pytest.MonkeyPatch) 
     monkeypatch.setattr(s, "fetch_all", fake_fetch_all)
     s.suivi_eleves(42)
 
-    assert "FROM progression_eleve" in captured["sql"]
+    assert "FROM progression_parcours" in captured["sql"]
     assert "progression_palier" in captured["sql"]
     assert 42 in captured["params"]  # filtre sur l'affectation
     # les statuts de palier agreges sont passes en parametres (SQL parametre)

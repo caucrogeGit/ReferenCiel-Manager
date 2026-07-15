@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS bilan_eleve (
     Synthese LONGTEXT NULL,
     eleve_id BIGINT UNSIGNED NOT NULL,
     professeur_id BIGINT UNSIGNED NOT NULL,
-    progression_eleve_id BIGINT UNSIGNED NOT NULL,
+    progression_parcours_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

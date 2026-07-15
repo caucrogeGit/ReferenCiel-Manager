@@ -24,7 +24,7 @@ def get_progression_detail(progression_id: int) -> dict[str, Any] | None:
     entete = fetch_one(
         "SELECT pe.Id AS id, pe.Statut AS statut, e.Nom AS nom, e.Prenom AS prenom, "
         "p.Titre AS parcours_titre, vp.Version AS version "
-        "FROM progression_eleve pe "
+        "FROM progression_parcours pe "
         "JOIN eleve e ON e.Id = pe.eleve_id "
         "JOIN affectation_parcours ap ON ap.Id = pe.affectation_parcours_id "
         "JOIN version_parcours vp ON vp.Id = ap.version_parcours_id "
@@ -44,7 +44,7 @@ def get_progression_detail(progression_id: int) -> dict[str, Any] | None:
         "(SELECT MIN(Id) FROM activite a WHERE a.palier_id = pa.Id) AS activite_id "
         "FROM progression_palier pp "
         "JOIN palier pa ON pa.Id = pp.palier_id "
-        "WHERE pp.progression_eleve_id = ? "
+        "WHERE pp.progression_parcours_id = ? "
         "ORDER BY pa.Ordre",
         (progression_id,),
     )
@@ -65,7 +65,7 @@ def set_palier_statut(progression_palier_id: int, statut: str) -> bool:
 def get_checklist_review(progression_palier_id: int) -> dict[str, Any] | None:
     """La checklist d'un palier avec le cochage élève ET prof, pour confirmation."""
     palier = fetch_one(
-        "SELECT pp.Id AS id, pp.palier_id AS palier_id, pp.progression_eleve_id AS progression_id, "
+        "SELECT pp.Id AS id, pp.palier_id AS palier_id, pp.progression_parcours_id AS progression_id, "
         "pa.Titre AS palier_titre "
         "FROM progression_palier pp JOIN palier pa ON pa.Id = pp.palier_id WHERE pp.Id = ?",
         (progression_palier_id,),

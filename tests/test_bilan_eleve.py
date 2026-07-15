@@ -66,7 +66,7 @@ def test_creer_bilan_fige_la_synthese_et_deduit_l_eleve(monkeypatch: pytest.Monk
     monkeypatch.setattr(m, "insert", fake_insert)
 
     bilan_id = m.creer_bilan(
-        progression_eleve_id=10, professeur_id=3, appreciation="Bon travail", statut="brouillon"
+        progression_parcours_id=10, professeur_id=3, appreciation="Bon travail", statut="brouillon"
     )
 
     assert bilan_id == 99
@@ -81,7 +81,7 @@ def test_creer_bilan_fige_la_synthese_et_deduit_l_eleve(monkeypatch: pytest.Monk
 def test_creer_bilan_progression_absente_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(m, "fetch_one", lambda sql, params=(): None)
     assert (
-        m.creer_bilan(progression_eleve_id=999, professeur_id=3, appreciation="x", statut="brouillon")
+        m.creer_bilan(progression_parcours_id=999, professeur_id=3, appreciation="x", statut="brouillon")
         is None
     )
 

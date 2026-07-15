@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS progression_eleve (
+CREATE TABLE IF NOT EXISTS progression_parcours (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     Statut VARCHAR(20) NOT NULL,
     DateDebut DATE NULL,

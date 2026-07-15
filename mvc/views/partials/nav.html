@@ -76,8 +76,6 @@
                     <li>{{ nav_sublink('/eleve/comptes', 'Comptes élèves') }}</li>
                     <li>{{ nav_sublink('/professeur', 'Professeurs') }}</li>
                     <li>{{ nav_sublink('/professeur/comptes', 'Comptes professeurs') }}</li>
-                    <li>{{ nav_sublink('/inscription_eleve', 'Inscriptions') }}</li>
-                    <li>{{ nav_sublink('/affectation_professeur_classe', 'Affectations professeur') }}</li>
                     <li>{{ nav_sublink('/groupe', 'Groupes') }}</li>
                 {% endcall %}
                 {% endif %}
@@ -95,8 +93,7 @@
 
                 {% if can('execution.gerer') %}
                 {% call nav_group('execution', 'Exécution', icon='play') %}
-                    <li>{{ nav_sublink('/affectation_parcours', 'Affectations de parcours') }}</li>
-                    <li>{{ nav_sublink('/progression_eleve', 'Progressions') }}</li>
+                    <li>{{ nav_sublink('/progression_parcours', 'Progressions') }}</li>
                     <li>{{ nav_sublink('/qcm', 'QCM') }}</li>
                     <li>{{ nav_sublink('/tentative_qcm', 'Tentatives QCM') }}</li>
                     <li>{{ nav_sublink('/checklist', 'Checklists') }}</li>

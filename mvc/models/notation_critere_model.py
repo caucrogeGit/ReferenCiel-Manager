@@ -25,13 +25,13 @@ NIVEAUX = ("non_atteint", "partiellement_atteint", "atteint", "depasse")
 def _contexte(progression_palier_id: int) -> dict[str, Any] | None:
     """Résout le palier : activité à noter, élève, et professeur de l'affectation."""
     return fetch_one(
-        "SELECT pp.Id AS pp_id, pp.progression_eleve_id AS progression_id, "
+        "SELECT pp.Id AS pp_id, pp.progression_parcours_id AS progression_id, "
         "pa.Titre AS palier_titre, e.Nom AS nom, e.Prenom AS prenom, "
         "ap.professeur_id AS professeur_id, "
         "(SELECT MIN(Id) FROM activite a WHERE a.palier_id = pa.Id) AS activite_id "
         "FROM progression_palier pp "
         "JOIN palier pa ON pa.Id = pp.palier_id "
-        "JOIN progression_eleve pe ON pe.Id = pp.progression_eleve_id "
+        "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
         "JOIN affectation_parcours ap ON ap.Id = pe.affectation_parcours_id "
         "WHERE pp.Id = ?",

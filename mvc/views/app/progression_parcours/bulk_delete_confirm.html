@@ -11,7 +11,7 @@
         </p>
         <p class="text-red-700 font-medium">Cette action est définitive et irréversible.</p>
     </div>
-    <form method="post" action="/progression_eleve/bulk-delete-confirm">
+    <form method="post" action="/progression_parcours/bulk-delete-confirm">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {% for id in ids %}
         <input type="hidden" name="ids" value="{{ id }}">
@@ -21,7 +21,7 @@
                     class="bg-red-600 text-white text-sm px-4 py-2 rounded font-medium hover:bg-red-700">
                 Confirmer la suppression
             </button>
-            <a href="/progression_eleve"
+            <a href="/progression_parcours"
                class="bg-gray-100 text-gray-800 text-sm px-4 py-2 rounded font-medium hover:bg-gray-200">
                 Annuler
             </a>

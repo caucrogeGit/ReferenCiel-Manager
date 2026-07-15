@@ -4,16 +4,16 @@ from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller import BaseController
 from core.mvc.view.pagination import Pagination
-from mvc.models.progression_eleve_model import (
-    get_progression_eleve_by_id, add_progression_eleve, update_progression_eleve, delete_progression_eleve, bulk_delete_progression_eleves,
-    count_progression_eleves, find_progression_eleves_paginated, find_progression_eleves_for_export,
+from mvc.models.progression_parcours_model import (
+    get_progression_parcours_by_id, add_progression_parcours, update_progression_parcours, delete_progression_parcours, bulk_delete_progression_parcourss,
+    count_progression_parcourss, find_progression_parcourss_paginated, find_progression_parcourss_for_export,
     get_eleve_choices, get_parcours_choices,
 )
-from mvc.forms.progression_eleve_form import ProgressionEleveForm
+from mvc.forms.progression_parcours_form import ProgressionParcoursForm
 from core.security.session import get_flash, get_session_id
 
 
-def _form_data_from_progression_eleve(record: dict) -> dict:
+def _form_data_from_progression_parcours(record: dict) -> dict:
     """Convertit les colonnes SQL vers les noms de champs du formulaire."""
     return {
         "statut": record.get("Statut"),
@@ -23,7 +23,7 @@ def _form_data_from_progression_eleve(record: dict) -> dict:
     }
 
 
-def _progression_eleve_form_options():
+def _progression_parcours_form_options():
     return {
         "eleve_id_choices": get_eleve_choices(),
         "parcours_id_choices": get_parcours_choices(),
@@ -44,7 +44,7 @@ def _is_hx_request(request):
 _CSV_COLS = [('Statut', 'Statut'), ('Date debut', 'DateDebut'), ('Eleve id', 'eleve_id_label'), ('Parcours id', 'parcours_id_label')]
 
 
-class ProgressionEleveController(BaseController):
+class ProgressionParcoursController(BaseController):
 
     @staticmethod
     def _parse_id(value):
@@ -104,12 +104,12 @@ class ProgressionEleveController(BaseController):
             _filters["eleve_id"] = eleve_id_f
         if parcours_id_f != "":
             _filters["parcours_id"] = parcours_id_f
-        total    = count_progression_eleves(q or None, filters=_filters or None)
+        total    = count_progression_parcourss(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
         offset = pagination_state.offset
         empty_context = "search_filters" if q and _filters else ("search" if q else ("filters" if _filters else None))
-        progression_eleves = find_progression_eleves_paginated(
+        progression_parcourss = find_progression_parcourss_paginated(
             q=q or None, sort=sort or None, direction=direction,
             limit=limit, offset=offset, filters=_filters or None,
         )
@@ -119,7 +119,7 @@ class ProgressionEleveController(BaseController):
             "filters": {"eleve_id": eleve_id_f, "parcours_id": parcours_id_f},
         })
         return {
-                "progression_eleves": progression_eleves,
+                "progression_parcourss": progression_parcourss,
                 "pagination": pagination,
                 "empty_context": empty_context,
                 "relation_filters": relation_filters,
@@ -128,111 +128,111 @@ class ProgressionEleveController(BaseController):
 
     @staticmethod
     def index(request: Request) -> Response:
-        context = ProgressionEleveController._list_context(request)
-        template = "app/progression_eleve/_results.html" if _is_hx_request(request) else "app/progression_eleve/index.html"
+        context = ProgressionParcoursController._list_context(request)
+        template = "app/progression_parcours/_results.html" if _is_hx_request(request) else "app/progression_parcours/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
-        form = ProgressionEleveForm(**_progression_eleve_form_options())
-        return BaseController.render("app/progression_eleve/form.html",
+        form = ProgressionParcoursForm(**_progression_parcours_form_options())
+        return BaseController.render("app/progression_parcours/form.html",
             context={
                 "form": form,
-                "action": "/progression_eleve/create",
-                "titre": "Nouveau progression_eleve",
+                "action": "/progression_parcours/create",
+                "titre": "Nouveau progression_parcours",
             },
             request=request)
 
     @staticmethod
     def create(request: Request) -> Response:
-        form = ProgressionEleveForm.from_request(request, **_progression_eleve_form_options())
+        form = ProgressionParcoursForm.from_request(request, **_progression_parcours_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("app/progression_eleve/form.html",
+            return BaseController.validation_error("app/progression_parcours/form.html",
                 context={
                     "form": form,
-                    "action": "/progression_eleve/create",
-                    "titre": "Nouveau progression_eleve",
+                    "action": "/progression_parcours/create",
+                    "titre": "Nouveau progression_parcours",
                 },
                 request=request)
-        add_progression_eleve(form.cleaned_data)
-        return BaseController.redirect_with_flash(request, "/progression_eleve", "ProgressionEleve créé.")
+        add_progression_parcours(form.cleaned_data)
+        return BaseController.redirect_with_flash(request, "/progression_parcours", "ProgressionParcours créé.")
 
     @staticmethod
     def show(request: Request) -> Response:
-        id = ProgressionEleveController._parse_id(request.route("id"))
+        id = ProgressionParcoursController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        progression_eleve = get_progression_eleve_by_id(id)
-        if progression_eleve is None:
+        progression_parcours = get_progression_parcours_by_id(id)
+        if progression_parcours is None:
             return BaseController.not_found()
-        return BaseController.render("app/progression_eleve/show.html",
-            context={"progression_eleve": progression_eleve, "flash": get_flash(get_session_id(request))},
+        return BaseController.render("app/progression_parcours/show.html",
+            context={"progression_parcours": progression_parcours, "flash": get_flash(get_session_id(request))},
             request=request)
 
     @staticmethod
     def edit(request: Request) -> Response:
-        id = ProgressionEleveController._parse_id(request.route("id"))
+        id = ProgressionParcoursController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        progression_eleve = get_progression_eleve_by_id(id)
-        if progression_eleve is None:
+        progression_parcours = get_progression_parcours_by_id(id)
+        if progression_parcours is None:
             return BaseController.not_found()
-        return BaseController.render("app/progression_eleve/form.html",
+        return BaseController.render("app/progression_parcours/form.html",
             context={
-                "form": ProgressionEleveForm(_form_data_from_progression_eleve(progression_eleve), **_progression_eleve_form_options()),
-                "action": f"/progression_eleve/update/{id}",
-                "titre": "Modifier progression_eleve",
+                "form": ProgressionParcoursForm(_form_data_from_progression_parcours(progression_parcours), **_progression_parcours_form_options()),
+                "action": f"/progression_parcours/update/{id}",
+                "titre": "Modifier progression_parcours",
             },
             request=request)
 
     @staticmethod
     def update(request: Request) -> Response:
-        id = ProgressionEleveController._parse_id(request.route("id"))
+        id = ProgressionParcoursController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        form = ProgressionEleveForm.from_request(request, **_progression_eleve_form_options())
+        form = ProgressionParcoursForm.from_request(request, **_progression_parcours_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("app/progression_eleve/form.html",
+            return BaseController.validation_error("app/progression_parcours/form.html",
                 context={
                     "form": form,
-                    "action": f"/progression_eleve/update/{id}",
-                    "titre": "Modifier progression_eleve",
+                    "action": f"/progression_parcours/update/{id}",
+                    "titre": "Modifier progression_parcours",
                 },
                 request=request)
-        update_progression_eleve(id, form.cleaned_data)
+        update_progression_parcours(id, form.cleaned_data)
         return BaseController.redirect_with_flash(
-            request, f"/progression_eleve/show/{id}", "ProgressionEleve mis à jour.")
+            request, f"/progression_parcours/show/{id}", "ProgressionParcours mis à jour.")
 
     @staticmethod
     def destroy(request: Request) -> Response:
-        id = ProgressionEleveController._parse_id(request.route("id"))
+        id = ProgressionParcoursController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        delete_progression_eleve(id)
+        delete_progression_parcours(id)
         if _is_hx_request(request):
-            context = ProgressionEleveController._list_context(request)
-            return BaseController.render("app/progression_eleve/_results.html", context=context, request=request)
-        return BaseController.redirect_with_flash(request, "/progression_eleve", "ProgressionEleve supprimé.")
+            context = ProgressionParcoursController._list_context(request)
+            return BaseController.render("app/progression_parcours/_results.html", context=context, request=request)
+        return BaseController.redirect_with_flash(request, "/progression_parcours", "ProgressionParcours supprimé.")
 
 
     @staticmethod
     def bulk_delete(request: Request) -> Response:
-        ids = ProgressionEleveController._parse_bulk_ids(request)
+        ids = ProgressionParcoursController._parse_bulk_ids(request)
         if not ids:
-            return BaseController.redirect_with_flash(request, "/progression_eleve", "Aucun élément sélectionné.")
-        return BaseController.render("app/progression_eleve/bulk_delete_confirm.html",
+            return BaseController.redirect_with_flash(request, "/progression_parcours", "Aucun élément sélectionné.")
+        return BaseController.render("app/progression_parcours/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 
     @staticmethod
     def bulk_delete_confirm(request: Request) -> Response:
-        ids = ProgressionEleveController._parse_bulk_ids(request)
+        ids = ProgressionParcoursController._parse_bulk_ids(request)
         if not ids:
-            return BaseController.redirect_with_flash(request, "/progression_eleve", "Aucun élément sélectionné.")
-        bulk_delete_progression_eleves(ids)
+            return BaseController.redirect_with_flash(request, "/progression_parcours", "Aucun élément sélectionné.")
+        bulk_delete_progression_parcourss(ids)
         count = len(ids)
         return BaseController.redirect_with_flash(
-            request, "/progression_eleve",
+            request, "/progression_parcours",
             f"{count} élément(s) supprimé(s).")
 
 
@@ -270,19 +270,19 @@ class ProgressionEleveController(BaseController):
             _filters["eleve_id"] = eleve_id_f
         if parcours_id_f != "":
             _filters["parcours_id"] = parcours_id_f
-        rows = find_progression_eleves_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
+        rows = find_progression_parcourss_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)
         writer.writerow([header for header, _ in _CSV_COLS])
         for row in rows:
-            writer.writerow([ProgressionEleveController._csv_escape(str(row.get(key) or "")) for _, key in _CSV_COLS])
+            writer.writerow([ProgressionParcoursController._csv_escape(str(row.get(key) or "")) for _, key in _CSV_COLS])
         content = output.getvalue().encode("utf-8")
         return Response(
             200,
             content,
             "text/csv; charset=utf-8",
             headers={
-                "Content-Disposition": 'attachment; filename="progression_eleves.csv"',
+                "Content-Disposition": 'attachment; filename="progression_parcourss.csv"',
                 "Cache-Control": "no-store",
             },
         )

@@ -18,7 +18,7 @@ def _id(row: "dict[str, Any] | None") -> int:
 class BlocBFixture(Fixture):
     tables = (
         "starter_welcome", "version_starter", "parcours", "version_parcours", "palier",
-        "affectation_parcours", "progression_eleve", "progression_palier", "activite",
+        "affectation_parcours", "progression_parcours", "progression_palier", "activite",
         "evaluation_activite", "evaluation_critere",
     )
     depends_on = ("niveau_classe", "classe", "eleve", "professeur", "critere_observable")
@@ -37,8 +37,8 @@ class BlocBFixture(Fixture):
         vp = db.insert("INSERT INTO version_parcours (Version, Statut, parcours_id, CreatedAt, UpdatedAt) VALUES ('1.0.0','publie',?,NOW(),NOW())", (parc,))
         pal = db.insert("INSERT INTO palier (Ordre, Titre, Theme, ProductionAttendue, DossierTechniqueFichier, version_parcours_id, CreatedAt, UpdatedAt) VALUES (1,'Palier 1 — Câblage','Réseau','Câble testé','dossier-p1.pdf',?,NOW(),NOW())", (vp,))
         aff = db.insert("INSERT INTO affectation_parcours (DateAffectation, Statut, version_parcours_id, classe_id, professeur_id, CreatedAt, UpdatedAt) VALUES (CURDATE(),'active',?,?,?,NOW(),NOW())", (vp, classe, prof))
-        pe = db.insert("INSERT INTO progression_eleve (Statut, DateDebut, eleve_id, affectation_parcours_id, CreatedAt, UpdatedAt) VALUES ('en_cours',CURDATE(),?,?,NOW(),NOW())", (eleve, aff))
-        pp = db.insert("INSERT INTO progression_palier (Statut, progression_eleve_id, palier_id, CreatedAt, UpdatedAt) VALUES ('en_cours',?,?,NOW(),NOW())", (pe, pal))
+        pe = db.insert("INSERT INTO progression_parcours (Statut, DateDebut, eleve_id, affectation_parcours_id, CreatedAt, UpdatedAt) VALUES ('en_cours',CURDATE(),?,?,NOW(),NOW())", (eleve, aff))
+        pp = db.insert("INSERT INTO progression_palier (Statut, progression_parcours_id, palier_id, CreatedAt, UpdatedAt) VALUES ('en_cours',?,?,NOW(),NOW())", (pe, pal))
         act = db.insert("INSERT INTO activite (Objectif, palier_id, CreatedAt, UpdatedAt) VALUES ('Câbler et mesurer une liaison',?,NOW(),NOW())", (pal,))
         ea = db.insert("INSERT INTO evaluation_activite (DateEvaluation, Appreciation, progression_palier_id, activite_id, professeur_id, CreatedAt, UpdatedAt) VALUES (NOW(),'Bon travail global',?,?,?,NOW(),NOW())", (pp, act, prof))
         for crit_id, niv in zip(crit, ["atteint", "depasse", "atteint", "partiellement_atteint"]):
