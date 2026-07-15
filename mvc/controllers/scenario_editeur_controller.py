@@ -24,17 +24,19 @@ from mvc.models.referentiel_atelier_model import (
 from mvc.models.scenario_editeur_model import (
     ajouter_ressource,
     creer_scenario,
+    titre_existe,
+    titre_existe_autre,
     enregistrer_contexte,
     enregistrer_liaison,
     enregistrer_referentiel,
     enregistrer_titre,
-    finaliser_scenario,
     get_activite_ids,
     get_co_auteur_ids,
     get_critere_ids,
     get_ressource,
     get_scenario,
     list_professeurs,
+    recalculer_statut,
     list_ressources,
     list_scenarios,
     supprimer_ressource,
@@ -85,16 +87,33 @@ class ScenarioEditeurController(BaseController):
     def index(request: Request) -> Response:
         return BaseController.render(
             "app/scenario_editeur/index.html",
-            context={"scenarios": list_scenarios()},
+            context={"scenarios": list_scenarios(), "referentiels": list_referentiels()},
             request=request,
         )
 
     @staticmethod
     def nouveau(request: Request) -> Response:
+        # Le référentiel est obligatoire dès la création (ADR-023) : formation,
+        # niveau et débouchés s'en déduisent. On vérifie côté serveur qu'il existe.
         titre = request.form("titre", "").strip()
-        if not titre:
-            return BaseController.redirect("/conception/scenario")
-        scenario_id = creer_scenario(titre)
+        referentiel_id = ScenarioEditeurController._parse_id(request.form("referentiel_id", ""))
+        refs_valides = {int(r["Id"]) for r in list_referentiels()}
+        if not titre or referentiel_id is None or referentiel_id not in refs_valides:
+            return BaseController.redirect(
+                "/conception/scenario",
+                request=request,
+                flash="Titre et référentiel sont obligatoires pour créer un scénario.",
+                level="warning",
+            )
+        # Le titre d'un scénario est unique.
+        if titre_existe(titre):
+            return BaseController.redirect(
+                "/conception/scenario",
+                request=request,
+                flash=f"Un scénario s'intitule déjà « {titre} ». Choisissez un autre titre.",
+                level="warning",
+            )
+        scenario_id = creer_scenario(titre, referentiel_id)
         return BaseController.redirect(f"/conception/scenario/{scenario_id}")
 
     # ── Helpers d'état du tunnel (ADR-021) ───────────────────────────────────
@@ -227,7 +246,6 @@ class ScenarioEditeurController(BaseController):
         referentiel = next(
             (r for r in referentiels if r["Id"] == referentiel_id), None
         )
-        tous_complets = all(s["done"] for s in steps)
 
         context: dict[str, Any] = {
             "scenario": scenario,
@@ -235,7 +253,6 @@ class ScenarioEditeurController(BaseController):
             "professeurs": list_professeurs(),
             "referentiels": referentiels,
             "referentiel": referentiel,
-            "tous_complets": tous_complets,
             "arbre": arbre,
             "activite_ids": activite_ids,
             "critere_ids": critere_ids,
@@ -293,43 +310,6 @@ class ScenarioEditeurController(BaseController):
         )
 
     @staticmethod
-    def finaliser(request: Request) -> Response:
-        """Enregistre le scénario : passe le statut à « finalise ».
-
-        Gate serveur : on ne finalise que si les 4 étapes sont dérivées « done »
-        (l'UI grise déjà le bouton, mais l'état n'est jamais falsifiable, ADR-021).
-        """
-        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
-        if scenario_id is None:
-            return BaseController.not_found()
-        scenario = get_scenario(scenario_id)
-        if scenario is None:
-            return BaseController.not_found()
-
-        referentiel_id = scenario.get("referentiel_id")
-        arbre = get_arbre(int(referentiel_id)) if referentiel_id else None
-        steps = ScenarioEditeurController._steps(
-            scenario,
-            arbre,
-            list_referentiels(),
-            get_activite_ids(scenario_id),
-            get_critere_ids(scenario_id),
-            list_ressources(scenario_id),
-            get_co_auteur_ids(scenario_id),
-        )
-        if not all(s["done"] for s in steps):
-            return BaseController.redirect(
-                f"/conception/scenario/{scenario_id}",
-                request=request,
-                flash="Toutes les étapes doivent être saisies avant d'enregistrer le scénario.",
-                level="warning",
-            )
-        finaliser_scenario(scenario_id)
-        return BaseController.redirect(
-            f"/conception/scenario/{scenario_id}", request=request, flash="Scénario enregistré."
-        )
-
-    @staticmethod
     def enregistrer_titre(request: Request) -> Response:
         scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
         if scenario_id is None:
@@ -346,6 +326,17 @@ class ScenarioEditeurController(BaseController):
             if co_intervention
             else []
         )
+        # Titre unique (contrainte en base) : on refuse un renommage qui collerait
+        # à un autre scénario, plutôt que de heurter la contrainte (500).
+        if titre and titre_existe_autre(titre, scenario_id):
+            if ScenarioEditeurController._is_htmx(request):
+                return Response(status=409)
+            return BaseController.redirect(
+                f"/conception/scenario/{scenario_id}",
+                request=request,
+                flash=f"Un autre scénario s'intitule déjà « {titre} ».",
+                level="warning",
+            )
         enregistrer_titre(scenario_id, titre, co_intervention, co_auteur_ids)
         # Auto-enregistrement HTMX (à la saisie) : pas de bouton dédié, pas de
         # rechargement. On répond 204 (rien à échanger, hx-swap="none" côté vue).
@@ -371,6 +362,7 @@ class ScenarioEditeurController(BaseController):
             request.form("liens_associes", "").strip(),
             request.form("espaces_formation", "").strip(),
         )
+        recalculer_statut(scenario_id)
         # Auto-enregistrement HTMX (à la saisie) : 204, pas de rechargement. Sans JS,
         # le <noscript> soumet le formulaire et on retombe sur la redirection.
         if ScenarioEditeurController._is_htmx(request):
@@ -399,6 +391,7 @@ class ScenarioEditeurController(BaseController):
         activite_ids = ScenarioEditeurController._parse_many_ids(request, "activites")
         critere_ids = ScenarioEditeurController._parse_many_ids(request, "criteres")
         enregistrer_liaison(scenario_id, activite_ids, critere_ids)
+        recalculer_statut(scenario_id)
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Liaison au référentiel enregistrée."
         )
@@ -466,6 +459,7 @@ class ScenarioEditeurController(BaseController):
                 critere_ids = [*critere_ids, cible_id]
 
         enregistrer_liaison(scenario_id, activite_ids, critere_ids)
+        recalculer_statut(scenario_id)
 
         # Sans JS : on retombe sur la page, à la bonne étape et au bon endroit.
         if not ScenarioEditeurController._is_htmx(request):

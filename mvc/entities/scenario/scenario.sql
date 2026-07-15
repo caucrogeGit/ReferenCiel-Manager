@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS scenario (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     Titre VARCHAR(200) NOT NULL,
+    UNIQUE KEY uk_scenario_titre (Titre),
     Intention TEXT NOT NULL,
     Objectifs TEXT NULL,
     DescriptionContexte TEXT NULL,

@@ -6,6 +6,11 @@
 {% extends "layouts/base.html" %}
 {% from "components/ui.html" import flash_messages, badge %}
 
+{# Statut dérivé/persisté (ADR-019) : brouillon (en cours), finalisé (contexte +
+   ≥1 activité + ≥1 critère), affecté (rattaché à des élèves, verrouillé). #}
+{%- set _statut_label = {"brouillon": "Brouillon", "finalise": "Finalisé", "affecte": "Affecté"} -%}
+{%- set _statut_tone = {"brouillon": "neutral", "finalise": "success", "affecte": "warning"} -%}
+
 {% block title %}{{ scenario.Titre or "Scénario sans titre" }} — {{ app_name }}{% endblock %}
 
 {% block content %}
@@ -21,7 +26,7 @@
         <h1 class="text-[28px] font-extrabold tracking-tight text-ink">
             {{ scenario.Titre or "Scénario sans titre" }}
         </h1>
-        {{ badge(scenario.Statut, tone="neutral") }}
+        {{ badge(_statut_label.get(scenario.Statut, scenario.Statut), tone=_statut_tone.get(scenario.Statut, "neutral")) }}
     </div>
     {% if referentiel %}
     {# Le référentiel appartient à une FORMATION (ADR-023) : ici la famille de

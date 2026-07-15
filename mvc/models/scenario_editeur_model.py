@@ -26,12 +26,28 @@ def get_scenario(scenario_id: int) -> "dict[str, Any] | None":
     return fetch_one("SELECT * FROM scenario WHERE Id = ?", (scenario_id,))
 
 
-def creer_scenario(titre: str) -> int:
-    """Crée un scénario avec juste un titre ; le reste se remplit par sections (ADR-019)."""
+def titre_existe(titre: str) -> bool:
+    """Un scénario porte-t-il déjà ce titre ? (unicité du titre, ADR-019)."""
+    return fetch_one("SELECT 1 AS x FROM scenario WHERE Titre = ? LIMIT 1", (titre,)) is not None
+
+
+def titre_existe_autre(titre: str, sauf_id: int) -> bool:
+    """Le titre est-il déjà pris par un AUTRE scénario ? (garde-fou au renommage)."""
+    return fetch_one(
+        "SELECT 1 AS x FROM scenario WHERE Titre = ? AND Id <> ? LIMIT 1", (titre, sauf_id)
+    ) is not None
+
+
+def creer_scenario(titre: str, referentiel_id: int) -> int:
+    """Crée un scénario rattaché à un référentiel dès sa naissance (ADR-019/ADR-023).
+
+    Le référentiel est le point d'entrée : formation, niveau et débouchés s'en
+    déduisent. Le reste (contexte, liaison, ressources) se remplit par sections.
+    """
     return insert(
-        "INSERT INTO scenario (Titre, Intention, Statut, Version, CoIntervention, CreatedAt, UpdatedAt) "
-        "VALUES (?, '', 'brouillon', '0.1.0', 0, NOW(), NOW())",
-        (titre,),
+        "INSERT INTO scenario (Titre, Intention, Statut, Version, CoIntervention, referentiel_id, CreatedAt, UpdatedAt) "
+        "VALUES (?, '', 'brouillon', '0.1.0', 0, ?, NOW(), NOW())",
+        (titre, referentiel_id),
     )
 
 
@@ -89,15 +105,44 @@ def enregistrer_contexte(
     )
 
 
-def finaliser_scenario(scenario_id: int) -> None:
-    """Marque le scénario comme enregistré (toutes les étapes saisies, ADR-019).
+_CHAMPS_CONTEXTE = (
+    "DescriptionContexte",
+    "Problematique",
+    "MaterielsLogiciels",
+    "LiensAssocies",
+    "EspacesFormation",
+)
 
-    L'état de complétion reste dérivé des données (voir le contrôleur) ; seul le
-    statut est persisté ici, une fois le gate serveur franchi.
+
+def recalculer_statut(scenario_id: int) -> None:
+    """Recalcule et persiste le statut du scénario d'après les données saisies (ADR-019).
+
+    Le statut est stocké en base (pas de calcul à la lecture) mais tenu à jour à
+    chaque écriture qui peut le faire changer, donc jamais falsifiable.
+      - « finalise » : contexte complet ET au moins une activité ET au moins un
+        critère (la compétence est impliquée par le critère) ;
+      - « brouillon » : sinon.
+    Un scénario « affecte » (rattaché à des élèves) est verrouillé : on n'y touche pas.
     """
-    execute(
-        "UPDATE scenario SET Statut = 'finalise', UpdatedAt = NOW() WHERE Id = ?",
+    row = fetch_one(
+        "SELECT Statut, " + ", ".join(_CHAMPS_CONTEXTE) + " FROM scenario WHERE Id = ?",
         (scenario_id,),
+    )
+    if row is None or row["Statut"] == "affecte":
+        return
+    contexte_complet = all(row[champ] for champ in _CHAMPS_CONTEXTE)
+    n_act = fetch_one(
+        "SELECT COUNT(*) AS n FROM scenario_activite WHERE scenario_id = ?", (scenario_id,)
+    )
+    n_crit = fetch_one(
+        "SELECT COUNT(*) AS n FROM scenario_critere WHERE scenario_id = ?", (scenario_id,)
+    )
+    a_activite = bool(n_act and int(n_act["n"]) > 0)
+    a_critere = bool(n_crit and int(n_crit["n"]) > 0)
+    statut = "finalise" if (contexte_complet and a_activite and a_critere) else "brouillon"
+    execute(
+        "UPDATE scenario SET Statut = ?, UpdatedAt = NOW() WHERE Id = ?",
+        (statut, scenario_id),
     )
 
 

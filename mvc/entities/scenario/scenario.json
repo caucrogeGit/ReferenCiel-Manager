@@ -9,7 +9,7 @@
       "max_length": 200,
       "required": true,
       "nullable": false,
-      "unique": false
+      "unique": true
     },
     {
       "name": "intention",

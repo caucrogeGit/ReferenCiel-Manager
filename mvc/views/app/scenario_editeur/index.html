@@ -1,16 +1,33 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-{% from "components/ui.html" import flash_messages %}
+{% from "components/ui.html" import flash_messages, badge %}
 {{ flash_messages(flash) }}
+
+{# Les trois états d'un scénario (ADR-019) : brouillon (en cours), finalisé
+   (validé, prêt à être affecté), affecté (rattaché à un élève, verrouillé). #}
+{%- set _statut_label = {"brouillon": "Brouillon", "finalise": "Finalisé", "affecte": "Affecté"} -%}
+{%- set _statut_tone = {"brouillon": "neutral", "finalise": "success", "affecte": "warning"} -%}
 
 <h1 class="text-2xl font-bold text-gray-800 mb-6">Scénarios pédagogiques</h1>
 
-<form method="post" action="/conception/scenario/nouveau" class="bg-white shadow rounded p-4 mb-6 flex gap-3 items-end">
+<form method="post" action="/conception/scenario/nouveau" class="bg-white shadow rounded p-4 mb-6 max-w-xl">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-  <div class="flex-1">
+  <div class="mb-3">
     <label class="block text-sm text-gray-600 mb-1" for="titre">Nouveau scénario</label>
     <input id="titre" name="titre" type="text" required placeholder="Titre du scénario"
            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+  </div>
+  {# Référentiel obligatoire dès la création (ADR-023) : formation, niveau et
+     débouchés s'en déduisent. Même design que le champ titre, placé en dessous. #}
+  <div class="mb-3">
+    <label class="block text-sm text-gray-600 mb-1" for="referentiel_id">Référentiel</label>
+    <select id="referentiel_id" name="referentiel_id" required
+            class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <option value="">Choisir un référentiel…</option>
+      {% for r in referentiels %}
+      <option value="{{ r.Id }}">{{ r.Identifiant }}{% if r.formation_intitule %} — {{ r.formation_intitule }}{% endif %}</option>
+      {% endfor %}
+    </select>
   </div>
   <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Créer</button>
 </form>
@@ -18,11 +35,14 @@
 <div class="grid gap-3 md:grid-cols-2">
   {% for s in scenarios %}
   <a href="/conception/scenario/{{ s.Id }}" class="block bg-white shadow rounded p-4 hover:ring-2 hover:ring-blue-500">
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center gap-2">
       <h2 class="text-lg font-semibold text-gray-800">{{ s.Titre }}</h2>
-      <span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600">{{ s.Statut }}</span>
+      {{ badge(_statut_label.get(s.Statut, s.Statut), tone=_statut_tone.get(s.Statut, "neutral")) }}
     </div>
-    <p class="text-sm text-gray-500 mt-1">Version {{ s.Version }}{% if s.referentiel_identifiant %} · {{ s.referentiel_identifiant }}{% endif %}{% if s.CoIntervention %} · co-intervention{% endif %}</p>
+    <p class="text-sm text-gray-500 mt-1">
+      {%- if s.referentiel_identifiant %}{{ s.referentiel_identifiant }}{% endif -%}
+      {%- if s.CoIntervention %} · co-intervention{% endif -%}
+    </p>
   </a>
   {% else %}
   <p class="text-gray-500">Aucun scénario. Créez-en un ci-dessus.</p>
