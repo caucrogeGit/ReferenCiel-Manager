@@ -109,7 +109,7 @@ class ScenarioEditeurController(BaseController):
                 "/conception/scenario",
                 request=request,
                 flash="Titre et référentiel sont obligatoires pour créer un scénario.",
-                level="warning",
+                level="success",
             )
         # Le titre d'un scénario est unique.
         if titre_existe(titre):
@@ -117,7 +117,7 @@ class ScenarioEditeurController(BaseController):
                 "/conception/scenario",
                 request=request,
                 flash=f"Un scénario s'intitule déjà « {titre} ». Choisissez un autre titre.",
-                level="warning",
+                level="success",
             )
         scenario_id = creer_scenario(titre, referentiel_id)
         return BaseController.redirect(f"/conception/scenario/{scenario_id}")
@@ -339,7 +339,7 @@ class ScenarioEditeurController(BaseController):
                 f"/conception/scenario/{scenario_id}",
                 request=request,
                 flash=f"Un autre scénario s'intitule déjà « {titre} ».",
-                level="warning",
+                level="success",
             )
         enregistrer_titre(scenario_id, titre, co_intervention, co_auteur_ids)
         # Auto-enregistrement HTMX : on renvoie une zone d'erreur vide (efface un
