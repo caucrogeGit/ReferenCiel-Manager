@@ -26,6 +26,11 @@
         csrf_token=csrf_token,
         savoir_etre=(c.SavoirEtre | default(false))
     ) }}
+    {% if c.indicateurs %}
+    <ul class="pl-8 pr-2 -mt-0.5 mb-1 text-xs text-muted list-disc list-inside">
+        {% for ind in c.indicateurs %}<li>{{ ind.Libelle }}</li>{% endfor %}
+    </ul>
+    {% endif %}
     {% else %}
     {{ empty_state("Aucun critère pour cette compétence.") }}
     {% endfor %}

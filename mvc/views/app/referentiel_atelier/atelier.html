@@ -68,7 +68,14 @@
       <summary class="cursor-pointer text-gray-800"><span class="text-xs text-gray-400">{{ comp.Code }}</span> {{ comp.Intitule }}</summary>
       {% if comp.criteres %}
       <ul class="list-disc pl-8 mt-1 text-sm text-gray-700">
-        {% for c in comp.criteres %}<li><span class="text-xs text-gray-400">{{ c.Code }}</span> {{ c.Libelle }}</li>{% endfor %}
+        {% for c in comp.criteres %}<li>
+          <span class="text-xs text-gray-400">{{ c.Code }}</span> {{ c.Libelle }}
+          {% if c.indicateurs %}
+          <ul class="list-[circle] pl-5 mt-0.5 text-xs text-gray-500">
+            {% for ind in c.indicateurs %}<li>{{ ind.Libelle }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+        </li>{% endfor %}
       </ul>
       {% else %}<p class="pl-6 text-sm text-gray-400">Aucun critère.</p>{% endif %}
     </details>
@@ -101,9 +108,10 @@
 
   <section id="indicateurs" class="bg-white shadow rounded p-5 scroll-mt-20">
     <h2 class="text-lg font-semibold text-gray-800 mb-3">Indicateurs de réussite</h2>
+    <p class="text-xs text-gray-400 mb-2">Rattachés à un critère (voir la section Compétences).</p>
     {% if arbre.indicateurs %}
     <ul class="list-disc pl-5 text-sm text-gray-700">{% for i in arbre.indicateurs %}
-      <li><span class="text-xs text-gray-400">{{ i.Code }}</span> {{ i.Libelle }}{% if i.Origine %} <span class="text-gray-400">({{ i.Origine }})</span>{% endif %}</li>
+      <li><span class="text-xs text-gray-400">{{ i.Code }}</span> {{ i.Libelle }}</li>
     {% endfor %}</ul>
     {% else %}<p class="text-sm text-gray-400">Aucun indicateur.</p>{% endif %}
   </section>
