@@ -59,9 +59,14 @@ def get_arbre(ref_id: int) -> dict[str, Any]:
         "FROM source WHERE referentiel_id = ? ORDER BY SourceId",
         r,
     )
+    # Indicateurs de réussite : rattachés à un CRITERE (ADR-022, option A). On les
+    # charge via le critère (le référentiel se déduit de critère -> compétence).
     indicateurs = fetch_all(
-        "SELECT Id, Code, Libelle, Origine, RefCode "
-        "FROM indicateur_reussite WHERE referentiel_id = ? ORDER BY Code",
+        "SELECT ind.Id, ind.Code, ind.Libelle, ind.critere_id "
+        "FROM indicateur_reussite ind "
+        "JOIN critere_observable c ON c.Id = ind.critere_id "
+        "JOIN competence cp ON cp.Id = c.competence_id "
+        "WHERE cp.referentiel_id = ? ORDER BY ind.Code",
         r,
     )
 
@@ -105,6 +110,10 @@ def get_arbre(ref_id: int) -> dict[str, Any]:
         "WHERE cp.referentiel_id = ? ORDER BY c.competence_id, c.Code",
         r,
     )
+    # Indicateurs nichés sous leur critère (Critère 1 - 0..n Indicateur).
+    ind_par_crit = _group_by(indicateurs, "critere_id")
+    for crit in criteres:
+        crit["indicateurs"] = ind_par_crit.get(crit["Id"], [])
     criteres_par_comp = _group_by(criteres, "competence_id")
     for comp in competences:
         comp["criteres"] = criteres_par_comp.get(comp["Id"], [])

@@ -65,7 +65,7 @@ provenance via `source_ids: [ ... ]` (références à `sources[].source_id`).
 | `poles_activites[]` | `id`, `intitule`, `source_ids` |
 | `activites_professionnelles[]` | `id`, `code` (E1, R2, D3…), `intitule`, `pole_id`, `taches[]`, `conditions_exercice{ moyens[], autonomie, }`, `resultats_attendus[]` (`{ id, libelle }`), `source_ids` |
 | `competences[]` | `id`, `code` (C01…C11), `intitule`, `connaissances[]` (`{ libelle, niveau_taxonomique }`), `criteres_evaluation[]` (`{ id, libelle }`), `source_ids` |
-| `indicateurs_reussite[]` | `id`, `libelle`, `origine` (`resultat_attendu` \| `critere` \| `reformulation`), `ref` (id d'origine), `source_ids` |
+| `indicateurs_reussite[]` | `id`, `libelle`, `origine` (`resultat_attendu` \| `critere` \| `reformulation`), `ref` (id d'origine), `source_ids`. **Import (ADR-022, option A)** : seuls les indicateurs `origine = critere` sont persistés, rattachés au critère `ref` ; les autres sont ignorés (amorces à recréer par le professeur). |
 
 ### 4.3 Relations
 

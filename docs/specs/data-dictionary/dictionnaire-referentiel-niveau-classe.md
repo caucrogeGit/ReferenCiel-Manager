@@ -127,16 +127,17 @@ Lié à une **compétence** (instructions §7).
 
 ### IndicateurReussite
 
-**Formulation pédagogique exploitable** (instructions §7), dérivée d'un résultat
-attendu, d'un critère, ou reformulée.
+**Formulation pédagogique exploitable** (instructions §7), **rattachée à un
+critère** (ADR-022, option A) : `Critère 1 ─ 0..n Indicateur`. Un indicateur
+n'existe que porté par un critère ; le professeur en définit 0, 1 ou plusieurs.
+Les amorces d'autre origine (résultat attendu, reformulation) présentes dans la
+source ne sont pas persistées : le professeur les recrée sur un critère.
 
 | Champ | Type | Oblig. | Description |
 |---|---|:--:|---|
-| `referentiel_id` | many_to_one → ReferentielNiveauClasse | oui | rattachement |
-| `code` | slug | oui | id local (ex. `ind-1`), unique |
+| `critere_id` | many_to_one → CritereObservable | oui | critère porteur |
+| `code` | slug | oui | id local (ex. `ind-2`) |
 | `libelle` | text | oui | indicateur exploitable |
-| `origine` | string | oui | `resultat_attendu` \| `critere` \| `reformulation` |
-| `ref_code` | string | non | code de l'élément d'origine (résultat/critère) |
 
 ### FamilleCompetence
 

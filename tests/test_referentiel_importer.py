@@ -23,10 +23,12 @@ _EXEMPLE = _ROOT / "docs/specs/json-canonique/examples/json-canonique-ciel-2tne.
 # Comptes attendus pour l'exemple CIEL 2TNE (source de vérité du test).
 _ATTENDU = {
     "sources": 2, "poles": 3, "competences": 8, "criteres": 9, "activites": 5,
-    "taches": 19, "resultats": 7, "familles": 9, "indicateurs": 3,
+    "taches": 19, "resultats": 7, "familles": 9, "indicateurs": 1,
     "activite_competence": 14, "cc_competence": 2,
 }
-_TOTAL = 81
+# ADR-022 option A : seuls les indicateurs d'origine 'critere' sont importés
+# (ici ind-2). Les amorces resultat_attendu / reformulation ne le sont plus.
+_TOTAL = 79
 
 
 class _FakeDb:

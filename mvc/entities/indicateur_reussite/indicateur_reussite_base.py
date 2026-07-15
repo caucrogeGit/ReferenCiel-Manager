@@ -19,15 +19,13 @@ from core.validation import (
 class IndicateurReussiteBase:
     """Classe de base regenerable de IndicateurReussite."""
 
-    def __init__(self, code, libelle, origine, referentiel_id, created_at, updated_at, id=None, ref_code=None):
+    def __init__(self, code, libelle, critere_id, created_at, updated_at, id=None):
         self.code = code
         self.libelle = libelle
-        self.origine = origine
-        self.referentiel_id = referentiel_id
+        self.critere_id = critere_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
-        self.ref_code = ref_code
 
     @staticmethod
     def _coerce_datetime(value):
@@ -71,39 +69,15 @@ class IndicateurReussiteBase:
         self._libelle = value
 
     @property
-    def origine(self):
-        return self._origine
+    def critere_id(self):
+        return self._critere_id
 
-    @origine.setter
-    @typed(str)
-    def origine(self, value):
-        if value is None:
-            raise ValidationError("origine", 'La propriété "origine" ne peut pas être nulle.')
-        self._origine = value
-
-    @property
-    def ref_code(self):
-        return self._ref_code
-
-    @ref_code.setter
-    @typed(str)
-    @nullable
-    def ref_code(self, value):
-        if value is None:
-            self._ref_code = None
-            return
-        self._ref_code = value
-
-    @property
-    def referentiel_id(self):
-        return self._referentiel_id
-
-    @referentiel_id.setter
+    @critere_id.setter
     @typed(int)
-    def referentiel_id(self, value):
+    def critere_id(self, value):
         if value is None:
-            raise ValidationError("referentiel_id", 'La propriété "referentiel_id" ne peut pas être nulle.')
-        self._referentiel_id = value
+            raise ValidationError("critere_id", 'La propriété "critere_id" ne peut pas être nulle.')
+        self._critere_id = value
 
     @property
     def created_at(self):
@@ -132,9 +106,7 @@ class IndicateurReussiteBase:
             "id": self.id,
             "code": self.code,
             "libelle": self.libelle,
-            "origine": self.origine,
-            "ref_code": self.ref_code,
-            "referentiel_id": self.referentiel_id,
+            "critere_id": self.critere_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -145,13 +117,11 @@ class IndicateurReussiteBase:
             id=data["id"],
             code=data["code"],
             libelle=data["libelle"],
-            origine=data["origine"],
-            ref_code=data["ref_code"],
-            referentiel_id=data["referentiel_id"],
+            critere_id=data["critere_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"IndicateurReussiteBase(id={self.id!r}, code={self.code!r}, libelle={self.libelle!r}, origine={self.origine!r}, ref_code={self.ref_code!r}, referentiel_id={self.referentiel_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"IndicateurReussiteBase(id={self.id!r}, code={self.code!r}, libelle={self.libelle!r}, critere_id={self.critere_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

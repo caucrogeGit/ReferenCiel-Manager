@@ -163,12 +163,12 @@
     {
       "type": "many_to_one",
       "from": "IndicateurReussite",
-      "to": "ReferentielNiveauClasse",
-      "name": "referentiel",
+      "to": "CritereObservable",
+      "name": "critere",
       "inverse_name": "indicateurs",
-      "foreign_key": "referentiel_id",
+      "foreign_key": "critere_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {

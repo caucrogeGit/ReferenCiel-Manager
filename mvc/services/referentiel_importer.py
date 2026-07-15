@@ -187,6 +187,7 @@ def import_referentiel(canonical: dict[str, Any]) -> ImportReport:
 
     # Compétences : code -> Id base (+ critères imbriqués).
     comp_map: dict[str, int] = {}
+    crit_map: dict[str, int] = {}  # id canonique du critère (ex. cr-c06-1) -> Id base
     for comp in canonical.get("competences", []):
         try:
             cid = db.insert(
@@ -198,11 +199,12 @@ def import_referentiel(canonical: dict[str, Any]) -> ImportReport:
             rapport.compte("competences")
             for crit in comp.get("criteres_evaluation", []):
                 try:
-                    db.insert(
+                    crit_id = db.insert(
                         "INSERT INTO critere_observable (Code, Libelle, competence_id, "
                         "CreatedAt, UpdatedAt) VALUES (?, ?, ?, NOW(), NOW())",
                         (crit["id"], crit["libelle"], cid),
                     )
+                    crit_map[str(crit["id"])] = crit_id
                     rapport.compte("criteres")
                 except Exception as exc:  # noqa: BLE001
                     rapport.echec(f"critere {crit.get('id')}", exc)
@@ -261,13 +263,21 @@ def import_referentiel(canonical: dict[str, Any]) -> ImportReport:
         except Exception as exc:  # noqa: BLE001
             rapport.echec(f"famille {fam.get('code')}", exc)
 
-    # Indicateurs de réussite.
+    # Indicateurs de réussite (ADR-022, option A) : un indicateur n'existe QUE
+    # rattaché à un critère. Les amorces d'autre origine (résultat attendu,
+    # reformulation) ne sont pas importées ; le professeur les recrée sur un critère.
     for ind in canonical.get("indicateurs_reussite", []):
+        if ind.get("origine") != "critere":
+            continue
+        crit_id = crit_map.get(str(ind.get("ref")))
+        if crit_id is None:
+            rapport.echec(f"indicateur {ind.get('id')}", ValueError(f"critère orphelin {ind.get('ref')}"))
+            continue
         try:
             db.insert(
-                "INSERT INTO indicateur_reussite (Code, Libelle, Origine, RefCode, "
-                "referentiel_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, NOW(), NOW())",
-                (ind["id"], ind["libelle"], ind.get("origine", ""), ind.get("ref"), ref_id),
+                "INSERT INTO indicateur_reussite (Code, Libelle, critere_id, CreatedAt, UpdatedAt) "
+                "VALUES (?, ?, ?, NOW(), NOW())",
+                (ind["id"], ind["libelle"], crit_id),
             )
             rapport.compte("indicateurs")
         except Exception as exc:  # noqa: BLE001

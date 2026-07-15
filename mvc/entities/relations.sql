@@ -114,10 +114,10 @@ ALTER TABLE critere_observable
     ON UPDATE RESTRICT;
 
 ALTER TABLE indicateur_reussite
-    ADD CONSTRAINT fk_indicateur_reussite_referentiel_id
-    FOREIGN KEY (referentiel_id)
-    REFERENCES referentiel_niveau_classe (Id)
-    ON DELETE RESTRICT
+    ADD CONSTRAINT fk_indicateur_reussite_critere_id
+    FOREIGN KEY (critere_id)
+    REFERENCES critere_observable (Id)
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE famille_competence
