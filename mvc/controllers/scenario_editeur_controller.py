@@ -265,8 +265,10 @@ class ScenarioEditeurController(BaseController):
                     context=context,
                     request=request,
                 )
+            # Navigation d'étape : on renvoie le corps entier (stepper + étape)
+            # pour que le stepper reflète l'étape sélectionnée (#tunnel-corps).
             return BaseController.render(
-                f"app/scenario_editeur/_etape_{etape}.html",
+                "app/scenario_editeur/_corps.html",
                 context=context,
                 request=request,
             )

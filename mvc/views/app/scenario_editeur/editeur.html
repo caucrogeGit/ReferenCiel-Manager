@@ -5,7 +5,6 @@
    mêmes liens font une navigation classique et la page rend l'étape demandée. #}
 {% extends "layouts/base.html" %}
 {% from "components/ui.html" import flash_messages, badge %}
-{% from "components/tunnel_macros.html" import stepper %}
 
 {% block title %}{{ scenario.Titre or "Scénario sans titre" }} — {{ app_name }}{% endblock %}
 
@@ -27,11 +26,10 @@
     <p class="mt-1 text-sm text-muted">Version {{ scenario.Version }}</p>
 </div>
 
-{{ stepper(steps, etape, base_url) }}
-
-{# Cible HTMX de la navigation d'étape. Le contrôleur renvoie ici le partial
-   _etape_<clé>.html seul (raw=True), sans le layout. #}
-<div id="tunnel-etape">
-    {% include "app/scenario_editeur/_etape_" ~ etape ~ ".html" %}
+{# Cible HTMX de la navigation d'étape : le stepper ET le contenu de l'étape sont
+   régénérés ensemble (sinon le stepper resterait figé sur l'étape initiale). Le
+   contrôleur renvoie ici le partial _corps.html seul, sans le layout. #}
+<div id="tunnel-corps">
+    {% include "app/scenario_editeur/_corps.html" %}
 </div>
 {% endblock %}
