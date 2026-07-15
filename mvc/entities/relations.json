@@ -699,6 +699,28 @@
         "on_delete": "cascade",
         "fields": []
       }
+    },
+    {
+      "type": "many_to_one",
+      "from": "FormationNiveau",
+      "to": "Formation",
+      "name": "formation",
+      "inverse_name": "formation_niveaux",
+      "foreign_key": "formation_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "FormationNiveau",
+      "to": "NiveauClasse",
+      "name": "niveau_classe",
+      "inverse_name": "formation_niveaux",
+      "foreign_key": "niveau_classe_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
     }
   ]
 }

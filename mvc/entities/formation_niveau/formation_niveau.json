@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "name": "FormationNiveau",
+  "table": "formation_niveau",
+  "fields": [
+    {
+      "name": "code",
+      "type": "string",
+      "max_length": 50,
+      "required": true,
+      "nullable": false,
+      "unique": true
+    },
+    {
+      "name": "libelle",
+      "type": "string",
+      "max_length": 200,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "ordre_indicatif",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "formation_id",
+      "type": "foreign_key",
+      "references": "Formation",
+      "required": true
+    },
+    {
+      "name": "niveau_classe_id",
+      "type": "foreign_key",
+      "references": "NiveauClasse",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

@@ -526,3 +526,17 @@ CREATE TABLE IF NOT EXISTS professeur_parcours (
         REFERENCES parcours (id)
         ON DELETE CASCADE
 );
+
+ALTER TABLE formation_niveau
+    ADD CONSTRAINT fk_formation_niveau_formation_id
+    FOREIGN KEY (formation_id)
+    REFERENCES formation (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE formation_niveau
+    ADD CONSTRAINT fk_formation_niveau_niveau_classe_id
+    FOREIGN KEY (niveau_classe_id)
+    REFERENCES niveau_classe (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
