@@ -11,7 +11,7 @@
     "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
     "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source" } },
     "provenance": { "$ref": "#/$defs/provenance" },
-    "formation": { "$ref": "#/$defs/codeIntitule" },
+    "formation": { "$ref": "#/$defs/formationRef" },
     "niveau_classe": { "$ref": "#/$defs/codeIntitule" },
     "poles_activites": { "type": "array", "items": { "$ref": "#/$defs/pole" } },
     "activites_professionnelles": { "type": "array", "items": { "$ref": "#/$defs/activite" } },
@@ -51,6 +51,18 @@
       "properties": {
         "code": { "type": "string" },
         "intitule": { "type": "string" }
+      }
+    },
+    "formationRef": {
+      "type": "object",
+      "required": ["code", "intitule"],
+      "properties": {
+        "code": { "type": "string" },
+        "intitule": { "type": "string" },
+        "type": {
+          "type": "string",
+          "description": "Type de formation (ADR-023) : FAMILLE_METIERS, SPECIALITE_BAC_PRO, CAP, BP, BMA, CERTIFICAT_SPECIALISATION, FCIL, BTS, AUTRE. Défaut AUTRE à l'import si absent."
+        }
       }
     },
     "pole": {

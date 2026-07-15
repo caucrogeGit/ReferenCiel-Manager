@@ -22,12 +22,13 @@
     "point_entree": "referentiel_officiel"
   },
   "formation": {
-    "code": "BACPRO-CIEL",
-    "intitule": "Baccalauréat professionnel Cybersécurité, Informatique et réseaux, Électronique"
+    "code": "2TNE",
+    "type": "FAMILLE_METIERS",
+    "intitule": "Métiers des transitions numérique et énergétique"
   },
   "niveau_classe": {
-    "code": "2TNE",
-    "intitule": "Seconde professionnelle, famille des métiers des transitions numérique et énergétique"
+    "code": "SECONDE_PRO",
+    "intitule": "Seconde professionnelle"
   },
   "poles_activites": [
     { "id": "pole-real-maint-elec", "intitule": "Réalisation et maintenance de produits électroniques", "source_ids": ["referentiel-bac-pro-ciel"] },
