@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "name": "DossierTechnique",
+  "table": "dossier_technique",
+  "fields": [
+    {
+      "name": "titre",
+      "type": "string",
+      "max_length": 200,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "palier_id",
+      "type": "foreign_key",
+      "references": "Palier",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

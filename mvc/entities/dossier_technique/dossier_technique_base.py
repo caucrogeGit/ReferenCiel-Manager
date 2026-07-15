@@ -1,5 +1,5 @@
 """FICHIER GENERE PAR FORGE.
-Base regenerable de l'entite QCM.
+Base regenerable de l'entite DossierTechnique.
 Ne pas y ajouter de logique metier manuelle.
 """
 
@@ -16,16 +16,15 @@ from core.validation import (
 )
 
 
-class QCMBase:
-    """Classe de base regenerable de QCM."""
+class DossierTechniqueBase:
+    """Classe de base regenerable de DossierTechnique."""
 
-    def __init__(self, seuil_validation, dossier_technique_id, created_at, updated_at, id=None, format_reponse=None):
-        self.seuil_validation = seuil_validation
-        self.dossier_technique_id = dossier_technique_id
+    def __init__(self, titre, palier_id, created_at, updated_at, id=None):
+        self.titre = titre
+        self.palier_id = palier_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
-        self.format_reponse = format_reponse
 
     @staticmethod
     def _coerce_datetime(value):
@@ -47,39 +46,26 @@ class QCMBase:
         self._id = value
 
     @property
-    def format_reponse(self):
-        return self._format_reponse
+    def titre(self):
+        return self._titre
 
-    @format_reponse.setter
+    @titre.setter
     @typed(str)
-    @nullable
-    def format_reponse(self, value):
+    def titre(self, value):
         if value is None:
-            self._format_reponse = None
-            return
-        self._format_reponse = value
+            raise ValidationError("titre", 'La propriété "titre" ne peut pas être nulle.')
+        self._titre = value
 
     @property
-    def seuil_validation(self):
-        return self._seuil_validation
+    def palier_id(self):
+        return self._palier_id
 
-    @seuil_validation.setter
-    @typed(str)
-    def seuil_validation(self, value):
-        if value is None:
-            raise ValidationError("seuil_validation", 'La propriété "seuil_validation" ne peut pas être nulle.')
-        self._seuil_validation = value
-
-    @property
-    def dossier_technique_id(self):
-        return self._dossier_technique_id
-
-    @dossier_technique_id.setter
+    @palier_id.setter
     @typed(int)
-    def dossier_technique_id(self, value):
+    def palier_id(self, value):
         if value is None:
-            raise ValidationError("dossier_technique_id", 'La propriété "dossier_technique_id" ne peut pas être nulle.')
-        self._dossier_technique_id = value
+            raise ValidationError("palier_id", 'La propriété "palier_id" ne peut pas être nulle.')
+        self._palier_id = value
 
     @property
     def created_at(self):
@@ -106,24 +92,22 @@ class QCMBase:
     def to_dict(self) -> dict:
         return {
             "id": self.id,
-            "format_reponse": self.format_reponse,
-            "seuil_validation": self.seuil_validation,
-            "dossier_technique_id": self.dossier_technique_id,
+            "titre": self.titre,
+            "palier_id": self.palier_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "QCMBase":
+    def from_dict(cls, data: dict[str, Any]) -> "DossierTechniqueBase":
         return cls(
             id=data["id"],
-            format_reponse=data["format_reponse"],
-            seuil_validation=data["seuil_validation"],
-            dossier_technique_id=data["dossier_technique_id"],
+            titre=data["titre"],
+            palier_id=data["palier_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"QCMBase(id={self.id!r}, format_reponse={self.format_reponse!r}, seuil_validation={self.seuil_validation!r}, dossier_technique_id={self.dossier_technique_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"DossierTechniqueBase(id={self.id!r}, titre={self.titre!r}, palier_id={self.palier_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

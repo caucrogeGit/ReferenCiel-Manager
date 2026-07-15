@@ -528,12 +528,34 @@
     {
       "type": "many_to_one",
       "from": "QCM",
-      "to": "Palier",
-      "name": "palier",
+      "to": "DossierTechnique",
+      "name": "dossier_technique",
       "inverse_name": "qcm",
-      "foreign_key": "palier_id",
+      "foreign_key": "dossier_technique_id",
       "nullable": false,
       "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "DossierTechnique",
+      "to": "Palier",
+      "name": "palier",
+      "inverse_name": "dossier_technique",
+      "foreign_key": "palier_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "RessourceDossier",
+      "to": "DossierTechnique",
+      "name": "dossier_technique",
+      "inverse_name": "ressources",
+      "foreign_key": "dossier_technique_id",
+      "nullable": false,
+      "on_delete": "cascade",
       "index": true
     },
     {

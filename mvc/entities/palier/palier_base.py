@@ -19,10 +19,9 @@ from core.validation import (
 class PalierBase:
     """Classe de base regenerable de Palier."""
 
-    def __init__(self, ordre, titre, dossier_technique_fichier, parcours_id, created_at, updated_at, id=None, theme=None, production_attendue=None):
+    def __init__(self, ordre, titre, parcours_id, created_at, updated_at, id=None, theme=None, production_attendue=None):
         self.ordre = ordre
         self.titre = titre
-        self.dossier_technique_fichier = dossier_technique_fichier
         self.parcours_id = parcours_id
         self.created_at = created_at
         self.updated_at = updated_at
@@ -98,17 +97,6 @@ class PalierBase:
         self._production_attendue = value
 
     @property
-    def dossier_technique_fichier(self):
-        return self._dossier_technique_fichier
-
-    @dossier_technique_fichier.setter
-    @typed(str)
-    def dossier_technique_fichier(self, value):
-        if value is None:
-            raise ValidationError("dossier_technique_fichier", 'La propriété "dossier_technique_fichier" ne peut pas être nulle.')
-        self._dossier_technique_fichier = value
-
-    @property
     def parcours_id(self):
         return self._parcours_id
 
@@ -148,7 +136,6 @@ class PalierBase:
             "titre": self.titre,
             "theme": self.theme,
             "production_attendue": self.production_attendue,
-            "dossier_technique_fichier": self.dossier_technique_fichier,
             "parcours_id": self.parcours_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
@@ -162,12 +149,11 @@ class PalierBase:
             titre=data["titre"],
             theme=data["theme"],
             production_attendue=data["production_attendue"],
-            dossier_technique_fichier=data["dossier_technique_fichier"],
             parcours_id=data["parcours_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"PalierBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, dossier_technique_fichier={self.dossier_technique_fichier!r}, parcours_id={self.parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"PalierBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, parcours_id={self.parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

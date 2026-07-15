@@ -401,10 +401,24 @@ ALTER TABLE progression_palier
     ON UPDATE RESTRICT;
 
 ALTER TABLE qcm
-    ADD CONSTRAINT fk_qcm_palier_id
+    ADD CONSTRAINT fk_qcm_dossier_technique_id
+    FOREIGN KEY (dossier_technique_id)
+    REFERENCES dossier_technique (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE dossier_technique
+    ADD CONSTRAINT fk_dossier_technique_palier_id
     FOREIGN KEY (palier_id)
     REFERENCES palier (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;
+
+ALTER TABLE ressource_dossier
+    ADD CONSTRAINT fk_ressource_dossier_dossier_technique_id
+    FOREIGN KEY (dossier_technique_id)
+    REFERENCES dossier_technique (Id)
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE question_qcm

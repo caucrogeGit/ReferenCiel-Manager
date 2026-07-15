@@ -1,7 +1,11 @@
-CREATE TABLE IF NOT EXISTS qcm (
+CREATE TABLE IF NOT EXISTS ressource_dossier (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    FormatReponse TEXT NULL,
-    SeuilValidation VARCHAR(20) NOT NULL,
+    Type VARCHAR(20) NOT NULL,
+    Titre VARCHAR(200) NOT NULL,
+    Ordre INT NOT NULL,
+    Contenu TEXT NULL,
+    MediaRef VARCHAR(255) NULL,
+    Url VARCHAR(500) NULL,
     dossier_technique_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,

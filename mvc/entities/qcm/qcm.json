@@ -19,9 +19,9 @@
       "unique": false
     },
     {
-      "name": "palier_id",
+      "name": "dossier_technique_id",
       "type": "foreign_key",
-      "references": "Palier",
+      "references": "DossierTechnique",
       "required": true
     }
   ],

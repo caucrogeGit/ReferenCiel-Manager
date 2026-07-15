@@ -1,11 +1,12 @@
 {
   "schema_version": "1.0",
-  "name": "Palier",
-  "table": "palier",
+  "name": "RessourceDossier",
+  "table": "ressource_dossier",
   "fields": [
     {
-      "name": "ordre",
-      "type": "integer",
+      "name": "type",
+      "type": "string",
+      "max_length": 20,
       "required": true,
       "nullable": false,
       "unique": false
@@ -19,15 +20,21 @@
       "unique": false
     },
     {
-      "name": "theme",
-      "type": "string",
-      "max_length": 100,
+      "name": "ordre",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "contenu",
+      "type": "text",
       "required": false,
       "nullable": true,
       "unique": false
     },
     {
-      "name": "production_attendue",
+      "name": "media_ref",
       "type": "string",
       "max_length": 255,
       "required": false,
@@ -35,9 +42,17 @@
       "unique": false
     },
     {
-      "name": "parcours_id",
+      "name": "url",
+      "type": "string",
+      "max_length": 500,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "dossier_technique_id",
       "type": "foreign_key",
-      "references": "Parcours",
+      "references": "DossierTechnique",
       "required": true
     }
   ],
