@@ -5,11 +5,12 @@
 
 <section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
     {# Auto-enregistrement : chaque champ se sauvegarde à sa sortie (événement
-       « change »), sans bouton dédié — le seul bouton du tunnel est « Enregistrer
-       le scénario » (finalisation). Le POST classique (method/action) reste la
-       cible du <noscript> pour la dégradation sans JS. #}
+       « change »). La réponse HTMX alimente la zone d'erreur du titre (#titre-erreur) :
+       vide si tout va bien, message si le titre est déjà pris (unicité). Le POST
+       classique (method/action) reste la cible du <noscript> sans JS. #}
     <form method="post" action="{{ base_url }}/titre" class="space-y-5"
-          hx-post="{{ base_url }}/titre" hx-trigger="change" hx-swap="none">
+          hx-post="{{ base_url }}/titre" hx-trigger="change"
+          hx-target="#titre-erreur" hx-swap="innerHTML">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
         <div>
@@ -19,6 +20,7 @@
             <input id="titre" name="titre" type="text" required value="{{ scenario.Titre }}"
                    class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
                           focus:outline-none focus:ring-2 focus:ring-forge">
+            <p id="titre-erreur" class="mt-1 text-sm text-red-600" role="alert" aria-live="polite"></p>
         </div>
 
         <label class="flex items-center gap-2.5 bg-cream rounded-[10px] px-3 py-2.5 cursor-pointer">
@@ -49,8 +51,7 @@
             </div>
         </div>
 
-        {# Auto-enregistrement silencieux (aucun message). Sans JS : l'auto-save ne
-           marche pas, on retombe sur le bouton de repli du <noscript>. #}
+        {# Sans JS : l'auto-save ne marche pas, on retombe sur le bouton de repli. #}
         <noscript><div class="pt-1">{{ button("Enregistrer", variant="primary", type="submit") }}</div></noscript>
     </form>
 </section>

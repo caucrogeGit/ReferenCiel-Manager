@@ -6,6 +6,7 @@ Liaison avec le référentiel, Ressources), remplaçant le CRUD plat. Phase 1 : 
 section Titre (titre, co-intervention, co-auteurs). La Liaison consommera l'arbre
 de l'atelier référentiel (ADR-018).
 """
+import html
 from typing import Any, cast
 
 from core.http.request import Request
@@ -136,23 +137,17 @@ class ScenarioEditeurController(BaseController):
         activite_ids: list[int],
         critere_ids: list[int],
         ressources: list[dict[str, Any]],
-        co_auteur_ids: list[int],
     ) -> list[dict[str, Any]]:
         """Barre d'étapes : la complétion est DÉRIVÉE des données.
 
-        Rien n'est persisté pour l'UI : si le titre est rempli, l'étape est
-        faite ; si un référentiel est rattaché, la liaison est amorcée. C'est
-        ce qui rend l'état du tunnel non-falsifiable et sans migration.
+        Rien n'est persisté pour l'UI ; l'indicateur de chaque étape est aligné sur
+        la règle de statut (recalculer_statut) : « finalisé » = contexte complet ET
+        au moins une activité ET au moins un critère.
         """
-        # « done » = tous les champs OBLIGATOIRES de l'étape sont renseignés. C'est
-        # ce qui conditionne l'enregistrement du scénario (voir tous_complets).
-        #  - Titre : le titre est obligatoire ; en co-intervention, au moins un
-        #    enseignant co-auteur devient obligatoire.
+        #  - Titre : rempli dès la création (obligatoire).
         #  - Contexte : les 5 champs cpro sont tous obligatoires (d'où all()).
-        #  - Liaison / Ressources : rien d'obligatoire -> l'étape ne bloque jamais.
-        titre_complet = bool(scenario.get("Titre")) and (
-            not scenario.get("CoIntervention") or len(co_auteur_ids) > 0
-        )
+        #  - Liaison : au moins une activité ET un critère (contribue à « finalisé »).
+        #  - Ressources : facultatives -> l'étape ne bloque jamais.
         contexte_complet = all(
             scenario.get(champ)
             for champ in (
@@ -163,13 +158,14 @@ class ScenarioEditeurController(BaseController):
                 "EspacesFormation",
             )
         )
+        liaison_complete = len(activite_ids) > 0 and len(critere_ids) > 0
 
         return [
             {
                 "key": "titre",
                 "label": _LIBELLES["titre"],
                 "badge": "",
-                "done": titre_complet,
+                "done": bool(scenario.get("Titre")),
             },
             {
                 "key": "contexte",
@@ -180,10 +176,9 @@ class ScenarioEditeurController(BaseController):
             {
                 "key": "liaison",
                 "label": _LIBELLES["liaison"],
-                # Le code du référentiel (ex. « ciel-2tne ») est rappelé sous le titre
-                # du scénario (éditeur.html) : pas de badge ici. Aucun champ obligatoire.
+                # Le code du référentiel (ex. « ciel-2tne ») est rappelé sous le titre.
                 "badge": "",
-                "done": True,
+                "done": liaison_complete,
             },
             {
                 "key": "ressources",
@@ -238,7 +233,7 @@ class ScenarioEditeurController(BaseController):
             request, arbre
         )
         steps = ScenarioEditeurController._steps(
-            scenario, arbre, referentiels, activite_ids, critere_ids, ressources, co_auteur_ids
+            scenario, arbre, referentiels, activite_ids, critere_ids, ressources
         )
         position = ETAPES.index(etape) + 1
         # Référentiel courant (rappelé sous le titre) et gate d'enregistrement :
@@ -327,10 +322,13 @@ class ScenarioEditeurController(BaseController):
             else []
         )
         # Titre unique (contrainte en base) : on refuse un renommage qui collerait
-        # à un autre scénario, plutôt que de heurter la contrainte (500).
+        # à un autre scénario, plutôt que de heurter la contrainte (500). La réponse
+        # HTMX alimente la zone d'erreur #titre-erreur (message si collision, sinon vide).
         if titre and titre_existe_autre(titre, scenario_id):
             if ScenarioEditeurController._is_htmx(request):
-                return Response(status=409)
+                return Response(
+                    body=f"Un autre scénario s'intitule déjà « {html.escape(titre)} »."
+                )
             return BaseController.redirect(
                 f"/conception/scenario/{scenario_id}",
                 request=request,
@@ -338,11 +336,10 @@ class ScenarioEditeurController(BaseController):
                 level="warning",
             )
         enregistrer_titre(scenario_id, titre, co_intervention, co_auteur_ids)
-        # Auto-enregistrement HTMX (à la saisie) : pas de bouton dédié, pas de
-        # rechargement. On répond 204 (rien à échanger, hx-swap="none" côté vue).
-        # Sans JS, le <noscript> soumet le formulaire et on retombe sur la redirection.
+        # Auto-enregistrement HTMX : on renvoie une zone d'erreur vide (efface un
+        # message précédent). Sans JS, le <noscript> soumet le formulaire (redirection).
         if ScenarioEditeurController._is_htmx(request):
-            return Response(status=204)
+            return Response(body="")
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Titre enregistrée."
         )
