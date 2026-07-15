@@ -85,6 +85,7 @@ nav:
       - ADR-020 — Preline UI pour la couche vues: adr/020-preline-ui-pour-la-couche-vues.md
       - ADR-021 — État du tunnel dans l'URL: adr/021-etat-du-tunnel-dans-l-url.md
       - ADR-022 — Parcours objet canonique (aplatissement): adr/022-parcours-objet-canonique-aplatissement.md
+      - ADR-023 — Modèle générique voie professionnelle: adr/023-modele-generique-voie-professionnelle.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md

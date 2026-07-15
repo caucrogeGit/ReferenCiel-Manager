@@ -64,6 +64,13 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   starter/version-starter/version-parcours et des affectations ; paliers
   directement sous le parcours ; nouvelles cardinalités (Scénario 1-1 Parcours
   via pivot, ProgressionParcours associative). Révise ADR-019.
+- `023-modele-generique-voie-professionnelle.md` (**Accepté**) : modèle générique
+  de la voie pro. Le pivot passe de `Formation -> NiveauClasse` à
+  **`Cursus -> CursusEtape -> FormationNiveau`** ; séparation
+  Formation/Referentiel/NiveauClasse/Certification/Classe ; le référentiel est
+  re-scopé sur la **Formation** (retrait de `niveau_classe_id`) ; le concept
+  académique s'appelle **Cursus** (pas Parcours, réservé au pédagogique de
+  l'ADR-022) ; déroulé en 4 phases. Révise ADR-018.
 
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
