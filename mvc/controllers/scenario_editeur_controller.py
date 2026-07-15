@@ -331,7 +331,14 @@ class ScenarioEditeurController(BaseController):
             return BaseController.not_found()
         titre = request.form("titre", "").strip()
         co_intervention = request.form("co_intervention", "") != ""
-        co_auteur_ids = ScenarioEditeurController._parse_many_ids(request, "co_auteurs")
+        # Les co-auteurs n'ont de sens qu'en co-intervention (le bloc est masqué
+        # sinon côté vue) : hors co-intervention, on n'en persiste aucun, même si
+        # le select masqué renvoyait encore une sélection.
+        co_auteur_ids = (
+            ScenarioEditeurController._parse_many_ids(request, "co_auteurs")
+            if co_intervention
+            else []
+        )
         enregistrer_titre(scenario_id, titre, co_intervention, co_auteur_ids)
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Titre enregistrée."
