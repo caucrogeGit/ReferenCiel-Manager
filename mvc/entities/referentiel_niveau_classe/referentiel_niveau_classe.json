@@ -39,12 +39,6 @@
       "type": "foreign_key",
       "references": "Formation",
       "required": true
-    },
-    {
-      "name": "niveau_classe_id",
-      "type": "foreign_key",
-      "references": "NiveauClasse",
-      "required": true
     }
   ],
   "options": {

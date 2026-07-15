@@ -63,17 +63,6 @@
     },
     {
       "type": "many_to_one",
-      "from": "ReferentielNiveauClasse",
-      "to": "NiveauClasse",
-      "name": "niveau_classe",
-      "inverse_name": "referentiels",
-      "foreign_key": "niveau_classe_id",
-      "nullable": false,
-      "on_delete": "restrict",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
       "from": "PoleActivite",
       "to": "ReferentielNiveauClasse",
       "name": "referentiel",

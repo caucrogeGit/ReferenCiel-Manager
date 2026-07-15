@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS referentiel_niveau_classe (
     Statut VARCHAR(20) NOT NULL,
     ImporteLe DATETIME NOT NULL,
     formation_id BIGINT UNSIGNED NOT NULL,
-    niveau_classe_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

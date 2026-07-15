@@ -50,13 +50,6 @@ ALTER TABLE referentiel_niveau_classe
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
-ALTER TABLE referentiel_niveau_classe
-    ADD CONSTRAINT fk_referentiel_niveau_classe_niveau_classe_id
-    FOREIGN KEY (niveau_classe_id)
-    REFERENCES niveau_classe (Id)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
 ALTER TABLE pole_activite
     ADD CONSTRAINT fk_pole_activite_referentiel_id
     FOREIGN KEY (referentiel_id)

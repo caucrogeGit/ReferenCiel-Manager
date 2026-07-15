@@ -24,13 +24,12 @@
         {{ badge(scenario.Statut, tone="neutral") }}
     </div>
     {% if referentiel %}
-    {# Identité de la 2nde commune (famille de métiers), et non d'un bac pro : 2TNE
-       est un tronc commun menant à plusieurs bac pros (CIEL, MELEC…), ce n'est pas
-       le diplôme CIEL. On affiche donc le niveau_classe, pas la formation. #}
+    {# Le référentiel appartient à une FORMATION (ADR-023) : ici la famille de
+       métiers 2TNE, tronc commun menant à plusieurs bacs pros, et non le diplôme
+       CIEL. On affiche donc la formation, pas un niveau de classe. #}
     <p class="mt-1 text-sm text-muted">
         Référentiel :
-        <span class="font-medium text-ink">{{ referentiel.niveau_intitule }}</span>
-        {% if referentiel.niveau_code %}<span class="text-faint">({{ referentiel.niveau_code }})</span>{% endif %}
+        <span class="font-medium text-ink">{{ referentiel.formation_intitule }}</span>
         <span class="font-mono text-xs text-faint">· {{ referentiel.Identifiant }}</span>
     </p>
     {% endif %}

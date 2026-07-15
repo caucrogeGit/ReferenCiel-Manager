@@ -19,13 +19,12 @@ from core.validation import (
 class ReferentielNiveauClasseBase:
     """Classe de base regenerable de ReferentielNiveauClasse."""
 
-    def __init__(self, identifiant, version, statut, importe_le, formation_id, niveau_classe_id, created_at, updated_at, id=None):
+    def __init__(self, identifiant, version, statut, importe_le, formation_id, created_at, updated_at, id=None):
         self.identifiant = identifiant
         self.version = version
         self.statut = statut
         self.importe_le = importe_le
         self.formation_id = formation_id
-        self.niveau_classe_id = niveau_classe_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -105,17 +104,6 @@ class ReferentielNiveauClasseBase:
         self._formation_id = value
 
     @property
-    def niveau_classe_id(self):
-        return self._niveau_classe_id
-
-    @niveau_classe_id.setter
-    @typed(int)
-    def niveau_classe_id(self, value):
-        if value is None:
-            raise ValidationError("niveau_classe_id", 'La propriété "niveau_classe_id" ne peut pas être nulle.')
-        self._niveau_classe_id = value
-
-    @property
     def created_at(self):
         return self._created_at
 
@@ -145,7 +133,6 @@ class ReferentielNiveauClasseBase:
             "statut": self.statut,
             "importe_le": None if self.importe_le is None else self.importe_le.isoformat(),
             "formation_id": self.formation_id,
-            "niveau_classe_id": self.niveau_classe_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -159,11 +146,10 @@ class ReferentielNiveauClasseBase:
             statut=data["statut"],
             importe_le=cls._coerce_datetime(data.get("importe_le")),
             formation_id=data["formation_id"],
-            niveau_classe_id=data["niveau_classe_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"ReferentielNiveauClasseBase(id={self.id!r}, identifiant={self.identifiant!r}, version={self.version!r}, statut={self.statut!r}, importe_le={self.importe_le!r}, formation_id={self.formation_id!r}, niveau_classe_id={self.niveau_classe_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"ReferentielNiveauClasseBase(id={self.id!r}, identifiant={self.identifiant!r}, version={self.version!r}, statut={self.statut!r}, importe_le={self.importe_le!r}, formation_id={self.formation_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

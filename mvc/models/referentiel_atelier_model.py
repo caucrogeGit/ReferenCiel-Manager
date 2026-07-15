@@ -17,27 +17,24 @@ from core.database.db import execute, fetch_all, fetch_one, insert
 
 
 def list_referentiels() -> list[dict[str, Any]]:
-    """Tous les référentiels, avec le libellé de formation et le niveau."""
+    """Tous les référentiels, avec la formation (ADR-023 : le référentiel appartient
+    à une formation, plus à un niveau de classe)."""
     return fetch_all(
         "SELECT r.Id, r.Identifiant, r.Version, r.Statut, r.ImporteLe, "
-        "f.Intitule AS formation_intitule, "
-        "nc.Code AS niveau_code, nc.Intitule AS niveau_intitule "
+        "f.Code AS formation_code, f.Type AS formation_type, f.Intitule AS formation_intitule "
         "FROM referentiel_niveau_classe r "
         "LEFT JOIN formation f ON f.Id = r.formation_id "
-        "LEFT JOIN niveau_classe nc ON nc.Id = r.niveau_classe_id "
         "ORDER BY r.Identifiant"
     )
 
 
 def get_referentiel(ref_id: int) -> "dict[str, Any] | None":
-    """L'en-tête d'un référentiel (identité, version, statut, formation, niveau)."""
+    """L'en-tête d'un référentiel (identité, version, statut, formation)."""
     return fetch_one(
         "SELECT r.Id, r.Identifiant, r.Version, r.Statut, r.ImporteLe, "
-        "f.Code AS formation_code, f.Intitule AS formation_intitule, "
-        "nc.Code AS niveau_code, nc.Intitule AS niveau_intitule "
+        "f.Code AS formation_code, f.Type AS formation_type, f.Intitule AS formation_intitule "
         "FROM referentiel_niveau_classe r "
         "LEFT JOIN formation f ON f.Id = r.formation_id "
-        "LEFT JOIN niveau_classe nc ON nc.Id = r.niveau_classe_id "
         "WHERE r.Id = ?",
         (ref_id,),
     )

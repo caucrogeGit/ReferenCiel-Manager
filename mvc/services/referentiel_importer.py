@@ -85,8 +85,11 @@ def _upsert_par_code(table: str, code: str, intitule: str, type_: "str | None" =
     )
 
 
-def _upsert_referentiel(canonical: dict[str, Any], formation_id: int, niveau_id: int) -> tuple[int, bool]:
-    """Insère ou met à jour le référentiel (clé = `Identifiant`). Retourne (id, remplacement)."""
+def _upsert_referentiel(canonical: dict[str, Any], formation_id: int) -> tuple[int, bool]:
+    """Insère ou met à jour le référentiel (clé = `Identifiant`). Retourne (id, remplacement).
+
+    Le référentiel appartient à une formation (ADR-023), plus à un niveau de classe.
+    """
     identifiant = str(canonical["identifiant"])
     version = str(canonical.get("version", ""))
     statut = str(canonical.get("statut", "brouillon"))
@@ -98,15 +101,15 @@ def _upsert_referentiel(canonical: dict[str, Any], formation_id: int, niveau_id:
         db.execute(
             "UPDATE referentiel_niveau_classe "
             "SET Version = ?, Statut = ?, ImporteLe = NOW(), formation_id = ?, "
-            "niveau_classe_id = ?, UpdatedAt = NOW() WHERE Id = ?",
-            (version, statut, formation_id, niveau_id, ref_id),
+            "UpdatedAt = NOW() WHERE Id = ?",
+            (version, statut, formation_id, ref_id),
         )
         return ref_id, True
     ref_id = db.insert(
         "INSERT INTO referentiel_niveau_classe "
-        "(Identifiant, Version, Statut, ImporteLe, formation_id, niveau_classe_id, CreatedAt, UpdatedAt) "
-        "VALUES (?, ?, ?, NOW(), ?, ?, NOW(), NOW())",
-        (identifiant, version, statut, formation_id, niveau_id),
+        "(Identifiant, Version, Statut, ImporteLe, formation_id, CreatedAt, UpdatedAt) "
+        "VALUES (?, ?, ?, NOW(), ?, NOW(), NOW())",
+        (identifiant, version, statut, formation_id),
     )
     return ref_id, False
 
@@ -173,15 +176,16 @@ def import_referentiel(canonical: dict[str, Any]) -> ImportReport:
     """Importe un canonique validé en base. Retourne un rapport best-effort (ADR-011)."""
     rapport = ImportReport(identifiant=str(canonical.get("identifiant", "")))
 
+    # ADR-023 : le référentiel appartient à une formation (le niveau de classe
+    # n'en est plus une propriété). Le mapping formation/FormationNiveau depuis le
+    # canonique sera affiné avec la révision de la spec (phase 1d).
     formation = canonical["formation"]
-    niveau = canonical["niveau_classe"]
     formation_id = _upsert_par_code(
         "formation", str(formation["code"]), str(formation["intitule"]),
         type_=str(formation.get("type", "AUTRE")),
     )
-    niveau_id = _upsert_par_code("niveau_classe", str(niveau["code"]), str(niveau["intitule"]))
 
-    ref_id, remplacement = _upsert_referentiel(canonical, formation_id, niveau_id)
+    ref_id, remplacement = _upsert_referentiel(canonical, formation_id)
     rapport.referentiel_id = ref_id
     rapport.remplacement = remplacement
     if remplacement:
