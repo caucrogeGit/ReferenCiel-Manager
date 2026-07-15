@@ -13,7 +13,7 @@ Structure de l'arbre retourné par `get_arbre` :
 """
 from typing import Any
 
-from core.database.db import fetch_all, fetch_one
+from core.database.db import execute, fetch_all, fetch_one, insert
 
 
 def list_referentiels() -> list[dict[str, Any]]:
@@ -140,3 +140,28 @@ def get_arbre(ref_id: int) -> dict[str, Any]:
         "competences": competences,
         "familles": familles,
     }
+
+
+def get_critere(critere_id: int) -> "dict[str, Any] | None":
+    """Un critère (pour valider son existence avant d'y attacher un indicateur)."""
+    return fetch_one(
+        "SELECT Id, Code, Libelle, competence_id FROM critere_observable WHERE Id = ?",
+        (critere_id,),
+    )
+
+
+def ajouter_indicateur(critere_id: int, libelle: str) -> int:
+    """Ajoute un indicateur de réussite à un critère (code local auto-généré)."""
+    row = fetch_one("SELECT COUNT(*) AS n FROM indicateur_reussite WHERE critere_id = ?", (critere_id,))
+    n = int(row["n"]) if row else 0
+    code = f"ind-c{critere_id}-{n + 1}"
+    return insert(
+        "INSERT INTO indicateur_reussite (Code, Libelle, critere_id, CreatedAt, UpdatedAt) "
+        "VALUES (?, ?, ?, NOW(), NOW())",
+        (code, libelle, critere_id),
+    )
+
+
+def supprimer_indicateur(indicateur_id: int) -> None:
+    """Supprime un indicateur de réussite."""
+    execute("DELETE FROM indicateur_reussite WHERE Id = ?", (indicateur_id,))

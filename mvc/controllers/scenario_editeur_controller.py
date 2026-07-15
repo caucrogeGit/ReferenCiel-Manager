@@ -14,7 +14,13 @@ from core.mvc.controller.base_controller import BaseController
 
 from forge_mvc_files import UploadError, delete_upload, save_upload
 
-from mvc.models.referentiel_atelier_model import get_arbre, list_referentiels
+from mvc.models.referentiel_atelier_model import (
+    ajouter_indicateur as _ajouter_indicateur,
+    get_arbre,
+    get_critere,
+    list_referentiels,
+    supprimer_indicateur as _supprimer_indicateur,
+)
 from mvc.models.scenario_editeur_model import (
     ajouter_ressource,
     creer_scenario,
@@ -432,3 +438,59 @@ class ScenarioEditeurController(BaseController):
     @staticmethod
     def basculer_critere(request: Request) -> Response:
         return ScenarioEditeurController._basculer(request, "critere", "competences")
+
+    # ── Indicateurs de réussite d'un critère (définis par le professeur) ──────
+    #
+    # Les indicateurs sont RÉFÉRENTIEL-level (partagés par tous les scénarios qui
+    # utilisent ce critère). L'édition depuis le tunnel écrit donc sur le critère
+    # du référentiel. On renvoie le fragment _detail_competence pour rafraîchir.
+
+    @staticmethod
+    def _rendre_detail_competence(request: Request, scenario_id: int) -> Response:
+        comp = request.form("competence", "")
+        # Sans JS : retour à la page, étape liaison, sur la bonne compétence.
+        if not ScenarioEditeurController._is_htmx(request):
+            suffixe = f"&competence={comp}" if comp else ""
+            return BaseController.redirect(
+                f"/conception/scenario/{scenario_id}?etape=liaison{suffixe}",
+                request=request,
+            )
+        scenario = cast("dict[str, Any]", get_scenario(scenario_id))
+        referentiel_id = scenario.get("referentiel_id")
+        arbre = get_arbre(int(referentiel_id)) if referentiel_id else None
+        competence_id = ScenarioEditeurController._parse_id(comp)
+        if competence_id is None and arbre:
+            comps: list[dict[str, Any]] = arbre.get("competences") or []
+            competence_id = int(comps[0]["Id"]) if comps else None
+        return BaseController.render(
+            "app/scenario_editeur/_detail_competence.html",
+            context={
+                "arbre": arbre,
+                "competence_id": competence_id,
+                "critere_ids": get_critere_ids(scenario_id),
+                "base_url": f"/conception/scenario/{scenario_id}",
+            },
+            request=request,
+        )
+
+    @staticmethod
+    def ajouter_indicateur(request: Request) -> Response:
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        critere_id = ScenarioEditeurController._parse_id(request.route("cid"))
+        if scenario_id is None or get_scenario(scenario_id) is None or critere_id is None:
+            return BaseController.not_found()
+        if get_critere(critere_id) is None:
+            return BaseController.not_found()
+        libelle = request.form("libelle", "").strip()
+        if libelle:
+            _ajouter_indicateur(critere_id, libelle)
+        return ScenarioEditeurController._rendre_detail_competence(request, scenario_id)
+
+    @staticmethod
+    def supprimer_indicateur(request: Request) -> Response:
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        indicateur_id = ScenarioEditeurController._parse_id(request.route("iid"))
+        if scenario_id is None or get_scenario(scenario_id) is None or indicateur_id is None:
+            return BaseController.not_found()
+        _supprimer_indicateur(indicateur_id)
+        return ScenarioEditeurController._rendre_detail_competence(request, scenario_id)

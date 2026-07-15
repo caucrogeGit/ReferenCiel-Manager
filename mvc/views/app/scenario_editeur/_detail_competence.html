@@ -26,11 +26,32 @@
         csrf_token=csrf_token,
         savoir_etre=(c.SavoirEtre | default(false))
     ) }}
-    {% if c.indicateurs %}
-    <ul class="pl-8 pr-2 -mt-0.5 mb-1 text-xs text-muted list-disc list-inside">
-        {% for ind in c.indicateurs %}<li>{{ ind.Libelle }}</li>{% endfor %}
-    </ul>
-    {% endif %}
+    {# Indicateurs de réussite du critère — définis par le professeur (0..n).
+       RÉFÉRENTIEL-level : partagés par tous les scénarios sur ce critère. #}
+    <div class="pl-8 pr-2 -mt-0.5 mb-2 flex flex-col gap-1">
+        {% for ind in c.indicateurs %}
+        <div class="flex items-start gap-1.5 text-xs text-muted">
+            <span class="mt-1 size-1 shrink-0 rounded-full bg-faint"></span>
+            <span class="flex-1">{{ ind.Libelle }}</span>
+            <form method="post" action="{{ base_url }}/indicateur/{{ ind.Id }}/supprimer"
+                  hx-post="{{ base_url }}/indicateur/{{ ind.Id }}/supprimer"
+                  hx-target="#detail-competence" hx-swap="innerHTML" class="shrink-0 leading-none">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="competence" value="{{ competence_id }}">
+                <button type="submit" class="text-faint hover:text-forge" title="Supprimer l'indicateur" aria-label="Supprimer l'indicateur">&times;</button>
+            </form>
+        </div>
+        {% endfor %}
+        <form method="post" action="{{ base_url }}/critere/{{ c.Id }}/indicateur"
+              hx-post="{{ base_url }}/critere/{{ c.Id }}/indicateur"
+              hx-target="#detail-competence" hx-swap="innerHTML" class="flex items-center gap-1.5">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="competence" value="{{ competence_id }}">
+            <input type="text" name="libelle" required placeholder="Ajouter un indicateur…"
+                   class="flex-1 min-w-0 text-xs py-1 px-2 rounded-md border border-field bg-surface focus:outline-none focus:border-forge">
+            <button type="submit" class="shrink-0 text-xs font-medium py-1 px-2 rounded-md bg-forge-soft text-forge-dark hover:bg-forge-border">+</button>
+        </form>
+    </div>
     {% else %}
     {{ empty_state("Aucun critère pour cette compétence.") }}
     {% endfor %}
