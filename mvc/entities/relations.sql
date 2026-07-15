@@ -380,9 +380,9 @@ ALTER TABLE progression_eleve
     ON UPDATE RESTRICT;
 
 ALTER TABLE progression_eleve
-    ADD CONSTRAINT fk_progression_eleve_affectation_parcours_id
-    FOREIGN KEY (affectation_parcours_id)
-    REFERENCES affectation_parcours (Id)
+    ADD CONSTRAINT fk_progression_eleve_parcours_id
+    FOREIGN KEY (parcours_id)
+    REFERENCES parcours (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 

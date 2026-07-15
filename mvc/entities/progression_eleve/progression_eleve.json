@@ -25,9 +25,9 @@
       "required": true
     },
     {
-      "name": "affectation_parcours_id",
+      "name": "parcours_id",
       "type": "foreign_key",
-      "references": "AffectationParcours",
+      "references": "Parcours",
       "required": true
     }
   ],

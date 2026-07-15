@@ -19,10 +19,10 @@ from core.validation import (
 class ProgressionEleveBase:
     """Classe de base regenerable de ProgressionEleve."""
 
-    def __init__(self, statut, eleve_id, affectation_parcours_id, created_at, updated_at, id=None, date_debut=None):
+    def __init__(self, statut, eleve_id, parcours_id, created_at, updated_at, id=None, date_debut=None):
         self.statut = statut
         self.eleve_id = eleve_id
-        self.affectation_parcours_id = affectation_parcours_id
+        self.parcours_id = parcours_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -89,15 +89,15 @@ class ProgressionEleveBase:
         self._eleve_id = value
 
     @property
-    def affectation_parcours_id(self):
-        return self._affectation_parcours_id
+    def parcours_id(self):
+        return self._parcours_id
 
-    @affectation_parcours_id.setter
+    @parcours_id.setter
     @typed(int)
-    def affectation_parcours_id(self, value):
+    def parcours_id(self, value):
         if value is None:
-            raise ValidationError("affectation_parcours_id", 'La propriété "affectation_parcours_id" ne peut pas être nulle.')
-        self._affectation_parcours_id = value
+            raise ValidationError("parcours_id", 'La propriété "parcours_id" ne peut pas être nulle.')
+        self._parcours_id = value
 
     @property
     def created_at(self):
@@ -127,7 +127,7 @@ class ProgressionEleveBase:
             "statut": self.statut,
             "date_debut": None if self.date_debut is None else self.date_debut.isoformat(),
             "eleve_id": self.eleve_id,
-            "affectation_parcours_id": self.affectation_parcours_id,
+            "parcours_id": self.parcours_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -139,11 +139,11 @@ class ProgressionEleveBase:
             statut=data["statut"],
             date_debut=cls._coerce_date(data.get("date_debut")),
             eleve_id=data["eleve_id"],
-            affectation_parcours_id=data["affectation_parcours_id"],
+            parcours_id=data["parcours_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"ProgressionEleveBase(id={self.id!r}, statut={self.statut!r}, date_debut={self.date_debut!r}, eleve_id={self.eleve_id!r}, affectation_parcours_id={self.affectation_parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"ProgressionEleveBase(id={self.id!r}, statut={self.statut!r}, date_debut={self.date_debut!r}, eleve_id={self.eleve_id!r}, parcours_id={self.parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

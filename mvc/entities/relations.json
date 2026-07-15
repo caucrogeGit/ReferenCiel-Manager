@@ -495,10 +495,10 @@
     {
       "type": "many_to_one",
       "from": "ProgressionEleve",
-      "to": "AffectationParcours",
-      "name": "affectation_parcours",
+      "to": "Parcours",
+      "name": "parcours",
       "inverse_name": "progressions",
-      "foreign_key": "affectation_parcours_id",
+      "foreign_key": "parcours_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true
