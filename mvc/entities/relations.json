@@ -702,6 +702,61 @@
     },
     {
       "type": "many_to_one",
+      "from": "Cursus",
+      "to": "Certification",
+      "name": "certification_cible",
+      "inverse_name": "cursus",
+      "foreign_key": "certification_cible_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "TransitionCursus",
+      "to": "FormationNiveau",
+      "name": "source",
+      "inverse_name": "transitions_sortantes",
+      "foreign_key": "formation_niveau_source_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "TransitionCursus",
+      "to": "FormationNiveau",
+      "name": "cible",
+      "inverse_name": "transitions_entrantes",
+      "foreign_key": "formation_niveau_cible_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "CursusEtape",
+      "to": "Cursus",
+      "name": "cursus",
+      "inverse_name": "etapes",
+      "foreign_key": "cursus_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "CursusEtape",
+      "to": "FormationNiveau",
+      "name": "formation_niveau",
+      "inverse_name": "etapes_cursus",
+      "foreign_key": "formation_niveau_id",
+      "nullable": false,
+      "on_delete": "restrict",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
       "from": "RelationFormation",
       "to": "Formation",
       "name": "source",

@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "name": "CursusEtape",
+  "table": "cursus_etape",
+  "fields": [
+    {
+      "name": "ordre",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "obligatoire",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "condition_entree",
+      "type": "string",
+      "max_length": 255,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "condition_sortie",
+      "type": "string",
+      "max_length": 255,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "cursus_id",
+      "type": "foreign_key",
+      "references": "Cursus",
+      "required": true
+    },
+    {
+      "name": "formation_niveau_id",
+      "type": "foreign_key",
+      "references": "FormationNiveau",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

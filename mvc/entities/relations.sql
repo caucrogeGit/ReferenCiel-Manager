@@ -527,6 +527,41 @@ ALTER TABLE formation
     ON DELETE SET NULL
     ON UPDATE RESTRICT;
 
+ALTER TABLE cursus
+    ADD CONSTRAINT fk_cursus_certification_cible_id
+    FOREIGN KEY (certification_cible_id)
+    REFERENCES certification (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE transition_cursus
+    ADD CONSTRAINT fk_transition_cursus_formation_niveau_source_id
+    FOREIGN KEY (formation_niveau_source_id)
+    REFERENCES formation_niveau (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;
+
+ALTER TABLE transition_cursus
+    ADD CONSTRAINT fk_transition_cursus_formation_niveau_cible_id
+    FOREIGN KEY (formation_niveau_cible_id)
+    REFERENCES formation_niveau (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;
+
+ALTER TABLE cursus_etape
+    ADD CONSTRAINT fk_cursus_etape_cursus_id
+    FOREIGN KEY (cursus_id)
+    REFERENCES cursus (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;
+
+ALTER TABLE cursus_etape
+    ADD CONSTRAINT fk_cursus_etape_formation_niveau_id
+    FOREIGN KEY (formation_niveau_id)
+    REFERENCES formation_niveau (Id)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
 ALTER TABLE relation_formation
     ADD CONSTRAINT fk_relation_formation_formation_source_id
     FOREIGN KEY (formation_source_id)

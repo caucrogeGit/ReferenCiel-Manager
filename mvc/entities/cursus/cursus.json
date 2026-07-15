@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "name": "Cursus",
+  "table": "cursus",
+  "fields": [
+    {
+      "name": "code",
+      "type": "string",
+      "max_length": 50,
+      "required": true,
+      "nullable": false,
+      "unique": true
+    },
+    {
+      "name": "libelle",
+      "type": "string",
+      "max_length": 200,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "modalite",
+      "type": "string",
+      "max_length": 30,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "certification_cible_id",
+      "type": "foreign_key",
+      "references": "Certification",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

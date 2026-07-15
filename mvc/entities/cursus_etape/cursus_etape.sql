@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS cursus_etape (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    Ordre INT NOT NULL,
+    Obligatoire BOOLEAN NOT NULL,
+    ConditionEntree VARCHAR(255) NULL,
+    ConditionSortie VARCHAR(255) NULL,
+    cursus_id BIGINT UNSIGNED NOT NULL,
+    formation_niveau_id BIGINT UNSIGNED NOT NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

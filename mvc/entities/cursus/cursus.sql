@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS cursus (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    Code VARCHAR(50) NOT NULL,
+    UNIQUE KEY uk_cursus_code (Code),
+    Libelle VARCHAR(200) NOT NULL,
+    Modalite VARCHAR(30) NOT NULL,
+    Statut VARCHAR(20) NOT NULL,
+    Description TEXT NULL,
+    certification_cible_id BIGINT UNSIGNED NOT NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
