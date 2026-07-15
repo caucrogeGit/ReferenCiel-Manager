@@ -4,6 +4,14 @@
   "table": "parcours",
   "fields": [
     {
+      "name": "identifiant",
+      "type": "string",
+      "max_length": 100,
+      "required": true,
+      "nullable": false,
+      "unique": true
+    },
+    {
       "name": "titre",
       "type": "string",
       "max_length": 200,
@@ -12,9 +20,38 @@
       "unique": false
     },
     {
-      "name": "version_starter_id",
+      "name": "presentation",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "activite_glissante",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "ordre_impose",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "niveau_classe_id",
       "type": "foreign_key",
-      "references": "VersionStarter",
+      "references": "NiveauClasse",
       "required": true
     }
   ],

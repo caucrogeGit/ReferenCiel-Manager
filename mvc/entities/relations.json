@@ -402,10 +402,10 @@
     {
       "type": "many_to_one",
       "from": "Parcours",
-      "to": "VersionStarter",
-      "name": "version_starter",
-      "inverse_name": "version_parcours",
-      "foreign_key": "version_starter_id",
+      "to": "NiveauClasse",
+      "name": "niveau_classe",
+      "inverse_name": "parcours",
+      "foreign_key": "niveau_classe_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true

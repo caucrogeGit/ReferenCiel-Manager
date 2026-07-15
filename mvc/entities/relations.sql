@@ -313,9 +313,9 @@ ALTER TABLE version_starter
     ON UPDATE RESTRICT;
 
 ALTER TABLE parcours
-    ADD CONSTRAINT fk_parcours_version_starter_id
-    FOREIGN KEY (version_starter_id)
-    REFERENCES version_starter (Id)
+    ADD CONSTRAINT fk_parcours_niveau_classe_id
+    FOREIGN KEY (niveau_classe_id)
+    REFERENCES niveau_classe (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 

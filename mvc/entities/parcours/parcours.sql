@@ -1,7 +1,13 @@
 CREATE TABLE IF NOT EXISTS parcours (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    Identifiant VARCHAR(100) NOT NULL,
+    UNIQUE KEY uk_parcours_identifiant (Identifiant),
     Titre VARCHAR(200) NOT NULL,
-    version_starter_id BIGINT UNSIGNED NOT NULL,
+    Presentation TEXT NULL,
+    Statut VARCHAR(20) NOT NULL,
+    ActiviteGlissante BOOLEAN NOT NULL,
+    OrdreImpose BOOLEAN NOT NULL,
+    niveau_classe_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

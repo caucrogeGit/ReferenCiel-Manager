@@ -19,12 +19,17 @@ from core.validation import (
 class ParcoursBase:
     """Classe de base regenerable de Parcours."""
 
-    def __init__(self, titre, version_starter_id, created_at, updated_at, id=None):
+    def __init__(self, identifiant, titre, statut, activite_glissante, ordre_impose, niveau_classe_id, created_at, updated_at, id=None, presentation=None):
+        self.identifiant = identifiant
         self.titre = titre
-        self.version_starter_id = version_starter_id
+        self.statut = statut
+        self.activite_glissante = activite_glissante
+        self.ordre_impose = ordre_impose
+        self.niveau_classe_id = niveau_classe_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
+        self.presentation = presentation
 
     @staticmethod
     def _coerce_datetime(value):
@@ -46,6 +51,17 @@ class ParcoursBase:
         self._id = value
 
     @property
+    def identifiant(self):
+        return self._identifiant
+
+    @identifiant.setter
+    @typed(str)
+    def identifiant(self, value):
+        if value is None:
+            raise ValidationError("identifiant", 'La propriété "identifiant" ne peut pas être nulle.')
+        self._identifiant = value
+
+    @property
     def titre(self):
         return self._titre
 
@@ -57,15 +73,61 @@ class ParcoursBase:
         self._titre = value
 
     @property
-    def version_starter_id(self):
-        return self._version_starter_id
+    def presentation(self):
+        return self._presentation
 
-    @version_starter_id.setter
-    @typed(int)
-    def version_starter_id(self, value):
+    @presentation.setter
+    @typed(str)
+    @nullable
+    def presentation(self, value):
         if value is None:
-            raise ValidationError("version_starter_id", 'La propriété "version_starter_id" ne peut pas être nulle.')
-        self._version_starter_id = value
+            self._presentation = None
+            return
+        self._presentation = value
+
+    @property
+    def statut(self):
+        return self._statut
+
+    @statut.setter
+    @typed(str)
+    def statut(self, value):
+        if value is None:
+            raise ValidationError("statut", 'La propriété "statut" ne peut pas être nulle.')
+        self._statut = value
+
+    @property
+    def activite_glissante(self):
+        return self._activite_glissante
+
+    @activite_glissante.setter
+    @typed(bool)
+    def activite_glissante(self, value):
+        if value is None:
+            raise ValidationError("activite_glissante", 'La propriété "activite_glissante" ne peut pas être nulle.')
+        self._activite_glissante = value
+
+    @property
+    def ordre_impose(self):
+        return self._ordre_impose
+
+    @ordre_impose.setter
+    @typed(bool)
+    def ordre_impose(self, value):
+        if value is None:
+            raise ValidationError("ordre_impose", 'La propriété "ordre_impose" ne peut pas être nulle.')
+        self._ordre_impose = value
+
+    @property
+    def niveau_classe_id(self):
+        return self._niveau_classe_id
+
+    @niveau_classe_id.setter
+    @typed(int)
+    def niveau_classe_id(self, value):
+        if value is None:
+            raise ValidationError("niveau_classe_id", 'La propriété "niveau_classe_id" ne peut pas être nulle.')
+        self._niveau_classe_id = value
 
     @property
     def created_at(self):
@@ -92,8 +154,13 @@ class ParcoursBase:
     def to_dict(self) -> dict:
         return {
             "id": self.id,
+            "identifiant": self.identifiant,
             "titre": self.titre,
-            "version_starter_id": self.version_starter_id,
+            "presentation": self.presentation,
+            "statut": self.statut,
+            "activite_glissante": self.activite_glissante,
+            "ordre_impose": self.ordre_impose,
+            "niveau_classe_id": self.niveau_classe_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -102,12 +169,17 @@ class ParcoursBase:
     def from_dict(cls, data: dict[str, Any]) -> "ParcoursBase":
         return cls(
             id=data["id"],
+            identifiant=data["identifiant"],
             titre=data["titre"],
-            version_starter_id=data["version_starter_id"],
+            presentation=data["presentation"],
+            statut=data["statut"],
+            activite_glissante=data["activite_glissante"],
+            ordre_impose=data["ordre_impose"],
+            niveau_classe_id=data["niveau_classe_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"ParcoursBase(id={self.id!r}, titre={self.titre!r}, version_starter_id={self.version_starter_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"ParcoursBase(id={self.id!r}, identifiant={self.identifiant!r}, titre={self.titre!r}, presentation={self.presentation!r}, statut={self.statut!r}, activite_glissante={self.activite_glissante!r}, ordre_impose={self.ordre_impose!r}, niveau_classe_id={self.niveau_classe_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 
