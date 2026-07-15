@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.eleve_model import (
     get_eleve_by_id, add_eleve, update_eleve, delete_eleve, bulk_delete_eleves,
     count_eleves, find_eleves_paginated, find_eleves_for_export,
-    get_niveau_classe_choices,
+    get_classe_choices,
 )
 from mvc.forms.eleve_form import EleveForm
 from core.security.session import get_flash, get_session_id
@@ -21,7 +21,7 @@ def _form_data_from_eleve(record: dict) -> dict:
         "identifiant": record.get("Identifiant"),
         "date_naissance": record.get("DateNaissance"),
         "user_id": record.get("UserId"),
-        "niveau_classe_id": record.get("niveau_classe_id"),
+        "classe_id": record.get("classe_id"),
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
     }
@@ -29,7 +29,7 @@ def _form_data_from_eleve(record: dict) -> dict:
 
 def _eleve_form_options() -> dict:
     """Options des champs relationnels (listes déroulantes) du formulaire élève."""
-    return {"niveau_classe_id_choices": get_niveau_classe_choices()}
+    return {"classe_id_choices": get_classe_choices()}
 
 
 def _query_param(request, name, default=""):

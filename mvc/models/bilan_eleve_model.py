@@ -142,8 +142,6 @@ def progressions_evaluables() -> list[dict[str, Any]]:
         "p.Titre AS parcours_titre "
         "FROM progression_parcours pe "
         "JOIN eleve e ON e.Id = pe.eleve_id "
-        "JOIN affectation_parcours ap ON ap.Id = pe.affectation_parcours_id "
-        "JOIN version_parcours vp ON vp.Id = ap.version_parcours_id "
-        "JOIN parcours p ON p.Id = vp.parcours_id "
+        "JOIN parcours p ON p.Id = pe.parcours_id "
         "ORDER BY e.Nom, e.Prenom"
     )

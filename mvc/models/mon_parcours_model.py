@@ -25,13 +25,11 @@ def mes_progressions(eleve_id: int) -> list[dict[str, Any]]:
     """Une ligne par parcours affecté à l'élève (titre, version, statut global)."""
     return fetch_all(
         "SELECT pe.Id AS progression_id, pe.Statut AS statut, "
-        "p.Titre AS parcours_titre, vp.Version AS version "
+        "p.Titre AS parcours_titre, p.Identifiant AS parcours_identifiant "
         "FROM progression_parcours pe "
-        "JOIN affectation_parcours ap ON ap.Id = pe.affectation_parcours_id "
-        "JOIN version_parcours vp ON vp.Id = ap.version_parcours_id "
-        "JOIN parcours p ON p.Id = vp.parcours_id "
+        "JOIN parcours p ON p.Id = pe.parcours_id "
         "WHERE pe.eleve_id = ? "
-        "ORDER BY p.Titre, vp.Version",
+        "ORDER BY p.Titre",
         (eleve_id,),
     )
 

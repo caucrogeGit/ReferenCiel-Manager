@@ -27,13 +27,11 @@ def _contexte(progression_palier_id: int) -> dict[str, Any] | None:
     return fetch_one(
         "SELECT pp.Id AS pp_id, pp.progression_parcours_id AS progression_id, "
         "pa.Titre AS palier_titre, e.Nom AS nom, e.Prenom AS prenom, "
-        "ap.professeur_id AS professeur_id, "
         "(SELECT MIN(Id) FROM activite a WHERE a.palier_id = pa.Id) AS activite_id "
         "FROM progression_palier pp "
         "JOIN palier pa ON pa.Id = pp.palier_id "
         "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
-        "JOIN affectation_parcours ap ON ap.Id = pe.affectation_parcours_id "
         "WHERE pp.Id = ?",
         (progression_palier_id,),
     )
@@ -97,7 +95,11 @@ def enregistrer_notation(
     if ctx is None or ctx["activite_id"] is None:
         return None
     activite_id = int(ctx["activite_id"])
-    professeur_id = (professeur_de_user(user_id) if user_id is not None else None) or ctx["professeur_id"]
+    # ADR-022 : le professeur attribué est celui du compte connecté (l'affectation,
+    # qui portait un professeur, a été supprimée). Sans prof identifiable, on n'attribue pas.
+    professeur_id = professeur_de_user(user_id) if user_id is not None else None
+    if professeur_id is None:
+        return None
     valides = {cid: niv for cid, niv in niveaux.items() if niv in NIVEAUX}
 
     with transaction() as tx:

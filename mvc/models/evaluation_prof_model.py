@@ -23,12 +23,10 @@ def get_progression_detail(progression_id: int) -> dict[str, Any] | None:
     """En-tête (élève + parcours) et paliers avec preuves, pour évaluer."""
     entete = fetch_one(
         "SELECT pe.Id AS id, pe.Statut AS statut, e.Nom AS nom, e.Prenom AS prenom, "
-        "p.Titre AS parcours_titre, vp.Version AS version "
+        "p.Titre AS parcours_titre, p.Identifiant AS parcours_identifiant "
         "FROM progression_parcours pe "
         "JOIN eleve e ON e.Id = pe.eleve_id "
-        "JOIN affectation_parcours ap ON ap.Id = pe.affectation_parcours_id "
-        "JOIN version_parcours vp ON vp.Id = ap.version_parcours_id "
-        "JOIN parcours p ON p.Id = vp.parcours_id "
+        "JOIN parcours p ON p.Id = pe.parcours_id "
         "WHERE pe.Id = ?",
         (progression_id,),
     )

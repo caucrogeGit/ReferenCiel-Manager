@@ -7,4 +7,4 @@ class EleveForm(Form):
     identifiant = StringField(label="Identifiant", required=False)
     date_naissance = DateField(label="Date naissance", required=False)
     user_id = IntegerField(label="User id", required=False)
-    niveau_classe_id = RelationField(label="Niveau de classe", target="NiveauClasse", required=True, choices_key="niveau_classe_id_choices")
+    classe_id = RelationField(label="Classe", target="Classe", required=True, choices_key="classe_id_choices")

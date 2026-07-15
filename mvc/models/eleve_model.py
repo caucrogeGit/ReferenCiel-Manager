@@ -4,23 +4,23 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-# Lectures : jointure vers niveau_classe pour exposer un libellé (niveau_classe_id_label).
+# Lectures : jointure vers classe pour exposer un libellé (classe_id_label).
 _SELECT_BASE = (
-    "SELECT eleve.*, niveau_classe.Code AS niveau_classe_id_label "
+    "SELECT eleve.*, classe.Code AS classe_id_label "
     "FROM eleve "
-    "LEFT JOIN niveau_classe ON eleve.niveau_classe_id = niveau_classe.Id"
+    "LEFT JOIN classe ON eleve.classe_id = classe.Id"
 )
 SELECT_ALL   = _SELECT_BASE + " ORDER BY eleve.Id"
 SELECT_BY_ID = _SELECT_BASE + " WHERE eleve.Id = ?"
-INSERT       = "INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, niveau_classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE eleve SET Nom = ?, Prenom = ?, Identifiant = ?, DateNaissance = ?, UserId = ?, niveau_classe_id = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE eleve SET Nom = ?, Prenom = ?, Identifiant = ?, DateNaissance = ?, UserId = ?, classe_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM eleve WHERE Id = ?"
 
 
-def get_niveau_classe_choices() -> list[tuple[Any, str]]:
+def get_classe_choices() -> list[tuple[Any, str]]:
     """Options (Id, libellé) pour le champ « Niveau de classe » du formulaire."""
-    rows = fetch_all("SELECT Id, Code, Intitule FROM niveau_classe ORDER BY Code")
-    return [(row["Id"], f"{row['Code']} — {row['Intitule']}") for row in rows]
+    rows = fetch_all("SELECT Id, Code, Libelle FROM classe ORDER BY Code")
+    return [(row["Id"], f"{row['Code']} — {row['Libelle']}") for row in rows]
 
 
 def get_eleves():
@@ -32,11 +32,11 @@ def get_eleve_by_id(id):
 
 
 def add_eleve(data):
-    return insert(INSERT, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["niveau_classe_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["classe_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_eleve(id, data):
-    execute(UPDATE, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["niveau_classe_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["nom"], data["prenom"], data["identifiant"], data["date_naissance"], data["user_id"], data["classe_id"], datetime.now(timezone.utc), id))
 
 
 def delete_eleve(id):
@@ -52,7 +52,7 @@ def bulk_delete_eleves(ids):
 
 
 _SEARCH_COLS  = ['Nom', 'Prenom', 'Identifiant']
-_ALLOWED_SORT = {"nom": "Nom", "prenom": "Prenom", "identifiant": "Identifiant", "date_naissance": "DateNaissance", "user_id": "UserId", "niveau_classe_id": "eleve.niveau_classe_id", "created_at": "CreatedAt", "updated_at": "UpdatedAt", "id": "eleve.Id"}
+_ALLOWED_SORT = {"nom": "Nom", "prenom": "Prenom", "identifiant": "Identifiant", "date_naissance": "DateNaissance", "user_id": "UserId", "classe_id": "eleve.classe_id", "created_at": "CreatedAt", "updated_at": "UpdatedAt", "id": "eleve.Id"}
 _ALLOWED_FILTERS = {}
 _DEFAULT_SORT = "eleve.Id"
 

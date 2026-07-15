@@ -32,7 +32,7 @@
             <header class="px-4 py-3 border-b border-gray-100 flex items-center justify-between gap-4">
                 <div>
                     <h2 class="font-semibold text-gray-800">{{ prog.parcours_titre }}</h2>
-                    <p class="text-xs text-gray-500">Version {{ prog.version }}</p>
+                    <p class="text-xs text-gray-500">{{ prog.parcours_identifiant }}</p>
                 </div>
                 {{ statut_badge(prog.statut) }}
             </header>

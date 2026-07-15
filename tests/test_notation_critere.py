@@ -1,8 +1,9 @@
 """Tests de la notation par critères (évaluation prof) sans backend BDD.
 
 `core.database` mocké : on vérifie le find-or-create de l'`evaluation_activite`
-(professeur de l'affectation), l'upsert des niveaux de critères, le filtrage des
-niveaux hors échelle, et l'absence d'activité → None. CI-safe (ADR-006).
+(professeur du compte connecté — ADR-022, l'affectation a été supprimée), l'upsert
+des niveaux de critères, le filtrage des niveaux hors échelle, et l'absence
+d'activité → None. CI-safe (ADR-006).
 """
 from __future__ import annotations
 
@@ -53,12 +54,12 @@ _CTX = {"pp_id": 1, "progression_id": 1, "palier_titre": "P", "nom": "D", "preno
 
 
 def test_cree_l_evaluation_et_upsert_les_niveaux_valides(monkeypatch: pytest.MonkeyPatch) -> None:
-    cap = _install(monkeypatch, ctx=_CTX, eval_existante=None)
+    cap = _install(monkeypatch, ctx=_CTX, eval_existante=None, prof_fiche={"id": 2})
 
-    res = m.enregistrer_notation(1, {7: "atteint", 8: "n_importe_quoi", 9: "depasse"})
+    res = m.enregistrer_notation(1, {7: "atteint", 8: "n_importe_quoi", 9: "depasse"}, user_id=99)
 
     assert res == {"notes": 2}  # le niveau hors échelle (8) est ignoré
-    # evaluation_activite créée avec le professeur de l'affectation
+    # evaluation_activite créée avec le professeur du compte connecté
     assert len(cap["insert"]) == 1
     assert cap["insert"][0][1] == (1, 9, 2)  # progression_palier, activite, professeur
     # upsert d'un evaluation_critere par critère valide
@@ -74,16 +75,17 @@ def test_attribue_au_professeur_connecte_si_lie(monkeypatch: pytest.MonkeyPatch)
     assert cap["insert"][0][1] == (1, 9, 42)  # professeur du compte, pas celui de l'affectation (2)
 
 
-def test_repli_sur_le_professeur_de_l_affectation(monkeypatch: pytest.MonkeyPatch) -> None:
-    # compte non lié à une fiche prof -> repli sur le professeur de l'affectation
+def test_sans_professeur_connecte_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
+    # compte non lié à une fiche prof -> aucune attribution possible, pas de notation
+    # (ADR-022 : le repli sur le professeur de l'affectation n'existe plus)
     cap = _install(monkeypatch, ctx=_CTX, eval_existante=None, prof_fiche=None)
-    m.enregistrer_notation(1, {7: "atteint"}, user_id=99)
-    assert cap["insert"][0][1] == (1, 9, 2)  # professeur_id de l'affectation
+    assert m.enregistrer_notation(1, {7: "atteint"}, user_id=99) is None
+    assert cap["insert"] == [] and cap["execute"] == []
 
 
 def test_reutilise_l_evaluation_existante(monkeypatch: pytest.MonkeyPatch) -> None:
-    cap = _install(monkeypatch, ctx=_CTX, eval_existante={"id": 50})
-    m.enregistrer_notation(1, {7: "atteint"})
+    cap = _install(monkeypatch, ctx=_CTX, eval_existante={"id": 50}, prof_fiche={"id": 2})
+    m.enregistrer_notation(1, {7: "atteint"}, user_id=99)
     assert cap["insert"] == []  # pas de nouvelle evaluation_activite
     assert cap["execute"][0][1] == ("atteint", 50, 7)
 

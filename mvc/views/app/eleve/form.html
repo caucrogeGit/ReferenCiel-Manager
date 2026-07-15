@@ -18,7 +18,7 @@
         {{ field(name='identifiant', label='Identifiant', type='text', value=form.value('identifiant'), error=form.error('identifiant')) }}
         {{ field(name='date_naissance', label='Date naissance', type='date', value=form.value('date_naissance'), error=form.error('date_naissance')) }}
         {{ field(name='user_id', label='User id', type='number', value=form.value('user_id'), error=form.error('user_id')) }}
-        {{ select_field(name='niveau_classe_id', label='Niveau de classe', options=form.options.niveau_classe_id_choices, selected=form.value('niveau_classe_id'), error=form.error('niveau_classe_id')) }}
+        {{ select_field(name='classe_id', label='Niveau de classe', options=form.options.classe_id_choices, selected=form.value('classe_id'), error=form.error('classe_id')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
             {{ button(label='Annuler', variant='secondary', href='/eleve') }}
