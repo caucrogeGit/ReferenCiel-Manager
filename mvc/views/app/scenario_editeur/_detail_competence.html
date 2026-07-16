@@ -24,7 +24,9 @@
         post_url=base_url ~ "/critere/basculer",
         target="#bloc-competences",
         csrf_token=csrf_token,
-        savoir_etre=(c.SavoirEtre | default(false))
+        savoir_etre=(c.SavoirEtre | default(false)),
+        master_name="competence",
+        master_value=competence_id
     ) }}
     {# Indicateurs de réussite du critère — définis par le professeur (0..n).
        RÉFÉRENTIEL-level : partagés par tous les scénarios sur ce critère. #}

@@ -198,21 +198,21 @@ class ScenarioEditeurController(BaseController):
     def _selection_courante(
         request: Request, arbre: "dict[str, Any] | None"
     ) -> "tuple[int | None, int | None]":
-        """Pôle et compétence actifs. Défaut : le premier de chaque liste.
+        """Pôle et compétence actifs, ou None si aucun n'est encore choisi.
 
-        Sans ce défaut, un accès direct à ?etape=liaison afficherait deux
-        colonnes de détail vides — piège classique du maître-détail.
+        À l'arrivée sur l'étape (aucun `pole`/`competence` dans la requête), on ne
+        présélectionne rien : chaque colonne de détail invite explicitement à
+        choisir un item. L'item actif est porté par l'URL (lien maître, hx-get) ou
+        par le formulaire de cochage (hx-post) — jamais deviné par défaut.
         """
         if not arbre:
             return None, None
-        pole_id = ScenarioEditeurController._parse_id(request.query("pole"))
-        comp_id = ScenarioEditeurController._parse_id(request.query("competence"))
-        poles: list[dict[str, Any]] = arbre.get("poles") or []
-        comps: list[dict[str, Any]] = arbre.get("competences") or []
-        if pole_id is None and poles:
-            pole_id = int(poles[0]["Id"])
-        if comp_id is None and comps:
-            comp_id = int(comps[0]["Id"])
+        pole_id = ScenarioEditeurController._parse_id(
+            request.query("pole") or request.form("pole", "")
+        )
+        comp_id = ScenarioEditeurController._parse_id(
+            request.query("competence") or request.form("competence", "")
+        )
         return pole_id, comp_id
 
     # ── Vue principale ───────────────────────────────────────────────────────
@@ -287,15 +287,18 @@ class ScenarioEditeurController(BaseController):
         # rendu normal produit le fragment seul, avec csrf_token/can() injectés.
         if ScenarioEditeurController._is_htmx(request):
             cible = request.query("fragment", "")
+            # Navigation dans un maître-détail : on renvoie le BLOC entier
+            # (colonne maître + détail) pour que la surbrillance de l'item actif
+            # suive le clic. Swap outerHTML sur #bloc-poles / #bloc-competences.
             if cible == "pole":
                 return BaseController.render(
-                    "app/scenario_editeur/_detail_pole.html",
+                    "app/scenario_editeur/_bloc_poles.html",
                     context=context,
                     request=request,
                 )
             if cible == "competence":
                 return BaseController.render(
-                    "app/scenario_editeur/_detail_competence.html",
+                    "app/scenario_editeur/_bloc_competences.html",
                     context=context,
                     request=request,
                 )

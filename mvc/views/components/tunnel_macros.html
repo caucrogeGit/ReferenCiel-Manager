@@ -85,7 +85,9 @@
    items : liste de dicts {id, label, count}.
    current_id : id de l'item actif.
    url : URL de base ; le paramètre `param` y est ajouté (ex. "pole").
-   target : sélecteur du fragment à remplacer (ex. "#detail-pole"). --- #}
+   target : sélecteur du bloc maître-détail à remplacer (ex. "#bloc-poles").
+   On réémet le bloc ENTIER (swap outerHTML) et non la seule colonne de détail :
+   ainsi la surbrillance de l'item actif suit la navigation. --- #}
 {% macro master_list(items, current_id, url, param, target) %}
 <ul class="flex flex-col gap-1" role="tablist">
     {% for item in items %}
@@ -94,6 +96,7 @@
         <a href="{{ url }}&{{ param }}={{ item.id }}"
            hx-get="{{ url }}&{{ param }}={{ item.id }}"
            hx-target="{{ target }}"
+           hx-swap="outerHTML"
            hx-push-url="true"
            role="tab" {% if is_current %}aria-selected="true"{% endif %}
            class="flex items-center justify-between gap-2 py-2.5 px-3 rounded-[10px] text-sm transition
@@ -116,8 +119,11 @@
 {# --- Ligne cochable (activité, critère).
    Le POST régénère la colonne maître (compteur) ET la ligne : d'où le
    hx-target sur le conteneur du maître-détail.
-   savoir_etre : rend le libellé en italique (convention du référentiel). --- #}
-{% macro checkbox_row(name, value, label, code="", checked=False, post_url="", target="", csrf_token="", savoir_etre=False) %}
+   savoir_etre : rend le libellé en italique (convention du référentiel).
+   master_name / master_value : maître actif (ex. "pole"/id) réémis en hidden,
+   pour que le cochage régénère le bloc SUR le bon item (sans présélection par
+   défaut côté serveur). --- #}
+{% macro checkbox_row(name, value, label, code="", checked=False, post_url="", target="", csrf_token="", savoir_etre=False, master_name="", master_value="") %}
 {# La soumission est déclenchée par HTMX (hx-trigger="change") et NON par un
    handler inline onchange : la CSP (script-src 'self') bloque le JS inline.
    L'événement change de la case remonte au formulaire, qui poste (l'id est porté
@@ -127,6 +133,7 @@
       class="contents">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <input type="hidden" name="{{ name }}" value="{{ value }}">
+    {% if master_name %}<input type="hidden" name="{{ master_name }}" value="{{ master_value }}">{% endif %}
     <label class="flex items-start gap-2.5 py-2 px-2.5 rounded-[10px] text-sm cursor-pointer transition
                   {% if checked %}bg-forge-soft{% else %}hover:bg-cream{% endif %}">
         <input type="checkbox" {% if checked %}checked{% endif %}

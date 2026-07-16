@@ -19,7 +19,9 @@
         checked=(act.Id in activite_ids),
         post_url=base_url ~ "/activite/basculer",
         target="#bloc-poles",
-        csrf_token=csrf_token
+        csrf_token=csrf_token,
+        master_name="pole",
+        master_value=pole_id
     ) }}
     {% else %}
     {{ empty_state("Aucune activité dans ce pôle.") }}
