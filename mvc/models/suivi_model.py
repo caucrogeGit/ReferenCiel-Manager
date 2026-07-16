@@ -31,7 +31,7 @@ def list_classes(professeur_id: int) -> list[dict[str, Any]]:
         "JOIN niveau_classe nc ON nc.Id = fn.niveau_classe_id "
         "JOIN annee_scolaire asc2 ON asc2.Id = c.annee_scolaire_id "
         "LEFT JOIN eleve e ON e.classe_id = c.Id "
-        "LEFT JOIN progression_parcours pe ON pe.eleve_id = e.Id "
+        "LEFT JOIN progression_sequence pe ON pe.eleve_id = e.Id "
         "WHERE cp.professeur_id = ? "
         "GROUP BY c.Id, c.Code, c.Libelle, nc.Code, asc2.Libelle "
         "ORDER BY asc2.Libelle DESC, nc.Code, c.Code",
@@ -65,9 +65,9 @@ def suivi_eleves(classe_id: int) -> list[dict[str, Any]]:
         "SUM(pp.Statut = ?) AS nb_en_cours, "
         "COUNT(pp.Id) AS nb_seances "
         "FROM eleve e "
-        "JOIN progression_parcours pe ON pe.eleve_id = e.Id "
+        "JOIN progression_sequence pe ON pe.eleve_id = e.Id "
         "JOIN sequence p ON p.Id = pe.sequence_id "
-        "LEFT JOIN progression_seance pp ON pp.progression_parcours_id = pe.Id "
+        "LEFT JOIN progression_seance pp ON pp.progression_sequence_id = pe.Id "
         "WHERE e.classe_id = ? "
         "GROUP BY pe.Id, e.Nom, e.Prenom, p.Titre, pe.Statut "
         "ORDER BY e.Nom, e.Prenom, p.Titre",

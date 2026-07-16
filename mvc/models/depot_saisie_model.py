@@ -17,7 +17,7 @@ def _seance_de_l_eleve(progression_seance_id: int, user_id: int) -> dict[str, An
     return fetch_one(
         "SELECT pp.Id AS progression_seance_id, pp.seance_id AS seance_id, pa.Titre AS seance_titre "
         "FROM progression_seance pp "
-        "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
+        "JOIN progression_sequence pe ON pe.Id = pp.progression_sequence_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
         "JOIN seance pa ON pa.Id = pp.seance_id "
         "WHERE pp.Id = ? AND e.UserId = ?",

@@ -1,5 +1,5 @@
 """FICHIER GENERE PAR FORGE.
-Base regenerable de l'entite ProgressionParcours.
+Base regenerable de l'entite ProgressionSequence.
 Ne pas y ajouter de logique metier manuelle.
 """
 
@@ -16,8 +16,8 @@ from core.validation import (
 )
 
 
-class ProgressionParcoursBase:
-    """Classe de base regenerable de ProgressionParcours."""
+class ProgressionSequenceBase:
+    """Classe de base regenerable de ProgressionSequence."""
 
     def __init__(self, statut, eleve_id, sequence_id, created_at, updated_at, id=None, date_debut=None):
         self.statut = statut
@@ -133,7 +133,7 @@ class ProgressionParcoursBase:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ProgressionParcoursBase":
+    def from_dict(cls, data: dict[str, Any]) -> "ProgressionSequenceBase":
         return cls(
             id=data["id"],
             statut=data["statut"],
@@ -145,5 +145,5 @@ class ProgressionParcoursBase:
         )
 
     def __repr__(self) -> str:
-        return f"ProgressionParcoursBase(id={self.id!r}, statut={self.statut!r}, date_debut={self.date_debut!r}, eleve_id={self.eleve_id!r}, sequence_id={self.sequence_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"ProgressionSequenceBase(id={self.id!r}, statut={self.statut!r}, date_debut={self.date_debut!r}, eleve_id={self.eleve_id!r}, sequence_id={self.sequence_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

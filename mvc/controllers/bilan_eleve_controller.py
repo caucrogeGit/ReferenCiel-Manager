@@ -95,7 +95,7 @@ class BilanEleveController:
             )
 
         bilan_id = creer_bilan(
-            progression_parcours_id=int(progression_raw),
+            progression_sequence_id=int(progression_raw),
             professeur_id=int(professeur["id"]),
             appreciation=appreciation,
             statut=statut,

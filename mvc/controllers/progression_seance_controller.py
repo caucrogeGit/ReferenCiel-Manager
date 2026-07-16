@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.progression_seance_model import (
     get_progression_seance_by_id, add_progression_seance, update_progression_seance, delete_progression_seance, bulk_delete_progression_seances,
     count_progression_seances, find_progression_seances_paginated, find_progression_seances_for_export,
-    get_progression_parcours_choices, get_seance_choices,
+    get_progression_sequence_choices, get_seance_choices,
 )
 from mvc.forms.progression_seance_form import ProgressionSeanceForm
 from core.security.session import get_flash, get_session_id
@@ -17,7 +17,7 @@ def _form_data_from_progression_seance(record: dict) -> dict:
     """Convertit les colonnes SQL vers les noms de champs du formulaire."""
     return {
         "statut": record.get("Statut"),
-        "progression_parcours_id": record.get("progression_parcours_id"),
+        "progression_sequence_id": record.get("progression_sequence_id"),
         "seance_id": record.get("seance_id"),
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
@@ -26,7 +26,7 @@ def _form_data_from_progression_seance(record: dict) -> dict:
 
 def _progression_seance_form_options():
     return {
-        "progression_parcours_id_choices": get_progression_parcours_choices(),
+        "progression_sequence_id_choices": get_progression_sequence_choices(),
         "seance_id_choices": get_seance_choices(),
     }
 
@@ -42,7 +42,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Statut', 'Statut'), ('Progression eleve id', 'progression_parcours_id_label'), ('Séance', 'seance_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Statut', 'Statut'), ('Progression eleve id', 'progression_sequence_id_label'), ('Séance', 'seance_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
 
 
 class ProgressionSeanceController(BaseController):
@@ -77,19 +77,19 @@ class ProgressionSeanceController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"statut", "progression_parcours_id", "seance_id", "created_at", "updated_at", "id"}:
+        if sort not in {"statut", "progression_sequence_id", "seance_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        progression_parcours_id_raw = _query_param(request, "progression_parcours_id").strip()
-        progression_parcours_id_f = ""
-        if progression_parcours_id_raw:
+        progression_sequence_id_raw = _query_param(request, "progression_sequence_id").strip()
+        progression_sequence_id_f = ""
+        if progression_sequence_id_raw:
             try:
-                progression_parcours_id_f = int(progression_parcours_id_raw)
+                progression_sequence_id_f = int(progression_sequence_id_raw)
             except (TypeError, ValueError):
-                progression_parcours_id_f = ""
+                progression_sequence_id_f = ""
         seance_id_raw = _query_param(request, "seance_id").strip()
         seance_id_f = ""
         if seance_id_raw:
@@ -98,11 +98,11 @@ class ProgressionSeanceController(BaseController):
             except (TypeError, ValueError):
                 seance_id_f = ""
         relation_filters = {}
-        relation_filters["progression_parcours_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_parcours_choices()]}
+        relation_filters["progression_sequence_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_sequence_choices()]}
         relation_filters["seance_id"] = {"options": [{"id": value, "label": label} for value, label in get_seance_choices()]}
         _filters = {}
-        if progression_parcours_id_f != "":
-            _filters["progression_parcours_id"] = progression_parcours_id_f
+        if progression_sequence_id_f != "":
+            _filters["progression_sequence_id"] = progression_sequence_id_f
         if seance_id_f != "":
             _filters["seance_id"] = seance_id_f
         total    = count_progression_seances(q or None, filters=_filters or None)
@@ -117,7 +117,7 @@ class ProgressionSeanceController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"progression_parcours_id": progression_parcours_id_f, "seance_id": seance_id_f},
+            "filters": {"progression_sequence_id": progression_sequence_id_f, "seance_id": seance_id_f},
         })
         return {
                 "progression_seances": progression_seances,
@@ -247,18 +247,18 @@ class ProgressionSeanceController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"statut", "progression_parcours_id", "seance_id", "created_at", "updated_at", "id"}:
+        if sort not in {"statut", "progression_sequence_id", "seance_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        progression_parcours_id_raw = _query_param(request, "progression_parcours_id").strip()
-        progression_parcours_id_f = ""
-        if progression_parcours_id_raw:
+        progression_sequence_id_raw = _query_param(request, "progression_sequence_id").strip()
+        progression_sequence_id_f = ""
+        if progression_sequence_id_raw:
             try:
-                progression_parcours_id_f = int(progression_parcours_id_raw)
+                progression_sequence_id_f = int(progression_sequence_id_raw)
             except (TypeError, ValueError):
-                progression_parcours_id_f = ""
+                progression_sequence_id_f = ""
         seance_id_raw = _query_param(request, "seance_id").strip()
         seance_id_f = ""
         if seance_id_raw:
@@ -267,8 +267,8 @@ class ProgressionSeanceController(BaseController):
             except (TypeError, ValueError):
                 seance_id_f = ""
         _filters = {}
-        if progression_parcours_id_f != "":
-            _filters["progression_parcours_id"] = progression_parcours_id_f
+        if progression_sequence_id_f != "":
+            _filters["progression_sequence_id"] = progression_sequence_id_f
         if seance_id_f != "":
             _filters["seance_id"] = seance_id_f
         rows = find_progression_seances_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)

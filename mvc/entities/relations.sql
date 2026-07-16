@@ -263,24 +263,24 @@ ALTER TABLE seance
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
-ALTER TABLE progression_parcours
-    ADD CONSTRAINT fk_progression_parcours_eleve_id
+ALTER TABLE progression_sequence
+    ADD CONSTRAINT fk_progression_sequence_eleve_id
     FOREIGN KEY (eleve_id)
     REFERENCES eleve (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
-ALTER TABLE progression_parcours
-    ADD CONSTRAINT fk_progression_parcours_sequence_id
+ALTER TABLE progression_sequence
+    ADD CONSTRAINT fk_progression_sequence_sequence_id
     FOREIGN KEY (sequence_id)
     REFERENCES sequence (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
 ALTER TABLE progression_seance
-    ADD CONSTRAINT fk_progression_seance_progression_parcours_id
-    FOREIGN KEY (progression_parcours_id)
-    REFERENCES progression_parcours (Id)
+    ADD CONSTRAINT fk_progression_seance_progression_sequence_id
+    FOREIGN KEY (progression_sequence_id)
+    REFERENCES progression_sequence (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -460,9 +460,9 @@ ALTER TABLE bilan_eleve
     ON UPDATE RESTRICT;
 
 ALTER TABLE bilan_eleve
-    ADD CONSTRAINT fk_bilan_eleve_progression_parcours_id
-    FOREIGN KEY (progression_parcours_id)
-    REFERENCES progression_parcours (Id)
+    ADD CONSTRAINT fk_bilan_eleve_progression_sequence_id
+    FOREIGN KEY (progression_sequence_id)
+    REFERENCES progression_sequence (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 

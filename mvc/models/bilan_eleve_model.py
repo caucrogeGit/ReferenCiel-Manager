@@ -34,7 +34,7 @@ def _niveau_agrege(niveaux: list[str]) -> str:
     return _INVERSE[round(sum(valeurs) / len(valeurs))]
 
 
-def lignes_evaluation(progression_parcours_id: int) -> list[dict[str, Any]]:
+def lignes_evaluation(progression_sequence_id: int) -> list[dict[str, Any]]:
     """Évaluations de critères de l'élève sur la progression, avec leur compétence."""
     return fetch_all(
         "SELECT comp.Id AS competence_id, comp.Code AS competence_code, "
@@ -45,20 +45,20 @@ def lignes_evaluation(progression_parcours_id: int) -> list[dict[str, Any]]:
         "JOIN evaluation_critere ec ON ec.evaluation_activite_id = ea.Id "
         "JOIN critere_observable crit ON crit.Id = ec.critere_id "
         "JOIN competence comp ON comp.Id = crit.competence_id "
-        "WHERE pp.progression_parcours_id = ? "
+        "WHERE pp.progression_sequence_id = ? "
         "ORDER BY comp.Code, crit.Code",
-        (progression_parcours_id,),
+        (progression_sequence_id,),
     )
 
 
-def agreger_synthese(progression_parcours_id: int) -> list[dict[str, Any]]:
+def agreger_synthese(progression_sequence_id: int) -> list[dict[str, Any]]:
     """Synthèse par compétence : niveau agrégé + détail des critères évalués.
 
     Les lignes arrivent déjà triées par code de compétence puis de critère ; on
     conserve cet ordre (dict ordonné par insertion).
     """
     par_competence: dict[int, dict[str, Any]] = {}
-    for ligne in lignes_evaluation(progression_parcours_id):
+    for ligne in lignes_evaluation(progression_sequence_id):
         cid = int(ligne["competence_id"])
         comp = par_competence.setdefault(
             cid,
@@ -83,7 +83,7 @@ def agreger_synthese(progression_parcours_id: int) -> list[dict[str, Any]]:
 
 
 def creer_bilan(
-    *, progression_parcours_id: int, professeur_id: int, appreciation: str, statut: str
+    *, progression_sequence_id: int, professeur_id: int, appreciation: str, statut: str
 ) -> int | None:
     """Crée un bilan en **figeant** la synthèse agrégée. Retourne l'id, ou None si la
     progression n'existe pas.
@@ -92,17 +92,17 @@ def creer_bilan(
     sequence réellement suivi par cet élève).
     """
     prog = fetch_one(
-        "SELECT eleve_id FROM progression_parcours WHERE Id = ?", (progression_parcours_id,)
+        "SELECT eleve_id FROM progression_sequence WHERE Id = ?", (progression_sequence_id,)
     )
     if prog is None:
         return None
     eleve_id = int(prog["eleve_id"])
-    synthese = json.dumps(agreger_synthese(progression_parcours_id), ensure_ascii=False)
+    synthese = json.dumps(agreger_synthese(progression_sequence_id), ensure_ascii=False)
     return insert(
         "INSERT INTO bilan_eleve (AppreciationGlobale, Statut, DateBilan, Synthese, "
-        "eleve_id, professeur_id, progression_parcours_id, CreatedAt, UpdatedAt) "
+        "eleve_id, professeur_id, progression_sequence_id, CreatedAt, UpdatedAt) "
         "VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?)",
-        (appreciation, statut, synthese, eleve_id, professeur_id, progression_parcours_id,
+        (appreciation, statut, synthese, eleve_id, professeur_id, progression_sequence_id,
          datetime.now(timezone.utc), datetime.now(timezone.utc)),
     )
 
@@ -140,7 +140,7 @@ def progressions_evaluables() -> list[dict[str, Any]]:
     return fetch_all(
         "SELECT pe.Id AS progression_id, e.Nom AS eleve_nom, e.Prenom AS eleve_prenom, "
         "p.Titre AS sequence_titre "
-        "FROM progression_parcours pe "
+        "FROM progression_sequence pe "
         "JOIN eleve e ON e.Id = pe.eleve_id "
         "JOIN sequence p ON p.Id = pe.sequence_id "
         "ORDER BY e.Nom, e.Prenom"

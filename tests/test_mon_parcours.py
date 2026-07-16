@@ -39,7 +39,7 @@ def test_mon_parcours_assemble_sequence_et_seances(monkeypatch: pytest.MonkeyPat
 
     def fake_fetch_all(sql: str, params: Sequence[Any] = ()) -> list[dict[str, Any]]:
         calls.append((sql, tuple(params)))
-        if "FROM progression_parcours" in sql:
+        if "FROM progression_sequence" in sql:
             return [{"progression_id": 3, "statut": "en_cours", "sequence_titre": "P1", "version": "1.0"}]
         return [{"ordre": 1, "titre": "Seance A", "statut": "valide"}]
 
@@ -50,7 +50,7 @@ def test_mon_parcours_assemble_sequence_et_seances(monkeypatch: pytest.MonkeyPat
 
     assert data is not None
     # progressions filtrées sur l'élève résolu (id 7), pas sur le user
-    prog_call = next(c for c in calls if "FROM progression_parcours" in c[0])
+    prog_call = next(c for c in calls if "FROM progression_sequence" in c[0])
     assert prog_call[1] == (7,)
     # seances assemblés sous chaque progression, filtrés sur la progression
     seance_call = next(c for c in calls if "FROM progression_seance" in c[0])

@@ -4,16 +4,16 @@ from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller import BaseController
 from core.mvc.view.pagination import Pagination
-from mvc.models.progression_parcours_model import (
-    get_progression_parcours_by_id, add_progression_parcours, update_progression_parcours, delete_progression_parcours, bulk_delete_progression_sequences,
-    count_progression_sequences, find_progression_parcourss_paginated, find_progression_parcourss_for_export,
+from mvc.models.progression_sequence_model import (
+    get_progression_sequence_by_id, add_progression_sequence, update_progression_sequence, delete_progression_sequence, bulk_delete_progression_sequences,
+    count_progression_sequences, find_progression_sequences_paginated, find_progression_sequences_for_export,
     get_eleve_choices, get_sequence_choices,
 )
-from mvc.forms.progression_parcours_form import ProgressionParcoursForm
+from mvc.forms.progression_sequence_form import ProgressionSequenceForm
 from core.security.session import get_flash, get_session_id
 
 
-def _form_data_from_progression_parcours(record: dict) -> dict:
+def _form_data_from_progression_sequence(record: dict) -> dict:
     """Convertit les colonnes SQL vers les noms de champs du formulaire."""
     return {
         "statut": record.get("Statut"),
@@ -23,7 +23,7 @@ def _form_data_from_progression_parcours(record: dict) -> dict:
     }
 
 
-def _progression_parcours_form_options():
+def _progression_sequence_form_options():
     return {
         "eleve_id_choices": get_eleve_choices(),
         "sequence_id_choices": get_sequence_choices(),
@@ -44,7 +44,7 @@ def _is_hx_request(request):
 _CSV_COLS = [('Statut', 'Statut'), ('Date debut', 'DateDebut'), ('Eleve id', 'eleve_id_label'), ('Séquence', 'sequence_id_label')]
 
 
-class ProgressionParcoursController(BaseController):
+class ProgressionSequenceController(BaseController):
 
     @staticmethod
     def _parse_id(value):
@@ -109,7 +109,7 @@ class ProgressionParcoursController(BaseController):
         limit = pagination_state.limit
         offset = pagination_state.offset
         empty_context = "search_filters" if q and _filters else ("search" if q else ("filters" if _filters else None))
-        progression_sequences = find_progression_parcourss_paginated(
+        progression_sequences = find_progression_sequences_paginated(
             q=q or None, sort=sort or None, direction=direction,
             limit=limit, offset=offset, filters=_filters or None,
         )
@@ -128,111 +128,111 @@ class ProgressionParcoursController(BaseController):
 
     @staticmethod
     def index(request: Request) -> Response:
-        context = ProgressionParcoursController._list_context(request)
-        template = "app/progression_parcours/_results.html" if _is_hx_request(request) else "app/progression_parcours/index.html"
+        context = ProgressionSequenceController._list_context(request)
+        template = "app/progression_sequence/_results.html" if _is_hx_request(request) else "app/progression_sequence/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
-        form = ProgressionParcoursForm(**_progression_parcours_form_options())
-        return BaseController.render("app/progression_parcours/form.html",
+        form = ProgressionSequenceForm(**_progression_sequence_form_options())
+        return BaseController.render("app/progression_sequence/form.html",
             context={
                 "form": form,
-                "action": "/progression_parcours/create",
-                "titre": "Nouveau progression_parcours",
+                "action": "/progression_sequence/create",
+                "titre": "Nouvelle progression de séquence",
             },
             request=request)
 
     @staticmethod
     def create(request: Request) -> Response:
-        form = ProgressionParcoursForm.from_request(request, **_progression_parcours_form_options())
+        form = ProgressionSequenceForm.from_request(request, **_progression_sequence_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("app/progression_parcours/form.html",
+            return BaseController.validation_error("app/progression_sequence/form.html",
                 context={
                     "form": form,
-                    "action": "/progression_parcours/create",
-                    "titre": "Nouveau progression_parcours",
+                    "action": "/progression_sequence/create",
+                    "titre": "Nouvelle progression de séquence",
                 },
                 request=request)
-        add_progression_parcours(form.cleaned_data)
-        return BaseController.redirect_with_flash(request, "/progression_parcours", "ProgressionParcours créé.")
+        add_progression_sequence(form.cleaned_data)
+        return BaseController.redirect_with_flash(request, "/progression_sequence", "Progression de séquence créée.")
 
     @staticmethod
     def show(request: Request) -> Response:
-        id = ProgressionParcoursController._parse_id(request.route("id"))
+        id = ProgressionSequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        progression_parcours = get_progression_parcours_by_id(id)
-        if progression_parcours is None:
+        progression_sequence = get_progression_sequence_by_id(id)
+        if progression_sequence is None:
             return BaseController.not_found()
-        return BaseController.render("app/progression_parcours/show.html",
-            context={"progression_parcours": progression_parcours, "flash": get_flash(get_session_id(request))},
+        return BaseController.render("app/progression_sequence/show.html",
+            context={"progression_sequence": progression_sequence, "flash": get_flash(get_session_id(request))},
             request=request)
 
     @staticmethod
     def edit(request: Request) -> Response:
-        id = ProgressionParcoursController._parse_id(request.route("id"))
+        id = ProgressionSequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        progression_parcours = get_progression_parcours_by_id(id)
-        if progression_parcours is None:
+        progression_sequence = get_progression_sequence_by_id(id)
+        if progression_sequence is None:
             return BaseController.not_found()
-        return BaseController.render("app/progression_parcours/form.html",
+        return BaseController.render("app/progression_sequence/form.html",
             context={
-                "form": ProgressionParcoursForm(_form_data_from_progression_parcours(progression_parcours), **_progression_parcours_form_options()),
-                "action": f"/progression_parcours/update/{id}",
-                "titre": "Modifier progression_parcours",
+                "form": ProgressionSequenceForm(_form_data_from_progression_sequence(progression_sequence), **_progression_sequence_form_options()),
+                "action": f"/progression_sequence/update/{id}",
+                "titre": "Modifier la progression de séquence",
             },
             request=request)
 
     @staticmethod
     def update(request: Request) -> Response:
-        id = ProgressionParcoursController._parse_id(request.route("id"))
+        id = ProgressionSequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        form = ProgressionParcoursForm.from_request(request, **_progression_parcours_form_options())
+        form = ProgressionSequenceForm.from_request(request, **_progression_sequence_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("app/progression_parcours/form.html",
+            return BaseController.validation_error("app/progression_sequence/form.html",
                 context={
                     "form": form,
-                    "action": f"/progression_parcours/update/{id}",
-                    "titre": "Modifier progression_parcours",
+                    "action": f"/progression_sequence/update/{id}",
+                    "titre": "Modifier la progression de séquence",
                 },
                 request=request)
-        update_progression_parcours(id, form.cleaned_data)
+        update_progression_sequence(id, form.cleaned_data)
         return BaseController.redirect_with_flash(
-            request, f"/progression_parcours/show/{id}", "ProgressionParcours mis à jour.")
+            request, f"/progression_sequence/show/{id}", "Progression de séquence mise à jour.")
 
     @staticmethod
     def destroy(request: Request) -> Response:
-        id = ProgressionParcoursController._parse_id(request.route("id"))
+        id = ProgressionSequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        delete_progression_parcours(id)
+        delete_progression_sequence(id)
         if _is_hx_request(request):
-            context = ProgressionParcoursController._list_context(request)
-            return BaseController.render("app/progression_parcours/_results.html", context=context, request=request)
-        return BaseController.redirect_with_flash(request, "/progression_parcours", "ProgressionParcours supprimé.")
+            context = ProgressionSequenceController._list_context(request)
+            return BaseController.render("app/progression_sequence/_results.html", context=context, request=request)
+        return BaseController.redirect_with_flash(request, "/progression_sequence", "Progression de séquence supprimée.")
 
 
     @staticmethod
     def bulk_delete(request: Request) -> Response:
-        ids = ProgressionParcoursController._parse_bulk_ids(request)
+        ids = ProgressionSequenceController._parse_bulk_ids(request)
         if not ids:
-            return BaseController.redirect_with_flash(request, "/progression_parcours", "Aucun élément sélectionné.")
-        return BaseController.render("app/progression_parcours/bulk_delete_confirm.html",
+            return BaseController.redirect_with_flash(request, "/progression_sequence", "Aucun élément sélectionné.")
+        return BaseController.render("app/progression_sequence/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 
     @staticmethod
     def bulk_delete_confirm(request: Request) -> Response:
-        ids = ProgressionParcoursController._parse_bulk_ids(request)
+        ids = ProgressionSequenceController._parse_bulk_ids(request)
         if not ids:
-            return BaseController.redirect_with_flash(request, "/progression_parcours", "Aucun élément sélectionné.")
+            return BaseController.redirect_with_flash(request, "/progression_sequence", "Aucun élément sélectionné.")
         bulk_delete_progression_sequences(ids)
         count = len(ids)
         return BaseController.redirect_with_flash(
-            request, "/progression_parcours",
+            request, "/progression_sequence",
             f"{count} élément(s) supprimé(s).")
 
 
@@ -270,12 +270,12 @@ class ProgressionParcoursController(BaseController):
             _filters["eleve_id"] = eleve_id_f
         if sequence_id_f != "":
             _filters["sequence_id"] = sequence_id_f
-        rows = find_progression_parcourss_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
+        rows = find_progression_sequences_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)
         writer.writerow([header for header, _ in _CSV_COLS])
         for row in rows:
-            writer.writerow([ProgressionParcoursController._csv_escape(str(row.get(key) or "")) for _, key in _CSV_COLS])
+            writer.writerow([ProgressionSequenceController._csv_escape(str(row.get(key) or "")) for _, key in _CSV_COLS])
         content = output.getvalue().encode("utf-8")
         return Response(
             200,

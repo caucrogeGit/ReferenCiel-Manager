@@ -45,9 +45,9 @@
       "required": true
     },
     {
-      "name": "progression_parcours_id",
+      "name": "progression_sequence_id",
       "type": "foreign_key",
-      "references": "ProgressionParcours",
+      "references": "ProgressionSequence",
       "required": true
     }
   ],

@@ -26,7 +26,7 @@ def test_list_classes_agrege_par_classe(monkeypatch: pytest.MonkeyPatch) -> None
 
     # ADR-022 : les classes du prof via le pivot classe_professeur
     assert "FROM classe_professeur" in captured["sql"]
-    assert "progression_parcours" in captured["sql"]
+    assert "progression_sequence" in captured["sql"]
     assert captured["params"] == (7,)  # filtre sur le professeur
     assert rows[0]["nb_progressions"] == 3
 
@@ -44,7 +44,7 @@ def test_suivi_eleves_filtre_sur_la_classe(monkeypatch: pytest.MonkeyPatch) -> N
 
     assert "FROM eleve" in captured["sql"]
     assert "e.classe_id = ?" in captured["sql"]
-    assert "progression_parcours" in captured["sql"]
+    assert "progression_sequence" in captured["sql"]
     assert "progression_seance" in captured["sql"]
     assert 42 in captured["params"]  # filtre sur la classe
     # les statuts de seance agreges sont passes en parametres (SQL parametre)

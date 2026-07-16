@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "name": "ProgressionParcours",
-  "table": "progression_parcours",
+  "name": "ProgressionSequence",
+  "table": "progression_sequence",
   "fields": [
     {
       "name": "statut",

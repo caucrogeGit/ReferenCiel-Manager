@@ -1,5 +1,5 @@
 <form id="bulk-delete-form"
-      method="post" action="/progression_parcours/bulk-delete"
+      method="post" action="/progression_sequence/bulk-delete"
       class="mb-3 flex items-center gap-3">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <button type="submit"
@@ -7,7 +7,7 @@
         Supprimer la sélection
     </button>
 </form>
-{% if progression_parcourss %}
+{% if progression_sequences %}
 <div class="bg-white shadow rounded overflow-hidden">
     <table class="w-full">
         <thead class="bg-gray-50 border-b">
@@ -21,20 +21,20 @@
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
-            {% for progression_parcours in progression_parcourss %}
+            {% for progression_sequence in progression_sequences %}
             <tr class="hover:bg-gray-50">
-                <td class="px-4 py-3"><input type="checkbox" name="ids" value="{{ progression_parcours.Id }}" form="bulk-delete-form" class="rounded"></td>
-                <td class="px-4 py-3 text-gray-800">{{ progression_parcours.Statut }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ progression_parcours.DateDebut }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ progression_parcours.eleve_id_label }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ progression_parcours.sequence_id_label }}</td>
+                <td class="px-4 py-3"><input type="checkbox" name="ids" value="{{ progression_sequence.Id }}" form="bulk-delete-form" class="rounded"></td>
+                <td class="px-4 py-3 text-gray-800">{{ progression_sequence.Statut }}</td>
+                <td class="px-4 py-3 text-gray-800">{{ progression_sequence.DateDebut }}</td>
+                <td class="px-4 py-3 text-gray-800">{{ progression_sequence.eleve_id_label }}</td>
+                <td class="px-4 py-3 text-gray-800">{{ progression_sequence.sequence_id_label }}</td>
                 <td class="px-4 py-3 text-right space-x-2">
-                    <a href="/progression_parcours/show/{{ progression_parcours.Id }}"
+                    <a href="/progression_sequence/show/{{ progression_sequence.Id }}"
                        class="text-sm text-blue-600 hover:underline">Voir</a>
-                    <a href="/progression_parcours/edit/{{ progression_parcours.Id }}"
+                    <a href="/progression_sequence/edit/{{ progression_sequence.Id }}"
                        class="text-sm text-blue-600 hover:underline">Modifier</a>
-                    <form method="post" action="/progression_parcours/destroy/{{ progression_parcours.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
-                          hx-post="/progression_parcours/destroy/{{ progression_parcours.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-confirm="Confirmer la suppression ?"
+                    <form method="post" action="/progression_sequence/destroy/{{ progression_sequence.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
+                          hx-post="/progression_sequence/destroy/{{ progression_sequence.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-confirm="Confirmer la suppression ?"
                           style="display:inline">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <button type="submit"

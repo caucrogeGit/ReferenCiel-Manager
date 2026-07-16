@@ -2,7 +2,7 @@
 
 Modèle canonique aplati (ADR-022) : la Séquence est l'objet racine (rattaché au
 NiveauClasse), il contient des Séances ; chaque séance porte un DossierTechnique
-(ressources + QCM de validation). L'élève a une ProgressionParcours (directe, sans
+(ressources + QCM de validation). L'élève a une ProgressionSequence (directe, sans
 affectation) déclinée en ProgressionSeance. On résout les Id au fil de l'eau via
 core.database.db (ADR-078). Dépend du socle (classe, élève, professeur) et du
 référentiel (niveau_classe, critères).
@@ -22,7 +22,7 @@ class BlocBFixture(Fixture):
     tables = (
         "sequence", "seance", "dossier_technique", "ressource_dossier", "qcm",
         "classe_professeur", "professeur_parcours",
-        "progression_parcours", "progression_seance", "activite",
+        "progression_sequence", "progression_seance", "activite",
         "evaluation_activite", "evaluation_critere",
     )
     depends_on = ("niveau_classe", "classe", "eleve", "professeur", "critere_observable")
@@ -66,12 +66,12 @@ class BlocBFixture(Fixture):
 
         # Progression directe de l'élève sur la séquence, déclinée par seance.
         pe = db.insert(
-            "INSERT INTO progression_parcours (Statut, DateDebut, eleve_id, sequence_id, CreatedAt, UpdatedAt) "
+            "INSERT INTO progression_sequence (Statut, DateDebut, eleve_id, sequence_id, CreatedAt, UpdatedAt) "
             "VALUES ('en_cours', CURDATE(), ?, ?, NOW(), NOW())",
             (eleve, parc),
         )
         pp = db.insert(
-            "INSERT INTO progression_seance (Statut, progression_parcours_id, seance_id, CreatedAt, UpdatedAt) "
+            "INSERT INTO progression_seance (Statut, progression_sequence_id, seance_id, CreatedAt, UpdatedAt) "
             "VALUES ('en_cours', ?, ?, NOW(), NOW())",
             (pe, pal),
         )

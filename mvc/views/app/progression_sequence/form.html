@@ -5,7 +5,7 @@
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
-    <a href="/progression_parcours" class="text-gray-600 hover:underline">← Retour</a>
+    <a href="/progression_sequence" class="text-gray-600 hover:underline">← Retour</a>
 </div>
 
 {% include "partials/form_errors.html" %}
@@ -19,7 +19,7 @@
         {{ select_field(name='sequence_id', label='Séquence', options=form.options.sequence_id_choices, selected=form.value('sequence_id'), error=form.error('sequence_id')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
-            {{ button(label='Annuler', variant='secondary', href='/progression_parcours') }}
+            {{ button(label='Annuler', variant='secondary', href='/progression_sequence') }}
         </div>
     </form>
 </div>

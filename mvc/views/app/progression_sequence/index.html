@@ -3,12 +3,12 @@
 {% from "components/ui.html" import button, flash_messages %}
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Liste des progression_parcourss</h1>
-    {{ button(label='Nouveau progression_parcours', variant='primary', href='/progression_parcours/new') }}
+    <h1 class="text-2xl font-bold text-gray-800">Liste des progressions de séquence</h1>
+    {{ button(label='Nouveau progression_sequence', variant='primary', href='/progression_sequence/new') }}
 </div>
 
-<form method="get" action="/progression_parcours"
-      hx-get="/progression_parcours" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
+<form method="get" action="/progression_sequence"
+      hx-get="/progression_sequence" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
       class="mb-4 flex gap-2 items-center flex-wrap">
     <input type="search" name="q" value="{{ pagination.q }}"
            placeholder="Rechercher…"
@@ -31,18 +31,18 @@
             class="bg-gray-100 text-gray-800 text-sm px-3 py-1.5 rounded font-medium hover:bg-gray-200">
         Rechercher</button>
     {% if pagination.q or pagination.filters %}
-    <a href="/progression_parcours"
-       hx-get="/progression_parcours" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
+    <a href="/progression_sequence"
+       hx-get="/progression_sequence" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
        class="text-sm text-gray-500 hover:underline">Réinitialiser</a>
     {% endif %}
 </form>
 
 <div class="mb-2">
-    <a href="/progression_parcours/export-csv?q={{ pagination.q | urlencode }}&amp;sort={{ pagination.sort }}&amp;direction={{ pagination.direction }}{% for key, val in pagination.filters.items() %}{% if val %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
+    <a href="/progression_sequence/export-csv?q={{ pagination.q | urlencode }}&amp;sort={{ pagination.sort }}&amp;direction={{ pagination.direction }}{% for key, val in pagination.filters.items() %}{% if val %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
        class="text-sm text-blue-600 hover:underline">Exporter CSV</a>
 </div>
 
 <div id="crud-results">
-    {% include "app/progression_parcours/_results.html" %}
+    {% include "app/progression_sequence/_results.html" %}
 </div>
 {% endblock %}

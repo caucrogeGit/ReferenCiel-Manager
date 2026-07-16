@@ -19,9 +19,9 @@ from core.validation import (
 class ProgressionSeanceBase:
     """Classe de base regenerable de ProgressionSeance."""
 
-    def __init__(self, statut, progression_parcours_id, seance_id, created_at, updated_at, id=None):
+    def __init__(self, statut, progression_sequence_id, seance_id, created_at, updated_at, id=None):
         self.statut = statut
-        self.progression_parcours_id = progression_parcours_id
+        self.progression_sequence_id = progression_sequence_id
         self.seance_id = seance_id
         self.created_at = created_at
         self.updated_at = updated_at
@@ -58,15 +58,15 @@ class ProgressionSeanceBase:
         self._statut = value
 
     @property
-    def progression_parcours_id(self):
-        return self._progression_parcours_id
+    def progression_sequence_id(self):
+        return self._progression_sequence_id
 
-    @progression_parcours_id.setter
+    @progression_sequence_id.setter
     @typed(int)
-    def progression_parcours_id(self, value):
+    def progression_sequence_id(self, value):
         if value is None:
-            raise ValidationError("progression_parcours_id", 'La propriété "progression_parcours_id" ne peut pas être nulle.')
-        self._progression_parcours_id = value
+            raise ValidationError("progression_sequence_id", 'La propriété "progression_sequence_id" ne peut pas être nulle.')
+        self._progression_sequence_id = value
 
     @property
     def seance_id(self):
@@ -105,7 +105,7 @@ class ProgressionSeanceBase:
         return {
             "id": self.id,
             "statut": self.statut,
-            "progression_parcours_id": self.progression_parcours_id,
+            "progression_sequence_id": self.progression_sequence_id,
             "seance_id": self.seance_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
@@ -116,12 +116,12 @@ class ProgressionSeanceBase:
         return cls(
             id=data["id"],
             statut=data["statut"],
-            progression_parcours_id=data["progression_parcours_id"],
+            progression_sequence_id=data["progression_sequence_id"],
             seance_id=data["seance_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"ProgressionSeanceBase(id={self.id!r}, statut={self.statut!r}, progression_parcours_id={self.progression_parcours_id!r}, seance_id={self.seance_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"ProgressionSeanceBase(id={self.id!r}, statut={self.statut!r}, progression_sequence_id={self.progression_sequence_id!r}, seance_id={self.seance_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 
