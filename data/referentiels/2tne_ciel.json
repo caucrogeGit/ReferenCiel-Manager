@@ -142,6 +142,18 @@
       ]
     },
     {
+      "id": "act-r1",
+      "code": "R1",
+      "intitule": "Accompagnement du client",
+      "pole_id": "pole-reseaux",
+      "taches": [],
+      "conditions_exercice": {},
+      "resultats_attendus": [],
+      "source_ids": [
+        "referentiel-bac-pro-ciel"
+      ]
+    },
+    {
       "id": "act-r2",
       "code": "R2",
       "intitule": "Installation et qualification",
@@ -191,6 +203,30 @@
       ]
     },
     {
+      "id": "act-r5",
+      "code": "R5",
+      "intitule": "Maintenance des réseaux informatiques",
+      "pole_id": "pole-reseaux",
+      "taches": [],
+      "conditions_exercice": {},
+      "resultats_attendus": [],
+      "source_ids": [
+        "referentiel-bac-pro-ciel"
+      ]
+    },
+    {
+      "id": "act-d1",
+      "code": "D1",
+      "intitule": "Élaboration et appropriation d'un cahier des charges",
+      "pole_id": "pole-donnee-cyber",
+      "taches": [],
+      "conditions_exercice": {},
+      "resultats_attendus": [],
+      "source_ids": [
+        "referentiel-bac-pro-ciel"
+      ]
+    },
+    {
       "id": "act-d2",
       "code": "D2",
       "intitule": "Développement et validation de solutions logicielles",
@@ -213,6 +249,18 @@
           "libelle": "Les solutions logicielles sont conformes aux spécifications du cahier des charges"
         }
       ],
+      "source_ids": [
+        "referentiel-bac-pro-ciel"
+      ]
+    },
+    {
+      "id": "act-d3",
+      "code": "D3",
+      "intitule": "Gestion d'incidents",
+      "pole_id": "pole-donnee-cyber",
+      "taches": [],
+      "conditions_exercice": {},
+      "resultats_attendus": [],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -724,29 +772,6 @@
         ]
       },
       {
-        "activite": "R2",
-        "competences": [
-          "C06",
-          "C09",
-          "C10"
-        ]
-      },
-      {
-        "activite": "R3",
-        "competences": [
-          "C06",
-          "C09",
-          "C10"
-        ]
-      },
-      {
-        "activite": "D2",
-        "competences": [
-          "C06",
-          "C08"
-        ]
-      },
-      {
         "activite": "E3",
         "competences": [
           "C03",
@@ -766,6 +791,72 @@
         "competences": [
           "C01",
           "C04",
+          "C11"
+        ]
+      },
+      {
+        "activite": "R1",
+        "competences": [
+          "C01",
+          "C04",
+          "C06",
+          "C10"
+        ]
+      },
+      {
+        "activite": "R2",
+        "competences": [
+          "C04",
+          "C06",
+          "C09",
+          "C10"
+        ]
+      },
+      {
+        "activite": "R3",
+        "competences": [
+          "C04",
+          "C06",
+          "C09",
+          "C10"
+        ]
+      },
+      {
+        "activite": "R5",
+        "competences": [
+          "C04",
+          "C06",
+          "C10",
+          "C11"
+        ]
+      },
+      {
+        "activite": "D1",
+        "competences": [
+          "C01",
+          "C03",
+          "C04",
+          "C06",
+          "C10",
+          "C11"
+        ]
+      },
+      {
+        "activite": "D2",
+        "competences": [
+          "C04",
+          "C06",
+          "C08",
+          "C10",
+          "C11"
+        ]
+      },
+      {
+        "activite": "D3",
+        "competences": [
+          "C04",
+          "C06",
+          "C10",
           "C11"
         ]
       }
