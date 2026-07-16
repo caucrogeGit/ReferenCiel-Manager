@@ -472,7 +472,8 @@ class ScenarioEditeurController(BaseController):
         scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
         if scenario_id is None or get_scenario(scenario_id) is None:
             return BaseController.not_found()
-        cible = f"/conception/scenario/{scenario_id}"
+        # Retour sur l'étape Ressources (sans ?etape, l'éditeur retombe sur Titre).
+        cible = f"/conception/scenario/{scenario_id}?etape=ressources"
         uploaded = request.file("fichier")
         if uploaded is None or not uploaded.filename:
             return BaseController.redirect_with_flash(request, cible, "Aucun fichier sélectionné.", "error")
@@ -495,7 +496,10 @@ class ScenarioEditeurController(BaseController):
         delete_upload(ressource["CheminMedia"])
         supprimer_ressource(ressource_id)
         return BaseController.redirect_with_flash(
-            request, f"/conception/scenario/{scenario_id}", "Ressource supprimée.", "success"
+            request,
+            f"/conception/scenario/{scenario_id}?etape=ressources",
+            "Ressource supprimée.",
+            "success",
         )
 
     # ── Cochage unitaire (activité / critère) ────────────────────────────────
