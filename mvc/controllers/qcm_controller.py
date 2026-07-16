@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.qcm_model import (
     get_qcm_by_id, add_qcm, update_qcm, delete_qcm, bulk_delete_qcms,
     count_qcms, find_qcms_paginated, find_qcms_for_export,
-    get_palier_choices,
+    get_dossier_technique_choices,
 )
 from mvc.forms.qcm_form import QCMForm
 from core.security.session import get_flash, get_session_id
@@ -18,7 +18,7 @@ def _form_data_from_qcm(record: dict) -> dict:
     return {
         "format_reponse": record.get("FormatReponse"),
         "seuil_validation": record.get("SeuilValidation"),
-        "palier_id": record.get("palier_id"),
+        "dossier_technique_id": record.get("dossier_technique_id"),
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
     }
@@ -26,7 +26,7 @@ def _form_data_from_qcm(record: dict) -> dict:
 
 def _qcm_form_options():
     return {
-        "palier_id_choices": get_palier_choices(),
+        "dossier_technique_id_choices": get_dossier_technique_choices(),
     }
 
 
@@ -41,7 +41,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Format reponse', 'FormatReponse'), ('Seuil validation', 'SeuilValidation'), ('Palier id', 'palier_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Format reponse', 'FormatReponse'), ('Seuil validation', 'SeuilValidation'), ('Dossier technique', 'dossier_technique_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
 
 
 class QCMController(BaseController):
@@ -76,24 +76,24 @@ class QCMController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"format_reponse", "seuil_validation", "palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"format_reponse", "seuil_validation", "dossier_technique_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        palier_id_raw = _query_param(request, "palier_id").strip()
-        palier_id_f = ""
-        if palier_id_raw:
+        dossier_technique_id_raw = _query_param(request, "dossier_technique_id").strip()
+        dossier_technique_id_f = ""
+        if dossier_technique_id_raw:
             try:
-                palier_id_f = int(palier_id_raw)
+                dossier_technique_id_f = int(dossier_technique_id_raw)
             except (TypeError, ValueError):
-                palier_id_f = ""
+                dossier_technique_id_f = ""
         relation_filters = {}
-        relation_filters["palier_id"] = {"options": [{"id": value, "label": label} for value, label in get_palier_choices()]}
+        relation_filters["dossier_technique_id"] = {"options": [{"id": value, "label": label} for value, label in get_dossier_technique_choices()]}
         _filters = {}
-        if palier_id_f != "":
-            _filters["palier_id"] = palier_id_f
+        if dossier_technique_id_f != "":
+            _filters["dossier_technique_id"] = dossier_technique_id_f
         total    = count_qcms(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -106,7 +106,7 @@ class QCMController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"palier_id": palier_id_f},
+            "filters": {"dossier_technique_id": dossier_technique_id_f},
         })
         return {
                 "qcms": qcms,
@@ -236,21 +236,21 @@ class QCMController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"format_reponse", "seuil_validation", "palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"format_reponse", "seuil_validation", "dossier_technique_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        palier_id_raw = _query_param(request, "palier_id").strip()
-        palier_id_f = ""
-        if palier_id_raw:
+        dossier_technique_id_raw = _query_param(request, "dossier_technique_id").strip()
+        dossier_technique_id_f = ""
+        if dossier_technique_id_raw:
             try:
-                palier_id_f = int(palier_id_raw)
+                dossier_technique_id_f = int(dossier_technique_id_raw)
             except (TypeError, ValueError):
-                palier_id_f = ""
+                dossier_technique_id_f = ""
         _filters = {}
-        if palier_id_f != "":
-            _filters["palier_id"] = palier_id_f
+        if dossier_technique_id_f != "":
+            _filters["dossier_technique_id"] = dossier_technique_id_f
         rows = find_qcms_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

@@ -27,12 +27,12 @@ def _capture_insert(monkeypatch: pytest.MonkeyPatch, module: Any) -> dict[str, A
     return captured
 
 
-def test_qcm_rattache_a_un_palier(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_qcm_rattache_a_un_dossier_technique(monkeypatch: pytest.MonkeyPatch) -> None:
     cap = _capture_insert(monkeypatch, qcm)
     qcm.add_qcm({
         "format_reponse": None,
         "seuil_validation": "100%",
-        "palier_id": 5,
+        "dossier_technique_id": 5,
         "created_at": "2026-07-10 00:00:00",
         "updated_at": "2026-07-10 00:00:00",
     })

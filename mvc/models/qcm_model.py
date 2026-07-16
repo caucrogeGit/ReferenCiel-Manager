@@ -4,10 +4,10 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT qcm.*, palier.Titre AS palier_id_label FROM qcm LEFT JOIN palier ON qcm.palier_id = palier.Id ORDER BY qcm.Id"
-SELECT_BY_ID = "SELECT qcm.*, palier.Titre AS palier_id_label FROM qcm LEFT JOIN palier ON qcm.palier_id = palier.Id WHERE qcm.Id = ?"
-INSERT       = "INSERT INTO qcm (FormatReponse, SeuilValidation, palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE qcm SET FormatReponse = ?, SeuilValidation = ?, palier_id = ?, UpdatedAt = ? WHERE Id = ?"
+SELECT_ALL   = "SELECT qcm.*, dossier_technique.Titre AS dossier_technique_id_label FROM qcm LEFT JOIN dossier_technique ON qcm.dossier_technique_id = dossier_technique.Id ORDER BY qcm.Id"
+SELECT_BY_ID = "SELECT qcm.*, dossier_technique.Titre AS dossier_technique_id_label FROM qcm LEFT JOIN dossier_technique ON qcm.dossier_technique_id = dossier_technique.Id WHERE qcm.Id = ?"
+INSERT       = "INSERT INTO qcm (FormatReponse, SeuilValidation, dossier_technique_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE qcm SET FormatReponse = ?, SeuilValidation = ?, dossier_technique_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM qcm WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_qcm_by_id(id):
 
 
 def add_qcm(data):
-    return insert(INSERT, (data["format_reponse"], data["seuil_validation"], data["palier_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["format_reponse"], data["seuil_validation"], data["dossier_technique_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_qcm(id, data):
-    execute(UPDATE, (data["format_reponse"], data["seuil_validation"], data["palier_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["format_reponse"], data["seuil_validation"], data["dossier_technique_id"], datetime.now(timezone.utc), id))
 
 
 def delete_qcm(id):
@@ -40,8 +40,8 @@ def bulk_delete_qcms(ids):
 
 
 _SEARCH_COLS  = ['qcm.FormatReponse', 'qcm.SeuilValidation']
-_ALLOWED_SORT = {"format_reponse": "qcm.FormatReponse", "seuil_validation": "qcm.SeuilValidation", "palier_id": "qcm.palier_id", "created_at": "qcm.CreatedAt", "updated_at": "qcm.UpdatedAt", "id": "qcm.Id"}
-_ALLOWED_FILTERS = {"palier_id": "qcm.palier_id"}
+_ALLOWED_SORT = {"format_reponse": "qcm.FormatReponse", "seuil_validation": "qcm.SeuilValidation", "dossier_technique_id": "qcm.dossier_technique_id", "created_at": "qcm.CreatedAt", "updated_at": "qcm.UpdatedAt", "id": "qcm.Id"}
+_ALLOWED_FILTERS = {"dossier_technique_id": "qcm.dossier_technique_id"}
 _DEFAULT_SORT = "qcm.Id"
 
 
@@ -69,7 +69,7 @@ def count_qcms(q: str | None = None, filters: dict[str, Any] | None = None) -> i
 def find_qcms_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT qcm.*, palier.Titre AS palier_id_label FROM qcm LEFT JOIN palier ON qcm.palier_id = palier.Id"
+    base = "SELECT qcm.*, dossier_technique.Titre AS dossier_technique_id_label FROM qcm LEFT JOIN dossier_technique ON qcm.dossier_technique_id = dossier_technique.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -102,6 +102,6 @@ def find_qcms_for_export(q: str | None = None, sort: str | None = None, directio
 
 
 
-def get_palier_choices():
-    rows = fetch_all("SELECT Id, Titre FROM palier ORDER BY Titre")
+def get_dossier_technique_choices():
+    rows = fetch_all("SELECT Id, Titre FROM dossier_technique ORDER BY Titre")
     return [(row["Id"], row["Titre"]) for row in rows]
