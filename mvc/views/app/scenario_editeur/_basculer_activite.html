@@ -1,0 +1,10 @@
+{# Réponse HTMX au basculement d'une activité.
+
+   Cocher/décocher une activité change la liste des compétences « valides »
+   (relation n-n activité↔compétence). On renvoie donc DEUX blocs :
+   - le bloc Pôles, cible normale du swap (#bloc-poles, outerHTML) ;
+   - le bloc Compétences rafraîchi HORS-BANDE (hx-swap-oob), pour que la
+     validité (bordures oranges / grisage « non valide ») suive immédiatement. #}
+{% include "app/scenario_editeur/_bloc_poles.html" %}
+{% set oob = true %}
+{% include "app/scenario_editeur/_bloc_competences.html" %}

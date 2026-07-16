@@ -140,6 +140,25 @@ def get_arbre(ref_id: int) -> dict[str, Any]:
     }
 
 
+def competences_valides(ref_id: int, activite_ids: list[int]) -> set[int]:
+    """Ids des compétences mobilisées par les activités cochées (relation n-n).
+
+    Une compétence n'est « valide » (évaluable) dans le scénario que si au moins
+    une des activités sélectionnées la mobilise, via le pivot activite_competence.
+    Sans activité sélectionnée, aucune compétence n'est valide (set vide).
+    """
+    if not activite_ids:
+        return set()
+    marks = ",".join("?" for _ in activite_ids)
+    rows = fetch_all(
+        "SELECT DISTINCT ac.competence_id AS c FROM activite_competence ac "
+        "JOIN competence cp ON cp.Id = ac.competence_id "
+        f"WHERE cp.referentiel_id = ? AND ac.activite_professionnelle_id IN ({marks})",
+        (ref_id, *activite_ids),
+    )
+    return {int(r["c"]) for r in rows}
+
+
 def get_critere(critere_id: int) -> "dict[str, Any] | None":
     """Un critère (pour valider son existence avant d'y attacher un indicateur)."""
     return fetch_one(

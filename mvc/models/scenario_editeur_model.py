@@ -201,6 +201,65 @@ def enregistrer_liaison(
             )
 
 
+# Cochage unitaire (tunnel maître-détail) : écriture CIBLÉE d'un seul lien, et non
+# une réécriture de la liste entière. Deux cases cochées/décochées « en même temps »
+# (HTMX émet des requêtes concurrentes) touchent alors des lignes distinctes et ne
+# s'écrasent plus l'une l'autre. `INSERT IGNORE` s'appuie sur la contrainte unique
+# du pivot (scenario_id, fk) pour rester idempotent sans lecture préalable fiable.
+
+def lier_activite(scenario_id: int, activite_id: int) -> None:
+    """Coche une activité pour un scénario (idempotent via l'unicité du pivot)."""
+    execute(
+        "INSERT IGNORE INTO scenario_activite (scenario_id, activite_professionnelle_id) "
+        "VALUES (?, ?)",
+        (scenario_id, activite_id),
+    )
+
+
+def delier_activite(scenario_id: int, activite_id: int) -> None:
+    """Décoche une activité (suppression du seul lien concerné)."""
+    execute(
+        "DELETE FROM scenario_activite WHERE scenario_id = ? AND activite_professionnelle_id = ?",
+        (scenario_id, activite_id),
+    )
+
+
+def lier_critere(scenario_id: int, critere_id: int) -> None:
+    """Coche un critère pour un scénario (idempotent via l'unicité du pivot)."""
+    execute(
+        "INSERT IGNORE INTO scenario_critere (scenario_id, critere_observable_id) VALUES (?, ?)",
+        (scenario_id, critere_id),
+    )
+
+
+def delier_critere(scenario_id: int, critere_id: int) -> None:
+    """Décoche un critère (suppression du seul lien concerné)."""
+    execute(
+        "DELETE FROM scenario_critere WHERE scenario_id = ? AND critere_observable_id = ?",
+        (scenario_id, critere_id),
+    )
+
+
+def elaguer_criteres_hors_activites(scenario_id: int) -> None:
+    """Retire les critères dont la compétence n'est plus mobilisée par les activités
+    cochées du scénario (invariant : on n'évalue qu'une compétence valide).
+
+    Appelé après chaque bascule d'activité : décocher une activité peut invalider
+    une compétence dont des critères étaient sélectionnés — ces critères deviennent
+    « fantômes » (compétence grisée, inaccessible) et sont donc élagués. Un seul
+    DELETE atomique ; sous-requête vide (aucune activité) => tous les critères
+    partent (competence_id est NOT NULL, pas de piège NULL sur NOT IN)."""
+    execute(
+        "DELETE sc FROM scenario_critere sc "
+        "JOIN critere_observable c ON c.Id = sc.critere_observable_id "
+        "WHERE sc.scenario_id = ? AND c.competence_id NOT IN ("
+        "SELECT ac.competence_id FROM activite_competence ac "
+        "JOIN scenario_activite sa ON sa.activite_professionnelle_id = ac.activite_professionnelle_id "
+        "WHERE sa.scenario_id = ?)",
+        (scenario_id, scenario_id),
+    )
+
+
 def list_ressources(scenario_id: int) -> list[dict[str, Any]]:
     return fetch_all(
         "SELECT Id, NomOriginal, CheminMedia, MimeType, Taille, CreatedAt "

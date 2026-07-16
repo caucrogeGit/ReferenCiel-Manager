@@ -19,6 +19,7 @@ from forge_mvc_files import UploadError, delete_upload, save_upload
 
 from mvc.models.referentiel_atelier_model import (
     ajouter_indicateur as _ajouter_indicateur,
+    competences_valides,
     get_arbre,
     get_critere,
     list_referentiels,
@@ -33,6 +34,11 @@ from mvc.models.scenario_editeur_model import (
     enregistrer_liaison,
     enregistrer_referentiel,
     enregistrer_titre,
+    lier_activite,
+    delier_activite,
+    lier_critere,
+    delier_critere,
+    elaguer_criteres_hors_activites,
     get_activite_ids,
     get_co_auteur_ids,
     get_critere_ids,
@@ -279,6 +285,12 @@ class ScenarioEditeurController(BaseController):
             "base_url": f"/conception/scenario/{scenario_id}",
             "pole_id": pole_id,
             "competence_id": competence_id,
+            # Compétences évaluables = celles mobilisées par les activités cochées
+            # (relation n-n). Les autres sont grisées « non valide » dans le bloc.
+            "competences_valides": (
+                competences_valides(int(referentiel_id), activite_ids)
+                if referentiel_id else set()
+            ),
         }
 
         # Fragment HTMX : on ne renvoie que le partial, sans le layout. Rendu
@@ -469,22 +481,29 @@ class ScenarioEditeurController(BaseController):
         if cible_id is None:
             return BaseController.not_found()
 
+        # Écriture CIBLÉE du seul lien basculé (pas de réécriture de la liste
+        # entière) : deux cases basculées « en même temps » émettent des requêtes
+        # HTMX concurrentes ; en touchant des lignes distinctes, elles ne
+        # s'écrasent plus (un décochage ne peut plus être « ressuscité » par la
+        # relecture d'une autre requête).
+        if champ == "activite":
+            if cible_id in get_activite_ids(scenario_id):
+                delier_activite(scenario_id, cible_id)
+            else:
+                lier_activite(scenario_id, cible_id)
+            # Le jeu d'activités a changé : purge les critères des compétences qui
+            # ne sont plus mobilisées (elles deviennent grisées « non valide »).
+            elaguer_criteres_hors_activites(scenario_id)
+        else:
+            if cible_id in get_critere_ids(scenario_id):
+                delier_critere(scenario_id, cible_id)
+            else:
+                lier_critere(scenario_id, cible_id)
+        recalculer_statut(scenario_id)
+
+        # Relecture après écriture, pour le rendu (compteur) et la redirection.
         activite_ids = get_activite_ids(scenario_id)
         critere_ids = get_critere_ids(scenario_id)
-
-        if champ == "activite":
-            if cible_id in activite_ids:
-                activite_ids = [i for i in activite_ids if i != cible_id]
-            else:
-                activite_ids = [*activite_ids, cible_id]
-        else:
-            if cible_id in critere_ids:
-                critere_ids = [i for i in critere_ids if i != cible_id]
-            else:
-                critere_ids = [*critere_ids, cible_id]
-
-        enregistrer_liaison(scenario_id, activite_ids, critere_ids)
-        recalculer_statut(scenario_id)
 
         # Sans JS : on retombe sur la page, à la bonne étape et au bon endroit.
         if not ScenarioEditeurController._is_htmx(request):
@@ -504,19 +523,28 @@ class ScenarioEditeurController(BaseController):
         pole_id, competence_id = ScenarioEditeurController._selection_courante(
             request, arbre
         )
-        return BaseController.render(
-            f"app/scenario_editeur/_bloc_{fragment}.html",
-            context={
-                "scenario": scenario,
-                "arbre": arbre,
-                "activite_ids": activite_ids,
-                "critere_ids": critere_ids,
-                "pole_id": pole_id,
-                "competence_id": competence_id,
-                "base_url": f"/conception/scenario/{scenario_id}",
-            },
-            request=request,
+        context: dict[str, Any] = {
+            "scenario": scenario,
+            "arbre": arbre,
+            "activite_ids": activite_ids,
+            "critere_ids": critere_ids,
+            "pole_id": pole_id,
+            "competence_id": competence_id,
+            "base_url": f"/conception/scenario/{scenario_id}",
+            "competences_valides": (
+                competences_valides(int(referentiel_id), activite_ids)
+                if referentiel_id else set()
+            ),
+        }
+        # Basculer une ACTIVITÉ change la validité des compétences (relation n-n) :
+        # on renvoie le bloc Pôles (cible du swap) ET le bloc Compétences rafraîchi
+        # hors-bande (hx-swap-oob). Basculer un critère ne touche que les critères.
+        template = (
+            "app/scenario_editeur/_basculer_activite.html"
+            if fragment == "poles"
+            else "app/scenario_editeur/_bloc_competences.html"
         )
+        return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def basculer_activite(request: Request) -> Response:

@@ -1,28 +1,60 @@
 {# Bloc maître-détail « Compétences → Critères ».
-   Symétrique de _bloc_poles.html : racine identifiée, cible du hx-post de
-   cochage en swap outerHTML, compteur recalculé en Jinja. #}
-{% from "components/tunnel_macros.html" import master_list %}
+   Symétrique de _bloc_poles.html, MAIS la colonne maître applique la validité :
+   une compétence n'est évaluable que si une activité cochée la mobilise
+   (relation n-n, `competences_valides`). Les compétences valides portent une
+   bordure gauche orange et sont cliquables ; les autres sont grisées, marquées
+   « non valide » et non accessibles.
 
-<section id="bloc-competences" class="bg-surface border border-line rounded-card p-5">
+   `oob` (optionnel) : rend la racine en swap hors-bande, pour le rafraîchissement
+   déclenché par une bascule d'activité (cf. _basculer_activite.html). #}
+
+<section id="bloc-competences"{% if oob %} hx-swap-oob="true"{% endif %}
+         class="bg-surface border border-line rounded-card p-5">
     <h2 class="text-base font-semibold text-ink">Compétences et critères d'évaluation</h2>
     <p class="mt-0.5 mb-3.5 text-sm text-muted">
+        Seules les compétences mobilisées par les activités cochées sont évaluables.
         Les critères en <em>italique</em> relèvent des savoir-être.
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-[minmax(0,260px)_minmax(0,1fr)] gap-4">
 
-        {%- set items = [] -%}
-        {%- for comp in arbre.competences -%}
+        {# Colonne maître : une entrée par compétence, avec sa validité. #}
+        <ul class="flex flex-col gap-1" role="tablist">
+            {% for comp in arbre.competences %}
             {%- set n = comp.criteres | selectattr("Id", "in", critere_ids) | list | length -%}
-            {%- set _ = items.append({"id": comp.Id, "label": comp.Code, "count": n}) -%}
-        {%- endfor -%}
-        {{ master_list(
-            items,
-            competence_id,
-            base_url ~ "?etape=liaison&fragment=competence",
-            "competence",
-            "#bloc-competences"
-        ) }}
+            {%- set valide = comp.Id in competences_valides -%}
+            {%- set actif = (comp.Id == competence_id) -%}
+            <li>
+                {% if valide %}
+                <a href="{{ base_url }}?etape=liaison&fragment=competence&competence={{ comp.Id }}"
+                   hx-get="{{ base_url }}?etape=liaison&fragment=competence&competence={{ comp.Id }}"
+                   hx-target="#bloc-competences" hx-swap="outerHTML"
+                   role="tab" {% if actif %}aria-selected="true"{% endif %}
+                   class="flex items-center justify-between gap-2 py-2.5 px-3 rounded-[10px] text-sm
+                          border-l-2 border-forge transition
+                          {% if actif %}bg-forge-soft font-semibold text-ink
+                          {% else %}text-muted hover:bg-cream hover:text-ink{% endif %}">
+                    <span class="truncate">{{ comp.Code }}</span>
+                    <span class="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full
+                                 {% if n %}bg-forge text-white{% else %}bg-cream text-faint{% endif %}">
+                        {{ n }}
+                    </span>
+                </a>
+                {% else %}
+                <div aria-disabled="true"
+                     title="Compétence non mobilisée par les activités sélectionnées"
+                     class="flex items-center justify-between gap-2 py-2.5 px-3 rounded-[10px] text-sm
+                            text-faint bg-cream/50 cursor-not-allowed select-none">
+                    <span class="truncate">{{ comp.Code }}</span>
+                    <span class="shrink-0 text-[10px] font-semibold uppercase tracking-wide
+                                 px-2 py-0.5 rounded-full bg-cream text-faint">non valide</span>
+                </div>
+                {% endif %}
+            </li>
+            {% else %}
+            <li class="px-3 py-2 text-sm text-faint">Aucune compétence.</li>
+            {% endfor %}
+        </ul>
 
         <div id="detail-competence">
             {% include "app/scenario_editeur/_detail_competence.html" %}
