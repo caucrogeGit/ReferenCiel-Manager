@@ -11,7 +11,7 @@ from typing import Any
 
 import pytest
 
-from mvc.models import mon_parcours_model as m
+from mvc.models import ma_sequence_model as m
 
 
 def test_get_eleve_by_user_filtre_sur_le_compte(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -31,7 +31,7 @@ def test_get_eleve_by_user_filtre_sur_le_compte(monkeypatch: pytest.MonkeyPatch)
     assert eleve is not None and eleve["id"] == 7
 
 
-def test_mon_parcours_assemble_sequence_et_seances(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_ma_sequence_assemble_sequence_et_seances(monkeypatch: pytest.MonkeyPatch) -> None:
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
         return {"id": 7, "nom": "Doe", "prenom": "Jane"}
 
@@ -46,7 +46,7 @@ def test_mon_parcours_assemble_sequence_et_seances(monkeypatch: pytest.MonkeyPat
     monkeypatch.setattr(m, "fetch_one", fake_fetch_one)
     monkeypatch.setattr(m, "fetch_all", fake_fetch_all)
 
-    data = m.mon_parcours(42)
+    data = m.ma_sequence(42)
 
     assert data is not None
     # progressions filtrées sur l'élève résolu (id 7), pas sur le user
@@ -58,7 +58,7 @@ def test_mon_parcours_assemble_sequence_et_seances(monkeypatch: pytest.MonkeyPat
     assert data["progressions"][0]["seances"][0]["titre"] == "Seance A"
 
 
-def test_mon_parcours_compte_non_rattache_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_ma_sequence_compte_non_rattache_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(m, "fetch_one", lambda sql, params=(): None)
 
     def _should_not_be_called(sql: str, params: Sequence[Any] = ()) -> list[dict[str, Any]]:
@@ -66,4 +66,4 @@ def test_mon_parcours_compte_non_rattache_renvoie_none(monkeypatch: pytest.Monke
 
     monkeypatch.setattr(m, "fetch_all", _should_not_be_called)
 
-    assert m.mon_parcours(999) is None
+    assert m.ma_sequence(999) is None

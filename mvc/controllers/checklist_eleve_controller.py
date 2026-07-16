@@ -1,7 +1,7 @@
 # pyright: strict
 """Espace élève v2 — cocher la checklist d'une séance.
 
-Route gardée par `espace_eleve.voir` (préfixe `/mon-parcours`) ; le modèle vérifie
+Route gardée par `espace_eleve.voir` (préfixe `/ma-sequence`) ; le modèle vérifie
 en plus l'appartenance de la séance au compte à chaque appel (séance d'autrui → 404).
 """
 from __future__ import annotations
@@ -18,21 +18,21 @@ from mvc.models.checklist_eleve_model import enregistrer_coches, get_checklist
 class ChecklistEleveController:
     @staticmethod
     def show(request: Request) -> Response:
-        """La checklist à cocher (`GET /mon-parcours/checklist/<progression_seance_id>`)."""
+        """La checklist à cocher (`GET /ma-sequence/checklist/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_checklist(pp_id, user_id) if user_id is not None else None
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
-            "app/mon_parcours/checklist.html",
+            "app/ma_sequence/checklist.html",
             context={"checklist": data, "flash": get_flash(get_session_id(request))},
             request=request,
         )
 
     @staticmethod
     def submit(request: Request) -> Response:
-        """Enregistre le cochage (`POST /mon-parcours/checklist/<progression_seance_id>`)."""
+        """Enregistre le cochage (`POST /ma-sequence/checklist/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_checklist(pp_id, user_id) if user_id is not None else None
@@ -50,4 +50,4 @@ class ChecklistEleveController:
         if resultat is None:
             return BaseController.not_found()
         message = f"Checklist enregistrée : {resultat['coches']} / {resultat['items']} items cochés."
-        return BaseController.redirect_with_flash(request, "/mon-parcours", message, "success")
+        return BaseController.redirect_with_flash(request, "/ma-sequence", message, "success")

@@ -648,7 +648,7 @@
       "name": "sequence",
       "inverse_name": "scenario",
       "pivot": {
-        "table": "scenario_parcours",
+        "table": "scenario_sequence",
         "from_key": "scenario_id",
         "to_key": "sequence_id",
         "id": true,
@@ -680,7 +680,7 @@
       "name": "sequence",
       "inverse_name": "professeurs",
       "pivot": {
-        "table": "professeur_parcours",
+        "table": "professeur_sequence",
         "from_key": "professeur_id",
         "to_key": "sequence_id",
         "id": true,

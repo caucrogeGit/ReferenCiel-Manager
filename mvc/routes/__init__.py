@@ -28,7 +28,7 @@ from mvc.routes.evaluation_critere_routes import register_evaluation_critere_rou
 from mvc.routes.evaluation_prof_routes import register_evaluation_prof_routes
 from mvc.routes.groupe_routes import register_groupe_routes
 from mvc.routes.mes_classes_routes import register_mes_classes_routes
-from mvc.routes.mon_parcours_routes import register_mon_parcours_routes
+from mvc.routes.ma_sequence_routes import register_ma_sequence_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
 # CRUD des entités du référentiel (admin) — ADR-017
 from mvc.routes.formation_routes import register_formation_routes
@@ -158,7 +158,7 @@ register_suivi_routes(router)
 register_mes_classes_routes(router)
 
 # Espace élève — « Mon sequence » (lecture seule, rôle eleve)
-register_mon_parcours_routes(router)
+register_ma_sequence_routes(router)
 
 # Évaluation professeur — détail progression, validation séance, checklist prof
 register_evaluation_prof_routes(router)
@@ -254,5 +254,5 @@ RBAC_PREFIX_RULES: dict[str, str] = {
     "/suivi": "suivi.voir",
     "/mes-classes": "suivi.voir",
     # Espace élève : espace_eleve.voir (rôle eleve). Données filtrées par compte.
-    "/mon-parcours": "espace_eleve.voir",
+    "/ma-sequence": "espace_eleve.voir",
 }

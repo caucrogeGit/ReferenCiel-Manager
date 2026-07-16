@@ -54,7 +54,7 @@ def seances_progression(progression_id: int) -> list[dict[str, Any]]:
     )
 
 
-def mon_parcours(user_id: int) -> dict[str, Any] | None:
+def ma_sequence(user_id: int) -> dict[str, Any] | None:
     """Vue complète « Mon sequence » du compte : élève + sequence + seances.
 
     Renvoie None si le compte n'est rattaché à aucun élève (compte élève non lié).

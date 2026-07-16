@@ -2,7 +2,7 @@
 """Espace élève v2 — passer un QCM.
 
 Affiche le QCM d'une séance de l'élève connecté, puis enregistre sa tentative. La
-route est gardée par `espace_eleve.voir` (préfixe `/mon-parcours`) ; en plus, le
+route est gardée par `espace_eleve.voir` (préfixe `/ma-sequence`) ; en plus, le
 modèle vérifie l'**appartenance** de la séance au compte à chaque appel — un id de
 séance d'un autre élève renvoie 404, jamais les données d'autrui.
 """
@@ -20,21 +20,21 @@ from mvc.models.passer_qcm_model import enregistrer_tentative, get_qcm_a_passer
 class PasserQcmController:
     @staticmethod
     def show(request: Request) -> Response:
-        """Le QCM à passer (`GET /mon-parcours/qcm/<progression_seance_id>`)."""
+        """Le QCM à passer (`GET /ma-sequence/qcm/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_qcm_a_passer(pp_id, user_id) if user_id is not None else None
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
-            "app/mon_parcours/qcm.html",
+            "app/ma_sequence/qcm.html",
             context={"qcm": data, "flash": get_flash(get_session_id(request))},
             request=request,
         )
 
     @staticmethod
     def submit(request: Request) -> Response:
-        """Enregistre la tentative (`POST /mon-parcours/qcm/<progression_seance_id>`)."""
+        """Enregistre la tentative (`POST /ma-sequence/qcm/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_qcm_a_passer(pp_id, user_id) if user_id is not None else None
@@ -61,4 +61,4 @@ class PasserQcmController:
                 f"({resultat['total']} questions). Vous pouvez retenter."
             )
             niveau = "info"
-        return BaseController.redirect_with_flash(request, "/mon-parcours", message, niveau)
+        return BaseController.redirect_with_flash(request, "/ma-sequence", message, niveau)

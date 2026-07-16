@@ -1,7 +1,7 @@
 # pyright: strict
 """Espace élève v2 — déposer un fichier pour l'activité d'une séance.
 
-Route gardée par `espace_eleve.voir` (préfixe `/mon-parcours`) + contrôle
+Route gardée par `espace_eleve.voir` (préfixe `/ma-sequence`) + contrôle
 d'appartenance dans le modèle. L'upload délègue à l'opt-in `files`
 (`save_upload` : allowlist d'extensions/MIME + taille max) ; on ne stocke que le
 chemin retourné dans `depot_eleve.Fichier`.
@@ -21,28 +21,28 @@ from mvc.models.depot_saisie_model import enregistrer_depot, get_activite_depots
 class DepotEleveSaisieController:
     @staticmethod
     def show(request: Request) -> Response:
-        """L'activité et les dépôts (`GET /mon-parcours/depot/<progression_seance_id>`)."""
+        """L'activité et les dépôts (`GET /ma-sequence/depot/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_activite_depots(pp_id, user_id) if user_id is not None else None
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
-            "app/mon_parcours/depot.html",
+            "app/ma_sequence/depot.html",
             context={"activite": data, "flash": get_flash(get_session_id(request))},
             request=request,
         )
 
     @staticmethod
     def submit(request: Request) -> Response:
-        """Reçoit et enregistre un dépôt (`POST /mon-parcours/depot/<progression_seance_id>`)."""
+        """Reçoit et enregistre un dépôt (`POST /ma-sequence/depot/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_activite_depots(pp_id, user_id) if user_id is not None else None
         if data is None or user_id is None:
             return BaseController.not_found()
 
-        cible = f"/mon-parcours/depot/{pp_id}"
+        cible = f"/ma-sequence/depot/{pp_id}"
         uploaded = request.file("fichier")
         if uploaded is None or not uploaded.filename:
             return BaseController.redirect_with_flash(request, cible, "Aucun fichier sélectionné.", "error")

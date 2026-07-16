@@ -13,17 +13,17 @@ from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller import BaseController
 
-from mvc.models.mon_parcours_model import mon_parcours
+from mvc.models.ma_sequence_model import ma_sequence
 
 
-class MonParcoursController:
+class MaSequenceController:
     @staticmethod
     def index(request: Request) -> Response:
-        """« Mon sequence » de l'élève connecté (`GET /mon-parcours`)."""
+        """« Mon sequence » de l'élève connecté (`GET /ma-sequence`)."""
         user_id = get_authenticated_user_id(request)
-        data = mon_parcours(user_id) if user_id is not None else None
+        data = ma_sequence(user_id) if user_id is not None else None
         return BaseController.render(
-            "app/mon_parcours/index.html",
+            "app/ma_sequence/index.html",
             context={"data": data},
             request=request,
         )

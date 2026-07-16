@@ -6,7 +6,7 @@
 <div class="max-w-2xl mx-auto">
     <div class="flex items-center justify-between mb-1">
         <h1 class="text-2xl font-bold text-gray-800">Déposer un fichier</h1>
-        <a href="/mon-parcours" class="text-gray-600 hover:underline">← Ma séquence</a>
+        <a href="/ma-sequence" class="text-gray-600 hover:underline">← Ma séquence</a>
     </div>
     <p class="text-gray-600 mb-6">Séance : {{ activite.seance_titre }}</p>
 
@@ -16,7 +16,7 @@
     <p class="text-sm text-gray-600 mb-4">Consigne fournie : <span class="font-mono">{{ activite.consigne }}</span></p>
     {% endif %}
 
-    <form method="POST" action="/mon-parcours/depot/{{ activite.progression_seance_id }}"
+    <form method="POST" action="/ma-sequence/depot/{{ activite.progression_seance_id }}"
           enctype="multipart/form-data" class="bg-white shadow rounded p-5 mb-8 space-y-4">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div>

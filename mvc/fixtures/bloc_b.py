@@ -21,7 +21,7 @@ def _id(row: "dict[str, Any] | None") -> int:
 class BlocBFixture(Fixture):
     tables = (
         "sequence", "seance", "dossier_technique", "ressource_dossier", "qcm",
-        "classe_professeur", "professeur_parcours",
+        "classe_professeur", "professeur_sequence",
         "progression_sequence", "progression_seance", "activite",
         "evaluation_activite", "evaluation_critere",
     )
@@ -40,7 +40,7 @@ class BlocBFixture(Fixture):
             "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
             ("welcome-reseau", "Sequence Welcome Réseau", "Découverte du réseau et du câblage.", "publie", 0, 1, niveau),
         )
-        db.execute("INSERT INTO professeur_parcours (professeur_id, sequence_id) VALUES (?, ?)", (prof, parc))
+        db.execute("INSERT INTO professeur_sequence (professeur_id, sequence_id) VALUES (?, ?)", (prof, parc))
         db.execute("INSERT INTO classe_professeur (classe_id, professeur_id) VALUES (?, ?)", (classe, prof))
 
         # Seance -> dossier technique (ressource markdown + QCM de validation).
