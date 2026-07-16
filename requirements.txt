@@ -22,3 +22,10 @@ forge-mvc-sessions-db @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253
 # BACKEND="mariadb"), epingle ici au MEME commit. Autres backends possibles :
 #   forge-mvc-sqlite / forge-mvc-postgres / forge-mvc-mssql
 forge-mvc-mariadb @ git+https://github.com/caucrogeGit/Forge.git@9c561ead253f366bce87c9614e2a70f678478052#subdirectory=packages/forge-mvc-mariadb
+
+# Génération PDF côté application (ADR-024) : PREMIÈRE dépendance tierce, hors
+# paquets Forge. WeasyPrint rend un template Jinja -> HTML -> PDF (esprit Jinja
+# de Forge), licence BSD. Deps système requises au déploiement : Pango, cairo,
+# gdk-pixbuf, harfbuzz. Isolée derrière services/pdf.py:render_pdf pour une
+# promotion future en opt-in forge-mvc-pdf.
+weasyprint

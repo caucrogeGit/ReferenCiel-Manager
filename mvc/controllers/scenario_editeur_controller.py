@@ -50,6 +50,7 @@ from mvc.models.scenario_editeur_model import (
     list_scenarios,
     supprimer_ressource,
 )
+from mvc.services.scenario_pdf import construire_pdf
 
 
 # État du tunnel (ADR-021) : les 4 étapes et leurs libellés. La complétion n'est
@@ -500,6 +501,40 @@ class ScenarioEditeurController(BaseController):
             f"/conception/scenario/{scenario_id}?etape=ressources",
             "Ressource supprimée.",
             "success",
+        )
+
+    # ── Export PDF (ADR-024) ─────────────────────────────────────────────────
+
+    @staticmethod
+    def _slug(texte: str) -> str:
+        """Nom de fichier sûr : alphanumériques conservés, le reste en tirets."""
+        slug = "".join(ch if ch.isalnum() else "-" for ch in texte.lower())
+        slug = "-".join(part for part in slug.split("-") if part)
+        return slug[:60] or "scenario"
+
+    @staticmethod
+    def telecharger_pdf(request: Request) -> Response:
+        scenario_id = ScenarioEditeurController._parse_id(request.route("id"))
+        if scenario_id is None:
+            return BaseController.not_found()
+        scenario = get_scenario(scenario_id)
+        if scenario is None:
+            return BaseController.not_found()
+        # Réservé aux scénarios finalisés (ou déjà utilisés : contenu complet, figé).
+        if scenario.get("Statut") not in ("finalise", "utilise"):
+            return BaseController.redirect_with_flash(
+                request,
+                f"/conception/scenario/{scenario_id}?etape=titre",
+                "Le PDF n'est disponible que pour un scénario finalisé.",
+                "error",
+            )
+        pdf = construire_pdf(scenario_id)
+        nom = ScenarioEditeurController._slug(str(scenario.get("Titre") or "scenario"))
+        return Response(
+            200,
+            pdf,
+            "application/pdf",
+            headers={"Content-Disposition": f'attachment; filename="scenario-{nom}.pdf"'},
         )
 
     # ── Cochage unitaire (activité / critère) ────────────────────────────────

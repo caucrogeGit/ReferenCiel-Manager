@@ -23,3 +23,5 @@ def register_scenario_editeur_routes(router: Router) -> None:
         g.add("POST", "/{id}/indicateur/{iid}/supprimer", ScenarioEditeurController.supprimer_indicateur, name="scenario_editeur-indicateur-supprimer")
         g.add("POST", "/{id}/ressources", ScenarioEditeurController.uploader_ressource, name="scenario_editeur-ressource-upload")
         g.add("POST", "/{id}/ressources/{rid}/supprimer", ScenarioEditeurController.supprimer_ressource, name="scenario_editeur-ressource-supprimer")
+        # Export PDF d'un scénario finalisé (ADR-024). GET : téléchargement direct.
+        g.add("GET", "/{id}/pdf", ScenarioEditeurController.telecharger_pdf, name="scenario_editeur-pdf")

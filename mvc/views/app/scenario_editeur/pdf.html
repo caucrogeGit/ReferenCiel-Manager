@@ -1,0 +1,104 @@
+{# Document PDF d'un scénario finalisé (ADR-024). Rendu par WeasyPrint : HTML
+   AUTONOME (pas d'extends base.html), styles en ligne (Tailwind indisponible),
+   couleurs de la charte en dur. #}
+{%- set STATUTS = {"brouillon": "Brouillon", "finalise": "Finalisé", "utilise": "Utilisé"} -%}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page { size: A4; margin: 1.8cm 1.6cm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Figtree", "DejaVu Sans", sans-serif; color: #211f1a; font-size: 10.5pt; line-height: 1.45; }
+  h1 { font-size: 19pt; margin: 0 0 2pt; color: #211f1a; }
+  h2 { font-size: 12pt; margin: 18pt 0 6pt; padding-bottom: 3pt; border-bottom: 1.5pt solid #E8651A; color: #211f1a; }
+  .meta { color: #5d574c; font-size: 9.5pt; }
+  .badge { display: inline-block; padding: 1.5pt 8pt; border-radius: 20pt; font-size: 8.5pt; font-weight: 700;
+           background: #fff3ea; color: #c2540f; border: 0.75pt solid #f6d3bf; vertical-align: middle; }
+  .field { margin-bottom: 7pt; }
+  .field .lbl { font-weight: 600; color: #403b32; font-size: 9.5pt; }
+  .field .val { color: #211f1a; }
+  ul { margin: 3pt 0 0; padding-left: 16pt; }
+  li { margin-bottom: 2pt; }
+  .act { margin-bottom: 3pt; }
+  .code { font-family: "JetBrains Mono", "DejaVu Sans Mono", monospace; font-size: 9pt; color: #a39b8c; }
+  .pole { color: #5d574c; font-size: 9pt; }
+  .comp { margin: 8pt 0 4pt; }
+  .comp .title { font-weight: 700; }
+  .cc { color: #a39b8c; font-weight: 400; }
+  .crit { margin: 2pt 0; }
+  .crit.se { font-style: italic; color: #5d574c; }
+  .ind { color: #5d574c; font-size: 9pt; }
+  .empty { color: #a39b8c; font-style: italic; }
+  footer { margin-top: 20pt; padding-top: 6pt; border-top: 0.75pt solid #ece6dc; color: #a39b8c; font-size: 8pt; }
+</style>
+</head>
+<body>
+
+  <h1>{{ scenario.Titre }}</h1>
+  <p class="meta">
+    <span class="badge">{{ STATUTS.get(scenario.Statut, scenario.Statut) }}</span>
+    {% if referentiel %}&nbsp; Référentiel : {{ referentiel.formation_intitule }} · {{ referentiel.Identifiant }}{% endif %}
+  </p>
+
+  {% if scenario.CoIntervention %}
+  <p class="meta" style="margin-top:4pt;">
+    Scénario de co-intervention{% if co_auteurs %} — co-auteurs : {{ co_auteurs | join(', ') }}{% endif %}.
+  </p>
+  {% endif %}
+
+  <h2>Contexte</h2>
+  {% if contexte %}
+    {% for c in contexte %}
+    <div class="field">
+      <div class="lbl">{{ c.libelle }}</div>
+      <div class="val">{{ c.valeur }}</div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="empty">Aucun élément de contexte renseigné.</p>
+  {% endif %}
+
+  <h2>Activités professionnelles visées</h2>
+  {% if activites %}
+    {% for a in activites %}
+    <div class="act"><span class="code">{{ a.code }}</span> {{ a.intitule }} <span class="pole">· {{ a.pole }}</span></div>
+    {% endfor %}
+  {% else %}
+    <p class="empty">Aucune activité sélectionnée.</p>
+  {% endif %}
+
+  <h2>Compétences et critères d'évaluation</h2>
+  {% if competences %}
+    {% for comp in competences %}
+    <div class="comp">
+      <span class="title">{{ comp.code }} — {{ comp.intitule }}</span>{% if comp.cc_codes %} <span class="cc">({{ comp.cc_codes | join('/') }})</span>{% endif %}
+    </div>
+    {% for c in comp.criteres %}
+    <div class="crit{% if c.savoir_etre %} se{% endif %}">• {{ c.libelle }}{% if c.savoir_etre %} <span class="cc">(savoir-être)</span>{% endif %}</div>
+    {% if c.indicateurs %}
+    <ul class="ind">
+      {% for i in c.indicateurs %}<li>{{ i }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+  {% else %}
+    <p class="empty">Aucun critère sélectionné.</p>
+  {% endif %}
+
+  <h2>Ressources</h2>
+  {% if ressources %}
+    <ul>
+      {% for r in ressources %}<li>{{ r.NomOriginal }} <span class="pole">({{ (r.Taille / 1024) | round(1) }} Ko)</span></li>{% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty">Aucune ressource déposée.</p>
+  {% endif %}
+
+  <footer>
+    Document généré depuis RéférenCiel Manager · Version {{ scenario.Version }}
+  </footer>
+
+</body>
+</html>

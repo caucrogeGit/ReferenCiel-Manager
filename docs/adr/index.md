@@ -71,6 +71,11 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   re-scopé sur la **Formation** (retrait de `niveau_classe_id`) ; le concept
   académique s'appelle **Cursus** (pas Parcours, réservé au pédagogique de
   l'ADR-022) ; déroulé en 4 phases. Révise ADR-018.
+- `024-generation-pdf-cote-application-weasyprint.md` (**Accepté**) : génération
+  PDF **côté application** avec **WeasyPrint** (template Jinja vers HTML vers PDF).
+  Couture d'extraction prête pour un futur opt-in `forge-mvc-pdf` : `render_pdf`
+  (générique) séparé de `scenario_pdf` (métier). Première dépendance tierce de
+  l'app (`weasyprint`, licence BSD).
 
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
