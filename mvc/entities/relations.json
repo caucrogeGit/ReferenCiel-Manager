@@ -407,7 +407,7 @@
       "inverse_name": "questions",
       "foreign_key": "qcm_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {
@@ -418,7 +418,7 @@
       "inverse_name": "choix",
       "foreign_key": "question_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {
@@ -429,7 +429,7 @@
       "inverse_name": "tentatives",
       "foreign_key": "progression_seance_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {
@@ -440,7 +440,7 @@
       "inverse_name": "reponses",
       "foreign_key": "tentative_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {
@@ -484,7 +484,7 @@
       "inverse_name": "sections",
       "foreign_key": "checklist_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {
@@ -495,7 +495,7 @@
       "inverse_name": "items",
       "foreign_key": "section_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {
@@ -517,7 +517,7 @@
       "inverse_name": "cochages_items",
       "foreign_key": "progression_seance_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {
@@ -539,7 +539,7 @@
       "inverse_name": "depots",
       "foreign_key": "progression_seance_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {
@@ -561,7 +561,7 @@
       "inverse_name": "evaluations",
       "foreign_key": "progression_seance_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {
@@ -594,7 +594,7 @@
       "inverse_name": "criteres",
       "foreign_key": "evaluation_activite_id",
       "nullable": false,
-      "on_delete": "restrict",
+      "on_delete": "cascade",
       "index": true
     },
     {

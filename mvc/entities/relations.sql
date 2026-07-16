@@ -316,28 +316,28 @@ ALTER TABLE question_qcm
     ADD CONSTRAINT fk_question_qcm_qcm_id
     FOREIGN KEY (qcm_id)
     REFERENCES qcm (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE choix_qcm
     ADD CONSTRAINT fk_choix_qcm_question_id
     FOREIGN KEY (question_id)
     REFERENCES question_qcm (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE tentative_qcm
     ADD CONSTRAINT fk_tentative_qcm_progression_seance_id
     FOREIGN KEY (progression_seance_id)
     REFERENCES progression_seance (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE reponse_qcm
     ADD CONSTRAINT fk_reponse_qcm_tentative_id
     FOREIGN KEY (tentative_id)
     REFERENCES tentative_qcm (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE reponse_qcm
@@ -365,14 +365,14 @@ ALTER TABLE section_checklist
     ADD CONSTRAINT fk_section_checklist_checklist_id
     FOREIGN KEY (checklist_id)
     REFERENCES checklist (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE item_checklist
     ADD CONSTRAINT fk_item_checklist_section_id
     FOREIGN KEY (section_id)
     REFERENCES section_checklist (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE item_coche
@@ -386,7 +386,7 @@ ALTER TABLE item_coche
     ADD CONSTRAINT fk_item_coche_progression_seance_id
     FOREIGN KEY (progression_seance_id)
     REFERENCES progression_seance (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE activite
@@ -400,7 +400,7 @@ ALTER TABLE depot_eleve
     ADD CONSTRAINT fk_depot_eleve_progression_seance_id
     FOREIGN KEY (progression_seance_id)
     REFERENCES progression_seance (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE depot_eleve
@@ -414,7 +414,7 @@ ALTER TABLE evaluation_activite
     ADD CONSTRAINT fk_evaluation_activite_progression_seance_id
     FOREIGN KEY (progression_seance_id)
     REFERENCES progression_seance (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE evaluation_activite
@@ -435,7 +435,7 @@ ALTER TABLE evaluation_critere
     ADD CONSTRAINT fk_evaluation_critere_evaluation_activite_id
     FOREIGN KEY (evaluation_activite_id)
     REFERENCES evaluation_activite (Id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
 ALTER TABLE evaluation_critere
