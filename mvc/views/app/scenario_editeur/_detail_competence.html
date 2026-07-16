@@ -15,11 +15,12 @@
 </div>
 <div class="flex flex-col gap-0.5">
     {% for c in comp_active.criteres %}
+    {# Pas de `code` : l'identifiant technique du critère (cr-c04-3) n'a pas à
+       s'afficher dans le tunnel — seul le libellé est utile au professeur. #}
     {{ checkbox_row(
         name="critere",
         value=c.Id,
         label=c.Libelle,
-        code=c.Code,
         checked=(c.Id in critere_ids),
         post_url=base_url ~ "/critere/basculer",
         target="#bloc-competences",
