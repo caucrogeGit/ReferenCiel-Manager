@@ -7,7 +7,7 @@ Une `evaluation_activite` (find-or-create) porte l'évaluation du couple
 (progression_seance, activité) ; chaque `evaluation_critere` fige le niveau d'un
 critère (upsert sur la clé unique). SQL visible et paramétré.
 
-Le `professeur_id` retenu est celui de l'**affectation** du parcours (professeur
+Le `professeur_id` retenu est celui de l'**affectation** de la séquence (professeur
 responsable) : le compte connecté n'est pas encore relié à une fiche `professeur`
 (raffinement futur, cf. `professeur.UserId`, à l'image de `eleve.UserId`).
 """

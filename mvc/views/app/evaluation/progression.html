@@ -8,7 +8,7 @@
         <h1 class="text-2xl font-bold text-gray-800">Évaluation — {{ progression.prenom }} {{ progression.nom }}</h1>
         <a href="/suivi" class="text-gray-600 hover:underline">← Suivi</a>
     </div>
-    <p class="text-gray-600 mb-6">{{ progression.parcours_titre }} (v{{ progression.version }}) — statut global : {{ progression.statut }}</p>
+    <p class="text-gray-600 mb-6">{{ progression.sequence_titre }} (v{{ progression.version }}) — statut global : {{ progression.statut }}</p>
 
     {{ flash_messages(flash) }}
 

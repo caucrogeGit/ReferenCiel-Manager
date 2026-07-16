@@ -1,7 +1,7 @@
-CREATE TABLE IF NOT EXISTS parcours (
+CREATE TABLE IF NOT EXISTS sequence (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     Identifiant VARCHAR(100) NOT NULL,
-    UNIQUE KEY uk_parcours_identifiant (Identifiant),
+    UNIQUE KEY uk_sequence_identifiant (Identifiant),
     Titre VARCHAR(200) NOT NULL,
     Presentation TEXT NULL,
     Statut VARCHAR(20) NOT NULL,

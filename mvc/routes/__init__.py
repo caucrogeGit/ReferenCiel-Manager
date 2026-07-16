@@ -43,7 +43,7 @@ from mvc.routes.referentiel_atelier_routes import register_referentiel_atelier_r
 from mvc.routes.scenario_editeur_routes import register_scenario_editeur_routes
 from mvc.routes.password_reset_routes import register_password_reset_routes
 from mvc.routes.seance_routes import register_seance_routes
-from mvc.routes.parcours_routes import register_parcours_routes
+from mvc.routes.sequence_routes import register_sequence_routes
 from mvc.routes.checklist_routes import register_checklist_routes
 from mvc.routes.choix_qcm_routes import register_choix_qcm_routes
 from mvc.routes.depot_eleve_routes import register_depot_eleve_routes
@@ -115,8 +115,8 @@ register_scenario_routes(router)
 
 # Routes StarterWelcome + VersionStarter (phase ⑦, ticket 14)
 
-# Routes Parcours + VersionParcours + Seance (phase ⑧, tickets 15-16)
-register_parcours_routes(router)
+# Routes Sequence (ex-Parcours) + Seance (phase ⑧, tickets 15-16)
+register_sequence_routes(router)
 register_seance_routes(router)
 
 # Bloc B — AffectationParcours (ticket 17)
@@ -157,7 +157,7 @@ register_suivi_routes(router)
 # Espace professeur — « Mes classes » (lecture seule, socle scolaire filtré par compte)
 register_mes_classes_routes(router)
 
-# Espace élève — « Mon parcours » (lecture seule, rôle eleve)
+# Espace élève — « Mon sequence » (lecture seule, rôle eleve)
 register_mon_parcours_routes(router)
 
 # Évaluation professeur — détail progression, validation séance, checklist prof
@@ -230,7 +230,7 @@ RBAC_PREFIX_RULES: dict[str, str] = {
     # Éditeur de scénario sur mesure (ADR-019), avant le CRUD plat /scenario.
     "/conception": "conception.gerer",
     "/scenario": "conception.gerer",
-    "/parcours": "conception.gerer",
+    "/sequence": "conception.gerer",
     "/seance": "conception.gerer",
     # Exécution (travail, évaluation) : execution.gerer (admin + professeur).
     "/progression_parcours": "execution.gerer",

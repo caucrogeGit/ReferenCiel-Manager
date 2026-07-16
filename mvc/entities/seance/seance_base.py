@@ -19,10 +19,10 @@ from core.validation import (
 class SeanceBase:
     """Classe de base regenerable de Seance."""
 
-    def __init__(self, ordre, titre, parcours_id, created_at, updated_at, id=None, theme=None, production_attendue=None):
+    def __init__(self, ordre, titre, sequence_id, created_at, updated_at, id=None, theme=None, production_attendue=None):
         self.ordre = ordre
         self.titre = titre
-        self.parcours_id = parcours_id
+        self.sequence_id = sequence_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -97,15 +97,15 @@ class SeanceBase:
         self._production_attendue = value
 
     @property
-    def parcours_id(self):
-        return self._parcours_id
+    def sequence_id(self):
+        return self._sequence_id
 
-    @parcours_id.setter
+    @sequence_id.setter
     @typed(int)
-    def parcours_id(self, value):
+    def sequence_id(self, value):
         if value is None:
-            raise ValidationError("parcours_id", 'La propriété "parcours_id" ne peut pas être nulle.')
-        self._parcours_id = value
+            raise ValidationError("sequence_id", 'La propriété "sequence_id" ne peut pas être nulle.')
+        self._sequence_id = value
 
     @property
     def created_at(self):
@@ -136,7 +136,7 @@ class SeanceBase:
             "titre": self.titre,
             "theme": self.theme,
             "production_attendue": self.production_attendue,
-            "parcours_id": self.parcours_id,
+            "sequence_id": self.sequence_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -149,11 +149,11 @@ class SeanceBase:
             titre=data["titre"],
             theme=data["theme"],
             production_attendue=data["production_attendue"],
-            parcours_id=data["parcours_id"],
+            sequence_id=data["sequence_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"SeanceBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, parcours_id={self.parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"SeanceBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, sequence_id={self.sequence_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

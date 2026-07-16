@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.seance_model import (
     get_seance_by_id, add_seance, update_seance, delete_seance, bulk_delete_seances,
     count_seances, find_seances_paginated, find_seances_for_export,
-    get_parcours_choices,
+    get_sequence_choices,
 )
 from mvc.forms.seance_form import SeanceForm
 from core.security.session import get_flash, get_session_id
@@ -20,13 +20,13 @@ def _form_data_from_seance(record: dict) -> dict:
         "titre": record.get("Titre"),
         "theme": record.get("Theme"),
         "production_attendue": record.get("ProductionAttendue"),
-        "parcours_id": record.get("parcours_id"),
+        "sequence_id": record.get("sequence_id"),
     }
 
 
 def _seance_form_options():
     return {
-        "parcours_id_choices": get_parcours_choices(),
+        "sequence_id_choices": get_sequence_choices(),
     }
 
 
@@ -41,7 +41,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Ordre', 'Ordre'), ('Titre', 'Titre'), ('Theme', 'Theme'), ('Production attendue', 'ProductionAttendue'), ('Parcours id', 'parcours_id_label')]
+_CSV_COLS = [('Ordre', 'Ordre'), ('Titre', 'Titre'), ('Theme', 'Theme'), ('Production attendue', 'ProductionAttendue'), ('Séquence', 'sequence_id_label')]
 
 
 class SeanceController(BaseController):
@@ -76,24 +76,24 @@ class SeanceController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"ordre", "titre", "theme", "production_attendue", "parcours_id", "id"}:
+        if sort not in {"ordre", "titre", "theme", "production_attendue", "sequence_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        parcours_id_raw = _query_param(request, "parcours_id").strip()
-        parcours_id_f = ""
-        if parcours_id_raw:
+        sequence_id_raw = _query_param(request, "sequence_id").strip()
+        sequence_id_f = ""
+        if sequence_id_raw:
             try:
-                parcours_id_f = int(parcours_id_raw)
+                sequence_id_f = int(sequence_id_raw)
             except (TypeError, ValueError):
-                parcours_id_f = ""
+                sequence_id_f = ""
         relation_filters = {}
-        relation_filters["parcours_id"] = {"options": [{"id": value, "label": label} for value, label in get_parcours_choices()]}
+        relation_filters["sequence_id"] = {"options": [{"id": value, "label": label} for value, label in get_sequence_choices()]}
         _filters = {}
-        if parcours_id_f != "":
-            _filters["parcours_id"] = parcours_id_f
+        if sequence_id_f != "":
+            _filters["sequence_id"] = sequence_id_f
         total    = count_seances(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -106,7 +106,7 @@ class SeanceController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"parcours_id": parcours_id_f},
+            "filters": {"sequence_id": sequence_id_f},
         })
         return {
                 "seances": seances,
@@ -236,21 +236,21 @@ class SeanceController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"ordre", "titre", "theme", "production_attendue", "parcours_id", "id"}:
+        if sort not in {"ordre", "titre", "theme", "production_attendue", "sequence_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        parcours_id_raw = _query_param(request, "parcours_id").strip()
-        parcours_id_f = ""
-        if parcours_id_raw:
+        sequence_id_raw = _query_param(request, "sequence_id").strip()
+        sequence_id_f = ""
+        if sequence_id_raw:
             try:
-                parcours_id_f = int(parcours_id_raw)
+                sequence_id_f = int(sequence_id_raw)
             except (TypeError, ValueError):
-                parcours_id_f = ""
+                sequence_id_f = ""
         _filters = {}
-        if parcours_id_f != "":
-            _filters["parcours_id"] = parcours_id_f
+        if sequence_id_f != "":
+            _filters["sequence_id"] = sequence_id_f
         rows = find_seances_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

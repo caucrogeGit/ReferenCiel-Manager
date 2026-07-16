@@ -4,10 +4,10 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT seance.*, parcours.Titre AS parcours_id_label FROM seance LEFT JOIN parcours ON seance.parcours_id = parcours.Id ORDER BY seance.Id"
-SELECT_BY_ID = "SELECT seance.*, parcours.Titre AS parcours_id_label FROM seance LEFT JOIN parcours ON seance.parcours_id = parcours.Id WHERE seance.Id = ?"
-INSERT       = "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, parcours_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE seance SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, parcours_id = ?, UpdatedAt = ? WHERE Id = ?"
+SELECT_ALL   = "SELECT seance.*, sequence.Titre AS sequence_id_label FROM seance LEFT JOIN sequence ON seance.sequence_id = sequence.Id ORDER BY seance.Id"
+SELECT_BY_ID = "SELECT seance.*, sequence.Titre AS sequence_id_label FROM seance LEFT JOIN sequence ON seance.sequence_id = sequence.Id WHERE seance.Id = ?"
+INSERT       = "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, sequence_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE seance SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, sequence_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM seance WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_seance_by_id(id):
 
 
 def add_seance(data):
-    return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["parcours_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["sequence_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_seance(id, data):
-    execute(UPDATE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["parcours_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["sequence_id"], datetime.now(timezone.utc), id))
 
 
 def delete_seance(id):
@@ -40,8 +40,8 @@ def bulk_delete_seances(ids):
 
 
 _SEARCH_COLS  = ['seance.Titre', 'seance.Theme', 'seance.ProductionAttendue']
-_ALLOWED_SORT = {"ordre": "seance.Ordre", "titre": "seance.Titre", "theme": "seance.Theme", "production_attendue": "seance.ProductionAttendue", "parcours_id": "seance.parcours_id", "id": "seance.Id"}
-_ALLOWED_FILTERS = {"parcours_id": "seance.parcours_id"}
+_ALLOWED_SORT = {"ordre": "seance.Ordre", "titre": "seance.Titre", "theme": "seance.Theme", "production_attendue": "seance.ProductionAttendue", "sequence_id": "seance.sequence_id", "id": "seance.Id"}
+_ALLOWED_FILTERS = {"sequence_id": "seance.sequence_id"}
 _DEFAULT_SORT = "seance.Id"
 
 
@@ -69,7 +69,7 @@ def count_seances(q: str | None = None, filters: dict[str, Any] | None = None) -
 def find_seances_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT seance.*, parcours.Titre AS parcours_id_label FROM seance LEFT JOIN parcours ON seance.parcours_id = parcours.Id"
+    base = "SELECT seance.*, sequence.Titre AS sequence_id_label FROM seance LEFT JOIN sequence ON seance.sequence_id = sequence.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -102,6 +102,6 @@ def find_seances_for_export(q: str | None = None, sort: str | None = None, direc
 
 
 
-def get_parcours_choices():
-    rows = fetch_all("SELECT Id, Titre FROM parcours ORDER BY Titre")
+def get_sequence_choices():
+    rows = fetch_all("SELECT Id, Titre FROM sequence ORDER BY Titre")
     return [(row["Id"], row["Titre"]) for row in rows]

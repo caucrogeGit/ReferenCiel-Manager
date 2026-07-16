@@ -29,7 +29,7 @@
                     <option value="">— Choisir une progression —</option>
                     {% for p in progressions %}
                     <option value="{{ p.progression_id }}" {{ 'selected' if valeurs.progression_id == p.progression_id|string else '' }}>
-                        {{ p.eleve_nom }} {{ p.eleve_prenom }} — {{ p.parcours_titre }}
+                        {{ p.eleve_nom }} {{ p.eleve_prenom }} — {{ p.sequence_titre }}
                     </option>
                     {% endfor %}
                 </select>

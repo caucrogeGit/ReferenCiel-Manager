@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS seance (
     Titre VARCHAR(200) NOT NULL,
     Theme VARCHAR(100) NULL,
     ProductionAttendue VARCHAR(255) NULL,
-    parcours_id BIGINT UNSIGNED NOT NULL,
+    sequence_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

@@ -3,7 +3,7 @@
 seule** sur la progression des élèves, organisées **par CLASSE du professeur**.
 
 Le professeur voit ses classes (pivot `classe_professeur`) ; pour une classe, ses
-élèves (`eleve.classe_id`) et l'avancement de chacun sur ses parcours (une ligne
+élèves (`eleve.classe_id`) et l'avancement de chacun sur ses sequence (une ligne
 par progression). Pas de nouvelle entité — vues de synthèse, SQL visible et
 paramétré (esprit Forge).
 """
@@ -54,19 +54,19 @@ def get_classe(classe_id: int) -> dict[str, Any] | None:
 
 
 def suivi_eleves(classe_id: int) -> list[dict[str, Any]]:
-    """Pour une classe : une ligne par progression d'élève (élève + parcours), avec
+    """Pour une classe : une ligne par progression d'élève (élève + sequence), avec
     l'avancement par seance agrégé (validés / en cours / bloqués / total) — de quoi
     repérer les élèves bloqués."""
     return fetch_all(
         "SELECT pe.Id AS progression_id, e.Nom AS nom, e.Prenom AS prenom, "
-        "p.Titre AS parcours_titre, pe.Statut AS statut, "
+        "p.Titre AS sequence_titre, pe.Statut AS statut, "
         "SUM(pp.Statut = ?) AS nb_valide, "
         "SUM(pp.Statut = ?) AS nb_bloque, "
         "SUM(pp.Statut = ?) AS nb_en_cours, "
         "COUNT(pp.Id) AS nb_seances "
         "FROM eleve e "
         "JOIN progression_parcours pe ON pe.eleve_id = e.Id "
-        "JOIN parcours p ON p.Id = pe.parcours_id "
+        "JOIN sequence p ON p.Id = pe.sequence_id "
         "LEFT JOIN progression_seance pp ON pp.progression_parcours_id = pe.Id "
         "WHERE e.classe_id = ? "
         "GROUP BY pe.Id, e.Nom, e.Prenom, p.Titre, pe.Statut "

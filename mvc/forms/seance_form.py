@@ -6,4 +6,4 @@ class SeanceForm(Form):
     titre = StringField(label="Titre", required=True)
     theme = StringField(label="Theme", required=False)
     production_attendue = StringField(label="Production attendue", required=False)
-    parcours_id = RelationField(label="Parcours", target="Parcours", required=True, choices_key="parcours_id_choices")
+    sequence_id = RelationField(label="Séquence", target="Sequence", required=True, choices_key="sequence_id_choices")

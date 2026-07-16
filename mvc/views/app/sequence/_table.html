@@ -1,5 +1,5 @@
 <form id="bulk-delete-form"
-      method="post" action="/parcours/bulk-delete"
+      method="post" action="/sequence/bulk-delete"
       class="mb-3 flex items-center gap-3">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <button type="submit"
@@ -7,7 +7,7 @@
         Supprimer la sélection
     </button>
 </form>
-{% if parcourss %}
+{% if sequences %}
 <div class="bg-white shadow rounded overflow-hidden">
     <table class="w-full">
         <thead class="bg-gray-50 border-b">
@@ -24,23 +24,23 @@
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
-            {% for parcours in parcourss %}
+            {% for sequence in sequences %}
             <tr class="hover:bg-gray-50">
-                <td class="px-4 py-3"><input type="checkbox" name="ids" value="{{ parcours.Id }}" form="bulk-delete-form" class="rounded"></td>
-                <td class="px-4 py-3 text-gray-800">{{ parcours.Identifiant }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ parcours.Titre }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ parcours.Presentation }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ parcours.Statut }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ parcours.ActiviteGlissante }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ parcours.OrdreImpose }}</td>
-                <td class="px-4 py-3 text-gray-800">{{ parcours.niveau_classe_id_label }}</td>
+                <td class="px-4 py-3"><input type="checkbox" name="ids" value="{{ sequence.Id }}" form="bulk-delete-form" class="rounded"></td>
+                <td class="px-4 py-3 text-gray-800">{{ sequence.Identifiant }}</td>
+                <td class="px-4 py-3 text-gray-800">{{ sequence.Titre }}</td>
+                <td class="px-4 py-3 text-gray-800">{{ sequence.Presentation }}</td>
+                <td class="px-4 py-3 text-gray-800">{{ sequence.Statut }}</td>
+                <td class="px-4 py-3 text-gray-800">{{ sequence.ActiviteGlissante }}</td>
+                <td class="px-4 py-3 text-gray-800">{{ sequence.OrdreImpose }}</td>
+                <td class="px-4 py-3 text-gray-800">{{ sequence.niveau_classe_id_label }}</td>
                 <td class="px-4 py-3 text-right space-x-2">
-                    <a href="/parcours/show/{{ parcours.Id }}"
+                    <a href="/sequence/show/{{ sequence.Id }}"
                        class="text-sm text-blue-600 hover:underline">Voir</a>
-                    <a href="/parcours/edit/{{ parcours.Id }}"
+                    <a href="/sequence/edit/{{ sequence.Id }}"
                        class="text-sm text-blue-600 hover:underline">Modifier</a>
-                    <form method="post" action="/parcours/destroy/{{ parcours.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
-                          hx-post="/parcours/destroy/{{ parcours.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-confirm="Confirmer la suppression ?"
+                    <form method="post" action="/sequence/destroy/{{ sequence.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
+                          hx-post="/sequence/destroy/{{ sequence.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-confirm="Confirmer la suppression ?"
                           style="display:inline">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <button type="submit"

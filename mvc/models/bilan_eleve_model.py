@@ -89,7 +89,7 @@ def creer_bilan(
     progression n'existe pas.
 
     L'`eleve_id` est **déduit** de la progression (cohérence : le bilan porte sur le
-    parcours réellement suivi par cet élève).
+    sequence réellement suivi par cet élève).
     """
     prog = fetch_one(
         "SELECT eleve_id FROM progression_parcours WHERE Id = ?", (progression_parcours_id,)
@@ -136,12 +136,12 @@ def list_bilans() -> list[dict[str, Any]]:
 
 
 def progressions_evaluables() -> list[dict[str, Any]]:
-    """Progressions d'élèves (élève + parcours) candidates à un bilan — pour le formulaire."""
+    """Progressions d'élèves (élève + sequence) candidates à un bilan — pour le formulaire."""
     return fetch_all(
         "SELECT pe.Id AS progression_id, e.Nom AS eleve_nom, e.Prenom AS eleve_prenom, "
-        "p.Titre AS parcours_titre "
+        "p.Titre AS sequence_titre "
         "FROM progression_parcours pe "
         "JOIN eleve e ON e.Id = pe.eleve_id "
-        "JOIN parcours p ON p.Id = pe.parcours_id "
+        "JOIN sequence p ON p.Id = pe.sequence_id "
         "ORDER BY e.Nom, e.Prenom"
     )

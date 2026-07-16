@@ -20,13 +20,13 @@ STATUTS_SEANCE = ("valide", "en_cours", "bloque", "non_commence")
 
 
 def get_progression_detail(progression_id: int) -> dict[str, Any] | None:
-    """En-tête (élève + parcours) et seances avec preuves, pour évaluer."""
+    """En-tête (élève + sequence) et seances avec preuves, pour évaluer."""
     entete = fetch_one(
         "SELECT pe.Id AS id, pe.Statut AS statut, e.Nom AS nom, e.Prenom AS prenom, "
-        "p.Titre AS parcours_titre, p.Identifiant AS parcours_identifiant "
+        "p.Titre AS sequence_titre, p.Identifiant AS sequence_identifiant "
         "FROM progression_parcours pe "
         "JOIN eleve e ON e.Id = pe.eleve_id "
-        "JOIN parcours p ON p.Id = pe.parcours_id "
+        "JOIN sequence p ON p.Id = pe.sequence_id "
         "WHERE pe.Id = ?",
         (progression_id,),
     )

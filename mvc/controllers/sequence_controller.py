@@ -4,16 +4,16 @@ from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller import BaseController
 from core.mvc.view.pagination import Pagination
-from mvc.models.parcours_model import (
-    get_parcours_by_id, add_parcours, update_parcours, delete_parcours, bulk_delete_parcourss,
-    count_parcourss, find_parcourss_paginated, find_parcourss_for_export,
+from mvc.models.sequence_model import (
+    get_sequence_by_id, add_sequence, update_sequence, delete_sequence, bulk_delete_sequences,
+    count_sequences, find_sequences_paginated, find_sequences_for_export,
     get_niveau_classe_choices,
 )
-from mvc.forms.parcours_form import ParcoursForm
+from mvc.forms.sequence_form import SequenceForm
 from core.security.session import get_flash, get_session_id
 
 
-def _form_data_from_parcours(record: dict) -> dict:
+def _form_data_from_sequence(record: dict) -> dict:
     """Convertit les colonnes SQL vers les noms de champs du formulaire."""
     return {
         "identifiant": record.get("Identifiant"),
@@ -26,7 +26,7 @@ def _form_data_from_parcours(record: dict) -> dict:
     }
 
 
-def _parcours_form_options():
+def _sequence_form_options():
     return {
         "niveau_classe_id_choices": get_niveau_classe_choices(),
     }
@@ -46,7 +46,7 @@ def _is_hx_request(request):
 _CSV_COLS = [('Identifiant', 'Identifiant'), ('Titre', 'Titre'), ('Presentation', 'Presentation'), ('Statut', 'Statut'), ('Activite glissante', 'ActiviteGlissante'), ('Ordre impose', 'OrdreImpose'), ('Niveau classe id', 'niveau_classe_id_label')]
 
 
-class ParcoursController(BaseController):
+class SequenceController(BaseController):
 
     @staticmethod
     def _parse_id(value):
@@ -96,12 +96,12 @@ class ParcoursController(BaseController):
         _filters = {}
         if niveau_classe_id_f != "":
             _filters["niveau_classe_id"] = niveau_classe_id_f
-        total    = count_parcourss(q or None, filters=_filters or None)
+        total    = count_sequences(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
         offset = pagination_state.offset
         empty_context = "search_filters" if q and _filters else ("search" if q else ("filters" if _filters else None))
-        parcourss = find_parcourss_paginated(
+        sequences = find_sequences_paginated(
             q=q or None, sort=sort or None, direction=direction,
             limit=limit, offset=offset, filters=_filters or None,
         )
@@ -111,7 +111,7 @@ class ParcoursController(BaseController):
             "filters": {"niveau_classe_id": niveau_classe_id_f},
         })
         return {
-                "parcourss": parcourss,
+                "sequences": sequences,
                 "pagination": pagination,
                 "empty_context": empty_context,
                 "relation_filters": relation_filters,
@@ -120,111 +120,111 @@ class ParcoursController(BaseController):
 
     @staticmethod
     def index(request: Request) -> Response:
-        context = ParcoursController._list_context(request)
-        template = "app/parcours/_results.html" if _is_hx_request(request) else "app/parcours/index.html"
+        context = SequenceController._list_context(request)
+        template = "app/sequence/_results.html" if _is_hx_request(request) else "app/sequence/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
-        form = ParcoursForm(**_parcours_form_options())
-        return BaseController.render("app/parcours/form.html",
+        form = SequenceForm(**_sequence_form_options())
+        return BaseController.render("app/sequence/form.html",
             context={
                 "form": form,
-                "action": "/parcours/create",
-                "titre": "Nouveau parcours",
+                "action": "/sequence/create",
+                "titre": "Nouvelle séquence",
             },
             request=request)
 
     @staticmethod
     def create(request: Request) -> Response:
-        form = ParcoursForm.from_request(request, **_parcours_form_options())
+        form = SequenceForm.from_request(request, **_sequence_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("app/parcours/form.html",
+            return BaseController.validation_error("app/sequence/form.html",
                 context={
                     "form": form,
-                    "action": "/parcours/create",
-                    "titre": "Nouveau parcours",
+                    "action": "/sequence/create",
+                    "titre": "Nouvelle séquence",
                 },
                 request=request)
-        add_parcours(form.cleaned_data)
-        return BaseController.redirect_with_flash(request, "/parcours", "Parcours créé.")
+        add_sequence(form.cleaned_data)
+        return BaseController.redirect_with_flash(request, "/sequence", "Séquence créée.")
 
     @staticmethod
     def show(request: Request) -> Response:
-        id = ParcoursController._parse_id(request.route("id"))
+        id = SequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        parcours = get_parcours_by_id(id)
-        if parcours is None:
+        sequence = get_sequence_by_id(id)
+        if sequence is None:
             return BaseController.not_found()
-        return BaseController.render("app/parcours/show.html",
-            context={"parcours": parcours, "flash": get_flash(get_session_id(request))},
+        return BaseController.render("app/sequence/show.html",
+            context={"sequence": sequence, "flash": get_flash(get_session_id(request))},
             request=request)
 
     @staticmethod
     def edit(request: Request) -> Response:
-        id = ParcoursController._parse_id(request.route("id"))
+        id = SequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        parcours = get_parcours_by_id(id)
-        if parcours is None:
+        sequence = get_sequence_by_id(id)
+        if sequence is None:
             return BaseController.not_found()
-        return BaseController.render("app/parcours/form.html",
+        return BaseController.render("app/sequence/form.html",
             context={
-                "form": ParcoursForm(_form_data_from_parcours(parcours), **_parcours_form_options()),
-                "action": f"/parcours/update/{id}",
-                "titre": "Modifier parcours",
+                "form": SequenceForm(_form_data_from_sequence(sequence), **_sequence_form_options()),
+                "action": f"/sequence/update/{id}",
+                "titre": "Modifier la séquence",
             },
             request=request)
 
     @staticmethod
     def update(request: Request) -> Response:
-        id = ParcoursController._parse_id(request.route("id"))
+        id = SequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        form = ParcoursForm.from_request(request, **_parcours_form_options())
+        form = SequenceForm.from_request(request, **_sequence_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("app/parcours/form.html",
+            return BaseController.validation_error("app/sequence/form.html",
                 context={
                     "form": form,
-                    "action": f"/parcours/update/{id}",
-                    "titre": "Modifier parcours",
+                    "action": f"/sequence/update/{id}",
+                    "titre": "Modifier la séquence",
                 },
                 request=request)
-        update_parcours(id, form.cleaned_data)
+        update_sequence(id, form.cleaned_data)
         return BaseController.redirect_with_flash(
-            request, f"/parcours/show/{id}", "Parcours mis à jour.")
+            request, f"/sequence/show/{id}", "Séquence mise à jour.")
 
     @staticmethod
     def destroy(request: Request) -> Response:
-        id = ParcoursController._parse_id(request.route("id"))
+        id = SequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        delete_parcours(id)
+        delete_sequence(id)
         if _is_hx_request(request):
-            context = ParcoursController._list_context(request)
-            return BaseController.render("app/parcours/_results.html", context=context, request=request)
-        return BaseController.redirect_with_flash(request, "/parcours", "Parcours supprimé.")
+            context = SequenceController._list_context(request)
+            return BaseController.render("app/sequence/_results.html", context=context, request=request)
+        return BaseController.redirect_with_flash(request, "/sequence", "Séquence supprimée.")
 
 
     @staticmethod
     def bulk_delete(request: Request) -> Response:
-        ids = ParcoursController._parse_bulk_ids(request)
+        ids = SequenceController._parse_bulk_ids(request)
         if not ids:
-            return BaseController.redirect_with_flash(request, "/parcours", "Aucun élément sélectionné.")
-        return BaseController.render("app/parcours/bulk_delete_confirm.html",
+            return BaseController.redirect_with_flash(request, "/sequence", "Aucun élément sélectionné.")
+        return BaseController.render("app/sequence/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 
     @staticmethod
     def bulk_delete_confirm(request: Request) -> Response:
-        ids = ParcoursController._parse_bulk_ids(request)
+        ids = SequenceController._parse_bulk_ids(request)
         if not ids:
-            return BaseController.redirect_with_flash(request, "/parcours", "Aucun élément sélectionné.")
-        bulk_delete_parcourss(ids)
+            return BaseController.redirect_with_flash(request, "/sequence", "Aucun élément sélectionné.")
+        bulk_delete_sequences(ids)
         count = len(ids)
         return BaseController.redirect_with_flash(
-            request, "/parcours",
+            request, "/sequence",
             f"{count} élément(s) supprimé(s).")
 
 
@@ -253,19 +253,19 @@ class ParcoursController(BaseController):
         _filters = {}
         if niveau_classe_id_f != "":
             _filters["niveau_classe_id"] = niveau_classe_id_f
-        rows = find_parcourss_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
+        rows = find_sequences_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)
         writer.writerow([header for header, _ in _CSV_COLS])
         for row in rows:
-            writer.writerow([ParcoursController._csv_escape(str(row.get(key) or "")) for _, key in _CSV_COLS])
+            writer.writerow([SequenceController._csv_escape(str(row.get(key) or "")) for _, key in _CSV_COLS])
         content = output.getvalue().encode("utf-8")
         return Response(
             200,
             content,
             "text/csv; charset=utf-8",
             headers={
-                "Content-Disposition": 'attachment; filename="parcourss.csv"',
+                "Content-Disposition": 'attachment; filename="sequences.csv"',
                 "Cache-Control": "no-store",
             },
         )

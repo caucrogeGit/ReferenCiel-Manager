@@ -1,7 +1,7 @@
 from core.forms import Form, BooleanField, RelationField, StringField
 
 
-class ParcoursForm(Form):
+class SequenceForm(Form):
     identifiant = StringField(label="Identifiant", required=True)
     titre = StringField(label="Titre", required=True)
     presentation = StringField(label="Presentation", required=False)

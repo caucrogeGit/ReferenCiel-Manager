@@ -1,6 +1,6 @@
-"""Fixture callable : chaîne pédagogique (parcours → seance → dossier → progression → évaluations).
+"""Fixture callable : chaîne pédagogique (sequence → seance → dossier → progression → évaluations).
 
-Modèle canonique aplati (ADR-022) : le Parcours est l'objet racine (rattaché au
+Modèle canonique aplati (ADR-022) : la Séquence est l'objet racine (rattaché au
 NiveauClasse), il contient des Séances ; chaque séance porte un DossierTechnique
 (ressources + QCM de validation). L'élève a une ProgressionParcours (directe, sans
 affectation) déclinée en ProgressionSeance. On résout les Id au fil de l'eau via
@@ -20,7 +20,7 @@ def _id(row: "dict[str, Any] | None") -> int:
 
 class BlocBFixture(Fixture):
     tables = (
-        "parcours", "seance", "dossier_technique", "ressource_dossier", "qcm",
+        "sequence", "seance", "dossier_technique", "ressource_dossier", "qcm",
         "classe_professeur", "professeur_parcours",
         "progression_parcours", "progression_seance", "activite",
         "evaluation_activite", "evaluation_critere",
@@ -34,18 +34,18 @@ class BlocBFixture(Fixture):
         eleve = _id(db.fetch_one("SELECT Id FROM eleve WHERE Identifiant = ?", ("dupont-marie",)))
         crit = [int(r["Id"]) for r in db.fetch_all("SELECT Id FROM critere_observable ORDER BY Id LIMIT 4")]
 
-        # Parcours canonique (rattaché au niveau de classe) et ses liens n-n.
+        # Sequence canonique (rattaché au niveau de classe) et ses liens n-n.
         parc = db.insert(
-            "INSERT INTO parcours (Identifiant, Titre, Presentation, Statut, ActiviteGlissante, OrdreImpose, niveau_classe_id, CreatedAt, UpdatedAt) "
+            "INSERT INTO sequence (Identifiant, Titre, Presentation, Statut, ActiviteGlissante, OrdreImpose, niveau_classe_id, CreatedAt, UpdatedAt) "
             "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-            ("welcome-reseau", "Parcours Welcome Réseau", "Découverte du réseau et du câblage.", "publie", 0, 1, niveau),
+            ("welcome-reseau", "Sequence Welcome Réseau", "Découverte du réseau et du câblage.", "publie", 0, 1, niveau),
         )
-        db.execute("INSERT INTO professeur_parcours (professeur_id, parcours_id) VALUES (?, ?)", (prof, parc))
+        db.execute("INSERT INTO professeur_parcours (professeur_id, sequence_id) VALUES (?, ?)", (prof, parc))
         db.execute("INSERT INTO classe_professeur (classe_id, professeur_id) VALUES (?, ?)", (classe, prof))
 
         # Seance -> dossier technique (ressource markdown + QCM de validation).
         pal = db.insert(
-            "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, parcours_id, CreatedAt, UpdatedAt) "
+            "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, sequence_id, CreatedAt, UpdatedAt) "
             "VALUES (1, 'Seance 1 — Câblage', 'Réseau', 'Câble testé et validé', ?, NOW(), NOW())",
             (parc,),
         )
@@ -64,9 +64,9 @@ class BlocBFixture(Fixture):
             (dt,),
         )
 
-        # Progression directe de l'élève sur le parcours, déclinée par seance.
+        # Progression directe de l'élève sur la séquence, déclinée par seance.
         pe = db.insert(
-            "INSERT INTO progression_parcours (Statut, DateDebut, eleve_id, parcours_id, CreatedAt, UpdatedAt) "
+            "INSERT INTO progression_parcours (Statut, DateDebut, eleve_id, sequence_id, CreatedAt, UpdatedAt) "
             "VALUES ('en_cours', CURDATE(), ?, ?, NOW(), NOW())",
             (eleve, parc),
         )

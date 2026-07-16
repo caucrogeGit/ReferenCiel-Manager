@@ -83,11 +83,11 @@
                 {% if can('conception.gerer') %}
                 {# Deux axes pairs, sans ordre imposé : le professeur commence par
                    l'un ou l'autre. La séance vit DANS le tunnel de construction du
-                   parcours (pas d'entrée de menu) ; Starters Welcome retiré (hors
+                   sequence (pas d'entrée de menu) ; Starters Welcome retiré (hors
                    périmètre du projet). #}
                 {% call nav_group('conception', 'Conception', icon='pen') %}
                     <li>{{ nav_sublink('/conception/scenario', 'Scénarios') }}</li>
-                    <li>{{ nav_sublink('/parcours', 'Parcours') }}</li>
+                    <li>{{ nav_sublink('/sequence', 'Séquences') }}</li>
                 {% endcall %}
                 {% endif %}
 
@@ -110,7 +110,7 @@
                 {% endif %}
 
                 {% if can('espace_eleve.voir') %}
-                <li>{{ nav_link('/mon-parcours', 'Mon parcours', icon='route') }}</li>
+                <li>{{ nav_link('/mon-parcours', 'Ma séquence', icon='route') }}</li>
                 {% endif %}
             </ul>
         </nav>

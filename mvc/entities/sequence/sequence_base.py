@@ -1,5 +1,5 @@
 """FICHIER GENERE PAR FORGE.
-Base regenerable de l'entite Parcours.
+Base regenerable de l'entite Sequence.
 Ne pas y ajouter de logique metier manuelle.
 """
 
@@ -16,8 +16,8 @@ from core.validation import (
 )
 
 
-class ParcoursBase:
-    """Classe de base regenerable de Parcours."""
+class SequenceBase:
+    """Classe de base regenerable de Sequence."""
 
     def __init__(self, identifiant, titre, statut, activite_glissante, ordre_impose, niveau_classe_id, created_at, updated_at, id=None, presentation=None):
         self.identifiant = identifiant
@@ -166,7 +166,7 @@ class ParcoursBase:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ParcoursBase":
+    def from_dict(cls, data: dict[str, Any]) -> "SequenceBase":
         return cls(
             id=data["id"],
             identifiant=data["identifiant"],
@@ -181,5 +181,5 @@ class ParcoursBase:
         )
 
     def __repr__(self) -> str:
-        return f"ParcoursBase(id={self.id!r}, identifiant={self.identifiant!r}, titre={self.titre!r}, presentation={self.presentation!r}, statut={self.statut!r}, activite_glissante={self.activite_glissante!r}, ordre_impose={self.ordre_impose!r}, niveau_classe_id={self.niveau_classe_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"SequenceBase(id={self.id!r}, identifiant={self.identifiant!r}, titre={self.titre!r}, presentation={self.presentation!r}, statut={self.statut!r}, activite_glissante={self.activite_glissante!r}, ordre_impose={self.ordre_impose!r}, niveau_classe_id={self.niveau_classe_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

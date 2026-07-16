@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS progression_parcours (
     Statut VARCHAR(20) NOT NULL,
     DateDebut DATE NULL,
     eleve_id BIGINT UNSIGNED NOT NULL,
-    parcours_id BIGINT UNSIGNED NOT NULL,
+    sequence_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

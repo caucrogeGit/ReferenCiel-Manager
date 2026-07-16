@@ -1,5 +1,5 @@
 # pyright: strict
-"""Routes de l'espace élève « Mon parcours » (lecture seule).
+"""Routes de l'espace élève « Mon sequence » (lecture seule).
 
 Protégées par la permission `espace_eleve.voir` (garde posée par `guard_prefix`
 dans mvc/routes/__init__.py) : réservées au rôle `eleve`.

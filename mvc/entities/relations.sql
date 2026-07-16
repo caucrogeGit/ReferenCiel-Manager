@@ -249,17 +249,17 @@ CREATE TABLE IF NOT EXISTS scenario_activite (
         ON DELETE CASCADE
 );
 
-ALTER TABLE parcours
-    ADD CONSTRAINT fk_parcours_niveau_classe_id
+ALTER TABLE sequence
+    ADD CONSTRAINT fk_sequence_niveau_classe_id
     FOREIGN KEY (niveau_classe_id)
     REFERENCES niveau_classe (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
 ALTER TABLE seance
-    ADD CONSTRAINT fk_seance_parcours_id
-    FOREIGN KEY (parcours_id)
-    REFERENCES parcours (Id)
+    ADD CONSTRAINT fk_seance_sequence_id
+    FOREIGN KEY (sequence_id)
+    REFERENCES sequence (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -271,9 +271,9 @@ ALTER TABLE progression_parcours
     ON UPDATE RESTRICT;
 
 ALTER TABLE progression_parcours
-    ADD CONSTRAINT fk_progression_parcours_parcours_id
-    FOREIGN KEY (parcours_id)
-    REFERENCES parcours (Id)
+    ADD CONSTRAINT fk_progression_parcours_sequence_id
+    FOREIGN KEY (sequence_id)
+    REFERENCES sequence (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -469,18 +469,18 @@ ALTER TABLE bilan_eleve
 CREATE TABLE IF NOT EXISTS scenario_parcours (
     id INT NOT NULL AUTO_INCREMENT,
     scenario_id INT NOT NULL,
-    parcours_id INT NOT NULL,
+    sequence_id INT NOT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY uq_scenario_parcours (scenario_id, parcours_id),
+    UNIQUE KEY uq_scenario_parcours (scenario_id, sequence_id),
     INDEX idx_scenario_parcours_scenario_id (scenario_id),
-    INDEX idx_scenario_parcours_parcours_id (parcours_id),
+    INDEX idx_scenario_parcours_sequence_id (sequence_id),
     CONSTRAINT fk_scenario_parcours_scenario_id
         FOREIGN KEY (scenario_id)
         REFERENCES scenario (id)
         ON DELETE CASCADE,
-    CONSTRAINT fk_scenario_parcours_parcours_id
-        FOREIGN KEY (parcours_id)
-        REFERENCES parcours (id)
+    CONSTRAINT fk_scenario_parcours_sequence_id
+        FOREIGN KEY (sequence_id)
+        REFERENCES sequence (id)
         ON DELETE CASCADE
 );
 
@@ -505,18 +505,18 @@ CREATE TABLE IF NOT EXISTS classe_professeur (
 CREATE TABLE IF NOT EXISTS professeur_parcours (
     id INT NOT NULL AUTO_INCREMENT,
     professeur_id INT NOT NULL,
-    parcours_id INT NOT NULL,
+    sequence_id INT NOT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY uq_professeur_parcours (professeur_id, parcours_id),
+    UNIQUE KEY uq_professeur_parcours (professeur_id, sequence_id),
     INDEX idx_professeur_parcours_professeur_id (professeur_id),
-    INDEX idx_professeur_parcours_parcours_id (parcours_id),
+    INDEX idx_professeur_parcours_sequence_id (sequence_id),
     CONSTRAINT fk_professeur_parcours_professeur_id
         FOREIGN KEY (professeur_id)
         REFERENCES professeur (id)
         ON DELETE CASCADE,
-    CONSTRAINT fk_professeur_parcours_parcours_id
-        FOREIGN KEY (parcours_id)
-        REFERENCES parcours (id)
+    CONSTRAINT fk_professeur_parcours_sequence_id
+        FOREIGN KEY (sequence_id)
+        REFERENCES sequence (id)
         ON DELETE CASCADE
 );
 

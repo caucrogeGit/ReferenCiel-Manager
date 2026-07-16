@@ -12,7 +12,7 @@
         <thead class="bg-gray-100 text-left text-gray-700">
             <tr>
                 <th class="px-4 py-2">Élève</th>
-                <th class="px-4 py-2">Parcours</th>
+                <th class="px-4 py-2">Séquence</th>
                 <th class="px-4 py-2">Statut</th>
                 <th class="px-4 py-2 text-right">Validés</th>
                 <th class="px-4 py-2 text-right">En cours</th>
@@ -26,7 +26,7 @@
             {% for e in eleves %}
             <tr class="border-t border-gray-100 {{ 'bg-red-50' if e.nb_bloque and e.nb_bloque > 0 else '' }}">
                 <td class="px-4 py-2 font-medium">{{ e.nom }} {{ e.prenom }}</td>
-                <td class="px-4 py-2 text-gray-600">{{ e.parcours_titre }}</td>
+                <td class="px-4 py-2 text-gray-600">{{ e.sequence_titre }}</td>
                 <td class="px-4 py-2">{{ e.statut }}</td>
                 <td class="px-4 py-2 text-right text-green-700">{{ e.nb_valide or 0 }}</td>
                 <td class="px-4 py-2 text-right">{{ e.nb_en_cours or 0 }}</td>

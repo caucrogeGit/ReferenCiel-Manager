@@ -1,5 +1,5 @@
 # pyright: strict
-"""Espace élève — « Mon parcours » (lecture seule).
+"""Espace élève — « Mon sequence » (lecture seule).
 
 Vues de synthèse sur la progression de l'élève **connecté**, filtrées par son
 compte (`eleve.UserId = ?`) : c'est la sécurité au niveau **ligne** (row-level),
@@ -22,12 +22,12 @@ def get_eleve_by_user(user_id: int) -> dict[str, Any] | None:
 
 
 def mes_progressions(eleve_id: int) -> list[dict[str, Any]]:
-    """Une ligne par parcours affecté à l'élève (titre, version, statut global)."""
+    """Une ligne par séquence affectée à l'élève (titre, version, statut global)."""
     return fetch_all(
         "SELECT pe.Id AS progression_id, pe.Statut AS statut, "
-        "p.Titre AS parcours_titre, p.Identifiant AS parcours_identifiant "
+        "p.Titre AS sequence_titre, p.Identifiant AS sequence_identifiant "
         "FROM progression_parcours pe "
-        "JOIN parcours p ON p.Id = pe.parcours_id "
+        "JOIN sequence p ON p.Id = pe.sequence_id "
         "WHERE pe.eleve_id = ? "
         "ORDER BY p.Titre",
         (eleve_id,),
@@ -38,7 +38,7 @@ def seances_progression(progression_id: int) -> list[dict[str, Any]]:
     """Les seances d'une progression, dans l'ordre, avec leur statut.
 
     Expose `progression_seance_id` (cible des actions de saisie) et `qcm_id`
-    (présence d'un QCM à passer, ou NULL) pour la vue « Mon parcours ».
+    (présence d'un QCM à passer, ou NULL) pour la vue « Mon sequence ».
     """
     return fetch_all(
         "SELECT pp.Id AS progression_seance_id, pa.Ordre AS ordre, pa.Titre AS titre, "
@@ -55,7 +55,7 @@ def seances_progression(progression_id: int) -> list[dict[str, Any]]:
 
 
 def mon_parcours(user_id: int) -> dict[str, Any] | None:
-    """Vue complète « Mon parcours » du compte : élève + parcours + seances.
+    """Vue complète « Mon sequence » du compte : élève + sequence + seances.
 
     Renvoie None si le compte n'est rattaché à aucun élève (compte élève non lié).
     """

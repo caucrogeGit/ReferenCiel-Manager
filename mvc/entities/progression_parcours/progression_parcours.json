@@ -25,9 +25,9 @@
       "required": true
     },
     {
-      "name": "parcours_id",
+      "name": "sequence_id",
       "type": "foreign_key",
-      "references": "Parcours",
+      "references": "Sequence",
       "required": true
     }
   ],

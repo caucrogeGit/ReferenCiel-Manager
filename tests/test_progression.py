@@ -27,18 +27,18 @@ def _capture_insert(monkeypatch: pytest.MonkeyPatch, module: Any) -> dict[str, A
     return captured
 
 
-def test_progression_parcours_par_eleve_et_parcours(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_progression_parcours_par_eleve_et_sequence(monkeypatch: pytest.MonkeyPatch) -> None:
     cap = _capture_insert(monkeypatch, pe)
     pe.add_progression_parcours({
         "statut": "en_cours",
         "date_debut": "2026-09-02",
         "eleve_id": 3,
-        "parcours_id": 8,
+        "sequence_id": 8,
         "created_at": "2026-07-10 00:00:00",
         "updated_at": "2026-07-10 00:00:00",
     })
     assert "INSERT INTO progression_parcours" in cap["sql"]
-    assert 3 in cap["params"] and 8 in cap["params"]  # eleve + parcours
+    assert 3 in cap["params"] and 8 in cap["params"]  # eleve + sequence
     assert "en_cours" in cap["params"]
 
 

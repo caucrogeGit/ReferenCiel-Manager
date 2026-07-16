@@ -17,7 +17,7 @@
         {{ field(name='titre', label='Titre', type='text', value=form.value('titre'), error=form.error('titre')) }}
         {{ field(name='theme', label='Theme', type='text', value=form.value('theme'), error=form.error('theme')) }}
         {{ field(name='production_attendue', label='Production attendue', type='text', value=form.value('production_attendue'), error=form.error('production_attendue')) }}
-        {{ select_field(name='parcours_id', label='Parcours', options=form.options.parcours_id_choices, selected=form.value('parcours_id'), error=form.error('parcours_id')) }}
+        {{ select_field(name='sequence_id', label='Séquence', options=form.options.sequence_id_choices, selected=form.value('sequence_id'), error=form.error('sequence_id')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
             {{ button(label='Annuler', variant='secondary', href='/seance') }}

@@ -3,45 +3,45 @@
 {% from "components/ui.html" import button, flash_messages %}
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Détail parcours</h1>
+    <h1 class="text-2xl font-bold text-gray-800">Détail de la séquence</h1>
     <div class="space-x-2">
-        {{ button(label='Modifier', variant='primary', href='/parcours/edit/' ~ parcours.Id) }}
-        <a href="/parcours" class="text-gray-600 hover:underline">← Retour</a>
+        {{ button(label='Modifier', variant='primary', href='/sequence/edit/' ~ sequence.Id) }}
+        <a href="/sequence" class="text-gray-600 hover:underline">← Retour</a>
     </div>
 </div>
 
 <div class="bg-white shadow rounded p-6 space-y-4">
     <div>
         <p class="text-sm text-gray-500">Identifiant</p>
-        <p class="text-gray-800">{{ parcours.Identifiant }}</p>
+        <p class="text-gray-800">{{ sequence.Identifiant }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Titre</p>
-        <p class="text-gray-800">{{ parcours.Titre }}</p>
+        <p class="text-gray-800">{{ sequence.Titre }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Presentation</p>
-        <p class="text-gray-800">{{ parcours.Presentation }}</p>
+        <p class="text-gray-800">{{ sequence.Presentation }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Statut</p>
-        <p class="text-gray-800">{{ parcours.Statut }}</p>
+        <p class="text-gray-800">{{ sequence.Statut }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Activite glissante</p>
-        <p class="text-gray-800">{{ parcours.ActiviteGlissante }}</p>
+        <p class="text-gray-800">{{ sequence.ActiviteGlissante }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Ordre impose</p>
-        <p class="text-gray-800">{{ parcours.OrdreImpose }}</p>
+        <p class="text-gray-800">{{ sequence.OrdreImpose }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Niveau classe</p>
-        <p class="text-gray-800">{{ parcours.niveau_classe_id_label }}</p>
+        <p class="text-gray-800">{{ sequence.niveau_classe_id_label }}</p>
     </div>
 </div>
 
-<form method="post" action="/parcours/destroy/{{ parcours.Id }}" class="mt-4" data-confirm="Confirmer la suppression ?">
+<form method="post" action="/sequence/destroy/{{ sequence.Id }}" class="mt-4" data-confirm="Confirmer la suppression ?">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     {{ button(label='Supprimer', variant='danger', type='submit') }}
 </form>

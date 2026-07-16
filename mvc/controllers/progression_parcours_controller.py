@@ -5,9 +5,9 @@ from core.http.response import Response
 from core.mvc.controller import BaseController
 from core.mvc.view.pagination import Pagination
 from mvc.models.progression_parcours_model import (
-    get_progression_parcours_by_id, add_progression_parcours, update_progression_parcours, delete_progression_parcours, bulk_delete_progression_parcourss,
-    count_progression_parcourss, find_progression_parcourss_paginated, find_progression_parcourss_for_export,
-    get_eleve_choices, get_parcours_choices,
+    get_progression_parcours_by_id, add_progression_parcours, update_progression_parcours, delete_progression_parcours, bulk_delete_progression_sequences,
+    count_progression_sequences, find_progression_parcourss_paginated, find_progression_parcourss_for_export,
+    get_eleve_choices, get_sequence_choices,
 )
 from mvc.forms.progression_parcours_form import ProgressionParcoursForm
 from core.security.session import get_flash, get_session_id
@@ -19,14 +19,14 @@ def _form_data_from_progression_parcours(record: dict) -> dict:
         "statut": record.get("Statut"),
         "date_debut": record.get("DateDebut"),
         "eleve_id": record.get("eleve_id"),
-        "parcours_id": record.get("parcours_id"),
+        "sequence_id": record.get("sequence_id"),
     }
 
 
 def _progression_parcours_form_options():
     return {
         "eleve_id_choices": get_eleve_choices(),
-        "parcours_id_choices": get_parcours_choices(),
+        "sequence_id_choices": get_sequence_choices(),
     }
 
 
@@ -41,7 +41,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Statut', 'Statut'), ('Date debut', 'DateDebut'), ('Eleve id', 'eleve_id_label'), ('Parcours id', 'parcours_id_label')]
+_CSV_COLS = [('Statut', 'Statut'), ('Date debut', 'DateDebut'), ('Eleve id', 'eleve_id_label'), ('Séquence', 'sequence_id_label')]
 
 
 class ProgressionParcoursController(BaseController):
@@ -76,7 +76,7 @@ class ProgressionParcoursController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"statut", "date_debut", "eleve_id", "parcours_id", "id"}:
+        if sort not in {"statut", "date_debut", "eleve_id", "sequence_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
@@ -89,37 +89,37 @@ class ProgressionParcoursController(BaseController):
                 eleve_id_f = int(eleve_id_raw)
             except (TypeError, ValueError):
                 eleve_id_f = ""
-        parcours_id_raw = _query_param(request, "parcours_id").strip()
-        parcours_id_f = ""
-        if parcours_id_raw:
+        sequence_id_raw = _query_param(request, "sequence_id").strip()
+        sequence_id_f = ""
+        if sequence_id_raw:
             try:
-                parcours_id_f = int(parcours_id_raw)
+                sequence_id_f = int(sequence_id_raw)
             except (TypeError, ValueError):
-                parcours_id_f = ""
+                sequence_id_f = ""
         relation_filters = {}
         relation_filters["eleve_id"] = {"options": [{"id": value, "label": label} for value, label in get_eleve_choices()]}
-        relation_filters["parcours_id"] = {"options": [{"id": value, "label": label} for value, label in get_parcours_choices()]}
+        relation_filters["sequence_id"] = {"options": [{"id": value, "label": label} for value, label in get_sequence_choices()]}
         _filters = {}
         if eleve_id_f != "":
             _filters["eleve_id"] = eleve_id_f
-        if parcours_id_f != "":
-            _filters["parcours_id"] = parcours_id_f
-        total    = count_progression_parcourss(q or None, filters=_filters or None)
+        if sequence_id_f != "":
+            _filters["sequence_id"] = sequence_id_f
+        total    = count_progression_sequences(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
         offset = pagination_state.offset
         empty_context = "search_filters" if q and _filters else ("search" if q else ("filters" if _filters else None))
-        progression_parcourss = find_progression_parcourss_paginated(
+        progression_sequences = find_progression_parcourss_paginated(
             q=q or None, sort=sort or None, direction=direction,
             limit=limit, offset=offset, filters=_filters or None,
         )
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"eleve_id": eleve_id_f, "parcours_id": parcours_id_f},
+            "filters": {"eleve_id": eleve_id_f, "sequence_id": sequence_id_f},
         })
         return {
-                "progression_parcourss": progression_parcourss,
+                "progression_sequences": progression_sequences,
                 "pagination": pagination,
                 "empty_context": empty_context,
                 "relation_filters": relation_filters,
@@ -229,7 +229,7 @@ class ProgressionParcoursController(BaseController):
         ids = ProgressionParcoursController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/progression_parcours", "Aucun élément sélectionné.")
-        bulk_delete_progression_parcourss(ids)
+        bulk_delete_progression_sequences(ids)
         count = len(ids)
         return BaseController.redirect_with_flash(
             request, "/progression_parcours",
@@ -246,7 +246,7 @@ class ProgressionParcoursController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"statut", "date_debut", "eleve_id", "parcours_id", "id"}:
+        if sort not in {"statut", "date_debut", "eleve_id", "sequence_id", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
@@ -258,18 +258,18 @@ class ProgressionParcoursController(BaseController):
                 eleve_id_f = int(eleve_id_raw)
             except (TypeError, ValueError):
                 eleve_id_f = ""
-        parcours_id_raw = _query_param(request, "parcours_id").strip()
-        parcours_id_f = ""
-        if parcours_id_raw:
+        sequence_id_raw = _query_param(request, "sequence_id").strip()
+        sequence_id_f = ""
+        if sequence_id_raw:
             try:
-                parcours_id_f = int(parcours_id_raw)
+                sequence_id_f = int(sequence_id_raw)
             except (TypeError, ValueError):
-                parcours_id_f = ""
+                sequence_id_f = ""
         _filters = {}
         if eleve_id_f != "":
             _filters["eleve_id"] = eleve_id_f
-        if parcours_id_f != "":
-            _filters["parcours_id"] = parcours_id_f
+        if sequence_id_f != "":
+            _filters["sequence_id"] = sequence_id_f
         rows = find_progression_parcourss_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)
@@ -282,7 +282,7 @@ class ProgressionParcoursController(BaseController):
             content,
             "text/csv; charset=utf-8",
             headers={
-                "Content-Disposition": 'attachment; filename="progression_parcourss.csv"',
+                "Content-Disposition": 'attachment; filename="progression_sequences.csv"',
                 "Cache-Control": "no-store",
             },
         )
