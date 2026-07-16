@@ -96,11 +96,11 @@ nav:
   - Spécifications:
       - JSON canonique: specs/json-canonique/README.md
       - Contrat — référentiel niveau-classe: specs/json-canonique/contrat-referentiel-niveau-classe.md
-      - Contrat — Parcours: specs/json-canonique/contrat-parcours.md
+      - Contrat — Séquence: specs/json-canonique/contrat-sequence.md
       - Dictionnaire — référentiel niveau-classe: specs/data-dictionary/dictionnaire-referentiel-niveau-classe.md
       - Dictionnaire — socle scolaire: specs/data-dictionary/dictionnaire-socle-scolaire.md
       - Dictionnaire — Scénario pédagogique: specs/data-dictionary/dictionnaire-scenario.md
-      - Dictionnaire — Parcours: specs/data-dictionary/dictionnaire-parcours.md
+      - Dictionnaire — Séquence: specs/data-dictionary/dictionnaire-sequence.md
       - Dictionnaire — Bilan élève: specs/data-dictionary/dictionnaire-bilan.md
       - Registre des sources: specs/json-canonique/registre-des-sources.md
       - Trace — JSON canonique CIEL 2TNE: specs/json-canonique/traces/trace-creation-json-canonique-ciel-2tne.md

@@ -3,6 +3,12 @@
 **Statut :** Accepté
 **Date :** 2026-07-15
 
+> **Note (ADR-025, 2026-07-16).** Les objets de cet ADR ont été renommés selon
+> la sémantique de l'Éducation nationale : **Parcours → Séquence** et
+> **Palier → Séance** (entités `Sequence`, `Seance`, `ProgressionSequence`,
+> `ProgressionSeance`). Les cardinalités et la logique décrites ici restent
+> valables telles quelles. Voir [ADR-025](025-renommage-sequence-seance.md).
+
 ## Contexte
 
 Le cœur pédagogique empile aujourd'hui cinq niveaux au-dessus du palier :

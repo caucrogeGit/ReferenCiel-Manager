@@ -192,7 +192,7 @@ Ce dictionnaire couvre le **domaine référentiel niveau-classe**.
 Voir aussi, mêmes
 principes : le [dictionnaire du **socle scolaire**](dictionnaire-socle-scolaire.md)
 (AnneeScolaire, Classe, Eleve, Professeur, InscriptionEleve…) et celui du
-[**Starter Welcome**](dictionnaire-parcours.md) (StarterWelcome, Palier,
+[**Starter Welcome**](dictionnaire-sequence.md) (StarterWelcome, Palier,
 QCM, Checklist…).
 Les contrats d'entité Forge et migrations en découlent (tickets de
 programmation, à faire ensemble).

@@ -82,8 +82,8 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 02 | [Contrat du JSON canonique](ticket-02-contrat-json-canonique.md) → [spécification](../specs/json-canonique/contrat-referentiel-niveau-classe.md) : enveloppe commune + référentiel niveau-classe **à deux couches** (famille TNE CC1–CC9 + cible CIEL C01–C11 + mapping) | Sources | Terminé |
 | 04 | [Schéma JSON](../specs/json-canonique/schemas/schema-json-canonique-referentiel-niveau-classe.json) du référentiel niveau-classe (porte de validation des uploads, ADR-009) | Sources | Terminé |
 | 03 | [Exemple CIEL 2TNE](../specs/json-canonique/examples/json-canonique-ciel-2tne.json) conforme (fixture d'upload et de test, validé par un test méta) | Sources | Terminé (v0.1.0, représentatif) |
-| 02b | [Contrat JSON canonique : Starter Welcome](../specs/json-canonique/contrat-parcours.md) : type `starter_welcome` (paliers → dossier / QCM / activité / checklist), manifeste + bundle | Sources | Terminé |
-| 04b | [Schéma JSON : Starter Welcome](../specs/json-canonique/schemas/schema-json-canonique-parcours.json) (porte de validation des uploads) | Sources | Terminé |
+| 02b | [Contrat JSON canonique : Starter Welcome](../specs/json-canonique/contrat-sequence.md) : type `starter_welcome` (paliers → dossier / QCM / activité / checklist), manifeste + bundle | Sources | Terminé |
+| 04b | [Schéma JSON : Starter Welcome](../specs/json-canonique/schemas/schema-json-canonique-sequence.json) (porte de validation des uploads) | Sources | Terminé |
 | 03b | [Manifeste canonique Welcome Réseau](../specs/json-canonique/examples/json-canonique-welcome-reseau.json) (4 paliers, 80 questions, 45 sections, 33 images), validé par test méta | Sources | Terminé |
 | 05 | [Dictionnaire de données du socle scolaire](../specs/data-dictionary/dictionnaire-socle-scolaire.md) (AnneeScolaire, NiveauClasse, Classe, Groupe, Eleve `user_id?`, Professeur, InscriptionEleve, AffectationProfesseurClasse) | A | Terminé |
 | 06 | **ADR-004 : Architecture Forge (mvc/ vs app/, contrats, migrations, services, repositories)**, prérequis du code | - | Terminé (Accepté) |
@@ -94,7 +94,7 @@ Valables pour tous les tickets, sauf décision structurante contraire (ADR) :
 | 11 | Importeur JSON canonique → base référentielle. Chaîne validation schéma → import upsert best-effort → rapport (ADR-011). Vérifié sur la fixture `ciel-2tne` (81 objets, pivots M2M compris). | Référentiel | Terminé |
 | 12 | [Dictionnaire de données `Scenario`](../specs/data-dictionary/dictionnaire-scenario.md) | Scénario | Terminé |
 | 13 | Chaîne `Scenario` (contrat, migration, service, interface prof minimale, tests de persistance). Vérifié : contrat + migration + model + controller + vues `app/scenario` ; `test_scenario_persistance.py` (4 tests) vert. | Scénario | Terminé |
-| 13b | [Dictionnaire de données Starter Welcome](../specs/data-dictionary/dictionnaire-parcours.md) (StarterWelcome, Palier, QCM/Question/Choix, Activite, Checklist/Section/Item, Image, Ressource ; contenu par référence ; lien `Palier ↔ Competence` optionnel) | Starter | Terminé |
+| 13b | [Dictionnaire de données Starter Welcome](../specs/data-dictionary/dictionnaire-sequence.md) (StarterWelcome, Palier, QCM/Question/Choix, Activite, Checklist/Section/Item, Image, Ressource ; contenu par référence ; lien `Palier ↔ Competence` optionnel) | Starter | Terminé |
 | 14 | `StarterWelcome` (+ `VersionStarter`) | Starter | Terminé |
 | 15 | `Parcours` + `VersionParcours` | Parcours | Terminé |
 | 16 | `Palier` (découpage du parcours), ticket explicite | Parcours | Terminé |

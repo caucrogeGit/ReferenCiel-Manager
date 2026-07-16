@@ -446,7 +446,7 @@ compétences/critères + `sync_*_ids` transactionnel. Tests de persistance (mock
 ### `StarterWelcome` / `VersionStarter` : tables `starter_welcome` / `version_starter` ✅ (phase ⑦)
 
 Parcours réutilisable, en **identité + versions** ([ADR-012](adr/012-versionnement-identite-plus-version.md),
-[dico](specs/data-dictionary/dictionnaire-parcours.md)).
+[dico](specs/data-dictionary/dictionnaire-sequence.md)).
 
 | Entité | Champs | Relations |
 |---|---|---|
@@ -459,7 +459,7 @@ Parcours réutilisable, en **identité + versions** ([ADR-012](adr/012-versionne
 ### `Parcours` / `VersionParcours` / `Palier` : phase ⑧ ✅
 
 Le parcours **organise le travail élève**, **dérivé** d'un starter ([ADR-012](adr/012-versionnement-identite-plus-version.md),
-[dico Parcours](specs/data-dictionary/dictionnaire-parcours.md)).
+[dico Parcours](specs/data-dictionary/dictionnaire-sequence.md)).
 
 | Entité | Champs | Relations |
 |---|---|---|

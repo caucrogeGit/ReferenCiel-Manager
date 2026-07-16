@@ -1,5 +1,5 @@
 {
-  "type": "parcours",
+  "type": "sequence",
   "identifiant": "welcome-reseau",
   "version": "0.1.0",
   "sources": [
@@ -7,7 +7,7 @@
       "source_id": "starter-welcome-reseau",
       "source_type": "starter",
       "source_fichier": "sources/starters/welcome-reseau/",
-      "source_note": "Parcours Welcome Réseau numérisé (4 paliers)."
+      "source_note": "Séquence Welcome Réseau numérisé (4 paliers)."
     }
   ],
   "provenance": {
@@ -24,9 +24,9 @@
     "activite_glissante": true,
     "ordre_impose": true
   },
-  "paliers": [
+  "seances": [
     {
-      "id": "palier-1",
+      "id": "seance-1",
       "ordre": 1,
       "titre": "Fabriquer et tester un câble Ethernet droit T568B",
       "theme": "Câble Ethernet droit",
@@ -43,7 +43,7 @@
         ]
       },
       "qcm": {
-        "id": "qcm-palier-1",
+        "id": "qcm-seance-1",
         "format_reponse": "Pour chaque question, choisir une seule réponse.",
         "validation": {
           "seuil": "100%"
@@ -432,18 +432,18 @@
         ]
       },
       "activite": {
-        "id": "activite-palier-1",
+        "id": "activite-seance-1",
         "fichier": "palier-1/eleve/activite-palier-1.md"
       },
       "checklist": {
-        "id": "checklist-palier-1",
+        "id": "checklist-seance-1",
         "sections": [
           {
             "numero": 1,
             "titre": "Validation du QCM",
             "items": [
               {
-                "libelle": "Le fichier de réponses du QCM du palier 1 existe"
+                "libelle": "Le fichier de réponses du QCM de la séance 1 existe"
               },
               {
                 "libelle": "Le format demandé est respecté"
@@ -479,7 +479,7 @@
                 "libelle": "Un testeur RJ45 est disponible"
               },
               {
-                "libelle": "Le dossier technique du palier 1 est accessible"
+                "libelle": "Le dossier technique de la séance 1 est accessible"
               },
               {
                 "libelle": "L’élève n’a pas commencé si un élément manquait"
@@ -665,7 +665,7 @@
           },
           {
             "numero": 12,
-            "titre": "Validation finale du palier 1",
+            "titre": "Validation finale de la séance 1",
             "items": [
               {
                 "libelle": "QCM validé à 100 %"
@@ -728,12 +728,12 @@
       ],
       "ressources": {
         "eleve": [
-          "palier-1/eleve/qcm-palier-1.md",
-          "palier-1/eleve/activite-palier-1.md",
-          "palier-1/eleve/checklist-palier-1-validation.md"
+          "seance-1/eleve/qcm-seance-1.md",
+          "seance-1/eleve/activite-seance-1.md",
+          "seance-1/eleve/checklist-seance-1-validation.md"
         ],
         "professeur": [
-          "palier-1/professeur/qcm-palier-1-corrige.md"
+          "seance-1/professeur/qcm-seance-1-corrige.md"
         ]
       },
       "source_ids": [
@@ -741,7 +741,7 @@
       ]
     },
     {
-      "id": "palier-2",
+      "id": "seance-2",
       "ordre": 2,
       "titre": "Installer deux machines virtuelles avec VirtualBox",
       "theme": "Machines virtuelles",
@@ -758,7 +758,7 @@
         ]
       },
       "qcm": {
-        "id": "qcm-palier-2",
+        "id": "qcm-seance-2",
         "format_reponse": "Fichier texte nomme qcm-palier2.txt contenant une reponse par ligne, sans espace entre le numero de la question et la lettre choisie (ex. 1a, 2b, 3c) ; les 20 questions doivent etre repondues.",
         "validation": {
           "seuil": "100%"
@@ -1127,7 +1127,7 @@
           },
           {
             "numero": 20,
-            "enonce": "Le palier 2 est termine lorsque :",
+            "enonce": "La séance 2 est terminée lorsque :",
             "choix": [
               {
                 "lettre": "A",
@@ -1147,11 +1147,11 @@
         ]
       },
       "activite": {
-        "id": "activite-palier-2",
+        "id": "activite-seance-2",
         "fichier": "palier-2/eleve/activite-palier-2.md"
       },
       "checklist": {
-        "id": "checklist-palier-2",
+        "id": "checklist-seance-2",
         "sections": [
           {
             "numero": 1,
@@ -1464,7 +1464,7 @@
           },
           {
             "numero": 6,
-            "titre": "Validation finale du palier 2",
+            "titre": "Validation finale de la séance 2",
             "items": [
               {
                 "libelle": "QCM valide a 100 %"
@@ -1500,7 +1500,7 @@
                 "libelle": "Instantane Zorin OS cree"
               },
               {
-                "libelle": "Les deux machines virtuelles sont pretes pour le palier 3"
+                "libelle": "Les deux machines virtuelles sont pretes pour la séance 3"
               }
             ]
           }
@@ -1542,12 +1542,12 @@
       ],
       "ressources": {
         "eleve": [
-          "palier-2/eleve/qcm-palier-2.md",
-          "palier-2/eleve/activite-palier-2.md",
-          "palier-2/eleve/checklist-palier-2-validation.md"
+          "seance-2/eleve/qcm-seance-2.md",
+          "seance-2/eleve/activite-seance-2.md",
+          "seance-2/eleve/checklist-seance-2-validation.md"
         ],
         "professeur": [
-          "palier-2/professeur/qcm-palier-2-corrige.md"
+          "seance-2/professeur/qcm-seance-2-corrige.md"
         ]
       },
       "source_ids": [
@@ -1555,7 +1555,7 @@
       ]
     },
     {
-      "id": "palier-3",
+      "id": "seance-3",
       "ordre": 3,
       "titre": "Relever les informations réseau et tester les modes simples VirtualBox",
       "theme": "Modes réseau simples",
@@ -1572,7 +1572,7 @@
         ]
       },
       "qcm": {
-        "id": "qcm-palier-3",
+        "id": "qcm-seance-3",
         "format_reponse": "Fichier texte nommé qcm-palier3.txt, une réponse par ligne au format numéro suivi de la lettre en minuscule sans espace (exemple : 1a), uniquement les lettres a, b ou c, sans phrase ni justification.",
         "validation": {
           "seuil": "100%"
@@ -1580,7 +1580,7 @@
         "questions": [
           {
             "numero": 1,
-            "enonce": "Dans ce palier, la machine hôte est :",
+            "enonce": "Dans cette séance, la machine hôte est :",
             "choix": [
               {
                 "lettre": "A",
@@ -1599,7 +1599,7 @@
           },
           {
             "numero": 2,
-            "enonce": "Les machines virtuelles utilisées dans ce palier sont :",
+            "enonce": "Les machines virtuelles utilisées dans cette séance sont :",
             "choix": [
               {
                 "lettre": "A",
@@ -1751,7 +1751,7 @@
           },
           {
             "numero": 10,
-            "enonce": "Dans ce palier, les élèves doivent :",
+            "enonce": "Dans cette séance, les élèves doivent :",
             "choix": [
               {
                 "lettre": "A",
@@ -1961,11 +1961,11 @@
         ]
       },
       "activite": {
-        "id": "activite-palier-3",
+        "id": "activite-seance-3",
         "fichier": "palier-3/eleve/activite-palier-3.md"
       },
       "checklist": {
-        "id": "checklist-palier-3",
+        "id": "checklist-seance-3",
         "sections": [
           {
             "numero": 1,
@@ -1978,7 +1978,7 @@
                 "libelle": "Le format demandé est respecté"
               },
               {
-                "libelle": "Le QCM du palier 3 est validé à 100 %"
+                "libelle": "Le QCM de la séance 3 est validé à 100 %"
               },
               {
                 "libelle": "L’activité a commencé uniquement après validation du QCM"
@@ -2002,10 +2002,10 @@
                 "libelle": "La VM Zorin OS est présente"
               },
               {
-                "libelle": "Le dossier technique du palier 3 est accessible"
+                "libelle": "Le dossier technique de la séance 3 est accessible"
               },
               {
-                "libelle": "L’activité du palier 3 est accessible"
+                "libelle": "L’activité de la séance 3 est accessible"
               }
             ]
           },
@@ -2371,7 +2371,7 @@
           },
           {
             "numero": 16,
-            "titre": "Validation finale du palier 3",
+            "titre": "Validation finale de la séance 3",
             "items": [
               {
                 "libelle": "QCM validé à 100 %"
@@ -2455,12 +2455,12 @@
       ],
       "ressources": {
         "eleve": [
-          "palier-3/eleve/qcm-palier-3.md",
-          "palier-3/eleve/activite-palier-3.md",
-          "palier-3/eleve/checklist-palier-3-validation.md"
+          "seance-3/eleve/qcm-seance-3.md",
+          "seance-3/eleve/activite-seance-3.md",
+          "seance-3/eleve/checklist-seance-3-validation.md"
         ],
         "professeur": [
-          "palier-3/professeur/qcm-palier-3-corrige.md"
+          "seance-3/professeur/qcm-seance-3-corrige.md"
         ]
       },
       "source_ids": [
@@ -2468,7 +2468,7 @@
       ]
     },
     {
-      "id": "palier-4",
+      "id": "seance-4",
       "ordre": 4,
       "titre": "Configurer un réseau interne et diagnostiquer une communication",
       "theme": "Réseau interne",
@@ -2485,7 +2485,7 @@
         ]
       },
       "qcm": {
-        "id": "qcm-palier-4",
+        "id": "qcm-seance-4",
         "format_reponse": "Une réponse par ligne dans un fichier texte nommé qcm-palier4.txt, sans espace entre le numéro et la lettre (exemple : 1a).",
         "validation": {
           "seuil": "100%"
@@ -2493,7 +2493,7 @@
         "questions": [
           {
             "numero": 1,
-            "enonce": "Dans le palier 4, les machines principales à tester sont :",
+            "enonce": "Dans la séance 4, les machines principales à tester sont :",
             "choix": [
               {
                 "lettre": "A",
@@ -2512,7 +2512,7 @@
           },
           {
             "numero": 2,
-            "enonce": "Dans ce palier, Debian 13 sert principalement à :",
+            "enonce": "Dans cette séance, Debian 13 sert principalement à :",
             "choix": [
               {
                 "lettre": "A",
@@ -2531,7 +2531,7 @@
           },
           {
             "numero": 3,
-            "enonce": "Le mode réseau étudié dans le palier 4 est :",
+            "enonce": "Le mode réseau étudié dans la séance 4 est :",
             "choix": [
               {
                 "lettre": "A",
@@ -2588,7 +2588,7 @@
           },
           {
             "numero": 6,
-            "enonce": "Dans ce palier, le nom du réseau interne à utiliser est :",
+            "enonce": "Dans cette séance, le nom du réseau interne à utiliser est :",
             "choix": [
               {
                 "lettre": "A",
@@ -2626,7 +2626,7 @@
           },
           {
             "numero": 8,
-            "enonce": "Pourquoi utilise-t-on des adresses IP fixes dans ce palier ?",
+            "enonce": "Pourquoi utilise-t-on des adresses IP fixes dans cette séance ?",
             "choix": [
               {
                 "lettre": "A",
@@ -2683,7 +2683,7 @@
           },
           {
             "numero": 11,
-            "enonce": "Le masque réseau utilisé dans ce palier est :",
+            "enonce": "Le masque réseau utilisé dans cette séance est :",
             "choix": [
               {
                 "lettre": "A",
@@ -2874,11 +2874,11 @@
         ]
       },
       "activite": {
-        "id": "activite-palier-4",
+        "id": "activite-seance-4",
         "fichier": "palier-4/eleve/activite-palier-4.md"
       },
       "checklist": {
-        "id": "checklist-palier-4",
+        "id": "checklist-seance-4",
         "sections": [
           {
             "numero": 1,
@@ -3095,13 +3095,13 @@
             "titre": "Validation finale",
             "items": [
               {
-                "libelle": "Le palier 4 est terminé"
+                "libelle": "La séance 4 est terminée"
               },
               {
                 "libelle": "Le travail peut être présenté"
               },
               {
-                "libelle": "Le palier suivant peut être commencé"
+                "libelle": "La séance suivante peut être commencée"
               }
             ]
           }
@@ -3110,7 +3110,7 @@
       "images": [
         {
           "fichier": "palier-4/images/01-machines-utilisees.png",
-          "legende": "Les machines utilisées dans le palier 4"
+          "legende": "Les machines utilisées dans la séance 4"
         },
         {
           "fichier": "palier-4/images/03-role-reseau-interne.png",
@@ -3135,12 +3135,12 @@
       ],
       "ressources": {
         "eleve": [
-          "palier-4/eleve/qcm-palier-4.md",
-          "palier-4/eleve/activite-palier-4.md",
-          "palier-4/eleve/checklist-palier-4-validation.md"
+          "seance-4/eleve/qcm-seance-4.md",
+          "seance-4/eleve/activite-seance-4.md",
+          "seance-4/eleve/checklist-seance-4-validation.md"
         ],
         "professeur": [
-          "palier-4/professeur/qcm-palier-4-corrige.md"
+          "seance-4/professeur/qcm-seance-4-corrige.md"
         ]
       },
       "source_ids": [

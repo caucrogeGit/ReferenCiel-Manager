@@ -120,7 +120,7 @@ Règle : `(professeur_id, classe_id, annee_scolaire_id)` **unique**.
 ## Portée
 
 Couvre le **socle scolaire (Bloc A)**.
-L'**exécution** (affectation de parcours,
+L'**exécution** (affectation de séquences,
 progression, évaluations ; Bloc B) et l'**authentification** relèvent de tickets
 ultérieurs.
 Les contrats d'entité Forge et migrations en découlent (tickets de

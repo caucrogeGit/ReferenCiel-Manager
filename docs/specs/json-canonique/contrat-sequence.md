@@ -1,42 +1,42 @@
-# Contrat du JSON canonique : Parcours
+# Contrat du JSON canonique : Séquence
 
-Spécifie la **forme** du JSON canonique de type **`parcours`** : un parcours
-pédagogique canonique (rattaché à un niveau-classe ; paliers → dossier technique /
+Spécifie la **forme** du JSON canonique de type **`sequence`** : une séquence
+pédagogique canonique (rattachée à un niveau-classe ; séances → dossier technique /
 QCM / activité / checklist). Modelé sur le starter numérisé
-`sources/starters/welcome-reseau/` (matière première canonicalisée en parcours).
+`sources/starters/welcome-reseau/` (matière première canonicalisée en séquence).
 
-> **Modèle canonique (ADR-022).** Le **Parcours** est l'objet racine du domaine
+> **Modèle canonique (ADR-022).** La **Séquence** est l'objet racine du domaine
 > pédagogique. La couche gabarit/versions (`StarterWelcome`, `VersionStarter`,
-> `VersionParcours`) a été supprimée : le manifeste décrit **directement** un parcours.
+> `VersionParcours`) a été supprimée : le manifeste décrit **directement** une séquence.
 > Voir [ADR-022](../../adr/022-parcours-objet-canonique-aplatissement.md) et le
-> [dictionnaire Parcours](../data-dictionary/dictionnaire-parcours.md).
+> [dictionnaire Séquence](../data-dictionary/dictionnaire-sequence.md).
 
 > Partage l'**enveloppe commune** du [contrat référentiel](contrat-referentiel-niveau-classe.md)
-> (§2-§3). Ce document ne couvre que le **corps `parcours`**.
+> (§2-§3). Ce document ne couvre que le **corps `sequence`**.
 
 ## 1. Principe
 
-Un parcours est **riche en contenu** (dossiers techniques, images ~30 Mo). Son JSON
+Une séquence est **riche en contenu** (dossiers techniques, images ~30 Mo). Son JSON
 canonique est donc un **manifeste** qui **référence** ses contenus par chemin
 relatif, pas un fichier auto-contenu :
 
 ```text
 référentiel niveau-classe : JSON auto-contenu (données)
-parcours                  : JSON manifeste + bundle (contenus md + images)
+séquence                  : JSON manifeste + bundle (contenus md + images)
 ```
 
-**Upload (ADR-009)** : un parcours s'importe sous forme de **bundle** (archive)
+**Upload (ADR-009)** : une séquence s'importe sous forme de **bundle** (archive)
 contenant le manifeste JSON et les fichiers référencés. L'application valide le
-manifeste (schéma) puis importe paliers/dossiers/QCM/checklists en base et stocke
+manifeste (schéma) puis importe séances/dossiers/QCM/checklists en base et stocke
 les contenus/fichiers (opt-ins `files`, `video`, `audio`).
 
 ## 2. Enveloppe commune
 
-Identique au contrat référentiel : `type` (= `parcours`), `identifiant`
+Identique au contrat référentiel : `type` (= `sequence`), `identifiant`
 (ex. `welcome-reseau`), `version`, `sources[]`, `provenance{}`. Chaque élément
 repris porte `source_ids`.
 
-## 3. Cadre du parcours
+## 3. Cadre de la séquence
 
 | Champ | Type | Obligatoire | Rôle |
 |---|---|:--:|---|
@@ -45,13 +45,13 @@ repris porte `source_ids`.
 | `presentation` | string \| ref | non | texte d'accueil (par ref de fichier possible) |
 | `statut` | string | non | `brouillon` \| `publie` (défaut `brouillon`) |
 | `organisation` | object | oui | `{ activite_glissante: bool, ordre_impose: bool }` |
-| `paliers` | array | oui | voir §4 |
+| `seances` | array | oui | voir §4 |
 
-## 4. Palier
+## 4. Séance
 
 | Champ | Type | Obligatoire | Rôle |
 |---|---|:--:|---|
-| `id` | string | oui | ex. `palier-1` |
+| `id` | string | oui | ex. `seance-1` |
 | `ordre` | integer | oui | rang (1..n), unique |
 | `titre` | string | oui | ex. « Fabriquer et tester un câble T568B » |
 | `theme` | string | non | ex. « Câble Ethernet droit » |
@@ -87,7 +87,7 @@ Le QCM de **validation** du dossier technique (à réussir avant l'activité).
 
 | Champ | Type | Obligatoire | Rôle |
 |---|---|:--:|---|
-| `id` | string | oui | ex. `qcm-palier-1` |
+| `id` | string | oui | ex. `qcm-seance-1` |
 | `format_reponse` | string | non | ex. « une réponse par ligne, `1a` » |
 | `validation` | object | oui | `{ seuil: "100%" }` |
 | `questions` | array | oui | voir ci-dessous |
@@ -101,29 +101,29 @@ Le QCM de **validation** du dossier technique (à réussir avant l'activité).
 
 | Champ | Type | Obligatoire | Rôle |
 |---|---|:--:|---|
-| `id` | string | oui | ex. `checklist-palier-1` |
+| `id` | string | oui | ex. `checklist-seance-1` |
 | `sections` | array | oui | `[{ numero, titre, items: [{ libelle }] }]` |
 | `decision_finale` | array | non | `[{ etat, decision }]` (validé / à reprendre / correction ciblée) |
 
 > Les colonnes de validation **élève/professeur** sont un état d'exécution
-> (`ProgressionParcours` / `ProgressionPalier`), pas une donnée de définition : le
+> (`ProgressionSequence` / `ProgressionSeance`), pas une donnée de définition : le
 > canonique porte les **items à vérifier**, pas leurs cases cochées.
 
 ## 7. Lien optionnel au référentiel
 
-Un parcours peut **aligner** ses paliers sur les compétences d'un référentiel
+Une séquence peut **aligner** ses séances sur les compétences d'un référentiel
 niveau-classe :
 
 ```text
-relations.palier_competences[] : { palier: <id>, competences: [<C0x>...] }
+relations.seance_competences[] : { seance: <id>, competences: [<C0x>...] }
 ```
 
 **Optionnel et relevant du jugement pédagogique** (domaine du professeur) : non
-imposé. Le contenu du parcours ne fournit pas ce mapping mécaniquement.
+imposé. Le contenu de la séquence ne fournit pas ce mapping mécaniquement.
 
 ## 8. Invariants
 
-- `ordre` des paliers **unique et contigu** (1..n).
+- `ordre` des séances **unique et contigu** (1..n).
 - Toute `bonne_reponse` d'une question ∈ les `lettre` de ses `choix`.
 - Tout `fichier`/`ref` pointe vers un contenu **présent dans le bundle**.
 - Provenance obligatoire (`source_ids`) sur les éléments repris.
@@ -131,11 +131,11 @@ imposé. Le contenu du parcours ne fournit pas ce mapping mécaniquement.
 
 ## 9. Fragment d'illustration (vérifiable)
 
-Extrait du palier 1 (câble T568B). **Illustration, pas un manifeste complet.**
+Extrait de la séance 1 (câble T568B). **Illustration, pas un manifeste complet.**
 
 ```json
 {
-  "type": "parcours",
+  "type": "séquence",
   "identifiant": "welcome-reseau",
   "version": "0.1.0",
   "sources": [
@@ -146,28 +146,28 @@ Extrait du palier 1 (câble T568B). **Illustration, pas un manifeste complet.**
   "titre": "Semaine réseau et virtualisation",
   "statut": "publie",
   "organisation": { "activite_glissante": true, "ordre_impose": true },
-  "paliers": [
+  "séances": [
     {
-      "id": "palier-1", "ordre": 1, "titre": "Fabriquer et tester un câble Ethernet droit T568B",
+      "id": "seance-1", "ordre": 1, "titre": "Fabriquer et tester un câble Ethernet droit T568B",
       "theme": "Câble Ethernet droit", "production_attendue": "Un câble droit conforme",
       "dossier_technique": {
         "titre": "Dossier technique — Câblage",
         "ressources": [
-          { "type": "markdown", "titre": "Consignes", "ordre": 1, "fichier": "palier-1/dossier-technique.md" },
+          { "type": "markdown", "titre": "Consignes", "ordre": 1, "fichier": "seance-1/dossier-technique.md" },
           { "type": "lien", "titre": "Norme T568B", "ordre": 2, "url": "https://example.org/t568b" }
         ]
       },
       "qcm": {
-        "id": "qcm-palier-1", "validation": { "seuil": "100%" },
+        "id": "qcm-seance-1", "validation": { "seuil": "100%" },
         "questions": [
           { "numero": 6, "enonce": "Un câble Ethernet contient généralement combien de fils ?",
             "choix": [ { "lettre": "A", "texte": "2" }, { "lettre": "B", "texte": "4" }, { "lettre": "C", "texte": "8" } ],
             "bonne_reponse": "C" }
         ]
       },
-      "activite": { "id": "activite-palier-1", "fichier": "palier-1/eleve/activite-palier-1.md" },
+      "activite": { "id": "activite-seance-1", "fichier": "seance-1/eleve/activite-seance-1.md" },
       "checklist": {
-        "id": "checklist-palier-1",
+        "id": "checklist-seance-1",
         "sections": [ { "numero": 7, "titre": "Étape 5 — test au testeur RJ45", "items": [ { "libelle": "Le résultat est comparé au résultat attendu (1→1 … 8→8)" } ] } ]
       },
       "source_ids": ["starter-welcome-reseau"]
@@ -178,7 +178,7 @@ Extrait du palier 1 (câble T568B). **Illustration, pas un manifeste complet.**
 
 ## 10. Schéma de validation
 
-Outillé par [`schemas/schema-json-canonique-parcours.json`](schemas/schema-json-canonique-parcours.json)
+Outillé par [`schemas/schema-json-canonique-sequence.json`](schemas/schema-json-canonique-sequence.json)
 (JSON Schema 2020-12) : porte de validation des uploads (ADR-009). Le schéma valide
 la structure ; les invariants sémantiques (ordre unique/contigu, `bonne_reponse` ∈
 `choix`, fichiers présents dans le bundle) sont validés par l'importeur.

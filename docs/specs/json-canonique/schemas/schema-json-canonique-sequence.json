@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://referenciel-manager/schemas/json-canonique-parcours.json",
-  "title": "JSON canonique — Parcours",
-  "description": "Valide la STRUCTURE d'un manifeste canonique de type 'parcours' (parcours → paliers → dossier technique / QCM / activité / checklist). Les invariants sémantiques (ordre unique et contigu, bonne_reponse ∈ choix, fichiers présents dans le bundle) sont validés par l'importeur. Champs additionnels tolérés.",
+  "$id": "https://referenciel-manager/schemas/json-canonique-sequence.json",
+  "title": "JSON canonique — Séquence",
+  "description": "Valide la STRUCTURE d'un manifeste canonique de type 'sequence' (sequence → paliers → dossier technique / QCM / activité / checklist). Les invariants sémantiques (ordre unique et contigu, bonne_reponse ∈ choix, fichiers présents dans le bundle) sont validés par l'importeur. Champs additionnels tolérés.",
   "type": "object",
-  "required": ["type", "identifiant", "version", "sources", "provenance", "niveau_classe", "titre", "organisation", "paliers"],
+  "required": ["type", "identifiant", "version", "sources", "provenance", "niveau_classe", "titre", "organisation", "seances"],
   "properties": {
-    "type": { "const": "parcours" },
+    "type": { "const": "sequence" },
     "identifiant": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
     "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
     "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source" } },
@@ -22,17 +22,17 @@
         "ordre_impose": { "type": "boolean" }
       }
     },
-    "paliers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/palier" } },
+    "seances": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/seance" } },
     "relations": {
       "type": "object",
       "properties": {
-        "palier_competences": {
+        "seance_competences": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["palier", "competences"],
+            "required": ["seance", "competences"],
             "properties": {
-              "palier": { "type": "string" },
+              "seance": { "type": "string" },
               "competences": { "type": "array", "items": { "type": "string" } }
             }
           }
@@ -76,7 +76,7 @@
       }
     },
     "lettre": { "type": "string", "enum": ["A", "B", "C"] },
-    "palier": {
+    "seance": {
       "type": "object",
       "required": ["id", "ordre", "titre", "dossier_technique"],
       "properties": {

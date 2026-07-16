@@ -3,7 +3,7 @@
 **Application métier pédagogique persistée**, construite à 100% avec le framework
 [Forge](https://forgemvc.com).
 Elle sert à créer, organiser, affecter, suivre et
-évaluer des parcours pédagogiques (spécialité **CIEL**), à partir de référentiels
+évaluer des séquences pédagogiques (spécialité **CIEL**), à partir de référentiels
 officiels, de JSON canoniques métier et de starters réutilisables.
 
 > Ce site documente le projet **au fil de sa progression**. Il est généré avec

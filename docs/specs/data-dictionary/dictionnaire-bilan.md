@@ -32,7 +32,7 @@ il la **capitalise**.
 
 ### BilanEleve
 
-Synthèse d'évaluation d'un élève sur un parcours suivi, arrêtée par un professeur.
+Synthèse d'évaluation d'un élève sur une séquence suivie, arrêtée par un professeur.
 
 | Champ | Type | Oblig. | Description / règle |
 |---|---|:--:|---|
@@ -42,7 +42,7 @@ Synthèse d'évaluation d'un élève sur un parcours suivi, arrêtée par un pro
 | `synthese` | json | non | **snapshot figé** des niveaux : par compétence (niveau agrégé) + détail des critères évalués, capturé à la création |
 | `eleve_id` | many_to_one → Eleve | oui | l'élève évalué |
 | `professeur_id` | many_to_one → Professeur | oui | professeur auteur du bilan |
-| `progression_eleve_id` | many_to_one → ProgressionEleve | oui | **périmètre** : le parcours suivi dont on fait le bilan |
+| `progression_eleve_id` | many_to_one → ProgressionEleve | oui | **périmètre** : la séquence suivie dont on fait le bilan |
 
 ## Relations (récapitulatif)
 
@@ -55,7 +55,7 @@ Synthèse d'évaluation d'un élève sur un parcours suivi, arrêtée par un pro
 ## Agrégation (calcul du `synthese`)
 
 Le snapshot est calculé en remontant la chaîne d'évaluation de l'élève sur la
-progression : `progression_palier → evaluation_activite → evaluation_critere
+progression : `progression_seance → evaluation_activite → evaluation_critere
 (niveau) → critere_observable → competence`.
 
 - **Échelle de niveau** (ordonnée) : `non_atteint` (0) < `partiellement_atteint`
@@ -73,7 +73,7 @@ progression : `progression_palier → evaluation_activite → evaluation_crite
 - **Figement** : le `synthese` est capturé à la **création** ; un bilan `publie`
   n'est plus recalculé (témoignage de l'état à la `date_bilan`).
 - **Périmètre** : tout bilan référence une `progression_eleve_id` existante ; il
-  porte sur un parcours réellement suivi.
+  porte sur une séquence réellement suivie.
 
 ## Portée
 

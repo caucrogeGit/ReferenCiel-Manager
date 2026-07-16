@@ -53,7 +53,7 @@ applicatif :
 - dictionnaire de données généré ou prérempli.
 
 Reste documentaire : pas de JSON canonique CPRO ou Welcome complet en dehors de
-ce qui sert ce jalon, pas de parcours exemple.
+ce qui sert ce jalon, pas de séquence exemple.
 
 ### Jalon 2 : Chaîne Scenario (premier objet métier persisté)
 
@@ -65,27 +65,27 @@ Premier objet métier construit de bout en bout :
 - interface professeur minimale (créer, consulter, modifier, publier) ;
 - tests de persistance.
 
-Ne crée pas de parcours fichier comme source principale.
+Ne crée pas de séquence fichier comme source principale.
 
-### Jalon 3 : Starters Welcome et parcours
+### Jalon 3 : Starters Welcome et séquences
 
 - StarterWelcome (dont Welcome Réseau) et versionnement ;
-- Parcours et paliers, avec statuts `brouillon / publie / archive`.
+- Séquences et séances, avec statuts `brouillon / publie / archive`.
 
 ### Jalon 4 : Affectation et exécution élève
 
 - Affectation d'une version publiée à une classe ou à un élève ;
-- Progression individuelle ; garantie qu'un parcours affecté ne change pas sous
+- Progression individuelle ; garantie qu'une séquence affectée ne change pas sous
   les pieds de l'élève.
 
-### Jalon 5 : Contenus de palier
+### Jalon 5 : Contenus de séance
 
 - Dossier technique, QCM de compréhension (le QCM ne valide pas une compétence) ;
 - Activité et checklist ; dépôts élève et ressources.
 
 ### Jalon 6 : Suivi et évaluation
 
-- Suivi professeur par classe, niveau, parcours, palier et compétence ;
+- Suivi professeur par classe, niveau, séquence, séance et compétence ;
 - Évaluation par critères observables dans l'activité ;
 - Bilans exploitables par le professeur.
 
@@ -101,8 +101,8 @@ Ne crée pas de parcours fichier comme source principale.
 
 ## Hors trajectoire immédiate
 
-- Réintroduire une V0 fichier ou des `*.yml` de parcours comme base principale.
-- Créer un parcours exemple ou les JSON canoniques CPRO / Welcome Réseau complets
+- Réintroduire une V0 fichier ou des `*.yml` de séquence comme base principale.
+- Créer une séquence exemple ou les JSON canoniques CPRO / Welcome Réseau complets
   avant que les sources et la spécification ne soient posées.
 - Opt-ins repoussés tant qu'ils ne sont pas nécessaires : video, search, cache,
   export/pdf, statistiques avancées, messagerie complète.

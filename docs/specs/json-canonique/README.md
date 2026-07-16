@@ -29,7 +29,7 @@ Ce qu'il **n'est pas** :
 - ce n'est **pas** un fichier de sauvegarde de l'application ;
 - ce n'est **pas** la source de vérité de l'application en fonctionnement
   (cette vérité est en base de données) ;
-- ce n'est **pas** un format de parcours plat de type V0 fichier
+- ce n'est **pas** un format de séquence plat de type V0 fichier
   (`path.yml`, `palier.yml`, `qcm.yml`, `checklist.yml`).
 
 ## Place dans le flux
@@ -65,7 +65,7 @@ ultérieur :
   de schéma formel ni d'exemple complet.
 - Aucun JSON canonique **CPRO** complet n'est produit à ce stade.
 - Aucun JSON canonique **Welcome Réseau** complet n'est produit à ce stade.
-- Aucun parcours exemple n'est fourni.
+- Aucune séquence exemple n'est fournie.
 
 La spécification détaillée (structure, champs, schéma de validation, exemples)
 sera ajoutée dans ce dossier selon la roadmap

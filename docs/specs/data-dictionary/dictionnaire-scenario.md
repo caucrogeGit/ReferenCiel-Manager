@@ -6,10 +6,10 @@ instructions §12-14).
 Objets **persistés en base** (ADR-003).
 
 > Place dans la chaîne pédagogique : `référentiel niveau-classe → compétences /
-> critères observables → **scénario pédagogique** → starter Welcome → parcours →
+> critères observables → **scénario pédagogique** → starter Welcome → séquence →
 > affectation → …`.
 > Le scénario **définit l'intention** ; le starter la rend
-> réutilisable ; le parcours organise le travail élève.
+> réutilisable ; la séquence organise le travail élève.
 
 ## Principes
 
@@ -20,7 +20,7 @@ Objets **persistés en base** (ADR-003).
 - **Base = vérité** (ADR-003). Le scénario est **créé par le professeur** via une
   interface (ou importé depuis une source / un JSON canonique), pas en dur dans le dépôt.
 - **Distinction** : le scénario **définit l'intention** ; il ne contient pas le travail
-  élève (paliers, activités, checklists) ; cela relève du parcours/starter en aval.
+  élève (séances, activités, checklists) ; cela relève de la séquence/starter en aval.
 
 ## Entité
 
@@ -59,7 +59,7 @@ Relations :
 ## Règles métier & cycle de vie
 
 - **Cycle de vie** : `brouillon` (édition libre) → `publie` (réutilisable, base d'un
-  starter/parcours) → `archive` (retiré de l'usage courant). Un scénario **publié** ne se
+  starter/séquence) → `archive` (retiré de l'usage courant). Un scénario **publié** ne se
   modifie pas librement (versionnement à venir, cohérent avec le référentiel).
 - **Intention obligatoire** : un scénario sans `intention` n'a pas de sens.
 - **Ciblage** : un scénario **devrait** cibler au moins une compétence (règle métier ;
@@ -72,8 +72,8 @@ Relations :
 ## Portée
 
 Ce dictionnaire couvre l'objet **Scénario pédagogique** (chaîne Scenario, tickets 12-13).
-En aval : **Starter Welcome** ([dictionnaire dédié](dictionnaire-parcours.md) :
-Palier, QCM, Checklist…) et le **parcours** (exécution élève, Bloc B).
+En aval : **Starter Welcome** ([dictionnaire dédié](dictionnaire-sequence.md) :
+Séance, QCM, Checklist…) et la **séquence** (exécution élève, Bloc B).
 En amont : le
 [**référentiel niveau-classe**](dictionnaire-referentiel-niveau-classe.md) (compétences,
 critères) et le [**socle scolaire**](dictionnaire-socle-scolaire.md) (Professeur, Classe…).

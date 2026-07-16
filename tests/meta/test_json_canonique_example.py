@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SPEC = ROOT / "docs" / "specs" / "json-canonique"
 SCHEMA = SPEC / "schemas" / "schema-json-canonique-referentiel-niveau-classe.json"
 EXAMPLE = SPEC / "examples" / "json-canonique-ciel-2tne.json"
-STARTER_SCHEMA = SPEC / "schemas" / "schema-json-canonique-parcours.json"
+STARTER_SCHEMA = SPEC / "schemas" / "schema-json-canonique-sequence.json"
 STARTER_EXAMPLE = SPEC / "examples" / "json-canonique-welcome-reseau.json"
 STARTER_BUNDLE = ROOT / "sources" / "starters" / "welcome-reseau"
 
@@ -83,12 +83,12 @@ def test_starter_valide_contre_le_schema() -> None:
 def test_starter_invariants_semantiques() -> None:
     """Ordre contigu, bonne_reponse ∈ choix, fichiers référencés présents dans le bundle."""
     doc = _load(STARTER_EXAMPLE)
-    paliers: list[Any] = doc["paliers"]
+    seances: list[Any] = doc["seances"]
 
-    ordres = [cast(int, p["ordre"]) for p in paliers]
+    ordres = [cast(int, p["ordre"]) for p in seances]
     assert ordres == list(range(1, len(ordres) + 1))
 
-    for p in paliers:
+    for p in seances:
         # ADR-022 : le dossier technique est un conteneur de ressources typées ;
         # les ressources référençant un fichier doivent exister dans le bundle.
         for ressource in p["dossier_technique"]["ressources"]:

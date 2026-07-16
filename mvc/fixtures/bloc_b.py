@@ -38,7 +38,7 @@ class BlocBFixture(Fixture):
         parc = db.insert(
             "INSERT INTO sequence (Identifiant, Titre, Presentation, Statut, ActiviteGlissante, OrdreImpose, niveau_classe_id, CreatedAt, UpdatedAt) "
             "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-            ("welcome-reseau", "Sequence Welcome Réseau", "Découverte du réseau et du câblage.", "publie", 0, 1, niveau),
+            ("welcome-reseau", "Séquence Welcome Réseau", "Découverte du réseau et du câblage.", "publie", 0, 1, niveau),
         )
         db.execute("INSERT INTO professeur_sequence (professeur_id, sequence_id) VALUES (?, ?)", (prof, parc))
         db.execute("INSERT INTO classe_professeur (classe_id, professeur_id) VALUES (?, ?)", (classe, prof))
@@ -46,7 +46,7 @@ class BlocBFixture(Fixture):
         # Seance -> dossier technique (ressource markdown + QCM de validation).
         pal = db.insert(
             "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, sequence_id, CreatedAt, UpdatedAt) "
-            "VALUES (1, 'Seance 1 — Câblage', 'Réseau', 'Câble testé et validé', ?, NOW(), NOW())",
+            "VALUES (1, 'Séance 1 — Câblage', 'Réseau', 'Câble testé et validé', ?, NOW(), NOW())",
             (parc,),
         )
         dt = db.insert(
