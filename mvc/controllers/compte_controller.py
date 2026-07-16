@@ -40,11 +40,21 @@ class CompteController:
         row = fetch_one("SELECT email, is_active FROM users WHERE id = ?", (user_id,))
         email = str(row["email"]) if row is not None else ""
         actif = bool(row["is_active"]) if row is not None else False
+        # Identité (nom/prénom) : portée par la fiche métier liée au compte, pas
+        # par `users`. Un compte est professeur OU élève ; un admin peut n'avoir
+        # ni l'une ni l'autre (nom/prénom vides, affichés « — »).
+        identite = fetch_one(
+            "SELECT Nom, Prenom FROM professeur WHERE UserId = ?", (user_id,)
+        ) or fetch_one(
+            "SELECT Nom, Prenom FROM eleve WHERE UserId = ?", (user_id,)
+        )
         return BaseController.render(
             "app/compte/profil.html",
             context={
                 "email": email,
                 "actif": actif,
+                "nom": str(identite["Nom"]) if identite else "",
+                "prenom": str(identite["Prenom"]) if identite else "",
                 "roles": _role_libelles(get_request_roles(request)),
             },
             request=request,

@@ -10,6 +10,14 @@
     <section class="bg-white shadow rounded p-5">
         <dl class="divide-y divide-gray-100">
             <div class="flex justify-between gap-4 py-3">
+                <dt class="text-sm text-gray-500">Prénom</dt>
+                <dd class="text-sm font-medium text-gray-800">{{ prenom or "—" }}</dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
+                <dt class="text-sm text-gray-500">Nom</dt>
+                <dd class="text-sm font-medium text-gray-800">{{ nom or "—" }}</dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
                 <dt class="text-sm text-gray-500">Adresse e-mail</dt>
                 <dd class="text-sm font-medium text-gray-800">{{ email }}</dd>
             </div>
