@@ -1,0 +1,3176 @@
+{
+  "schema_version": "1.0.0",
+  "date_generation": "2026-07-16",
+  "objet": "Référentiel canonique de la famille de métiers 2TNE",
+  "famille_metiers": {
+    "code": "2TNE",
+    "libelle": "Métiers des transitions numérique et énergétique",
+    "niveau": "Seconde professionnelle",
+    "nature": "famille de métiers",
+    "competences_communes": [
+      {
+        "code": "CC1",
+        "libelle": "S’informer sur l’intervention ou sur la réalisation"
+      },
+      {
+        "code": "CC2",
+        "libelle": "Organiser la réalisation ou l’intervention"
+      },
+      {
+        "code": "CC3",
+        "libelle": "Analyser et exploiter les données"
+      },
+      {
+        "code": "CC4",
+        "libelle": "Réaliser une installation ou une intervention"
+      },
+      {
+        "code": "CC5",
+        "libelle": "Effectuer les opérations préalables"
+      },
+      {
+        "code": "CC6",
+        "libelle": "Mettre en service"
+      },
+      {
+        "code": "CC7",
+        "libelle": "Réaliser une opération de maintenance"
+      },
+      {
+        "code": "CC8",
+        "libelle": "Renseigner les documents"
+      },
+      {
+        "code": "CC9",
+        "libelle": "Communiquer avec le client et/ou l’usager"
+      }
+    ],
+    "specialites_bac_pro": [
+      {
+        "code": "CIEL",
+        "libelle": "Cybersécurité, Informatique et réseaux, Électronique",
+        "structure_poles": "pôles d’activités officiels",
+        "poles": [
+          {
+            "code": "P1",
+            "libelle": "Réalisation et maintenance de produits électroniques",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "E1",
+                "libelle": "Étude et conception de produits électroniques",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "E1.T1",
+                    "libelle": "Analyse et saisie d’un schéma, d’une carte électronique (non complexe) ou étude d’un système électronique communicant à partir d’un cahier des charges"
+                  },
+                  {
+                    "code": "E1.T2",
+                    "libelle": "Placement et routage d’une carte électronique et génération des fichiers de fabrication"
+                  },
+                  {
+                    "code": "E1.T3",
+                    "libelle": "Réalisation d’un prototype et mise au point d’une carte électronique (non complexe)"
+                  },
+                  {
+                    "code": "E1.T4",
+                    "libelle": "Intégration dans son environnement à partir d’un cahier des charges"
+                  }
+                ],
+                "competence_codes": [
+                  "C03",
+                  "C04",
+                  "C07"
+                ]
+              },
+              {
+                "code": "E2",
+                "libelle": "Tests et essais",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "E2.T1",
+                    "libelle": "Tests et mesures nécessaires à la vérification d'une carte et/ou d’un système électronique communicant"
+                  },
+                  {
+                    "code": "E2.T2",
+                    "libelle": "Mise en place d’un environnement de tests"
+                  },
+                  {
+                    "code": "E2.T3",
+                    "libelle": "Application d’un protocole de tests et de mesures"
+                  }
+                ],
+                "competence_codes": [
+                  "C01",
+                  "C03",
+                  "C06"
+                ]
+              },
+              {
+                "code": "E3",
+                "libelle": "Production et assemblage d'ensembles électroniques",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "E3.T1",
+                    "libelle": "Préparation, assemblage et contrôle des cartes et/ou des sous-ensembles électroniques communicants au vu d’une installation"
+                  },
+                  {
+                    "code": "E3.T2",
+                    "libelle": "Configuration, paramétrage, et intégration des outils de production et/ou des équipements (matériels et logiciels) ainsi que le matériel de contrôle"
+                  },
+                  {
+                    "code": "E3.T3",
+                    "libelle": "Renseignement du suivi de production"
+                  },
+                  {
+                    "code": "E3.T4",
+                    "libelle": "Vérification de la conformité des caractéristiques de fonctionnement et intervention corrective si nécessaire"
+                  }
+                ],
+                "competence_codes": [
+                  "C03",
+                  "C07",
+                  "C09"
+                ]
+              },
+              {
+                "code": "E4",
+                "libelle": "Intégration matérielle et logicielle",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "E4.T1",
+                    "libelle": "Préparation et contrôle préalable"
+                  },
+                  {
+                    "code": "E4.T2",
+                    "libelle": "Intégration mécanique des sous-ensembles électronique, électrique, automatique, filaire et optique"
+                  },
+                  {
+                    "code": "E4.T3",
+                    "libelle": "Intégration des équipements électroniques communicants sur site"
+                  },
+                  {
+                    "code": "E4.T4",
+                    "libelle": "Installation et paramétrage des logiciels et des équipements communicants en fonction de protocoles (cahier des charges)"
+                  },
+                  {
+                    "code": "E4.T5",
+                    "libelle": "Vérification des caractéristiques de fonctionnement en conformité avec le projet"
+                  },
+                  {
+                    "code": "E4.T6",
+                    "libelle": "Conseils au client sur l'utilisation, le fonctionnement, l'entretien des équipements et de l’installation"
+                  }
+                ],
+                "competence_codes": [
+                  "C04",
+                  "C09"
+                ]
+              },
+              {
+                "code": "E5",
+                "libelle": "Maintenance et réparation de produits électroniques",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "E5.T1",
+                    "libelle": "Identification des fonctions principales et secondaires constitutives d’une carte électronique (non complexe), d’un sous-système ou d’un système électronique communicant"
+                  },
+                  {
+                    "code": "E5.T2",
+                    "libelle": "Constat et identification du dysfonctionnement"
+                  },
+                  {
+                    "code": "E5.T3",
+                    "libelle": "Réalisation d’une opération de réparation ou de maintenance corrective ou préventive (sur site ou à distance)"
+                  },
+                  {
+                    "code": "E5.T4",
+                    "libelle": "Tests et vérification de la conformité"
+                  },
+                  {
+                    "code": "E5.T5",
+                    "libelle": "Renseignement de la fiche technique d’intervention et/ou du cahier de maintenance"
+                  },
+                  {
+                    "code": "E5.T6",
+                    "libelle": "Communication au client ou à la hiérarchie"
+                  }
+                ],
+                "competence_codes": [
+                  "C01",
+                  "C04",
+                  "C11"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "P2",
+            "libelle": "Mise en œuvre de réseaux informatiques",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "R1",
+                "libelle": "Accompagnement du client",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "R1.T1",
+                    "libelle": "Prise en compte des besoins du client"
+                  },
+                  {
+                    "code": "R1.T2",
+                    "libelle": "Réception de l’installation avec le client"
+                  },
+                  {
+                    "code": "R1.T3",
+                    "libelle": "Information ou conseil au client"
+                  }
+                ],
+                "competence_codes": [
+                  "C01",
+                  "C04"
+                ]
+              },
+              {
+                "code": "R2",
+                "libelle": "Installation et qualification",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "R2.T1",
+                    "libelle": "Prise en compte de la demande du client"
+                  },
+                  {
+                    "code": "R2.T2",
+                    "libelle": "Vérification du dossier, interprétation des plans d’exécution"
+                  },
+                  {
+                    "code": "R2.T3",
+                    "libelle": "Préparation du chantier en fonction de l’intervention souhaitée"
+                  },
+                  {
+                    "code": "R2.T4",
+                    "libelle": "Réalisation des opérations avec intégration des contraintes client et contrôle"
+                  },
+                  {
+                    "code": "R2.T5",
+                    "libelle": "Recettage de l’installation"
+                  }
+                ],
+                "competence_codes": [
+                  "C06",
+                  "C09",
+                  "C10"
+                ]
+              },
+              {
+                "code": "R3",
+                "libelle": "Exploitation et maintien en condition opérationnelle",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "R3.T1",
+                    "libelle": "Réalisation d’un diagnostic de premier niveau"
+                  },
+                  {
+                    "code": "R3.T2",
+                    "libelle": "Configuration matérielle et logicielle des équipements"
+                  },
+                  {
+                    "code": "R3.T3",
+                    "libelle": "Intégration de nouveaux équipements"
+                  },
+                  {
+                    "code": "R3.T4",
+                    "libelle": "Mise à jour des équipements"
+                  }
+                ],
+                "competence_codes": [
+                  "C06",
+                  "C09",
+                  "C10"
+                ]
+              },
+              {
+                "code": "R5",
+                "libelle": "Maintenance des réseaux informatiques",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "R5.T1",
+                    "libelle": "Réalisation de diagnostics et d’interventions de maintenance curative"
+                  },
+                  {
+                    "code": "R5.T2",
+                    "libelle": "Réparation des liaisons, changement de cartes ou d’équipements"
+                  },
+                  {
+                    "code": "R5.T3",
+                    "libelle": "Rédaction de compte rendu d’intervention"
+                  }
+                ],
+                "competence_codes": [
+                  "C04",
+                  "C06",
+                  "C10",
+                  "C11"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "P3",
+            "libelle": "Valorisation de la donnée et cybersécurité",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "D1",
+                "libelle": "Élaboration et appropriation d’un cahier des charges",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "D1.T1",
+                    "libelle": "Collecte des informations"
+                  },
+                  {
+                    "code": "D1.T2",
+                    "libelle": "Analyse des informations"
+                  },
+                  {
+                    "code": "D1.T3",
+                    "libelle": "Interprétation d’un cahier des charges"
+                  },
+                  {
+                    "code": "D1.T4",
+                    "libelle": "Formalisation du cahier des charges"
+                  }
+                ],
+                "competence_codes": [
+                  "C01",
+                  "C03",
+                  "C04"
+                ]
+              },
+              {
+                "code": "D2",
+                "libelle": "Développement et validation de solutions logicielles",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "D2.T1",
+                    "libelle": "Modélisation d’une solution logicielle"
+                  },
+                  {
+                    "code": "D2.T2",
+                    "libelle": "Développement, utilisation ou adaptation de composants logiciels"
+                  },
+                  {
+                    "code": "D2.T3",
+                    "libelle": "Tests et validation"
+                  }
+                ],
+                "competence_codes": [
+                  "C06",
+                  "C08"
+                ]
+              },
+              {
+                "code": "D3",
+                "libelle": "Gestion d’incidents",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "D3.T1",
+                    "libelle": "Ouvrir et catégoriser les tickets par niveau de criticité"
+                  },
+                  {
+                    "code": "D3.T2",
+                    "libelle": "Traiter les tickets"
+                  },
+                  {
+                    "code": "D3.T3",
+                    "libelle": "Remédier aux incidents"
+                  },
+                  {
+                    "code": "D3.T4",
+                    "libelle": "Élaborer les rapports d’incidents"
+                  },
+                  {
+                    "code": "D3.T5",
+                    "libelle": "Transmettre l’information (escalade)"
+                  }
+                ],
+                "competence_codes": [
+                  "C04",
+                  "C06",
+                  "C10"
+                ]
+              }
+            ]
+          }
+        ],
+        "activites_transversales": [],
+        "competences": [
+          {
+            "code": "C01",
+            "libelle": "Communiquer en situation professionnelle (français/anglais)",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC9"
+            ],
+            "activite_codes": [
+              "E2",
+              "E5",
+              "R1",
+              "D1"
+            ],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [
+              "La présentation, la typographie, l’orthographe, l’illustration et la lisibilité sont soignées et soutiennent le discours avec des enchaînements cohérents",
+              "La présentation orale, le support et l’expression sont de qualité et clairs",
+              "L’argumentation développée lors de la présentation et de l’échange est de qualité",
+              "L’argumentation tient compte des éventuelles situations de handicap des personnes avec lesquelles l’élève interagit",
+              "Le style, le ton et la terminologie utilisés sont adaptés à la personne et aux circonstances",
+              "L’attitude, les comportements et le langage adoptés sont conformes aux règles de la profession et la réaction est adaptée au contexte"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C02",
+            "libelle": "Organiser",
+            "mobilisee_dans_diplome": false,
+            "competence_commune_codes": [],
+            "activite_codes": [],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C03",
+            "libelle": "Participer à un projet",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC1",
+              "CC2"
+            ],
+            "activite_codes": [
+              "E1",
+              "E2",
+              "E3",
+              "D1"
+            ],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [
+              "Les rôles et tâches de chacun sont identifiés et, le cas échéant, les besoins spécifiques des personnes en situation de handicap sont pris en compte",
+              "Le planning prévisionnel est compris",
+              "Le suivi du projet est respecté",
+              "L’espace collaboratif est correctement utilisé",
+              "Face à un ensemble de faits, des actions appropriées sont décidées",
+              "Le calme est conservé dans des situations particulières et la tâche est poursuivie jusqu’à l’atteinte du résultat",
+              "Le déroulement des tâches de travail est observé avec attention afin d’en contrôler le résultat attendu"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C04",
+            "libelle": "Analyser une structure matérielle et logicielle",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC3"
+            ],
+            "activite_codes": [
+              "E1",
+              "E4",
+              "E5",
+              "R1",
+              "R5",
+              "D1",
+              "D3"
+            ],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [
+              "Le besoin est identifié ainsi que les ressources matérielles, logicielles et humaines",
+              "Les logiciels d’analyse et de tests sont utilisés selon les procédures de traitement d’incidents",
+              "Les informations nécessaires sont extraites des documents réglementaires et/ou constructeurs",
+              "Les indicateurs de fonctionnement sont interprétés",
+              "Les fiches de test ou d’intervention sont renseignées",
+              "Le travail est préparé de façon à satisfaire les exigences de qualité, d’efficacité et d’échéancier",
+              "Le calme est conservé dans des situations particulières et la tâche est poursuivie jusqu’à l’atteinte du résultat",
+              "Les risques d’une situation de travail sont repérés et les mesures appropriées pour la santé et la sécurité sont adoptées"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C05",
+            "libelle": "Concevoir",
+            "mobilisee_dans_diplome": false,
+            "competence_commune_codes": [],
+            "activite_codes": [],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C06",
+            "libelle": "Valider la conformité d’une installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC6"
+            ],
+            "activite_codes": [
+              "E2",
+              "R2",
+              "R3",
+              "R5",
+              "D2",
+              "D3"
+            ],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [
+              "Les exigences du cahier des charges sont respectées",
+              "Les tests sont effectués",
+              "Les résultats attendus sont vérifiés",
+              "La procédure de test est respectée",
+              "Le travail est effectué sans vouloir tromper, abuser, léser ou blesser les autres",
+              "Face à un ensemble de faits, des actions appropriées sont décidées"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C07",
+            "libelle": "Réaliser des maquettes et prototypes",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC4"
+            ],
+            "activite_codes": [
+              "E1",
+              "E3"
+            ],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [
+              "Le placement et le routage sont conformes au cahier des charges",
+              "La génération des fichiers de fabrication du circuit imprimé est conforme aux attentes",
+              "Le circuit imprimé est réalisé, contrôlé et conforme aux règles IPC",
+              "Les composants sont conformes à la nomenclature",
+              "La nomenclature des composants est respectée",
+              "Le brasage de la carte est conforme à la nomenclature et aux règles IPC",
+              "Les contraintes liées aux impacts environnementaux sont intégrées",
+              "Le contrôle visuel de la carte assemblée est conforme au dossier de fabrication",
+              "Les risques d’une situation de travail sont repérés et les mesures appropriées pour la santé et la sécurité sont adoptées",
+              "Le travail est effectué selon les attentes de temps, de quantité ou de qualité dans le respect des contraintes environnementales",
+              "L’effort nécessaire est fourni afin de terminer et de réussir le travail demandé",
+              "Le travail est préparé de façon à satisfaire les exigences de qualité, d’efficacité et d’échéancier"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C08",
+            "libelle": "Coder",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC4"
+            ],
+            "activite_codes": [
+              "D2"
+            ],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [
+              "Les environnements de développement et de test sont mis en œuvre en tenant compte des contraintes de fonctionnalités et de sécurité",
+              "Le module logiciel est débogué et syntaxiquement correct",
+              "Les composants logiciels individuels sont développés et testés conformément au cahier des charges et aux bonnes pratiques",
+              "La solution logicielle et matérielle est intégrée et testée conformément au cahier des charges et aux bonnes pratiques",
+              "Le code est commenté et le logiciel est documenté",
+              "Le travail est effectué selon les attentes de temps, de quantité ou de qualité",
+              "Le travail en équipe est conduit de manière solidaire en contribuant par des idées et des efforts"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C09",
+            "libelle": "Installer les éléments d’un système électronique ou informatique",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC4"
+            ],
+            "activite_codes": [
+              "E3",
+              "E4",
+              "R2",
+              "R3"
+            ],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [
+              "L’ensemble des éléments nécessaires à l’installation du système est complet et vérifié par rapport au cahier des charges",
+              "Les éléments du système sont installés et raccordés selon une procédure",
+              "La configuration est réalisée",
+              "La mise en service est réalisée",
+              "L’état de l’installation est renseigné de manière écrite ou orale",
+              "Les risques d’une situation de travail sont repérés et les mesures appropriées pour la santé et la sécurité sont adoptées",
+              "Le travail est préparé de façon à satisfaire les exigences de qualité, d’efficacité et d’échéancier",
+              "Le travail est effectué selon les attentes de temps, de quantité ou de qualité",
+              "La résolution d’un problème nouveau imprévu est réussie avec les moyens disponibles et conformément aux règles de la fonction",
+              "Des tâches diverses dans des domaines et contextes variés sont accomplies"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C10",
+            "libelle": "Exploiter un réseau informatique",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC5"
+            ],
+            "activite_codes": [
+              "R2",
+              "R3",
+              "R5",
+              "D3"
+            ],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [
+              "Les alertes et problèmes rencontrés sont renseignés",
+              "Les différents éléments d’un réseau ou d’un système sont identifiés à partir d’un schéma fourni",
+              "La mise à jour des équipements, systèmes d’exploitation, logiciels ou micrologiciels est effectuée",
+              "Les optimisations nécessaires sont effectuées",
+              "Le travail en équipe est conduit de manière solidaire en contribuant par des idées et des efforts",
+              "Le travail est préparé de façon à satisfaire les exigences de qualité, d’efficacité et d’échéancier"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C11",
+            "libelle": "Maintenir un système électronique ou réseau informatique",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC7"
+            ],
+            "activite_codes": [
+              "E5",
+              "R5"
+            ],
+            "tache_codes": [],
+            "association_taches_granularite": "activité",
+            "criteres_reussite": [
+              "L’intervention est préparée",
+              "Le dysfonctionnement est constaté",
+              "La maintenance ou la réparation est réalisée",
+              "La fiche d’intervention est correctement renseignée",
+              "Les risques d’une situation de travail sont repérés et les mesures appropriées pour la santé et la sécurité sont adoptées",
+              "Le déroulement des tâches de travail est observé avec attention afin d’en contrôler le résultat attendu",
+              "Des idées, pratiques ou ressources inhabituelles sont introduites pour l’avancement du travail"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          }
+        ]
+      },
+      {
+        "code": "MELEC",
+        "libelle": "Métiers de l’Électricité et de ses Environnements Connectés",
+        "structure_poles": "blocs certificatifs officiels utilisés comme regroupement principal",
+        "poles": [
+          {
+            "code": "B1",
+            "libelle": "Préparation des opérations à réaliser",
+            "statut": "bloc_certificatif_officiel",
+            "activites": [
+              {
+                "code": "A1",
+                "libelle": "Préparation des opérations de réalisation, de mise en service et de maintenance",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "T1.1",
+                    "libelle": "Prendre connaissance du dossier relatif aux opérations à réaliser, le constituer pour une opération simple"
+                  },
+                  {
+                    "code": "T1.2",
+                    "libelle": "Rechercher et expliciter les informations relatives aux opérations et aux conditions d’exécution"
+                  },
+                  {
+                    "code": "T1.3",
+                    "libelle": "Vérifier et compléter si nécessaire la liste des matériels électriques, équipements et outillages nécessaires aux opérations"
+                  },
+                  {
+                    "code": "T1.4",
+                    "libelle": "Répartir les tâches en fonction des habilitations, des certifications des équipiers et du planning des autres intervenants"
+                  }
+                ],
+                "competence_codes": [
+                  "C1",
+                  "C2",
+                  "C3",
+                  "C10",
+                  "C11",
+                  "C12"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "B2",
+            "libelle": "Réalisation et mise en service d’une installation",
+            "statut": "bloc_certificatif_officiel",
+            "activites": [
+              {
+                "code": "A2",
+                "libelle": "Réalisation",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "T2.1",
+                    "libelle": "Organiser le poste de travail"
+                  },
+                  {
+                    "code": "T2.2",
+                    "libelle": "Implanter, poser, installer les matériels électriques"
+                  },
+                  {
+                    "code": "T2.3",
+                    "libelle": "Câbler, raccorder les matériels électriques"
+                  },
+                  {
+                    "code": "T2.4",
+                    "libelle": "Gérer les activités de son équipe"
+                  },
+                  {
+                    "code": "T2.5",
+                    "libelle": "Coordonner son activité par rapport à celles des autres intervenants"
+                  },
+                  {
+                    "code": "T2.6",
+                    "libelle": "Mener son activité de manière éco-responsable"
+                  }
+                ],
+                "competence_codes": [
+                  "C2",
+                  "C4",
+                  "C5",
+                  "C12"
+                ]
+              },
+              {
+                "code": "A3",
+                "libelle": "Mise en service",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "T3.1",
+                    "libelle": "Réaliser les vérifications, les réglages, les paramétrages et les essais nécessaires à la mise en service de l’installation"
+                  },
+                  {
+                    "code": "T3.2",
+                    "libelle": "Participer à la réception technique et aux levées de réserves de l’installation"
+                  }
+                ],
+                "competence_codes": [
+                  "C5",
+                  "C6",
+                  "C7"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "B3",
+            "libelle": "Maintenance d’une installation",
+            "statut": "bloc_certificatif_officiel",
+            "activites": [
+              {
+                "code": "A4",
+                "libelle": "Maintenance",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "T4.1",
+                    "libelle": "Réaliser une opération de maintenance préventive"
+                  },
+                  {
+                    "code": "T4.2",
+                    "libelle": "Réaliser une opération de dépannage"
+                  }
+                ],
+                "competence_codes": [
+                  "C2",
+                  "C5",
+                  "C6",
+                  "C7",
+                  "C8",
+                  "C9"
+                ]
+              }
+            ]
+          }
+        ],
+        "activites_transversales": [
+          {
+            "code": "A5",
+            "libelle": "Communication",
+            "transversale": true,
+            "taches": [
+              {
+                "code": "T5.1",
+                "libelle": "Participer à la mise à jour du dossier technique de l’installation"
+              },
+              {
+                "code": "T5.2",
+                "libelle": "Échanger sur le déroulement des opérations, expliquer le fonctionnement de l’installation à l’interne et à l’externe"
+              },
+              {
+                "code": "T5.3",
+                "libelle": "Conseiller le client, lui proposer une prestation complémentaire, une modification ou une amélioration"
+              }
+            ],
+            "competence_codes": [
+              "C10",
+              "C11",
+              "C12",
+              "C13"
+            ]
+          }
+        ],
+        "competences": [
+          {
+            "code": "C1",
+            "libelle": "Analyser les conditions de l’opération et son contexte",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC1"
+            ],
+            "activite_codes": [
+              "A1"
+            ],
+            "tache_codes": [
+              "T1.1",
+              "T1.2",
+              "T1.4"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les informations nécessaires sont recueillies",
+              "Les contraintes techniques et d’exécution sont repérées",
+              "Les contraintes liées à l’efficacité énergétique sont repérées",
+              "Les risques professionnels sont évalués",
+              "Les mesures de prévention de santé et sécurité au travail sont proposées",
+              "Les contraintes environnementales sont recensées",
+              "Les interactions avec les autres intervenants sont repérées",
+              "Les habilitations et certifications nécessaires à l’opération sont identifiées"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C2",
+            "libelle": "Organiser l’opération dans son contexte",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC2"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A4"
+            ],
+            "tache_codes": [
+              "T1.3",
+              "T1.4",
+              "T2.1",
+              "T2.4",
+              "T2.5",
+              "T2.6",
+              "T4.2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Après inventaire, les matériels, équipements et outillages manquants ou en mauvais état sont repérés et le bon de commande est complété",
+              "Les tâches sont réparties en fonction des habilitations et des certifications des électriciens affectés",
+              "La répartition des tâches prend en compte l’avancement des autres intervenants",
+              "Les activités sont organisées de manière chronologique",
+              "Les contraintes propres au poste de travail, y compris environnementales, sont prises en compte",
+              "Les activités sont réorganisées en fonction des aléas techniques ou organisationnels",
+              "Les règles de santé et de sécurité au travail sont respectées",
+              "Le poste de travail est organisé avec ergonomie",
+              "Le poste de travail est approvisionné en matériels, équipements et outillages",
+              "Le lieu d’activité est restitué quotidiennement propre et en ordre"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C3",
+            "libelle": "Définir une installation à l’aide de solutions préétablies",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC3"
+            ],
+            "activite_codes": [
+              "A1"
+            ],
+            "tache_codes": [
+              "T1.1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Le dossier technique des opérations est constitué et complet",
+              "La solution technique proposée répond au besoin du client et elle est pertinente",
+              "La solution technique proposée intègre les enjeux d’efficacité énergétique"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C4",
+            "libelle": "Réaliser une installation de manière éco-responsable",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC4"
+            ],
+            "activite_codes": [
+              "A2"
+            ],
+            "tache_codes": [
+              "T2.2",
+              "T2.3",
+              "T2.6"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les matériels sont posés conformément aux prescriptions et règles de l’art",
+              "Le façonnage est réalisé conformément aux prescriptions et règles de l’art",
+              "Les câblages et les raccordements sont réalisés conformément aux prescriptions et règles de l’art",
+              "Les adaptations techniques nécessaires sont réalisées",
+              "Les réalisations respectent les contraintes liées à l’efficacité énergétique",
+              "Les autocontrôles sont réalisés et les fiches d’autocontrôles sont complétées",
+              "Les déchets sont triés et évacués de manière sélective",
+              "Le consommable est utilisé sans gaspillage",
+              "Les règles de santé et de sécurité au travail sont respectées",
+              "Les procédures de respect de l’environnement, des lieux et des biens sont appliquées"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C5",
+            "libelle": "Contrôler les grandeurs caractéristiques de l’installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [],
+            "activite_codes": [
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "tache_codes": [
+              "T2.2",
+              "T2.3",
+              "T3.1",
+              "T3.2",
+              "T4.1",
+              "T4.2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les contrôles visuels et caractéristiques sont réalisés",
+              "Les mesures électriques et dimensionnelles sont réalisées",
+              "Les mesures liées à l’efficacité énergétique sont réalisées",
+              "Les essais adaptés sont réalisés",
+              "Les grandeurs contrôlées sont correctement interprétées au regard des prescriptions",
+              "Les règles de santé et de sécurité au travail sont respectées"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C6",
+            "libelle": "Régler, paramétrer les matériels de l’installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC5"
+            ],
+            "activite_codes": [
+              "A3",
+              "A4"
+            ],
+            "tache_codes": [
+              "T3.1",
+              "T3.2",
+              "T4.2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les réglages sont réalisés conformément aux prescriptions",
+              "Les réglages prennent en compte l’efficacité énergétique",
+              "Les paramétrages guidés sont réalisés conformément aux prescriptions",
+              "Les règles de santé et de sécurité au travail sont respectées"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C7",
+            "libelle": "Valider le fonctionnement de l’installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC6"
+            ],
+            "activite_codes": [
+              "A3",
+              "A4"
+            ],
+            "tache_codes": [
+              "T3.1",
+              "T3.2",
+              "T4.1",
+              "T4.2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’installation est mise en fonctionnement conformément aux prescriptions",
+              "Le fonctionnement est conforme aux spécifications du cahier des charges, y compris celles liées à l’efficacité énergétique",
+              "Les opérations nécessaires à la levée de réserves sont faites",
+              "Les règles de santé et de sécurité au travail sont respectées"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C8",
+            "libelle": "Diagnostiquer un dysfonctionnement",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC7"
+            ],
+            "activite_codes": [
+              "A4"
+            ],
+            "tache_codes": [
+              "T4.2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les informations relatives au dysfonctionnement sont analysées",
+              "Le fonctionnement de l’installation est analysé",
+              "Le diagnostic est posé",
+              "Le diagnostic est pertinent et complet",
+              "Les règles de santé et de sécurité au travail sont respectées"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C9",
+            "libelle": "Remplacer un matériel électrique",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC7"
+            ],
+            "activite_codes": [
+              "A4"
+            ],
+            "tache_codes": [
+              "T4.1",
+              "T4.2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Le matériel électrique à remplacer est identifié",
+              "Le matériel électrique à remplacer est correctement déposé",
+              "Le matériel électrique de remplacement est correctement choisi",
+              "Le matériel électrique de remplacement est correctement installé",
+              "Le fonctionnement est vérifié après rétablissement des énergies",
+              "Les règles de santé et de sécurité au travail sont respectées"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C10",
+            "libelle": "Exploiter les outils numériques dans le contexte professionnel",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [],
+            "activite_codes": [
+              "A1",
+              "A5"
+            ],
+            "tache_codes": [
+              "T1.1",
+              "T1.2",
+              "T5.1",
+              "T5.2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les applications numériques de représentation graphique, de dimensionnement ou de chiffrage sont exploitées avec pertinence",
+              "La recherche d’information est faite avec pertinence",
+              "Les moyens et outils de communication sont exploités",
+              "Les moyens et outils de communication sont exploités de manière éthique et responsable"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C11",
+            "libelle": "Compléter les documents liés aux opérations",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC8"
+            ],
+            "activite_codes": [
+              "A1",
+              "A5"
+            ],
+            "tache_codes": [
+              "T1.1",
+              "T1.3",
+              "T5.1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les documents à compléter sont identifiés",
+              "Les informations nécessaires sont identifiées",
+              "Les documents sont complétés ou modifiés correctement"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C12",
+            "libelle": "Communiquer entre professionnels sur l’opération",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A5"
+            ],
+            "tache_codes": [
+              "T1.1",
+              "T1.2",
+              "T2.4",
+              "T2.5",
+              "T5.1",
+              "T5.2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les informations nécessaires à la communication sont identifiées",
+              "Les contraintes techniques sont expliquées",
+              "Les choix technologiques sont argumentés",
+              "Les choix économiques sont expliqués",
+              "Les contraintes techniques liées à la performance énergétique de l’installation sont expliquées",
+              "L’état d’avancement de l’opération est justifié",
+              "Les difficultés sont remontées à la hiérarchie"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          },
+          {
+            "code": "C13",
+            "libelle": "Communiquer avec le client/usager sur l’opération",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC9"
+            ],
+            "activite_codes": [
+              "A5"
+            ],
+            "tache_codes": [
+              "T5.2",
+              "T5.3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les besoins du client sont collectés",
+              "Les contraintes techniques d’utilisation et de performances énergétiques de l’installation sont expliquées",
+              "Les usages et le fonctionnement de l’installation sont maîtrisés par le client ou l’usager",
+              "Les choix technologiques et économiques sont expliqués",
+              "L’état d’avancement de l’opération et ses contraintes sont expliqués",
+              "Les prestations complémentaires sont expliquées",
+              "La satisfaction client est collectée"
+            ],
+            "terme_officiel_source": "Critères d’évaluation de la compétence"
+          }
+        ]
+      },
+      {
+        "code": "MFER",
+        "libelle": "Métiers du Froid et des Énergies Renouvelables",
+        "structure_poles": "pôles d’activités officiels",
+        "poles": [
+          {
+            "code": "P1",
+            "libelle": "Préparation des opérations à réaliser",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "A1",
+                "libelle": "Préparation des opérations à réaliser",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A1T1",
+                    "libelle": "Prendre connaissance des dossiers relatifs aux opérations à réaliser"
+                  },
+                  {
+                    "code": "A1T2",
+                    "libelle": "Analyser et exploiter les données techniques d’une installation"
+                  },
+                  {
+                    "code": "A1T3",
+                    "libelle": "Analyser les risques relatifs aux opérations à réaliser"
+                  },
+                  {
+                    "code": "A1T4",
+                    "libelle": "Choisir les matériels, équipements et outillages nécessaires aux opérations à réaliser"
+                  },
+                  {
+                    "code": "A1T5",
+                    "libelle": "Prendre connaissance des tâches en fonction des habilitations, des certifications des équipiers et du planning des autres intervenants"
+                  }
+                ],
+                "competence_codes": [
+                  "C1",
+                  "C2",
+                  "C3",
+                  "C4",
+                  "C6",
+                  "C7",
+                  "C8",
+                  "C9",
+                  "C10",
+                  "C11"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "P2",
+            "libelle": "Réalisation et mise en service d’une installation",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "A2",
+                "libelle": "Réalisation",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A2T1",
+                    "libelle": "Réceptionner et vérifier les matériels"
+                  },
+                  {
+                    "code": "A2T2",
+                    "libelle": "Implanter les appareils et les accessoires"
+                  },
+                  {
+                    "code": "A2T3",
+                    "libelle": "Réaliser les réseaux fluidiques"
+                  },
+                  {
+                    "code": "A2T4",
+                    "libelle": "Câbler, raccorder les équipements électriques"
+                  },
+                  {
+                    "code": "A2T5",
+                    "libelle": "Agir de manière écoresponsable"
+                  }
+                ],
+                "competence_codes": [
+                  "C4",
+                  "C5",
+                  "C6",
+                  "C9",
+                  "C10",
+                  "C11"
+                ]
+              },
+              {
+                "code": "A3",
+                "libelle": "Mise en service",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A3T1",
+                    "libelle": "Réaliser les opérations préalables à la mise en service de l’installation"
+                  },
+                  {
+                    "code": "A3T2",
+                    "libelle": "Réaliser la mise en service de l’installation"
+                  }
+                ],
+                "competence_codes": [
+                  "C1",
+                  "C2",
+                  "C7",
+                  "C8",
+                  "C10",
+                  "C11",
+                  "C12",
+                  "C13"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "P3",
+            "libelle": "Maintenance d’une installation",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "A4",
+                "libelle": "Maintenance",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A4T1",
+                    "libelle": "Réaliser une opération de maintenance préventive"
+                  },
+                  {
+                    "code": "A4T2",
+                    "libelle": "Réaliser une opération de maintenance corrective"
+                  }
+                ],
+                "competence_codes": [
+                  "C7",
+                  "C8",
+                  "C9",
+                  "C10",
+                  "C12",
+                  "C13"
+                ]
+              }
+            ]
+          }
+        ],
+        "activites_transversales": [
+          {
+            "code": "A5",
+            "libelle": "Communication",
+            "transversale": true,
+            "taches": [
+              {
+                "code": "A5T1",
+                "libelle": "Rendre compte oralement à l’interne et à l’externe du déroulement de l’intervention"
+              },
+              {
+                "code": "A5T2",
+                "libelle": "Renseigner les documents techniques et réglementaires"
+              },
+              {
+                "code": "A5T3",
+                "libelle": "Conseiller le client et/ou l’exploitant"
+              }
+            ],
+            "competence_codes": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7",
+              "C9",
+              "C10",
+              "C11",
+              "C12",
+              "C13"
+            ]
+          }
+        ],
+        "competences": [
+          {
+            "code": "C1",
+            "libelle": "Analyser les conditions de l’opération et son contexte",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC1"
+            ],
+            "activite_codes": [
+              "A1",
+              "A3",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T3",
+              "A1T5",
+              "A3T1",
+              "A5T1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les données techniques nécessaires à l’intervention sont identifiées",
+              "La collecte des informations nécessaires à l’intervention est complète et exploitable",
+              "Le classement des données est exploitable et respecte les règles de l’entreprise",
+              "Les contraintes techniques et d’exécution sont repérées",
+              "Les contraintes liées à l’efficacité énergétique sont repérées",
+              "Les risques professionnels sont évalués",
+              "Les contraintes d’environnement de travail sont recensées",
+              "Les mesures de prévention de santé et sécurité au travail sont proposées",
+              "Les interactions avec les autres intervenants sont repérées",
+              "Les habilitations et certifications nécessaires à l’opération sont identifiées",
+              "Les contraintes sont prises en compte et donnent lieu à une solution"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C2",
+            "libelle": "Analyser et exploiter les données techniques de l’intervention",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC3"
+            ],
+            "activite_codes": [
+              "A1",
+              "A3",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T2",
+              "A1T5",
+              "A3T1",
+              "A5T1",
+              "A5T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’identification des éléments permet de déterminer leurs caractéristiques",
+              "Les fonctions principales de chaque élément sont identifiées",
+              "Les différents éléments sont repérés sur les différents schémas",
+              "Les caractéristiques sont identifiées et conformes aux normes en vigueur",
+              "Les grandeurs physiques sont déterminées, interprétées et associées à des moyens de mesure, de capteurs et de protection",
+              "Le dimensionnement des matériels est vérifié et justifié",
+              "Les valeurs identifiées permettent de prévoir le réglage des appareils de l’installation",
+              "Les schémas et/ou les croquis sont exploitables",
+              "Les conventions de représentation sont respectées",
+              "Les éléments à raccorder, le type et la section des conducteurs sont identifiés",
+              "La modification est approuvée et portée au dossier technique",
+              "La solution technique proposée intègre les enjeux d’efficacité énergétique"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C3",
+            "libelle": "Choisir les matériels, équipements et outillage",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC2"
+            ],
+            "activite_codes": [
+              "A1",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T3",
+              "A1T4",
+              "A5T1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les matériels et outillages choisis sont adaptés à l’intervention",
+              "Les règles et limites d’utilisation des matériels et outillages sont recensées",
+              "L’inventaire des EPI et EPC est complet et adapté à l’’intervention",
+              "Les risques professionnels sont évalués",
+              "Les équipements nécessaires à l’intervention sont listés",
+              "Les mesures de prévention de santé et sécurité au travail sont recensées",
+              "Les habilitations et certifications nécessaires sont identifiées",
+              "La liste des équipements spécifiques est communiquée à l’interne et à l’externe"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C4",
+            "libelle": "Organiser et sécuriser son intervention",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC2"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T3",
+              "A2T1",
+              "A5T1",
+              "A5T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les spécificités du chantier sont identifiées",
+              "Les anomalies techniques sont repérées et signalées",
+              "Le poste de travail est approvisionné en matériels et outillages avec méthode",
+              "Le lieu d’activité est restitué quotidiennement conformément aux règles d’hygiène et de sécurité",
+              "Les principes généraux de prévention (PGP) sont appliqués dans le choix des mesures de prévention",
+              "Les contraintes propres au poste de travail y compris environnementales sont prises en compte",
+              "L’implantation des équipements spécifiques est certifiée",
+              "Les activités sont organisées de manière chronologique et méthodique",
+              "Les activités sont (ré)organisées en fonction des aléas (techniques, organisationnels, …)"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C5",
+            "libelle": "Réceptionner les approvisionnements",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [],
+            "activite_codes": [
+              "A2",
+              "A5"
+            ],
+            "tache_codes": [
+              "A2T1",
+              "A5T1",
+              "A5T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les caractéristiques techniques sont vérifiées",
+              "Les quantités sont contrôlées",
+              "Les éventuelles anomalies sont consignées",
+              "Les bons de livraison, bons de garantie et notices techniques sont recueillis",
+              "Les accès et les circulations sont préservés",
+              "Les conditions de stockage données sont respectées",
+              "Les principes de la prévention des risques liés à l’activité physique (PRAP) sont appliqués",
+              "Les matériels de manutention sont utilisés le plus souvent possible"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C6",
+            "libelle": "Réaliser une installation en adoptant une attitude écoresponsable",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC4"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A2T2",
+              "A2T3",
+              "A2T4",
+              "A2T5",
+              "A5T1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’implantation des appareils et supports est conforme aux consignes de sa hiérarchie, aux prescriptions techniques, règlementaires et aux normes en vigueur",
+              "Les fixations sont adaptées à la nature de la paroi, aux charges et aux prescriptions du fabricant",
+              "Les réseaux sont façonnés, posés et raccordés conformément aux consignes de sa hiérarchie, aux prescriptions techniques, règlementaires et aux normes en vigueur",
+              "Le matériel électrique est câblé et raccordé conformément aux consignes de sa hiérarchie et aux prescriptions techniques, règlementaires et aux normes en vigueur",
+              "Le travail est soigné, le niveau de qualité attendu est atteint",
+              "Les règles de sécurité sont respectées",
+              "Les déchets sont triés et évacués de manière sélective conformément à la règlementation et aux normes en vigueur",
+              "Le consommable est utilisé sans gaspillage"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C7",
+            "libelle": "Mettre en service une installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC6"
+            ],
+            "activite_codes": [
+              "A1",
+              "A3",
+              "A4",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A3T1",
+              "A3T2",
+              "A4T1",
+              "A5T1",
+              "A5T2",
+              "A5T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les réseaux et les contrôle sont identifiés",
+              "Les contrôles des réalisations sont effectués et conformes aux normes en vigueur",
+              "Les risques professionnels sont identifiés et permettent une intervention en sécurité",
+              "Les modes opératoires sont réalisés et conformes aux règles en vigueur",
+              "Les préréglages sont réalisés dans le respect des normes et la réglementation en vigueur",
+              "Les préréglages permettent une mise en service de toute ou partie de l’installation",
+              "La précharge en réalisée suivant les normes en vigueur",
+              "La précharge permet la mise en service de l’installation.",
+              "L’installation fonctionne"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C8",
+            "libelle": "Contrôler, régler et paramétrer l’installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC5"
+            ],
+            "activite_codes": [
+              "A1",
+              "A3",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A1T5",
+              "A3T2",
+              "A4T1",
+              "A4T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "La charge est réalisée suivant les normes en vigueurs et dans le respect de la règlementation sur l’environnement",
+              "La valeur du sous refroidissement est correcte suivants les valeurs définies par la norme",
+              "Les réglages et leur précision permettent le bon fonctionnement du système frigorifique",
+              "Le réglage des sécurités est réalisé, justifié et précis",
+              "Les paramètres sont identifiés",
+              "Le paramétrage assure la fiabilité du système et correspond aux besoins du client",
+              "Les points de mesures sont repérés.",
+              "Les mesures permettent la validation du fonctionnement du système frigorifique",
+              "Les mesures sont réalisées avec précision et méthode.",
+              "Le fonctionnement de l’installation est optimisé",
+              "Toutes les mesures de prévention des risques pour la sécurité des biens et des personnes sont appliquées",
+              "Les règles, principes sur la manipulation des fluides, et les différentes prises de mesures sont respectées"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C9",
+            "libelle": "Réaliser des opérations de maintenance préventive",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC7"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A4",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A2T5",
+              "A4T1",
+              "A5T1",
+              "A5T2",
+              "A5T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "La collecte des informations nécessaires à l’intervention est complète et exploitable",
+              "L’organisation du travail est respectueuse de l’environnement, de la santé et sécurité au travail",
+              "Les risques sont pris en compte pour effectuer l’intervention",
+              "Les données du dossier technique sont identifiées et exploitées",
+              "Les données de télémaintenance et celles des applications numériques sont identifiées et exploitées",
+              "Le contrôle périodique d’étanchéité est réalisé",
+              "Les fluides frigorigènes et caloporteurs sont manipulés conformément aux règles en vigueur",
+              "Les opérations d’ordre technique sont réalisées avec méthode",
+              "Les éventuels éléments défectueux sont identifiés et l’information est transmise à la hiérarchie",
+              "Le système est dans les conditions normales de fonctionnement",
+              "Les déchets sont évacués de façon écoresponsable et conformément aux règles en vigueur"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C10",
+            "libelle": "Réaliser des opérations de maintenance corrective",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC7"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A2T1",
+              "A3T1",
+              "A4T2",
+              "A5T1",
+              "A5T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’analyse du constat confirme que: - les informations délivrées par le système sont relevées - la configuration du système est analysée",
+              "Toutes les hypothèses émises sont pertinentes",
+              "Les points de mesures, de contrôles, de tests sont correctement choisis et localisés",
+              "Les appareils de mesure et de contrôle sont correctement mis en œuvre",
+              "Les résultats sont correctement interprétés par rapport aux attendus",
+              "La chronologie des tests est réalisée de façon méthodique",
+              "L’identification du composant et/ou la cause de la défaillance est correcte",
+              "Les pièces de rechange et consommables sortis du magasin ou commandés sont conformes",
+              "Le poste de travail est approvisionné en matériels, équipements et outillages",
+              "L’intervention peut se dérouler en toute sécurité",
+              "Les EPI et EPC sont adaptés",
+              "Les fluides frigorigènes et caloporteurs sont manipulés conformément aux règles en vigueur",
+              "Les consignes et procédures sont respectées",
+              "Les moyens de manutention et l’outillage sont mis en œuvre et en toute sécurité",
+              "Le composant défectueux est déposé et prêt à être recyclé",
+              "Le composant est remplacé sans risque pour les personnes et le système",
+              "Les réglages et/ou paramétrages sont conformes au dossier technique",
+              "Le système est prêt pour la remise en service",
+              "La mise en service est réalisée avec méthode",
+              "Les performances du système sont conformes au dossier technique",
+              "Les déchets sont évacués de façon écoresponsable et conformément aux règles en vigueur"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C11",
+            "libelle": "Consigner et transmettre les informations",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC8"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A3",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A2T5",
+              "A3T2",
+              "A5T1",
+              "A5T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "La fiche d’intervention/bordereau de suivi de déchet dangereux est complétée sans erreurs",
+              "Les rapports sont correctement renseignés et exploitables"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C12",
+            "libelle": "Communiquer, rendre compte de son intervention à l’écrit et/ou à l’oral",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [],
+            "activite_codes": [
+              "A3",
+              "A4",
+              "A5"
+            ],
+            "tache_codes": [
+              "A3T2",
+              "A4T1",
+              "A4T2",
+              "A5T1",
+              "A5T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les évènements avant panne sont collectés",
+              "Les constats sont pris en compte",
+              "L’état d’avancement des opérations est clairement décrit, Les contraintes et les difficultés sont identifiées",
+              "Le compte-rendu est complet et exploitable"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C13",
+            "libelle": "Conseiller le client et/ou l’exploitant du système",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC9"
+            ],
+            "activite_codes": [
+              "A3",
+              "A4",
+              "A5"
+            ],
+            "tache_codes": [
+              "A3T2",
+              "A4T1",
+              "A4T2",
+              "A5T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les besoins de l’exploitant sont identifiés et interprétés",
+              "Les explications sont correctes et permettent l’utilisation de l’installation par l’exploitant",
+              "Les consignes de sécurité sont présentées et détaillées",
+              "La solution technique proposée est correcte"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          }
+        ]
+      },
+      {
+        "code": "ICCER",
+        "libelle": "Installateur en Chauffage, Climatisation et Énergies Renouvelables",
+        "structure_poles": "pôles d’activités officiels",
+        "poles": [
+          {
+            "code": "P1",
+            "libelle": "Préparation des opérations à réaliser",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "A1",
+                "libelle": "Préparation des opérations à réaliser",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A1T1",
+                    "libelle": "Prendre connaissance des dossiers relatifs aux opérations à réaliser"
+                  },
+                  {
+                    "code": "A1T2",
+                    "libelle": "Analyser et exploiter les données techniques d’une installation"
+                  },
+                  {
+                    "code": "A1T3",
+                    "libelle": "Choisir et vérifier les matériels, les matériaux, les équipements et l’outillage nécessaires aux opérations à réaliser"
+                  },
+                  {
+                    "code": "A1T4",
+                    "libelle": "Analyser les risques relatifs aux opérations à réaliser"
+                  },
+                  {
+                    "code": "A1T5",
+                    "libelle": "Prendre connaissance des tâches en fonction des habilitations, des certifications des équipiers et du planning des autres intervenants"
+                  }
+                ],
+                "competence_codes": [
+                  "C1",
+                  "C2",
+                  "C3",
+                  "C4",
+                  "C6",
+                  "C7",
+                  "C8",
+                  "C9",
+                  "C10",
+                  "C11",
+                  "C12"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "P2",
+            "libelle": "Réalisation et mise en service d’une installation",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "A2",
+                "libelle": "Réalisation d’une installation",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A2T1",
+                    "libelle": "Réceptionner et vérifier la livraison"
+                  },
+                  {
+                    "code": "A2T2",
+                    "libelle": "Implanter les appareils et les accessoires"
+                  },
+                  {
+                    "code": "A2T3",
+                    "libelle": "Réaliser les réseaux fluidiques"
+                  },
+                  {
+                    "code": "A2T4",
+                    "libelle": "Câbler, raccorder les équipements électriques"
+                  },
+                  {
+                    "code": "A2T5",
+                    "libelle": "Agir de manière écoresponsable"
+                  }
+                ],
+                "competence_codes": [
+                  "C4",
+                  "C5",
+                  "C6",
+                  "C10",
+                  "C11",
+                  "C12",
+                  "C13"
+                ]
+              },
+              {
+                "code": "A3",
+                "libelle": "Mise en service d’une installation",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A3T1",
+                    "libelle": "Réaliser les opérations préalables à la mise en service de l’installation"
+                  },
+                  {
+                    "code": "A3T2",
+                    "libelle": "Réaliser la mise en service de l’installation"
+                  }
+                ],
+                "competence_codes": [
+                  "C7",
+                  "C8",
+                  "C11",
+                  "C12",
+                  "C13"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "P3",
+            "libelle": "Travaux d’amélioration de l’efficacité énergétique et de dépannage",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "A4",
+                "libelle": "Intervention d’amélioration de l’efficacité énergétique et de dépannage",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A4T1",
+                    "libelle": "Réaliser une opération d’amélioration de l’efficacité énergétique"
+                  },
+                  {
+                    "code": "A4T2",
+                    "libelle": "Réaliser des travaux de dépannage"
+                  }
+                ],
+                "competence_codes": [
+                  "C9",
+                  "C10",
+                  "C12",
+                  "C13"
+                ]
+              }
+            ]
+          }
+        ],
+        "activites_transversales": [
+          {
+            "code": "A5",
+            "libelle": "Communication",
+            "transversale": true,
+            "taches": [
+              {
+                "code": "A5T1",
+                "libelle": "Rendre compte oralement à l’interne et à l’externe du déroulement de l’intervention"
+              },
+              {
+                "code": "A5T2",
+                "libelle": "Renseigner les documents techniques et réglementaires"
+              },
+              {
+                "code": "A5T3",
+                "libelle": "Conseiller le client et/ou l’exploitant"
+              }
+            ],
+            "competence_codes": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7",
+              "C9",
+              "C10",
+              "C11",
+              "C12",
+              "C13"
+            ]
+          }
+        ],
+        "competences": [
+          {
+            "code": "C1",
+            "libelle": "S’informer sur la nature et sur les contraintes de l’intervention",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC1"
+            ],
+            "activite_codes": [
+              "A1",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T4",
+              "A1T5",
+              "A5T1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les données techniques nécessaires à son intervention sont identifiées",
+              "La collecte des informations nécessaires à l’intervention est complète et exploitable",
+              "Le classement des données est exploitable et respecte les règles de l’entreprise",
+              "Les contraintes techniques et d’exécution sont repérées",
+              "Les contraintes liées à l’efficacité énergétique sont repérées",
+              "Les risques professionnels sont évalués",
+              "Les contraintes d’environnement sont recensées",
+              "Les mesures de prévention de santé et sécurité au travail sont proposées",
+              "Les interactions avec les autres intervenants sont repérées",
+              "Les habilitations et certifications nécessaires à l’opération sont identifiées",
+              "Les contraintes sont prises en compte et donnent lieu à une solution"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C2",
+            "libelle": "Analyser et exploiter les données techniques de l’intervention",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC3"
+            ],
+            "activite_codes": [
+              "A1",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T2",
+              "A5T1",
+              "A5T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’identification des éléments permet de déterminer leurs caractéristiques",
+              "Les fonctions principales de chaque élément sont identifiées",
+              "Les différents éléments sont repérés sur les différents schémas",
+              "Les caractéristiques sont identifiées et conformes aux normes en vigueur",
+              "Les grandeurs physiques sont déterminées, interprétées et associées à des moyens de mesure, de capteurs et de protection",
+              "Le dimensionnement des matériels est vérifié et justifié",
+              "Les valeurs identifiées permettent de prévoir le réglage des appareils de l’installation",
+              "Les schémas et/ou les croquis sont exploitables",
+              "Les conventions de représentation sont respectées",
+              "Les éléments à raccorder, le type et la section des conducteurs sont identifiés",
+              "La modification est approuvée par sa hiérarchie et portée au dossier technique",
+              "La solution technique proposée intègre les enjeux d’efficacité énergétique"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C3",
+            "libelle": "Choisir les matériels, les matériaux, les équipements et l’outillage",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC2"
+            ],
+            "activite_codes": [
+              "A1",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T3",
+              "A1T4",
+              "A5T1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les matériels et outillages choisis sont adaptés à l’intervention",
+              "Les règles et limites d’utilisation des matériels et outillages sont recensées",
+              "Les équipements nécessaires à l’intervention sont listés",
+              "Les habilitations et certifications nécessaires sont identifiées",
+              "Les risques professionnels sont analysés",
+              "Les mesures de prévention choisies répondent aux risques professionnels identifiés",
+              "L’inventaire des EPI et EPC est complet et adapté à l’intervention",
+              "La liste des équipements spécifiques est communiquée à l’interne et à l’externe"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C4",
+            "libelle": "Organiser et sécuriser son intervention",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC2"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T4",
+              "A2T1",
+              "A5T1",
+              "A5T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les spécificités du chantier sont prises en compte",
+              "Les anomalies techniques sont repérées et signalées",
+              "Le poste de travail est approvisionné en matériels et outillages avec méthode",
+              "Le lieu d’activité est restitué quotidiennement conformément aux règles d’hygiène et de sécurité",
+              "Les règles de santé et de sécurité au travail sont respectées",
+              "Les contraintes propres au poste de travail et à la zone d’intervention y compris environnementales sont prises en compte",
+              "Les équipements spécifiques sont certifiés",
+              "Les activités sont organisées de manière chronologique et méthodique",
+              "Les activités sont (ré)organisées en fonction des aléas (techniques, organisationnels, …)"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C5",
+            "libelle": "Réceptionner les approvisionnements",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [],
+            "activite_codes": [
+              "A2",
+              "A5"
+            ],
+            "tache_codes": [
+              "A2T1",
+              "A5T1",
+              "A5T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les caractéristiques techniques sont vérifiées",
+              "Les quantités sont contrôlées",
+              "Les éventuelles anomalies sont consignées",
+              "Les bons de livraison, bons de garantie et notices techniques sont recueillis",
+              "Les accès et les circulations sont préservés",
+              "Les conditions de stockage données sont respectées",
+              "Les principes de la prévention des risques liés à l’activité physique (PRAP) sont appliqués",
+              "Les matériels de manutention sont utilisés"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C6",
+            "libelle": "Réaliser une installation en adoptant une attitude écoresponsable",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC4"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A2T2",
+              "A2T3",
+              "A2T4",
+              "A2T5",
+              "A5T1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’implantation des appareils et supports est conforme aux consignes de la hiérarchie, aux prescriptions techniques, règlementaires et aux normes en vigueur",
+              "Les fixations sont adaptées à la nature de la paroi, aux charges et aux prescriptions du fabricant",
+              "Les réseaux sont façonnés, posés et raccordés conformément aux consignes de la hiérarchie, aux prescriptions techniques, règlementaires et aux normes en vigueur",
+              "Le matériel électrique est câblé et raccordé conformément aux consignes de la hiérarchie et aux prescriptions techniques, règlementaires et aux normes en vigueur",
+              "Le travail est soigné, le niveau de qualité attendu est atteint",
+              "Les règles de sécurité sont respectées",
+              "Les déchets sont triés et évacués de manière sélective conformément à la règlementation et aux normes en vigueur",
+              "Le consommable est utilisé sans gaspillage"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C7",
+            "libelle": "Mettre en service une installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC6"
+            ],
+            "activite_codes": [
+              "A1",
+              "A3",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A3T1",
+              "A3T2",
+              "A5T1",
+              "A5T2",
+              "A5T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les contrôles des réalisations sont effectués et conformes aux normes en vigueur",
+              "Les risques professionnels sont identifiés et permettent une intervention en sécurité",
+              "Les modes opératoires sont réalisés et conformes aux règles en vigueur",
+              "Les préréglages sont réalisés dans le respect des normes et la réglementation en vigueur",
+              "Les préréglages permettent une mise en service de tout ou partie d’une installation",
+              "L’installation fonctionne"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C8",
+            "libelle": "Contrôler et régler les paramètres",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC5"
+            ],
+            "activite_codes": [
+              "A1",
+              "A3"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A1T5",
+              "A3T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les réglages et leur précision permettent le bon fonctionnement du système",
+              "Le réglage des sécurités est réalisé, justifié et précis",
+              "Les points de mesures sont repérés",
+              "Les mesures permettent la validation du fonctionnement du système",
+              "Les mesures sont réalisées avec précision et méthode",
+              "Toutes les règles de sécurité des biens et des personnes sont appliquées",
+              "Les règles sur les différentes prises de mesures sont respectées"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C9",
+            "libelle": "Réaliser des opérations d’amélioration de l’efficacité énergétique",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC7"
+            ],
+            "activite_codes": [
+              "A1",
+              "A4",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A4T1",
+              "A5T1",
+              "A5T2",
+              "A5T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’organisation du travail est respectueuse de l’environnement, de la santé et sécurité au travail",
+              "Les risques sont pris en compte pour effectuer l’intervention",
+              "Les données du dossier technique sont identifiées et exploitées",
+              "Les opérations d’ordre technique sont réalisées avec méthode",
+              "L’installation est restituée dans un état de fonctionnement optimal",
+              "Les déchets sont évacués de façon écoresponsable et conformément aux règles en vigueur"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C10",
+            "libelle": "Réaliser des travaux de dépannage",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC7"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A4",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A2T1",
+              "A4T2",
+              "A5T1",
+              "A5T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’analyse du constat confirme que: - les informations délivrées par le système sont relevées - la configuration du système est analysée",
+              "Toutes les hypothèses émises sont pertinentes",
+              "Les points de mesures, de contrôles, de tests sont correctement choisis et localisés",
+              "Les appareils de mesure et de contrôle sont correctement mis en œuvre",
+              "Les résultats sont correctement interprétés par rapport aux attendus",
+              "La chronologie des tests est réalisée de façon méthodique",
+              "L’identification du composant et/ou la cause de la défaillance est correcte",
+              "L’information transmise permet la programmation du dépannage",
+              "Le poste de travail est approvisionné en matériels, équipements et outillages",
+              "L’intervention peut se dérouler en toute sécurité",
+              "Les EPI et EPC sont adaptés",
+              "Les consignes et procédures sont respectées",
+              "Les moyens de manutention et l’outillage sont mis en œuvre en toute sécurité",
+              "Le composant défectueux est déposé et prêt à être recyclé",
+              "Le composant est remplacé sans risque pour les personnes et le système",
+              "Le système est prêt pour la remise en service",
+              "Les réglages sont conformes au dossier technique",
+              "La remise en service est réalisée avec méthode",
+              "Les performances du système sont conformes au dossier technique",
+              "Les déchets sont évacués de façon écoresponsable et conformément aux règles en vigueur"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C11",
+            "libelle": "Consigner et transmettre les informations",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC8"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A3",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A2T5",
+              "A3T2",
+              "A5T1",
+              "A5T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les fiches sont choisies et complétées sans erreurs",
+              "Les rapports sont correctement renseignés et exploitables"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C12",
+            "libelle": "Communiquer, rendre compte de son intervention à l’écrit et/ou à l’oral",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4",
+              "A5"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A1T5",
+              "A2T1",
+              "A2T2",
+              "A2T3",
+              "A2T4",
+              "A2T5",
+              "A3T1",
+              "A3T2",
+              "A4T1",
+              "A4T2",
+              "A5T1",
+              "A5T2",
+              "A5T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’état d’avancement des opérations est clairement décrit",
+              "Les contraintes et les difficultés sont identifiées",
+              "Le compte-rendu est complet et exploitable"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C13",
+            "libelle": "Conseiller le client et/ou l’exploitant du système",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC9"
+            ],
+            "activite_codes": [
+              "A2",
+              "A3",
+              "A4",
+              "A5"
+            ],
+            "tache_codes": [
+              "A2T5",
+              "A3T2",
+              "A4T1",
+              "A4T2",
+              "A5T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les besoins du client et/ou de l’exploitant sont identifiés et interprétés",
+              "Les explications sont correctes et permettent l’utilisation de l’installation par le client et/ou l’exploitant",
+              "Les consignes de sécurité sont présentées et détaillées",
+              "La solution technique proposée est correcte"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          }
+        ]
+      },
+      {
+        "code": "MEE",
+        "libelle": "Maintenance et Efficacité Énergétique",
+        "structure_poles": "pôles d’activités officiels",
+        "poles": [
+          {
+            "code": "P1",
+            "libelle": "Préparation des opérations à réaliser",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "A1",
+                "libelle": "Préparation des opérations à réaliser",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A1T1",
+                    "libelle": "Prendre connaissance des dossiers relatifs aux opérations à réaliser"
+                  },
+                  {
+                    "code": "A1T2",
+                    "libelle": "Analyser et exploiter les données techniques d’une installation"
+                  },
+                  {
+                    "code": "A1T3",
+                    "libelle": "Analyser les risques relatifs aux opérations à réaliser"
+                  },
+                  {
+                    "code": "A1T4",
+                    "libelle": "Choisir les matériels, équipements et outillages nécessaires aux opérations à réaliser"
+                  },
+                  {
+                    "code": "A1T5",
+                    "libelle": "Prendre connaissance des tâches en fonction des habilitations, des certifications des équipiers et du planning des autres intervenants"
+                  }
+                ],
+                "competence_codes": [
+                  "C1",
+                  "C2",
+                  "C3",
+                  "C4",
+                  "C6",
+                  "C7",
+                  "C8",
+                  "C9",
+                  "C10",
+                  "C11"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "P2",
+            "libelle": "Exploitation et mise en service de l’installation",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "A2",
+                "libelle": "Exploitation et mise en service de l’installation",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A2T1",
+                    "libelle": "Réceptionner et vérifier les matériels"
+                  },
+                  {
+                    "code": "A2T2",
+                    "libelle": "Implanter les appareils et les accessoires"
+                  },
+                  {
+                    "code": "A2T3",
+                    "libelle": "Réaliser des modifications sur les réseaux fluidiques"
+                  },
+                  {
+                    "code": "A2T4",
+                    "libelle": "Câbler, raccorder les équipements électriques"
+                  },
+                  {
+                    "code": "A2T5",
+                    "libelle": "Agir de manière éco-responsable"
+                  },
+                  {
+                    "code": "A2T6",
+                    "libelle": "Réaliser les opérations préalables à la mise en service et/ou l’arrêt de l’installation"
+                  },
+                  {
+                    "code": "A2T7",
+                    "libelle": "Réaliser la mise en service et/ou l’arrêt de l’installation"
+                  },
+                  {
+                    "code": "A2T8",
+                    "libelle": "Piloter l’installation avec un rendement énergétique global optimum dans le respect de l’environnement"
+                  },
+                  {
+                    "code": "A2T9",
+                    "libelle": "Réaliser des mesurages électriques"
+                  }
+                ],
+                "competence_codes": [
+                  "C4",
+                  "C5",
+                  "C6",
+                  "C7",
+                  "C8",
+                  "C9",
+                  "C10",
+                  "C11",
+                  "C12",
+                  "C13"
+                ]
+              }
+            ]
+          },
+          {
+            "code": "P3",
+            "libelle": "Maintenance d’une installation",
+            "statut": "officiel",
+            "activites": [
+              {
+                "code": "A3",
+                "libelle": "Maintenance d’une installation",
+                "transversale": false,
+                "taches": [
+                  {
+                    "code": "A3T1",
+                    "libelle": "Réaliser une opération de maintenance préventive"
+                  },
+                  {
+                    "code": "A3T2",
+                    "libelle": "Réaliser une opération de maintenance corrective"
+                  }
+                ],
+                "competence_codes": [
+                  "C10",
+                  "C11",
+                  "C12",
+                  "C13"
+                ]
+              }
+            ]
+          }
+        ],
+        "activites_transversales": [
+          {
+            "code": "A4",
+            "libelle": "Communication",
+            "transversale": true,
+            "taches": [
+              {
+                "code": "A4T1",
+                "libelle": "Rendre compte oralement à l’interne et à l’externe du déroulement de l’intervention"
+              },
+              {
+                "code": "A4T2",
+                "libelle": "Renseigner les documents techniques et réglementaires"
+              },
+              {
+                "code": "A4T3",
+                "libelle": "Conseiller le client et/ou l’exploitant"
+              }
+            ],
+            "competence_codes": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7",
+              "C8",
+              "C9",
+              "C10",
+              "C11",
+              "C12",
+              "C13"
+            ]
+          }
+        ],
+        "competences": [
+          {
+            "code": "C1",
+            "libelle": "Déterminer les conditions de l’opération dans son contexte",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC1"
+            ],
+            "activite_codes": [
+              "A1",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T3",
+              "A1T5",
+              "A4T1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les données techniques nécessaires à son intervention sont identifiées",
+              "La collecte des informations nécessaires à l’intervention est complète et exploitable",
+              "Les contraintes techniques et d’exécution sont identifiées",
+              "Le classement des données est exploitable et respecte les conditions d’intervention",
+              "L’ordonnancement des données permet d’identifier les informations utiles à transmettre à l’interne et à l’externe",
+              "Les contraintes liées à l’efficacité énergétique sont identifiées",
+              "Les contraintes d’environnement de travail sont recensées",
+              "Les habilitations et certifications nécessaires à l’opération sont identifiées",
+              "Les risques professionnels et environnementaux sont identifiés et les mesures de prévention sont adaptées",
+              "Les interactions avec les autres intervenants sont repérées",
+              "Les contraintes de co- activités sont repérées"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C2",
+            "libelle": "Analyser les données techniques de l’installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC3"
+            ],
+            "activite_codes": [
+              "A1",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T2",
+              "A4T1",
+              "A4T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’organisation fonctionnelle du système est décrite",
+              "Les fonctions principales de chaque élément sont identifiées",
+              "Les caractéristiques utiles des éléments sont déterminées",
+              "Les différents éléments sont repérés sur les différentes représentations (schémas, maquette numérique, synoptique…) et sur le système",
+              "Les caractéristiques sont déterminées conformément aux contraintes normatives et fonctionnelles et permettent le choix des matériels et des procédures d’intervention",
+              "La protection des personnes et des biens est assurée",
+              "Les grandeurs physiques utiles sont identifiées",
+              "Les valeurs nominales identifiées permettent: - d’optimiser le fonctionnement de l’installation - de dimensionner des matériels - de déterminer les moyens de mesures - d’assurer la protection des personnes et des biens",
+              "Les valeurs identifiées permettent de prévoir le réglage des appareils pour un fonctionnement conforme de l’installation",
+              "Les schémas fluidiques et électriques et/ou les croquis sont exploitables",
+              "Les conventions de représentation sont respectées",
+              "Les éléments électriques raccordés ou à raccorder, le type et la section des conducteurs sont identifiés ainsi que leurs repérages",
+              "Les éléments fluidiques raccordés ou à raccorder, le type et le diamètre des réseaux sont identifiés et repérés",
+              "La modification est approuvée et portée au dossier technique",
+              "La solution technique proposée intègre les enjeux d’efficacité énergétique"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C3",
+            "libelle": "Choisir les matériels, les équipements et les outillages",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC2"
+            ],
+            "activite_codes": [
+              "A1",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T3",
+              "A1T4",
+              "A4T1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les matériels, les produits et les outillages choisis sont adaptés à l’intervention",
+              "Les règles et limites d’utilisation des matériels, des produits et des outillages sont recensées",
+              "La protection des personnes et des biens est assurée",
+              "La protection de l’environnement est assurée",
+              "La liste des équipements, des matériels, des outillages et des produits nécessaires à l’opération est communiquée à l’interne et à l’externe",
+              "L’inventaire des EPC, des EPI et des EIS est complet et adapté à l’intervention",
+              "Les risques professionnels sont identifiés",
+              "Les équipements nécessaires à l’intervention sont listés",
+              "Les mesures de prévention de santé et sécurité au travail sont adaptées",
+              "Les habilitations et certifications nécessaires sont identifiées"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C4",
+            "libelle": "Organiser son intervention en toute sécurité",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC2"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T3",
+              "A2T1",
+              "A4T1",
+              "A4T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les risques propres à l’intervention sont analysés",
+              "Les principes généraux de prévention sont appliqués dans le choix des mesures de prévention",
+              "Les mesures de prévention sont adaptées aux risques identifiés",
+              "Le mode d’approvisionnement du poste de travail est déterminé",
+              "L’implantation des équipements spécifiques est certifiée",
+              "Le lieu d’activité est restitué quotidiennement pour garantir la sécurité des intervenants"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C5",
+            "libelle": "Gérer les approvisionnements",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [],
+            "activite_codes": [
+              "A2",
+              "A4"
+            ],
+            "tache_codes": [
+              "A2T1",
+              "A4T1",
+              "A4T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les caractéristiques techniques sont vérifiées",
+              "Les quantités sont contrôlées",
+              "Les éventuelles anomalies sont consignées",
+              "Les bons de livraison, bons de garantie et notices techniques sont recueillis et transmis",
+              "Les accès et les circulations sont préservés",
+              "Les conditions de stockage données sont respectées",
+              "Les principes de la prévention des risques liés à l’activité physique (PRAP) sont appliqués",
+              "La qualité des stocks est vérifiée",
+              "La protection des personnes et des biens et de l’environnement est assurée"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C6",
+            "libelle": "Réaliser une modification de manière éco-responsable",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC4"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A2T2",
+              "A2T3",
+              "A2T4",
+              "A2T5",
+              "A4T1"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "L’implantation des appareils et supports est conforme aux consignes de la hiérarchie, aux prescriptions techniques, réglementaires et aux normes en vigueur",
+              "Les fixations sont adaptées à la nature de la paroi, aux charges et aux prescriptions du fabricant",
+              "Les réseaux sont façonnés, posés et raccordés conformément aux consignes de la hiérarchie, aux prescriptions techniques, réglementaires et aux normes en vigueur",
+              "Le matériel électrique est câblé et raccordé conformément aux consignes de la hiérarchie, et aux prescriptions techniques, réglementaires et aux normes en vigueur",
+              "Le travail est soigné, le niveau de qualité attendu est atteint",
+              "La protection des personnes et des biens est assurée",
+              "Les déchets sont triés et évacués de manière sélective conformément à la réglementation et aux normes en vigueur",
+              "Les consommables sont utilisés sans gaspillage",
+              "Le maintien de la qualité thermique de l’enveloppe est assurée"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C7",
+            "libelle": "Réaliser les opérations de mise en service et d’arrêt de l’installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC6"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A2T6",
+              "A2T7",
+              "A2T9",
+              "A4T1",
+              "A4T2",
+              "A4T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les réseaux, les installations et les contrôles sont identifiés",
+              "Les contrôles des réalisations sont effectués et conformes aux normes en vigueur",
+              "La sécurité des biens et des personnes est assurée",
+              "Les mesures de prévention sont adaptées au contexte de l’intervention",
+              "Les aléas de l’environnement sont pris en compte",
+              "Les anomalies sont signalées à la hiérarchie",
+              "Les modes opératoires sont réalisés et conformes aux règles en vigueur",
+              "Les préréglages sont réalisés dans le respect des normes et la réglementation en vigueur",
+              "Les préréglages permettent une mise en service de toute ou partie de l’installation",
+              "La sécurité des personnes et des biens est assurée",
+              "La précharge est réalisée suivant les",
+              "La précharge permet la mise en service de l’installation",
+              "La protection de l’environnement est respectée",
+              "Les consignations (déconsignations) sont réalisées",
+              "Les protocoles de mise en service et/ou d’arrêt sont respectés",
+              "La sécurité des usagers et de l’installation est assurée tout au long de l’opération",
+              "Les informations sont transmises"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C8",
+            "libelle": "Contrôler les grandeurs caractéristiques de l’installation",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC5"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A1T5",
+              "A2T7",
+              "A2T8",
+              "A2T9",
+              "A4T1",
+              "A4T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les procédés de mesurages identifiés respectent les normes en vigueur et les règles de l’art",
+              "Les points de mesures identifiés sont conformes au besoin du contrôle",
+              "Les appareils sont installés en suivant les préconisations du fabricant et en respectant les normes en vigueur et les règles de l’art",
+              "Les protocoles de communication sont paramétrés",
+              "La sécurité des personnes et des biens est assurée",
+              "Les appareils sont utilisés en suivant les préconisations du fabricant et en respectant les normes en vigueur et les règles de l’art",
+              "La lecture est conforme à la grandeur mesurée",
+              "Les grandeurs mesurées sont consignées dans les supports d’enregistrement",
+              "Les valeurs sont adaptées aux unités attendues dans les supports d’enregistrement",
+              "Les calculs de puissance, d’énergie, de débit, de consommation… sont réalisés",
+              "L’interprétation de l’écart est caractérisée"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C9",
+            "libelle": "Effectuer les réglages adaptés",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC7"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A1T5",
+              "A2T7",
+              "A2T8",
+              "A2T9",
+              "A4T1",
+              "A4T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "La charge est réalisée en respectant les normes en vigueurs",
+              "La valeur du sous refroidissement est correcte suivant les valeurs définies par la norme",
+              "L’interprétation des écarts de mesures caractérisés* permettent l’identification des réglages nécessaires pour valider le fonctionnement attendu du système *cf C8: contrôler les grandeurs caractéristiques de l’installation",
+              "Les réglages permettent le fonctionnement attendu du système",
+              "Le réglage des sécurités est réalisé, justifié et précis",
+              "Toutes les règles de sécurité des personnes et des biens sont appliquées",
+              "Les règles sur la manipulation des fluides, et les différentes prises de mesures sont respectées"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C10",
+            "libelle": "Réaliser des opérations de maintenance préventive",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC7"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A2T9",
+              "A3T1",
+              "A4T1",
+              "A4T2",
+              "A4T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Le site et le lieu d’intervention sont identifiés",
+              "La période d’intervention est identifiée",
+              "La collecte des informations permet de lister (ou vérifier) toutes les interventions liées au contrat de maintenance et/ou à la gamme de maintenance",
+              "L’organisation établie répond aux attentes du contrat de maintenance",
+              "L’approvisionnement en équipements, matériels et outillages est assurée",
+              "La procédure d’intervention prend en compte les contraintes techniques du système* (vidanges nécessaires, isolement de parties du système, fonctionnement en mode dégradé…)",
+              "Le poste de travail est organisé avec ergonomie",
+              "La sécurité des biens et des personnes est assurée *cf C2: Analyser les données techniques de l’installation",
+              "Les informations de télémaintenance et celles des applications numériques transmises sont localisées sur le système",
+              "Les données de télémaintenance et celles des applications numériques nécessaires à",
+              "L’interprétation de l’écart (entre la grandeur indiquée et la grandeur nominale) est caractérisée",
+              "Le contrôle périodique d’étanchéité est réalisé",
+              "Les fluides frigorigènes et caloporteurs sont manipulés conformément aux règles en vigueur",
+              "Les opérations d’ordre technique sont réalisées avec méthode",
+              "Les modifications de réglages nécessaires sont réalisées",
+              "Le système est dans les conditions normales de fonctionnement",
+              "La sécurité des personnes et des biens est assurée",
+              "Les éventuels éléments défectueux sont identifiés",
+              "Les informations sont transmises à la hiérarchie",
+              "Les documents techniques et administratifs sont complétés",
+              "La zone d’intervention est remise en état",
+              "Les déchets sont évacués de façon écoresponsable et conformément aux règles en vigueur"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C11",
+            "libelle": "Réaliser des opérations de maintenance corrective",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC8"
+            ],
+            "activite_codes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "tache_codes": [
+              "A1T1",
+              "A1T2",
+              "A1T3",
+              "A1T4",
+              "A2T1",
+              "A3T2",
+              "A4T1",
+              "A4T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Le site, le lieu sont identifiés",
+              "Les contraintes d’accès sont identifiées",
+              "L’intervention est identifiée dans le cadre du contrat de maintenance",
+              "La sécurité des biens et des personnes est prise en compte",
+              "L’analyse* des données technique de l’installation est effectuée",
+              "Le dysfonctionnement est identifié *Cf C2: Analyser les données techniques de l’installation)",
+              "Toutes les hypothèses émises sont pertinentes",
+              "La hiérarchie des hypothèses identifiées est cohérente",
+              "La sécurité des biens et des personnes est assurée",
+              "Les résultats des tests, des contrôles et/ou des mesures permettent de valider les hypothèses",
+              "La cause de la défaillance est identifiée",
+              "Les caractéristiques techniques des pièces de rechanges choisies sont identiques ou similaires aux pièces à changer",
+              "La disponibilité des bouteilles de fluides frigorigènes et des instruments de pesée est assurée",
+              "Le bon de commande éventuel est complet",
+              "Les matériels, équipements et outillages sont approvisionnés* conformément au planning et aux besoins de l’intervention *Cf C5 Gérer les approvisionnement",
+              "Les matériels, les équipements et les outillages nécessaires à la consignation sont identifiés",
+              "Les étapes de consignation (déconsignation) sont réalisées en respectant les normes en vigueur",
+              "Les protocoles de mise en service et/ou d’arrêt sont respectés",
+              "La sécurité des usagers, et de l’installation est assurée tout au long de l’opération",
+              "Les informations sont transmises à la hiérarchie et aux usagers",
+              "Les documents sont complétés",
+              "Les opérations préalables sur le système (isolation tout ou partie du système fluidique, vidange, récupération des fluides frigorigènes …) permettent de garantir l’opération de dépose",
+              "L’opération de remplacement respecte les consignes, le contrat de maintenance, les procédures et les normes en vigueur",
+              "Les moyens de manutention et l’outillage sont mis en œuvre et en toute sécurité",
+              "Le composant défectueux est déposé et prêt à être recyclé",
+              "La sécurité des usagers et de l’installation est assurée tout au long de l’opération",
+              "Le composant est remplacé en respectant les normes en vigueur et les contraintes de l’installation*",
+              "La sécurité des usagers et de l’installation est assurée tout au long de l’opération *Suivant le type d’opération cf C6",
+              "La remise en service (*;**;***) permet le fonctionnement de l’installation à son point nominal ou en mode dégradé de l’installation et la continuité de service est assurée",
+              "Les informations sont transmises à la hiérarchie et à l’exploitant ou l’usager",
+              "Les documents techniques et administratifs sont complétés *Suivant le type d’opération cf C7: mise en service **Suivant le type d’opération cf C8: contrôle **Suivant le type d’opération cf C9: réglages, paramétrages",
+              "La zone d’intervention est remise en état",
+              "Les déchets sont évacués de façon éco- responsable et conformément aux règles en vigueur",
+              "La sécurité des personnes et des biens est assurée"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C12",
+            "libelle": "Informer de son intervention à l’écrit et/ou à l’oral",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [],
+            "activite_codes": [
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "tache_codes": [
+              "A2T7",
+              "A3T1",
+              "A3T2",
+              "A4T1",
+              "A4T2"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les événements avant panne sont collectés",
+              "Les constats sont pris en compte",
+              "L’état d’avancement des opérations est clairement décrit",
+              "Les contraintes et les difficultés sont identifiées",
+              "Les informations sont transmises à la hiérarchie",
+              "La fiche d’intervention est complétée sans erreurs",
+              "Le bordereau de suivi de déchet dangereux est complété sans erreurs",
+              "Le dossier technique est mis à jour",
+              "Les informations du système sont consignées sur le support prévu à cet effet",
+              "Les fluides frigorigènes sont consignés sur la fiche CERFA n°15497",
+              "Le planning est mis à jour",
+              "Le compte-rendu est factuel et complet",
+              "Les formules de civilités sont adaptées à la situation",
+              "Le support de communication est adapté à la situation",
+              "L’utilisation de l’outil de communication est maîtrisée",
+              "Les documents sont transmis"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          },
+          {
+            "code": "C13",
+            "libelle": "Formuler les informations nécessaires pour le client et/ou l’exploitant du système",
+            "mobilisee_dans_diplome": true,
+            "competence_commune_codes": [
+              "CC9"
+            ],
+            "activite_codes": [
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "tache_codes": [
+              "A2T7",
+              "A2T8",
+              "A3T1",
+              "A3T2",
+              "A4T3"
+            ],
+            "association_taches_granularite": "tâche",
+            "criteres_reussite": [
+              "Les besoins de l’exploitant sont identifiés et interprétés",
+              "Les informations sont transmises à la hiérarchie",
+              "Les explications sont correctes",
+              "Les explications permettent l’utilisation de l’installation par l’exploitant et/ou le client",
+              "Les consignes de sécurité sont présentées et détaillées",
+              "La sécurité des usagers et de l’installation est assurée",
+              "Le langage utilisé est adapté à la situation",
+              "Les formules de civilités sont adaptées à la situation",
+              "Le support de communication est adapté à la situation",
+              "L’utilisation de l’outil de communication est maîtrisée.",
+              "Les échanges sont transmis à la hiérarchie",
+              "La solution technique proposée est correcte"
+            ],
+            "terme_officiel_source": "Indicateurs d’évaluation"
+          }
+        ]
+      }
+    ]
+  },
+  "conventions": {
+    "criteres_reussite": "Le champ reprend les critères ou indicateurs d’évaluation officiels. Le nom est normalisé pour l’usage pédagogique de RéférenCiel Manager.",
+    "competences_communes": "Les relations CC1 à CC9 proviennent de la table de correspondance du vadémécum 2TNE.",
+    "activites_transversales": "Les activités de communication sont conservées hors des pôles lorsqu’elles traversent plusieurs blocs ou pôles.",
+    "ciel_c02_c05": "C02 Organiser et C05 Concevoir sont conservées dans la liste CIEL mais signalées comme non mobilisées au niveau du baccalauréat professionnel.",
+    "melec_poles": "Le référentiel MELEC 2024 structure principalement les activités par blocs certificatifs ; ces blocs sont utilisés comme regroupement principal sans être renommés artificiellement en pôles.",
+    "qualite_extraction": "Les libellés, tâches et critères proviennent des documents officiels. Quelques corrections typographiques mineures ont été appliquées pour réparer les coupures de lignes issues des tableaux PDF, sans modifier le sens."
+  },
+  "sources": [
+    {
+      "id": "SRC-2TNE",
+      "titre": "Vadémécum de la seconde professionnelle famille des métiers des transitions numérique et énergétique",
+      "organisme": "Éduscol STI",
+      "url": "https://sti.eduscol.education.fr/sites/eduscol.education.fr.sti/files/Vademecum_seconde_famille-metiers2.pdf"
+    },
+    {
+      "id": "SRC-CIEL",
+      "titre": "Annexes du baccalauréat professionnel CIEL",
+      "organisme": "Éduscol STI / Journal officiel",
+      "url": "https://sti.eduscol.education.fr/sites/eduscol.education.fr.sti/files/textes/bac-pro/bac-pro-cybersecurite-informatique-et-reseaux-electronique-ciel-rentree-2023/16021-annexes-bac-pro-ciel230213.pdf"
+    },
+    {
+      "id": "SRC-MELEC",
+      "titre": "Référentiel du baccalauréat professionnel MELEC 2024",
+      "organisme": "Éduscol STI / Journal officiel",
+      "url": "https://sti.eduscol.education.fr/sites/eduscol.education.fr.sti/files/referentiel_bac_pro_melec_legifrance.pdf"
+    },
+    {
+      "id": "SRC-MFER",
+      "titre": "Référentiel du baccalauréat professionnel MFER",
+      "organisme": "Éduscol STI",
+      "url": "https://sti.eduscol.education.fr/sites/eduscol.education.fr.sti/files/referentiel_bcp_mfer_12_fevrier_2021_publication.pdf"
+    },
+    {
+      "id": "SRC-ICCER",
+      "titre": "Référentiel du baccalauréat professionnel ICCER",
+      "organisme": "Éduscol STI",
+      "url": "https://sti.eduscol.education.fr/sites/eduscol.education.fr.sti/files/referentiel_bcp_iccer.pdf"
+    },
+    {
+      "id": "SRC-MEE",
+      "titre": "Référentiel du baccalauréat professionnel MEE",
+      "organisme": "Éduscol STI",
+      "url": "https://sti.eduscol.education.fr/sites/eduscol.education.fr.sti/files/referentiel_bcp_mee.pdf"
+    }
+  ]
+}
