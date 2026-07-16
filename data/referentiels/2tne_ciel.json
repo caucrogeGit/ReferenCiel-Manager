@@ -471,8 +471,7 @@
         },
         {
           "id": "cr-c09-10",
-          "libelle": "Des tâches diverses dans des domaines et contextes variés sont accomplies",
-          "savoir_etre": true
+          "libelle": "Des tâches diverses dans des domaines et contextes variés sont accomplies"
         }
       ],
       "source_ids": [
@@ -917,6 +916,12 @@
         "cc": "CC7",
         "competences": [
           "C11"
+        ]
+      },
+      {
+        "cc": "CC8",
+        "competences": [
+          "C01"
         ]
       },
       {

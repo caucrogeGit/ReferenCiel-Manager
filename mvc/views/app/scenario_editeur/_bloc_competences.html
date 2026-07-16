@@ -34,7 +34,7 @@
                           border-l-2 border-forge transition
                           {% if actif %}bg-forge-soft font-semibold text-ink
                           {% else %}text-muted hover:bg-cream hover:text-ink{% endif %}">
-                    <span class="truncate">{{ comp.Code }}</span>
+                    <span class="truncate">{{ comp.Code }}{% if comp.cc_codes %}<span class="text-faint font-normal"> · {{ comp.cc_codes | join('/') }}</span>{% endif %}</span>
                     <span class="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full
                                  {% if n %}bg-forge text-white{% else %}bg-cream text-faint{% endif %}">
                         {{ n }}
@@ -45,7 +45,7 @@
                      title="Compétence non mobilisée par les activités sélectionnées"
                      class="flex items-center justify-between gap-2 py-2.5 px-3 rounded-[10px] text-sm
                             text-faint bg-cream/50 cursor-not-allowed select-none">
-                    <span class="truncate">{{ comp.Code }}</span>
+                    <span class="truncate">{{ comp.Code }}{% if comp.cc_codes %}<span class="font-normal"> · {{ comp.cc_codes | join('/') }}</span>{% endif %}</span>
                     <span class="shrink-0 text-[10px] font-semibold uppercase tracking-wide
                                  px-2 py-0.5 rounded-full bg-cream text-faint">non valide</span>
                 </div>

@@ -131,6 +131,15 @@ def get_arbre(ref_id: int) -> dict[str, Any]:
     for fam in familles:
         fam["competences"] = comp_par_famille.get(fam["Id"], [])
 
+    # Correspondance inverse : codes des compétences communes (CCx) rattachées à
+    # chaque compétence, pour les afficher à côté du code (ex. « C04 · CC3 »).
+    famille_code = {f["Id"]: f["Code"] for f in familles}
+    cc_par_comp: dict[Any, list[str]] = {}
+    for lien in liens_fc:
+        cc_par_comp.setdefault(lien["Id"], []).append(famille_code[lien["famille_competence_id"]])
+    for comp in competences:
+        comp["cc_codes"] = sorted(cc_par_comp.get(comp["Id"], []))
+
     return {
         "sources": sources,
         "indicateurs": indicateurs,
