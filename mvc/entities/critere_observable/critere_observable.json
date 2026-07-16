@@ -19,6 +19,13 @@
       "unique": false
     },
     {
+      "name": "savoir_etre",
+      "type": "boolean",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
       "name": "competence_id",
       "type": "foreign_key",
       "references": "Competence",

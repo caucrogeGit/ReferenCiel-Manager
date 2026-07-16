@@ -19,9 +19,10 @@ from core.validation import (
 class CritereObservableBase:
     """Classe de base regenerable de CritereObservable."""
 
-    def __init__(self, code, libelle, competence_id, created_at, updated_at, id=None):
+    def __init__(self, code, libelle, savoir_etre, competence_id, created_at, updated_at, id=None):
         self.code = code
         self.libelle = libelle
+        self.savoir_etre = savoir_etre
         self.competence_id = competence_id
         self.created_at = created_at
         self.updated_at = updated_at
@@ -69,6 +70,17 @@ class CritereObservableBase:
         self._libelle = value
 
     @property
+    def savoir_etre(self):
+        return self._savoir_etre
+
+    @savoir_etre.setter
+    @typed(bool)
+    def savoir_etre(self, value):
+        if value is None:
+            raise ValidationError("savoir_etre", 'La propriété "savoir_etre" ne peut pas être nulle.')
+        self._savoir_etre = value
+
+    @property
     def competence_id(self):
         return self._competence_id
 
@@ -106,6 +118,7 @@ class CritereObservableBase:
             "id": self.id,
             "code": self.code,
             "libelle": self.libelle,
+            "savoir_etre": self.savoir_etre,
             "competence_id": self.competence_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
@@ -117,11 +130,12 @@ class CritereObservableBase:
             id=data["id"],
             code=data["code"],
             libelle=data["libelle"],
+            savoir_etre=data["savoir_etre"],
             competence_id=data["competence_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"CritereObservableBase(id={self.id!r}, code={self.code!r}, libelle={self.libelle!r}, competence_id={self.competence_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"CritereObservableBase(id={self.id!r}, code={self.code!r}, libelle={self.libelle!r}, savoir_etre={self.savoir_etre!r}, competence_id={self.competence_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

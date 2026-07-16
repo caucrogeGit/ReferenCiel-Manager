@@ -150,9 +150,10 @@ def _purge_contenu(ref_id: int) -> None:
         "(SELECT Id FROM competence WHERE referentiel_id = ?)",
         r,
     )
-    # Enfants directs.
+    # Enfants directs. (indicateur_reussite est rattaché au CRITERE depuis ADR-022 —
+    # pas de colonne referentiel_id ; il est déjà purgé en CASCADE avec les critères.)
     for table in (
-        "indicateur_reussite", "source", "activite_professionnelle",
+        "source", "activite_professionnelle",
         "competence", "pole_activite", "famille_competence",
     ):
         db.execute(f"DELETE FROM {table} WHERE referentiel_id = ?", r)
@@ -222,9 +223,9 @@ def import_referentiel(canonical: dict[str, Any]) -> ImportReport:
             for crit in comp.get("criteres_evaluation", []):
                 try:
                     crit_id = db.insert(
-                        "INSERT INTO critere_observable (Code, Libelle, competence_id, "
-                        "CreatedAt, UpdatedAt) VALUES (?, ?, ?, NOW(), NOW())",
-                        (crit["id"], crit["libelle"], cid),
+                        "INSERT INTO critere_observable (Code, Libelle, SavoirEtre, competence_id, "
+                        "CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, NOW(), NOW())",
+                        (crit["id"], crit["libelle"], 1 if crit.get("savoir_etre") else 0, cid),
                     )
                     crit_map[str(crit["id"])] = crit_id
                     rapport.compte("criteres")

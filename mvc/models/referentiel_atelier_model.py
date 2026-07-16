@@ -103,7 +103,7 @@ def get_arbre(ref_id: int) -> dict[str, Any]:
         "SELECT Id, Code, Intitule FROM competence WHERE referentiel_id = ? ORDER BY Code", r
     )
     criteres = fetch_all(
-        "SELECT c.Id, c.Code, c.Libelle, c.competence_id "
+        "SELECT c.Id, c.Code, c.Libelle, c.SavoirEtre, c.competence_id "
         "FROM critere_observable c JOIN competence cp ON cp.Id = c.competence_id "
         "WHERE cp.referentiel_id = ? ORDER BY c.competence_id, c.Code",
         r,
