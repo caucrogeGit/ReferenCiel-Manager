@@ -10,7 +10,11 @@ from typing import Any
 
 from core.templating.manager import template_manager
 
-from mvc.models.referentiel_atelier_model import get_arbre, get_referentiel
+from mvc.models.referentiel_atelier_model import (
+    get_arbre,
+    get_referentiel,
+    liens_activite_competence,
+)
 from mvc.models.scenario_editeur_model import (
     get_activite_ids,
     get_co_auteur_ids,
@@ -40,22 +44,10 @@ def _contexte(scenario: dict[str, Any]) -> list[dict[str, str]]:
     ]
 
 
-def _activites(arbre: dict[str, Any], activite_ids: list[int]) -> list[dict[str, Any]]:
-    """Activités cochées, avec le pôle d'appartenance."""
-    retenues: list[dict[str, Any]] = []
-    for pole in arbre.get("poles", []):
-        for act in pole.get("activites", []):
-            if act["Id"] in activite_ids:
-                retenues.append(
-                    {"code": act["Code"], "intitule": act["Intitule"], "pole": pole["Intitule"]}
-                )
-    return retenues
-
-
-def _competences(arbre: dict[str, Any], critere_ids: list[int]) -> list[dict[str, Any]]:
-    """Compétences ayant au moins un critère coché, avec leurs critères retenus
-    (libellé, savoir-être, indicateurs de réussite)."""
-    retenues: list[dict[str, Any]] = []
+def _competences_par_id(arbre: dict[str, Any], critere_ids: list[int]) -> dict[int, dict[str, Any]]:
+    """comp_id -> compétence (code, intitulé, CCx, critères cochés) pour les seules
+    compétences ayant au moins un critère coché. L'ordre suit l'arbre (C01, C03…)."""
+    out: dict[int, dict[str, Any]] = {}
     for comp in arbre.get("competences", []):
         criteres = [
             {
@@ -67,12 +59,42 @@ def _competences(arbre: dict[str, Any], critere_ids: list[int]) -> list[dict[str
             if c["Id"] in critere_ids
         ]
         if criteres:
+            out[comp["Id"]] = {
+                "code": comp["Code"],
+                "intitule": comp["Intitule"],
+                "cc_codes": comp.get("cc_codes", []),
+                "criteres": criteres,
+            }
+    return out
+
+
+def _activites(
+    arbre: dict[str, Any],
+    activite_ids: list[int],
+    comp_par_id: dict[int, dict[str, Any]],
+    liens: dict[int, set[int]],
+) -> list[dict[str, Any]]:
+    """Activités cochées AVEC leurs compétences évaluées (critères cochés).
+
+    Une activité dont aucune compétence liée n'a de critère coché est OMISE.
+    Une compétence mobilisée par plusieurs activités apparaît sous chacune.
+    """
+    retenues: list[dict[str, Any]] = []
+    for pole in arbre.get("poles", []):
+        for act in pole.get("activites", []):
+            if act["Id"] not in activite_ids:
+                continue
+            lies = liens.get(act["Id"], set())
+            # Ordre des compétences = ordre de comp_par_id (arbre : C01, C03…).
+            competences = [comp for cid, comp in comp_par_id.items() if cid in lies]
+            if not competences:
+                continue
             retenues.append(
                 {
-                    "code": comp["Code"],
-                    "intitule": comp["Intitule"],
-                    "cc_codes": comp.get("cc_codes", []),
-                    "criteres": criteres,
+                    "code": act["Code"],
+                    "intitule": act["Intitule"],
+                    "pole": pole["Intitule"],
+                    "competences": competences,
                 }
             )
     return retenues
@@ -102,13 +124,14 @@ def construire_pdf(scenario_id: int) -> bytes:
         get_arbre(int(referentiel_id)) if referentiel_id else {"poles": [], "competences": []}
     )
 
+    comp_par_id = _competences_par_id(arbre, get_critere_ids(scenario_id))
+    liens = liens_activite_competence(int(referentiel_id)) if referentiel_id else {}
     context: dict[str, Any] = {
         "scenario": scenario,
         "referentiel": referentiel,
         "co_auteurs": _co_auteurs(scenario_id) if scenario.get("CoIntervention") else [],
         "contexte": _contexte(scenario),
-        "activites": _activites(arbre, get_activite_ids(scenario_id)),
-        "competences": _competences(arbre, get_critere_ids(scenario_id)),
+        "activites": _activites(arbre, get_activite_ids(scenario_id), comp_par_id, liens),
         "ressources": list_ressources(scenario_id),
     }
     html = template_manager.render("app/scenario_editeur/pdf.html", context)

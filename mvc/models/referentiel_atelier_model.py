@@ -168,6 +168,26 @@ def competences_valides(ref_id: int, activite_ids: list[int]) -> set[int]:
     return {int(r["c"]) for r in rows}
 
 
+def liens_activite_competence(ref_id: int) -> dict[int, set[int]]:
+    """Pour un référentiel : activite_id -> ids des compétences liées (pivot n-n).
+
+    Sert à regrouper, dans un rendu (ex. PDF), chaque activité avec ses seules
+    compétences (une compétence partagée apparaît sous chaque activité qui la
+    mobilise).
+    """
+    rows = fetch_all(
+        "SELECT ac.activite_professionnelle_id AS a, ac.competence_id AS c "
+        "FROM activite_competence ac "
+        "JOIN activite_professionnelle ap ON ap.Id = ac.activite_professionnelle_id "
+        "WHERE ap.referentiel_id = ?",
+        (ref_id,),
+    )
+    out: dict[int, set[int]] = {}
+    for r in rows:
+        out.setdefault(int(r["a"]), set()).add(int(r["c"]))
+    return out
+
+
 def get_critere(critere_id: int) -> "dict[str, Any] | None":
     """Un critère (pour valider son existence avant d'y attacher un indicateur)."""
     return fetch_one(
