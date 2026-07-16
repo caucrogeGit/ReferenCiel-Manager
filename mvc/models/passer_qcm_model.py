@@ -33,8 +33,13 @@ def _seance_de_l_eleve(progression_seance_id: int, user_id: int) -> dict[str, An
 
 
 def _qcm_du_seance(seance_id: int) -> dict[str, Any] | None:
+    # Un QCM appartient à un dossier technique (ADR-022), lui-même rattaché à la
+    # séance : on remonte la chaîne qcm -> dossier_technique -> seance.
     return fetch_one(
-        "SELECT Id AS id FROM qcm WHERE seance_id = ? ORDER BY Id LIMIT 1", (seance_id,)
+        "SELECT q.Id AS id FROM qcm q "
+        "JOIN dossier_technique dt ON dt.Id = q.dossier_technique_id "
+        "WHERE dt.seance_id = ? ORDER BY q.Id LIMIT 1",
+        (seance_id,),
     )
 
 

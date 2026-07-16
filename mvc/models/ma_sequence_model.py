@@ -43,7 +43,9 @@ def seances_progression(progression_id: int) -> list[dict[str, Any]]:
     return fetch_all(
         "SELECT pp.Id AS progression_seance_id, pa.Ordre AS ordre, pa.Titre AS titre, "
         "pp.Statut AS statut, "
-        "(SELECT MIN(Id) FROM qcm WHERE seance_id = pa.Id) AS qcm_id, "
+        "(SELECT MIN(q.Id) FROM qcm q "
+        " JOIN dossier_technique dt ON dt.Id = q.dossier_technique_id "
+        " WHERE dt.seance_id = pa.Id) AS qcm_id, "
         "(SELECT MIN(Id) FROM checklist WHERE seance_id = pa.Id) AS checklist_id, "
         "(SELECT MIN(Id) FROM activite WHERE seance_id = pa.Id) AS activite_id "
         "FROM progression_seance pp "
