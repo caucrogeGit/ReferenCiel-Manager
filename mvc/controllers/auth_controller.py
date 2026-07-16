@@ -64,6 +64,8 @@ class AuthController(BaseController):
         response = BaseController.render("app/auth/login.html", context={
             "csrf_token": session.get("csrf_token", ""),
             "erreur": "",
+            # Affiche le cadre de la sidebar (inactive) autour du formulaire.
+            "force_sidebar": True,
         })
         set_session_cookie(response, session_id)
         return response
@@ -97,6 +99,7 @@ class AuthController(BaseController):
         response = BaseController.render("app/auth/login.html", context={
             "csrf_token": session.get("csrf_token", ""),
             "erreur": "Identifiant ou mot de passe incorrect.",
+            "force_sidebar": True,
         })
         set_session_cookie(response, session_id)
         return response

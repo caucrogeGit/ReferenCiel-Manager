@@ -3,25 +3,33 @@
 {% from "components/ui.html" import alert %}
 {% block title %}Connexion{% endblock %}
 
-{# Page d'entrée : on vide la navigation (le bouton « Connexion » ferait doublon
-   avec le formulaire). Le brand du header reste le seul élément de nav. #}
-{% block nav %}{% endblock %}
+{# Page d'entrée : la sidebar reste visible mais INACTIVE (partials/nav_login.html),
+   et le formulaire s'affiche dans la zone de travail. Une fois le login validé,
+   la vraie navigation (filtrée par rôle) reprend sa place. #}
+{% block nav %}{% include "partials/nav_login.html" %}{% endblock %}
 
 {% block content %}
-<div class="max-w-sm mx-auto">
+<div class="max-w-sm mx-auto w-full">
+    <div class="mb-6 text-center">
+        <h1 class="text-2xl font-bold text-ink">Connexion</h1>
+        <p class="mt-1 text-sm text-muted">Accédez à votre espace RéférenCiel Manager.</p>
+    </div>
+
     {% if erreur %}
     <div class="mb-4">{{ alert(erreur, level="error") }}</div>
     {% endif %}
 
-    <form method="POST" action="/login" class="space-y-4">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        {{ field(name="email", label="Email", type="email", required=True) }}
-        {{ field(name="password", label="Mot de passe", type="password", required=True) }}
-        {{ submit(label="Se connecter") }}
-    </form>
+    <div class="bg-surface border border-line rounded-card p-6 shadow-sm">
+        <form method="POST" action="/login" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            {{ field(name="email", label="Email", type="email", required=True) }}
+            {{ field(name="password", label="Mot de passe", type="password", required=True) }}
+            {{ submit(label="Se connecter") }}
+        </form>
 
-    <p class="mt-4 text-center text-sm">
-        <a href="/password/forgot" class="text-blue-600 hover:underline">Mot de passe oublié ?</a>
-    </p>
+        <p class="mt-4 text-center text-sm">
+            <a href="/password/forgot" class="text-forge hover:underline">Mot de passe oublié ?</a>
+        </p>
+    </div>
 </div>
 {% endblock %}

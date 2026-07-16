@@ -1,0 +1,36 @@
+{# Sidebar de l'écran de connexion : même cadre que la navigation applicative
+   (partials/nav.html), mais INACTIVE. On ne connaît pas encore le rôle, donc
+   aucune rubrique n'est affichée : juste la marque, une invite, et un état
+   « non connecté ». La sidebar redevient la vraie nav une fois le login validé. #}
+<aside id="app-sidebar"
+       class="lg:block lg:translate-x-0 lg:inset-e-auto lg:bottom-0
+              w-64 -translate-x-full transition-all duration-300 transform h-full
+              hidden overflow-x-hidden fixed top-0 inset-s-0 bottom-0 z-60
+              bg-surface border-e border-line select-none"
+       aria-label="Navigation (indisponible avant connexion)" aria-disabled="true">
+    <div class="relative flex flex-col h-full max-h-full">
+
+        {# En-tête : marque seule (pas de repli/fermeture, sans objet ici). #}
+        <header class="py-4 px-3 flex items-center gap-x-2 border-b border-line">
+            <span class="flex-none font-extrabold text-lg tracking-tight text-forge">{{ app_name }}</span>
+        </header>
+
+        {# Corps grisé : invite, aucune rubrique (rôle inconnu avant connexion). #}
+        <div class="flex-1 flex flex-col items-center justify-center px-5 text-center opacity-70">
+            <span class="inline-flex items-center justify-center size-11 rounded-full bg-cream text-faint border border-line mb-3">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <p class="text-sm text-muted">Connectez-vous pour accéder à vos espaces.</p>
+        </div>
+
+        {# Pied : état « non connecté » (à la place de la fiche profil). #}
+        <footer class="border-t border-line p-3">
+            <div class="flex items-center gap-x-2 py-2 px-2.5 text-sm text-faint">
+                <span class="shrink-0 inline-flex items-center justify-center size-8 rounded-full bg-cream text-faint border border-line">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+                </span>
+                <span>Non connecté</span>
+            </div>
+        </footer>
+    </div>
+</aside>

@@ -31,7 +31,7 @@
        via la classe .app-main. #}
     {% block nav %}{% include "partials/nav.html" ignore missing %}{% endblock %}
 
-    <div class="app-main{% if is_authenticated %} has-sidebar{% endif %} min-h-screen flex flex-col">
+    <div class="app-main{% if is_authenticated or force_sidebar %} has-sidebar{% endif %} min-h-screen flex flex-col">
 
         {# Barre supérieure — visible seulement en < lg (la sidebar est repliée en overlay).
            Contient la marque et le bouton d'ouverture de la sidebar. Rendue uniquement
