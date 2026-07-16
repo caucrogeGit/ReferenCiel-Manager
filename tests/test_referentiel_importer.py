@@ -73,7 +73,7 @@ def test_import_frais_compte_et_mappe(monkeypatch: pytest.MonkeyPatch, canonical
 
     rapport = imp.import_referentiel(canonical)
 
-    assert rapport.identifiant == "ciel-2tne"
+    assert rapport.identifiant == "2tne-ciel"
     assert rapport.remplacement is False
     assert rapport.erreurs == []
     assert rapport.inseres == _ATTENDU
