@@ -5,7 +5,20 @@
    - form[data-prevent-submit] : neutralise l'envoi (formulaires de démonstration).
    Les tableaux CRUD, eux, utilisent hx-confirm de htmx (déjà CSP-safe). */
 (function () {
-    // Confirmation / neutralisation avant soumission (le submit remonte au document).
+    // Modale de confirmation stylée (<dialog> du layout), en remplacement du
+    // window.confirm() natif. La soumission d'un form[data-confirm] est asynchrone :
+    // on l'intercepte, on ouvre la modale, puis on resoumet à la validation via un
+    // drapeau data-confirmed (pour ne pas rouvrir la modale en boucle).
+    var confirmDialog = document.getElementById('confirm-dialog');
+    var pendingForm = null;
+
+    function resubmit(form) {
+        if (!form) return;
+        form.dataset.confirmed = '1';
+        if (typeof form.requestSubmit === 'function') form.requestSubmit();
+        else form.submit();
+    }
+
     document.addEventListener('submit', function (e) {
         var form = e.target;
         if (!form || !form.matches) return;
@@ -13,11 +26,41 @@
             e.preventDefault();
             return;
         }
-        if (form.matches('form[data-confirm]') &&
-            !window.confirm(form.getAttribute('data-confirm'))) {
+        if (form.matches('form[data-confirm]')) {
+            // Déjà confirmé : on laisse passer (et on nettoie le drapeau).
+            if (form.dataset.confirmed === '1') {
+                delete form.dataset.confirmed;
+                return;
+            }
             e.preventDefault();
+            var message = form.getAttribute('data-confirm');
+            // Repli si <dialog> indisponible : confirm natif.
+            if (!confirmDialog || typeof confirmDialog.showModal !== 'function') {
+                if (window.confirm(message)) resubmit(form);
+                return;
+            }
+            pendingForm = form;
+            var msgEl = document.getElementById('confirm-dialog-message');
+            if (msgEl) msgEl.textContent = message;
+            confirmDialog.showModal();
         }
     });
+
+    if (confirmDialog) {
+        confirmDialog.addEventListener('click', function (e) {
+            if (e.target.closest('[data-confirm-ok]')) {
+                var form = pendingForm;
+                pendingForm = null;
+                confirmDialog.close();
+                resubmit(form);
+            } else if (e.target.closest('[data-confirm-cancel]')) {
+                pendingForm = null;
+                confirmDialog.close();
+            }
+        });
+        // Fermeture par Échap ou clic backdrop : on oublie le formulaire en attente.
+        confirmDialog.addEventListener('close', function () { pendingForm = null; });
+    }
 
     // Ouverture d'une modale <dialog> native.
     document.addEventListener('click', function (e) {
