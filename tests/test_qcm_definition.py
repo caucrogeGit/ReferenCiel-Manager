@@ -1,7 +1,7 @@
 """Tests de persistance de la définition QCM (ticket 19, sous-lot 1) sans backend BDD.
 
 `core.database` est mocké : on vérifie l'arbre de définition QCM → QuestionQCM → ChoixQCM
-(corrigé fusionné via `bonne_reponse`), rattaché à un Palier. CI-safe (ADR-006).
+(corrigé fusionné via `bonne_reponse`), rattaché à un Seance. CI-safe (ADR-006).
 """
 from __future__ import annotations
 

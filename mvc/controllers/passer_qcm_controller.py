@@ -1,10 +1,10 @@
 # pyright: strict
 """Espace élève v2 — passer un QCM.
 
-Affiche le QCM d'un palier de l'élève connecté, puis enregistre sa tentative. La
+Affiche le QCM d'une séance de l'élève connecté, puis enregistre sa tentative. La
 route est gardée par `espace_eleve.voir` (préfixe `/mon-parcours`) ; en plus, le
-modèle vérifie l'**appartenance** du palier au compte à chaque appel — un id de
-palier d'un autre élève renvoie 404, jamais les données d'autrui.
+modèle vérifie l'**appartenance** de la séance au compte à chaque appel — un id de
+séance d'un autre élève renvoie 404, jamais les données d'autrui.
 """
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ class PasserQcmController:
             return BaseController.not_found()
 
         if resultat["validee"]:
-            message = f"Bravo, palier validé ! Score : {resultat['score']} %."
+            message = f"Bravo, séance validée ! Score : {resultat['score']} %."
             niveau = "success"
         else:
             message = (

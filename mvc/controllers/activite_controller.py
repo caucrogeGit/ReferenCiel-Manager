@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.activite_model import (
     get_activite_by_id, add_activite, update_activite, delete_activite, bulk_delete_activites,
     count_activites, find_activites_paginated, find_activites_for_export,
-    get_palier_choices,
+    get_seance_choices,
 )
 from mvc.forms.activite_form import ActiviteForm
 from core.security.session import get_flash, get_session_id
@@ -26,7 +26,7 @@ def _form_data_from_activite(record: dict) -> dict:
 
 def _activite_form_options():
     return {
-        "palier_id_choices": get_palier_choices(),
+        "seance_id_choices": get_seance_choices(),
     }
 
 
@@ -41,7 +41,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Objectif', 'Objectif'), ('Fichier', 'Fichier'), ('Palier id', 'palier_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Objectif', 'Objectif'), ('Fichier', 'Fichier'), ('Séance', 'seance_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
 
 
 class ActiviteController(BaseController):
@@ -82,18 +82,18 @@ class ActiviteController(BaseController):
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        palier_id_raw = _query_param(request, "seance_id").strip()
-        palier_id_f = ""
-        if palier_id_raw:
+        seance_id_raw = _query_param(request, "seance_id").strip()
+        seance_id_f = ""
+        if seance_id_raw:
             try:
-                palier_id_f = int(palier_id_raw)
+                seance_id_f = int(seance_id_raw)
             except (TypeError, ValueError):
-                palier_id_f = ""
+                seance_id_f = ""
         relation_filters = {}
-        relation_filters["seance_id"] = {"options": [{"id": value, "label": label} for value, label in get_palier_choices()]}
+        relation_filters["seance_id"] = {"options": [{"id": value, "label": label} for value, label in get_seance_choices()]}
         _filters = {}
-        if palier_id_f != "":
-            _filters["seance_id"] = palier_id_f
+        if seance_id_f != "":
+            _filters["seance_id"] = seance_id_f
         total    = count_activites(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -106,7 +106,7 @@ class ActiviteController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"seance_id": palier_id_f},
+            "filters": {"seance_id": seance_id_f},
         })
         return {
                 "activites": activites,
@@ -241,16 +241,16 @@ class ActiviteController(BaseController):
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        palier_id_raw = _query_param(request, "seance_id").strip()
-        palier_id_f = ""
-        if palier_id_raw:
+        seance_id_raw = _query_param(request, "seance_id").strip()
+        seance_id_f = ""
+        if seance_id_raw:
             try:
-                palier_id_f = int(palier_id_raw)
+                seance_id_f = int(seance_id_raw)
             except (TypeError, ValueError):
-                palier_id_f = ""
+                seance_id_f = ""
         _filters = {}
-        if palier_id_f != "":
-            _filters["seance_id"] = palier_id_f
+        if seance_id_f != "":
+            _filters["seance_id"] = seance_id_f
         rows = find_activites_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

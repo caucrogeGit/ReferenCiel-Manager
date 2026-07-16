@@ -13,9 +13,9 @@ from typing import Any
 
 from core.database.db import fetch_all, fetch_one
 
-_STATUT_PALIER_VALIDE = "valide"
-_STATUT_PALIER_BLOQUE = "bloque"
-_STATUT_PALIER_EN_COURS = "en_cours"
+_STATUT_SEANCE_VALIDE = "valide"
+_STATUT_SEANCE_BLOQUE = "bloque"
+_STATUT_SEANCE_EN_COURS = "en_cours"
 
 
 def list_classes(professeur_id: int) -> list[dict[str, Any]]:
@@ -55,7 +55,7 @@ def get_classe(classe_id: int) -> dict[str, Any] | None:
 
 def suivi_eleves(classe_id: int) -> list[dict[str, Any]]:
     """Pour une classe : une ligne par progression d'élève (élève + parcours), avec
-    l'avancement par palier agrégé (validés / en cours / bloqués / total) — de quoi
+    l'avancement par seance agrégé (validés / en cours / bloqués / total) — de quoi
     repérer les élèves bloqués."""
     return fetch_all(
         "SELECT pe.Id AS progression_id, e.Nom AS nom, e.Prenom AS prenom, "
@@ -63,7 +63,7 @@ def suivi_eleves(classe_id: int) -> list[dict[str, Any]]:
         "SUM(pp.Statut = ?) AS nb_valide, "
         "SUM(pp.Statut = ?) AS nb_bloque, "
         "SUM(pp.Statut = ?) AS nb_en_cours, "
-        "COUNT(pp.Id) AS nb_paliers "
+        "COUNT(pp.Id) AS nb_seances "
         "FROM eleve e "
         "JOIN progression_parcours pe ON pe.eleve_id = e.Id "
         "JOIN parcours p ON p.Id = pe.parcours_id "
@@ -71,5 +71,5 @@ def suivi_eleves(classe_id: int) -> list[dict[str, Any]]:
         "WHERE e.classe_id = ? "
         "GROUP BY pe.Id, e.Nom, e.Prenom, p.Titre, pe.Statut "
         "ORDER BY e.Nom, e.Prenom, p.Titre",
-        (_STATUT_PALIER_VALIDE, _STATUT_PALIER_BLOQUE, _STATUT_PALIER_EN_COURS, classe_id),
+        (_STATUT_SEANCE_VALIDE, _STATUT_SEANCE_BLOQUE, _STATUT_SEANCE_EN_COURS, classe_id),
     )

@@ -1,7 +1,7 @@
 """Tests du suivi professeur (ticket 20) sans backend BDD.
 
 `core.database` est mocké : on vérifie que les requêtes d'agrégation ciblent les bonnes
-tables et paramètres (classe → élèves → paliers), sans base réelle. CI-safe (ADR-006).
+tables et paramètres (classe → élèves → seances), sans base réelle. CI-safe (ADR-006).
 """
 from __future__ import annotations
 
@@ -47,5 +47,5 @@ def test_suivi_eleves_filtre_sur_la_classe(monkeypatch: pytest.MonkeyPatch) -> N
     assert "progression_parcours" in captured["sql"]
     assert "progression_palier" in captured["sql"]
     assert 42 in captured["params"]  # filtre sur la classe
-    # les statuts de palier agreges sont passes en parametres (SQL parametre)
+    # les statuts de seance agreges sont passes en parametres (SQL parametre)
     assert "valide" in captured["params"] and "bloque" in captured["params"]

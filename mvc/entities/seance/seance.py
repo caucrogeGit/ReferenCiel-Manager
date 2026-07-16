@@ -1,4 +1,4 @@
-"""Classe metier manuelle pour Seance (ex-Palier, ADR-025)."""
+"""Classe metier manuelle pour Seance (ex-Seance, ADR-025)."""
 
 from .seance_base import SeanceBase
 

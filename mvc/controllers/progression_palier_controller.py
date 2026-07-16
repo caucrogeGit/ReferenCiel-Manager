@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.progression_palier_model import (
     get_progression_palier_by_id, add_progression_palier, update_progression_palier, delete_progression_palier, bulk_delete_progression_paliers,
     count_progression_paliers, find_progression_paliers_paginated, find_progression_paliers_for_export,
-    get_progression_parcours_choices, get_palier_choices,
+    get_progression_parcours_choices, get_seance_choices,
 )
 from mvc.forms.progression_palier_form import ProgressionPalierForm
 from core.security.session import get_flash, get_session_id
@@ -27,7 +27,7 @@ def _form_data_from_progression_palier(record: dict) -> dict:
 def _progression_palier_form_options():
     return {
         "progression_parcours_id_choices": get_progression_parcours_choices(),
-        "palier_id_choices": get_palier_choices(),
+        "seance_id_choices": get_seance_choices(),
     }
 
 
@@ -42,7 +42,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Statut', 'Statut'), ('Progression eleve id', 'progression_parcours_id_label'), ('Palier id', 'palier_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Statut', 'Statut'), ('Progression eleve id', 'progression_parcours_id_label'), ('Séance', 'seance_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
 
 
 class ProgressionPalierController(BaseController):
@@ -90,21 +90,21 @@ class ProgressionPalierController(BaseController):
                 progression_parcours_id_f = int(progression_parcours_id_raw)
             except (TypeError, ValueError):
                 progression_parcours_id_f = ""
-        palier_id_raw = _query_param(request, "seance_id").strip()
-        palier_id_f = ""
-        if palier_id_raw:
+        seance_id_raw = _query_param(request, "seance_id").strip()
+        seance_id_f = ""
+        if seance_id_raw:
             try:
-                palier_id_f = int(palier_id_raw)
+                seance_id_f = int(seance_id_raw)
             except (TypeError, ValueError):
-                palier_id_f = ""
+                seance_id_f = ""
         relation_filters = {}
         relation_filters["progression_parcours_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_parcours_choices()]}
-        relation_filters["seance_id"] = {"options": [{"id": value, "label": label} for value, label in get_palier_choices()]}
+        relation_filters["seance_id"] = {"options": [{"id": value, "label": label} for value, label in get_seance_choices()]}
         _filters = {}
         if progression_parcours_id_f != "":
             _filters["progression_parcours_id"] = progression_parcours_id_f
-        if palier_id_f != "":
-            _filters["seance_id"] = palier_id_f
+        if seance_id_f != "":
+            _filters["seance_id"] = seance_id_f
         total    = count_progression_paliers(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -117,7 +117,7 @@ class ProgressionPalierController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"progression_parcours_id": progression_parcours_id_f, "seance_id": palier_id_f},
+            "filters": {"progression_parcours_id": progression_parcours_id_f, "seance_id": seance_id_f},
         })
         return {
                 "progression_paliers": progression_paliers,
@@ -259,18 +259,18 @@ class ProgressionPalierController(BaseController):
                 progression_parcours_id_f = int(progression_parcours_id_raw)
             except (TypeError, ValueError):
                 progression_parcours_id_f = ""
-        palier_id_raw = _query_param(request, "seance_id").strip()
-        palier_id_f = ""
-        if palier_id_raw:
+        seance_id_raw = _query_param(request, "seance_id").strip()
+        seance_id_f = ""
+        if seance_id_raw:
             try:
-                palier_id_f = int(palier_id_raw)
+                seance_id_f = int(seance_id_raw)
             except (TypeError, ValueError):
-                palier_id_f = ""
+                seance_id_f = ""
         _filters = {}
         if progression_parcours_id_f != "":
             _filters["progression_parcours_id"] = progression_parcours_id_f
-        if palier_id_f != "":
-            _filters["seance_id"] = palier_id_f
+        if seance_id_f != "":
+            _filters["seance_id"] = seance_id_f
         rows = find_progression_paliers_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

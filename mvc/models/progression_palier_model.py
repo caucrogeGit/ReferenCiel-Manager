@@ -4,8 +4,8 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT progression_palier.*, progression_parcours.Statut AS progression_parcours_id_label, seance.Titre AS palier_id_label FROM progression_palier LEFT JOIN progression_parcours ON progression_palier.progression_parcours_id = progression_parcours.Id LEFT JOIN seance ON progression_palier.seance_id = seance.Id ORDER BY progression_palier.Id"
-SELECT_BY_ID = "SELECT progression_palier.*, progression_parcours.Statut AS progression_parcours_id_label, seance.Titre AS palier_id_label FROM progression_palier LEFT JOIN progression_parcours ON progression_palier.progression_parcours_id = progression_parcours.Id LEFT JOIN seance ON progression_palier.seance_id = seance.Id WHERE progression_palier.Id = ?"
+SELECT_ALL   = "SELECT progression_palier.*, progression_parcours.Statut AS progression_parcours_id_label, seance.Titre AS seance_id_label FROM progression_palier LEFT JOIN progression_parcours ON progression_palier.progression_parcours_id = progression_parcours.Id LEFT JOIN seance ON progression_palier.seance_id = seance.Id ORDER BY progression_palier.Id"
+SELECT_BY_ID = "SELECT progression_palier.*, progression_parcours.Statut AS progression_parcours_id_label, seance.Titre AS seance_id_label FROM progression_palier LEFT JOIN progression_parcours ON progression_palier.progression_parcours_id = progression_parcours.Id LEFT JOIN seance ON progression_palier.seance_id = seance.Id WHERE progression_palier.Id = ?"
 INSERT       = "INSERT INTO progression_palier (Statut, progression_parcours_id, seance_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
 UPDATE       = "UPDATE progression_palier SET Statut = ?, progression_parcours_id = ?, seance_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM progression_palier WHERE Id = ?"
@@ -69,7 +69,7 @@ def count_progression_paliers(q: str | None = None, filters: dict[str, Any] | No
 def find_progression_paliers_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT progression_palier.*, progression_parcours.Statut AS progression_parcours_id_label, seance.Titre AS palier_id_label FROM progression_palier LEFT JOIN progression_parcours ON progression_palier.progression_parcours_id = progression_parcours.Id LEFT JOIN seance ON progression_palier.seance_id = seance.Id"
+    base = "SELECT progression_palier.*, progression_parcours.Statut AS progression_parcours_id_label, seance.Titre AS seance_id_label FROM progression_palier LEFT JOIN progression_parcours ON progression_palier.progression_parcours_id = progression_parcours.Id LEFT JOIN seance ON progression_palier.seance_id = seance.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -107,6 +107,6 @@ def get_progression_parcours_choices():
     return [(row["Id"], row["Statut"]) for row in rows]
 
 
-def get_palier_choices():
+def get_seance_choices():
     rows = fetch_all("SELECT Id, Titre FROM seance ORDER BY Titre")
     return [(row["Id"], row["Titre"]) for row in rows]

@@ -15,7 +15,7 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {{ field(name='statut', label='Statut', type='text', value=form.value('statut'), error=form.error('statut')) }}
         {{ select_field(name='progression_parcours_id', label='Progression eleve', options=form.options.progression_parcours_id_choices, selected=form.value('progression_parcours_id'), error=form.error('progression_parcours_id')) }}
-        {{ select_field(name='seance_id', label='Palier', options=form.options.palier_id_choices, selected=form.value('seance_id'), error=form.error('seance_id')) }}
+        {{ select_field(name='seance_id', label='Seance', options=form.options.seance_id_choices, selected=form.value('seance_id'), error=form.error('seance_id')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
             {{ button(label='Annuler', variant='secondary', href='/progression_palier') }}

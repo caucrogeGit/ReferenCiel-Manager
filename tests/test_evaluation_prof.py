@@ -1,6 +1,6 @@
 """Tests de l'évaluation professeur sans backend BDD.
 
-`core.database` mocké : on vérifie la validation du statut de palier (valeur
+`core.database` mocké : on vérifie la validation du statut de seance (valeur
 contrôlée), et le cochage `CocheProfesseur` (upsert qui ne touche pas
 `CocheEleve`). CI-safe (ADR-006).
 """
@@ -22,19 +22,19 @@ class _FakeTx:
         return False
 
 
-def test_set_palier_statut_refuse_valeur_invalide(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_set_seance_statut_refuse_valeur_invalide(monkeypatch: pytest.MonkeyPatch) -> None:
     calls: list[tuple[str, tuple[Any, ...]]] = []
     monkeypatch.setattr(m, "execute", lambda sql, params=(): calls.append((sql, tuple(params))) or 1)
 
-    assert m.set_palier_statut(3, "n_importe_quoi") is False
+    assert m.set_seance_statut(3, "n_importe_quoi") is False
     assert calls == []  # aucune écriture pour un statut hors liste
 
 
-def test_set_palier_statut_pose_un_statut_valide(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_set_seance_statut_pose_un_statut_valide(monkeypatch: pytest.MonkeyPatch) -> None:
     calls: list[tuple[str, tuple[Any, ...]]] = []
     monkeypatch.setattr(m, "execute", lambda sql, params=(): calls.append((sql, tuple(params))) or 1)
 
-    assert m.set_palier_statut(3, "valide") is True
+    assert m.set_seance_statut(3, "valide") is True
     assert len(calls) == 1
     assert "UPDATE progression_palier SET Statut" in calls[0][0]
     assert calls[0][1] == ("valide", 3)

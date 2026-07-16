@@ -76,7 +76,7 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   Couture d'extraction prête pour un futur opt-in `forge-mvc-pdf` : `render_pdf`
   (générique) séparé de `scenario_pdf` (métier). Première dépendance tierce de
   l'app (`weasyprint`, licence BSD).
-- `025-renommage-sequence-seance.md` (**Proposé**) : sémantique Éducation
+- `025-renommage-sequence-seance.md` (**Accepté**) : sémantique Éducation
   nationale — **Parcours → Séquence**, **Palier → Séance**, partout (entités,
   tables, routes, vues, docs). Identifiants ASCII (`sequence`, `seance`),
   libellés accentués. Déroulé en 6 phases, la feuille d'abord. Annote ADR-022.

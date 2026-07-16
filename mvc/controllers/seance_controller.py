@@ -4,16 +4,16 @@ from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller import BaseController
 from core.mvc.view.pagination import Pagination
-from mvc.models.palier_model import (
-    get_palier_by_id, add_palier, update_palier, delete_palier, bulk_delete_paliers,
-    count_paliers, find_paliers_paginated, find_paliers_for_export,
+from mvc.models.seance_model import (
+    get_seance_by_id, add_seance, update_seance, delete_seance, bulk_delete_seances,
+    count_seances, find_seances_paginated, find_seances_for_export,
     get_parcours_choices,
 )
-from mvc.forms.palier_form import PalierForm
+from mvc.forms.seance_form import SeanceForm
 from core.security.session import get_flash, get_session_id
 
 
-def _form_data_from_palier(record: dict) -> dict:
+def _form_data_from_seance(record: dict) -> dict:
     """Convertit les colonnes SQL vers les noms de champs du formulaire."""
     return {
         "ordre": record.get("Ordre"),
@@ -24,7 +24,7 @@ def _form_data_from_palier(record: dict) -> dict:
     }
 
 
-def _palier_form_options():
+def _seance_form_options():
     return {
         "parcours_id_choices": get_parcours_choices(),
     }
@@ -44,7 +44,7 @@ def _is_hx_request(request):
 _CSV_COLS = [('Ordre', 'Ordre'), ('Titre', 'Titre'), ('Theme', 'Theme'), ('Production attendue', 'ProductionAttendue'), ('Parcours id', 'parcours_id_label')]
 
 
-class PalierController(BaseController):
+class SeanceController(BaseController):
 
     @staticmethod
     def _parse_id(value):
@@ -94,12 +94,12 @@ class PalierController(BaseController):
         _filters = {}
         if parcours_id_f != "":
             _filters["parcours_id"] = parcours_id_f
-        total    = count_paliers(q or None, filters=_filters or None)
+        total    = count_seances(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
         offset = pagination_state.offset
         empty_context = "search_filters" if q and _filters else ("search" if q else ("filters" if _filters else None))
-        paliers = find_paliers_paginated(
+        seances = find_seances_paginated(
             q=q or None, sort=sort or None, direction=direction,
             limit=limit, offset=offset, filters=_filters or None,
         )
@@ -109,7 +109,7 @@ class PalierController(BaseController):
             "filters": {"parcours_id": parcours_id_f},
         })
         return {
-                "paliers": paliers,
+                "seances": seances,
                 "pagination": pagination,
                 "empty_context": empty_context,
                 "relation_filters": relation_filters,
@@ -118,111 +118,111 @@ class PalierController(BaseController):
 
     @staticmethod
     def index(request: Request) -> Response:
-        context = PalierController._list_context(request)
-        template = "app/palier/_results.html" if _is_hx_request(request) else "app/palier/index.html"
+        context = SeanceController._list_context(request)
+        template = "app/seance/_results.html" if _is_hx_request(request) else "app/seance/index.html"
         return BaseController.render(template, context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
-        form = PalierForm(**_palier_form_options())
-        return BaseController.render("app/palier/form.html",
+        form = SeanceForm(**_seance_form_options())
+        return BaseController.render("app/seance/form.html",
             context={
                 "form": form,
-                "action": "/palier/create",
-                "titre": "Nouveau palier",
+                "action": "/seance/create",
+                "titre": "Nouvelle séance",
             },
             request=request)
 
     @staticmethod
     def create(request: Request) -> Response:
-        form = PalierForm.from_request(request, **_palier_form_options())
+        form = SeanceForm.from_request(request, **_seance_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("app/palier/form.html",
+            return BaseController.validation_error("app/seance/form.html",
                 context={
                     "form": form,
-                    "action": "/palier/create",
-                    "titre": "Nouveau palier",
+                    "action": "/seance/create",
+                    "titre": "Nouvelle séance",
                 },
                 request=request)
-        add_palier(form.cleaned_data)
-        return BaseController.redirect_with_flash(request, "/palier", "Palier créé.")
+        add_seance(form.cleaned_data)
+        return BaseController.redirect_with_flash(request, "/seance", "Séance créée.")
 
     @staticmethod
     def show(request: Request) -> Response:
-        id = PalierController._parse_id(request.route("id"))
+        id = SeanceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        palier = get_palier_by_id(id)
-        if palier is None:
+        seance = get_seance_by_id(id)
+        if seance is None:
             return BaseController.not_found()
-        return BaseController.render("app/palier/show.html",
-            context={"palier": palier, "flash": get_flash(get_session_id(request))},
+        return BaseController.render("app/seance/show.html",
+            context={"seance": seance, "flash": get_flash(get_session_id(request))},
             request=request)
 
     @staticmethod
     def edit(request: Request) -> Response:
-        id = PalierController._parse_id(request.route("id"))
+        id = SeanceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        palier = get_palier_by_id(id)
-        if palier is None:
+        seance = get_seance_by_id(id)
+        if seance is None:
             return BaseController.not_found()
-        return BaseController.render("app/palier/form.html",
+        return BaseController.render("app/seance/form.html",
             context={
-                "form": PalierForm(_form_data_from_palier(palier), **_palier_form_options()),
-                "action": f"/palier/update/{id}",
-                "titre": "Modifier palier",
+                "form": SeanceForm(_form_data_from_seance(seance), **_seance_form_options()),
+                "action": f"/seance/update/{id}",
+                "titre": "Modifier la séance",
             },
             request=request)
 
     @staticmethod
     def update(request: Request) -> Response:
-        id = PalierController._parse_id(request.route("id"))
+        id = SeanceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        form = PalierForm.from_request(request, **_palier_form_options())
+        form = SeanceForm.from_request(request, **_seance_form_options())
         if not form.is_valid():
-            return BaseController.validation_error("app/palier/form.html",
+            return BaseController.validation_error("app/seance/form.html",
                 context={
                     "form": form,
-                    "action": f"/palier/update/{id}",
-                    "titre": "Modifier palier",
+                    "action": f"/seance/update/{id}",
+                    "titre": "Modifier la séance",
                 },
                 request=request)
-        update_palier(id, form.cleaned_data)
+        update_seance(id, form.cleaned_data)
         return BaseController.redirect_with_flash(
-            request, f"/palier/show/{id}", "Palier mis à jour.")
+            request, f"/seance/show/{id}", "Séance mise à jour.")
 
     @staticmethod
     def destroy(request: Request) -> Response:
-        id = PalierController._parse_id(request.route("id"))
+        id = SeanceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
-        delete_palier(id)
+        delete_seance(id)
         if _is_hx_request(request):
-            context = PalierController._list_context(request)
-            return BaseController.render("app/palier/_results.html", context=context, request=request)
-        return BaseController.redirect_with_flash(request, "/palier", "Palier supprimé.")
+            context = SeanceController._list_context(request)
+            return BaseController.render("app/seance/_results.html", context=context, request=request)
+        return BaseController.redirect_with_flash(request, "/seance", "Séance supprimée.")
 
 
     @staticmethod
     def bulk_delete(request: Request) -> Response:
-        ids = PalierController._parse_bulk_ids(request)
+        ids = SeanceController._parse_bulk_ids(request)
         if not ids:
-            return BaseController.redirect_with_flash(request, "/palier", "Aucun élément sélectionné.")
-        return BaseController.render("app/palier/bulk_delete_confirm.html",
+            return BaseController.redirect_with_flash(request, "/seance", "Aucun élément sélectionné.")
+        return BaseController.render("app/seance/bulk_delete_confirm.html",
             context={"ids": ids, "count": len(ids), "flash": get_flash(get_session_id(request))},
             request=request)
 
     @staticmethod
     def bulk_delete_confirm(request: Request) -> Response:
-        ids = PalierController._parse_bulk_ids(request)
+        ids = SeanceController._parse_bulk_ids(request)
         if not ids:
-            return BaseController.redirect_with_flash(request, "/palier", "Aucun élément sélectionné.")
-        bulk_delete_paliers(ids)
+            return BaseController.redirect_with_flash(request, "/seance", "Aucun élément sélectionné.")
+        bulk_delete_seances(ids)
         count = len(ids)
         return BaseController.redirect_with_flash(
-            request, "/palier",
+            request, "/seance",
             f"{count} élément(s) supprimé(s).")
 
 
@@ -251,19 +251,19 @@ class PalierController(BaseController):
         _filters = {}
         if parcours_id_f != "":
             _filters["parcours_id"] = parcours_id_f
-        rows = find_paliers_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
+        rows = find_seances_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)
         writer.writerow([header for header, _ in _CSV_COLS])
         for row in rows:
-            writer.writerow([PalierController._csv_escape(str(row.get(key) or "")) for _, key in _CSV_COLS])
+            writer.writerow([SeanceController._csv_escape(str(row.get(key) or "")) for _, key in _CSV_COLS])
         content = output.getvalue().encode("utf-8")
         return Response(
             200,
             content,
             "text/csv; charset=utf-8",
             headers={
-                "Content-Disposition": 'attachment; filename="paliers.csv"',
+                "Content-Disposition": 'attachment; filename="seances.csv"',
                 "Cache-Control": "no-store",
             },
         )

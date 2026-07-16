@@ -1,7 +1,7 @@
 # pyright: strict
 """Espace élève — « Mon parcours » (lecture seule).
 
-L'élève **connecté** consulte ses parcours affectés et son avancement par palier.
+L'élève **connecté** consulte ses parcours affectés et son avancement par seance.
 Route protégée par la permission `espace_eleve.voir` (rôle `eleve`) ; les données
 sont filtrées par le compte (`eleve.UserId`), donc chacun ne voit que les siennes.
 Un compte non rattaché à un élève voit un message explicite (pas une erreur).

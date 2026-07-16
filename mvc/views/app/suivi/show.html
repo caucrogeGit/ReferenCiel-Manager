@@ -17,7 +17,7 @@
                 <th class="px-4 py-2 text-right">Validés</th>
                 <th class="px-4 py-2 text-right">En cours</th>
                 <th class="px-4 py-2 text-right">Bloqués</th>
-                <th class="px-4 py-2 text-right">Paliers</th>
+                <th class="px-4 py-2 text-right">Séances</th>
                 <th class="px-4 py-2">Alerte</th>
                 <th class="px-4 py-2"></th>
             </tr>
@@ -31,7 +31,7 @@
                 <td class="px-4 py-2 text-right text-green-700">{{ e.nb_valide or 0 }}</td>
                 <td class="px-4 py-2 text-right">{{ e.nb_en_cours or 0 }}</td>
                 <td class="px-4 py-2 text-right text-red-700">{{ e.nb_bloque or 0 }}</td>
-                <td class="px-4 py-2 text-right text-gray-600">{{ e.nb_paliers or 0 }}</td>
+                <td class="px-4 py-2 text-right text-gray-600">{{ e.nb_seances or 0 }}</td>
                 <td class="px-4 py-2">
                     {% if e.nb_bloque and e.nb_bloque > 0 %}<span class="text-red-700 font-medium">Bloqué</span>{% endif %}
                 </td>

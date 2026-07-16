@@ -1,7 +1,7 @@
 from core.forms import Form, IntegerField, RelationField, StringField
 
 
-class PalierForm(Form):
+class SeanceForm(Form):
     ordre = IntegerField(label="Ordre", required=True)
     titre = StringField(label="Titre", required=True)
     theme = StringField(label="Theme", required=False)

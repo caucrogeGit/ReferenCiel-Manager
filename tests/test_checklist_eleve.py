@@ -2,7 +2,7 @@
 
 `core.database` mocké : on vérifie l'upsert de `CocheEleve` sur TOUS les items
 (cochés → 1, décochés → 0), la préservation de `CocheProfesseur`, et le contrôle
-d'appartenance (palier d'autrui → None, aucune écriture). CI-safe (ADR-006).
+d'appartenance (séance d'autrui → None, aucune écriture). CI-safe (ADR-006).
 """
 from __future__ import annotations
 
@@ -22,12 +22,12 @@ class _FakeTx:
         return False
 
 
-def _install(monkeypatch: pytest.MonkeyPatch, *, palier: dict[str, Any] | None) -> list[tuple[str, tuple[Any, ...]]]:
+def _install(monkeypatch: pytest.MonkeyPatch, *, seance: dict[str, Any] | None) -> list[tuple[str, tuple[Any, ...]]]:
     calls: list[tuple[str, tuple[Any, ...]]] = []
 
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
         if "FROM progression_palier pp" in sql:
-            return palier
+            return seance
         if "FROM checklist WHERE seance_id" in sql:
             return {"id": 3}
         return None
@@ -49,7 +49,7 @@ def _install(monkeypatch: pytest.MonkeyPatch, *, palier: dict[str, Any] | None) 
 
 
 def test_coche_tous_les_items_et_preserve_le_prof(monkeypatch: pytest.MonkeyPatch) -> None:
-    calls = _install(monkeypatch, palier={"progression_palier_id": 1, "seance_id": 5, "palier_titre": "P"})
+    calls = _install(monkeypatch, seance={"progression_palier_id": 1, "seance_id": 5, "seance_titre": "P"})
 
     res = m.enregistrer_coches(1, 42, {10, 12})
 
@@ -63,7 +63,7 @@ def test_coche_tous_les_items_et_preserve_le_prof(monkeypatch: pytest.MonkeyPatc
     assert all("CocheProfesseur = VALUES" not in c[0] for c in calls)
 
 
-def test_palier_d_autrui_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
-    calls = _install(monkeypatch, palier=None)
+def test_seance_d_autrui_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _install(monkeypatch, seance=None)
     assert m.enregistrer_coches(1, 42, {10}) is None
     assert calls == []  # aucune écriture

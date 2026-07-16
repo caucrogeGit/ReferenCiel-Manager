@@ -3,37 +3,37 @@
 {% from "components/ui.html" import button, flash_messages %}
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Détail palier</h1>
+    <h1 class="text-2xl font-bold text-gray-800">Détail de la séance</h1>
     <div class="space-x-2">
-        {{ button(label='Modifier', variant='primary', href='/palier/edit/' ~ palier.Id) }}
-        <a href="/palier" class="text-gray-600 hover:underline">← Retour</a>
+        {{ button(label='Modifier', variant='primary', href='/seance/edit/' ~ seance.Id) }}
+        <a href="/seance" class="text-gray-600 hover:underline">← Retour</a>
     </div>
 </div>
 
 <div class="bg-white shadow rounded p-6 space-y-4">
     <div>
         <p class="text-sm text-gray-500">Ordre</p>
-        <p class="text-gray-800">{{ palier.Ordre }}</p>
+        <p class="text-gray-800">{{ seance.Ordre }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Titre</p>
-        <p class="text-gray-800">{{ palier.Titre }}</p>
+        <p class="text-gray-800">{{ seance.Titre }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Theme</p>
-        <p class="text-gray-800">{{ palier.Theme }}</p>
+        <p class="text-gray-800">{{ seance.Theme }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Production attendue</p>
-        <p class="text-gray-800">{{ palier.ProductionAttendue }}</p>
+        <p class="text-gray-800">{{ seance.ProductionAttendue }}</p>
     </div>
     <div>
         <p class="text-sm text-gray-500">Parcours</p>
-        <p class="text-gray-800">{{ palier.parcours_id_label }}</p>
+        <p class="text-gray-800">{{ seance.parcours_id_label }}</p>
     </div>
 </div>
 
-<form method="post" action="/palier/destroy/{{ palier.Id }}" class="mt-4" data-confirm="Confirmer la suppression ?">
+<form method="post" action="/seance/destroy/{{ seance.Id }}" class="mt-4" data-confirm="Confirmer la suppression ?">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     {{ button(label='Supprimer', variant='danger', type='submit') }}
 </form>

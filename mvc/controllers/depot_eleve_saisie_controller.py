@@ -1,5 +1,5 @@
 # pyright: strict
-"""Espace élève v2 — déposer un fichier pour l'activité d'un palier.
+"""Espace élève v2 — déposer un fichier pour l'activité d'une séance.
 
 Route gardée par `espace_eleve.voir` (préfixe `/mon-parcours`) + contrôle
 d'appartenance dans le modèle. L'upload délègue à l'opt-in `files`

@@ -1,6 +1,6 @@
 # ADR-025 : Renommage Parcours → Séquence, Palier → Séance
 
-**Statut :** Proposé
+**Statut :** Accepté
 **Date :** 2026-07-16
 
 ## Contexte

@@ -15,7 +15,7 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {{ field(name='date_evaluation', label='Date evaluation', type='datetime-local', value=form.value('date_evaluation'), error=form.error('date_evaluation')) }}
         {{ textarea_field(name='appreciation', label='Appreciation', value=form.value('appreciation'), error=form.error('appreciation')) }}
-        {{ select_field(name='progression_palier_id', label='Progression palier', options=form.options.progression_palier_id_choices, selected=form.value('progression_palier_id'), error=form.error('progression_palier_id')) }}
+        {{ select_field(name='progression_palier_id', label='Progression séance', options=form.options.progression_palier_id_choices, selected=form.value('progression_palier_id'), error=form.error('progression_palier_id')) }}
         {{ select_field(name='activite_id', label='Activite', options=form.options.activite_id_choices, selected=form.value('activite_id'), error=form.error('activite_id')) }}
         {{ select_field(name='professeur_id', label='Professeur', options=form.options.professeur_id_choices, selected=form.value('professeur_id'), error=form.error('professeur_id')) }}
         <div class="flex gap-4 pt-2">

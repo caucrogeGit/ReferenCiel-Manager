@@ -11,27 +11,27 @@ UPDATE       = "UPDATE seance SET Ordre = ?, Titre = ?, Theme = ?, ProductionAtt
 DELETE       = "DELETE FROM seance WHERE Id = ?"
 
 
-def get_paliers():
+def get_seances():
     return fetch_all(SELECT_ALL)
 
 
-def get_palier_by_id(id):
+def get_seance_by_id(id):
     return fetch_one(SELECT_BY_ID, (id,))
 
 
-def add_palier(data):
+def add_seance(data):
     return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["parcours_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
-def update_palier(id, data):
+def update_seance(id, data):
     execute(UPDATE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["parcours_id"], datetime.now(timezone.utc), id))
 
 
-def delete_palier(id):
+def delete_seance(id):
     execute(DELETE, (id,))
 
 
-def bulk_delete_paliers(ids):
+def bulk_delete_seances(ids):
     """Supprime plusieurs enregistrements par ID. Aucune concaténation SQL."""
     if not ids:
         return
@@ -45,7 +45,7 @@ _ALLOWED_FILTERS = {"parcours_id": "seance.parcours_id"}
 _DEFAULT_SORT = "seance.Id"
 
 
-def count_paliers(q: str | None = None, filters: dict[str, Any] | None = None) -> int:
+def count_seances(q: str | None = None, filters: dict[str, Any] | None = None) -> int:
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -66,7 +66,7 @@ def count_paliers(q: str | None = None, filters: dict[str, Any] | None = None) -
     return row["total"] if row else 0
 
 
-def find_paliers_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def find_seances_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
     base = "SELECT seance.*, parcours.Titre AS parcours_id_label FROM seance LEFT JOIN parcours ON seance.parcours_id = parcours.Id"
@@ -94,8 +94,8 @@ def find_paliers_paginated(q: str | None = None, sort: str | None = None, direct
 _EXPORT_LIMIT = 1000
 
 
-def find_paliers_for_export(q: str | None = None, sort: str | None = None, direction: str = "asc", filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-    return find_paliers_paginated(
+def find_seances_for_export(q: str | None = None, sort: str | None = None, direction: str = "asc", filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    return find_seances_paginated(
         q=q, sort=sort, direction=direction,
         limit=_EXPORT_LIMIT, offset=0, filters=filters,
     )

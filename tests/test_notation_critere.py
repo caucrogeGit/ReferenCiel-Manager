@@ -50,7 +50,7 @@ def _install(monkeypatch: pytest.MonkeyPatch, *, ctx: dict[str, Any] | None, eva
     return cap
 
 
-_CTX = {"pp_id": 1, "progression_id": 1, "palier_titre": "P", "nom": "D", "prenom": "J", "professeur_id": 2, "activite_id": 9}
+_CTX = {"pp_id": 1, "progression_id": 1, "seance_titre": "P", "nom": "D", "prenom": "J", "professeur_id": 2, "activite_id": 9}
 
 
 def test_cree_l_evaluation_et_upsert_les_niveaux_valides(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -90,7 +90,7 @@ def test_reutilise_l_evaluation_existante(monkeypatch: pytest.MonkeyPatch) -> No
     assert cap["execute"][0][1] == ("atteint", 50, 7)
 
 
-def test_palier_sans_activite_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_seance_sans_activite_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
     cap = _install(monkeypatch, ctx={**_CTX, "activite_id": None}, eval_existante=None)
     assert m.enregistrer_notation(1, {7: "atteint"}) is None
     assert cap["insert"] == [] and cap["execute"] == []

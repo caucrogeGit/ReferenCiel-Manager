@@ -2,7 +2,7 @@
 
 `core.database` est mocké : on vérifie que l'état réel de l'élève est persisté —
 `ProgressionParcours` (par élève et affectation, statut global) et `ProgressionPalier`
-(état par palier : non_commence/en_cours/valide/bloque). CI-safe (ADR-006).
+(état par seance : non_commence/en_cours/valide/bloque). CI-safe (ADR-006).
 """
 from __future__ import annotations
 
@@ -42,7 +42,7 @@ def test_progression_parcours_par_eleve_et_parcours(monkeypatch: pytest.MonkeyPa
     assert "en_cours" in cap["params"]
 
 
-def test_progression_palier_porte_l_etat_du_palier(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_progression_palier_porte_l_etat_du_seance(monkeypatch: pytest.MonkeyPatch) -> None:
     cap = _capture_insert(monkeypatch, pp)
     pp.add_progression_palier({
         "statut": "valide",  # porte de passage franchie
@@ -52,5 +52,5 @@ def test_progression_palier_porte_l_etat_du_palier(monkeypatch: pytest.MonkeyPat
         "updated_at": "2026-07-10 00:00:00",
     })
     assert "INSERT INTO progression_palier" in cap["sql"]
-    assert 1 in cap["params"] and 5 in cap["params"]  # progression + palier
+    assert 1 in cap["params"] and 5 in cap["params"]  # progression + seance
     assert "valide" in cap["params"]

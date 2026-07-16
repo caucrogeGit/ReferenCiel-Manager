@@ -13,11 +13,11 @@ from core.mvc.controller import BaseController
 from core.security.session import get_flash, get_session_id
 
 from mvc.models.evaluation_prof_model import (
-    STATUTS_PALIER,
+    STATUTS_SEANCE,
     enregistrer_coches_prof,
     get_checklist_review,
     get_progression_detail,
-    set_palier_statut,
+    set_seance_statut,
 )
 from mvc.models.notation_critere_model import enregistrer_notation, get_grille
 
@@ -34,7 +34,7 @@ class EvaluationProfController:
             "app/evaluation/progression.html",
             context={
                 "progression": data,
-                "statuts": STATUTS_PALIER,
+                "statuts": STATUTS_SEANCE,
                 "flash": get_flash(get_session_id(request)),
             },
             request=request,
@@ -42,18 +42,18 @@ class EvaluationProfController:
 
     @staticmethod
     def set_statut(request: Request) -> Response:
-        """Pose le statut d'un palier (`POST /evaluation/palier/<progression_palier_id>/statut`)."""
+        """Pose le statut d'une séance (`POST /evaluation/seance/<progression_palier_id>/statut`)."""
         pp_id = int(request.route("id") or "0")
         statut = request.form("statut", "")
         progression_id = request.form("progression_id", "0")
         cible = f"/evaluation/progression/{progression_id}"
-        if set_palier_statut(pp_id, statut):
-            return BaseController.redirect_with_flash(request, cible, f"Palier mis à jour : {statut}.", "success")
+        if set_seance_statut(pp_id, statut):
+            return BaseController.redirect_with_flash(request, cible, f"Séance mise à jour : {statut}.", "success")
         return BaseController.redirect_with_flash(request, cible, "Statut invalide.", "error")
 
     @staticmethod
     def checklist(request: Request) -> Response:
-        """Revue de la checklist d'un palier (`GET /evaluation/checklist/<progression_palier_id>`)."""
+        """Revue de la checklist d'une séance (`GET /evaluation/checklist/<progression_palier_id>`)."""
         pp_id = int(request.route("id") or "0")
         data = get_checklist_review(pp_id)
         if data is None:

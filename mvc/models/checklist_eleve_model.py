@@ -1,10 +1,10 @@
 # pyright: strict
-"""Espace élève v2 — cocher la checklist d'un palier (écriture, appartenance).
+"""Espace élève v2 — cocher la checklist d'une séance (écriture, appartenance).
 
 L'élève auto-déclare les items faits (`item_coche.CocheEleve`) sur un de **ses**
-paliers. La **validation** reste au professeur (`item_coche.CocheProfesseur`, non
-touché ici) : cocher côté élève ne change donc pas le statut du palier. Sécurité
-row-level vérifiée à chaque appel (le palier doit appartenir au compte). Upsert
+seances. La **validation** reste au professeur (`item_coche.CocheProfesseur`, non
+touché ici) : cocher côté élève ne change donc pas le statut de la séance. Sécurité
+row-level vérifiée à chaque appel (la séance doit appartenir au compte). Upsert
 idempotent via la clé unique `(item_id, progression_palier_id)`.
 """
 from __future__ import annotations
@@ -15,9 +15,9 @@ from core.database.db import execute, fetch_all, fetch_one
 from core.database.transaction import transaction
 
 
-def _palier_de_l_eleve(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
+def _seance_de_l_eleve(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
     return fetch_one(
-        "SELECT pp.Id AS progression_palier_id, pp.seance_id AS seance_id, pa.Titre AS palier_titre "
+        "SELECT pp.Id AS progression_palier_id, pp.seance_id AS seance_id, pa.Titre AS seance_titre "
         "FROM progression_palier pp "
         "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
@@ -27,18 +27,18 @@ def _palier_de_l_eleve(progression_palier_id: int, user_id: int) -> dict[str, An
     )
 
 
-def _checklist_du_palier(seance_id: int) -> dict[str, Any] | None:
+def _checklist_du_seance(seance_id: int) -> dict[str, Any] | None:
     return fetch_one(
         "SELECT Id AS id FROM checklist WHERE seance_id = ? ORDER BY Id LIMIT 1", (seance_id,)
     )
 
 
 def get_checklist(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
-    """Checklist du palier (sections → items + état coché de l'élève) si elle lui appartient."""
-    palier = _palier_de_l_eleve(progression_palier_id, user_id)
-    if palier is None:
+    """Checklist de la séance (sections → items + état coché de l'élève) si elle lui appartient."""
+    seance = _seance_de_l_eleve(progression_palier_id, user_id)
+    if seance is None:
         return None
-    checklist = _checklist_du_palier(int(palier["seance_id"]))
+    checklist = _checklist_du_seance(int(seance["seance_id"]))
     if checklist is None:
         return None
     sections = fetch_all(
@@ -57,7 +57,7 @@ def get_checklist(progression_palier_id: int, user_id: int) -> dict[str, Any] | 
         )
     return {
         "progression_palier_id": progression_palier_id,
-        "palier_titre": palier["palier_titre"],
+        "seance_titre": seance["seance_titre"],
         "checklist_id": checklist["id"],
         "sections": sections,
     }
@@ -70,12 +70,12 @@ def enregistrer_coches(
 
     `items_coches` : ids d'items cochés. Les autres sont remis à 0. Upsert sur la
     clé `(item_id, progression_palier_id)`, sans jamais toucher `CocheProfesseur`.
-    Renvoie {items, coches} ou None si le palier n'appartient pas au compte.
+    Renvoie {items, coches} ou None si la séance n'appartient pas au compte.
     """
-    palier = _palier_de_l_eleve(progression_palier_id, user_id)
-    if palier is None:
+    seance = _seance_de_l_eleve(progression_palier_id, user_id)
+    if seance is None:
         return None
-    checklist = _checklist_du_palier(int(palier["seance_id"]))
+    checklist = _checklist_du_seance(int(seance["seance_id"]))
     if checklist is None:
         return None
 

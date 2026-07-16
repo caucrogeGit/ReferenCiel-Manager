@@ -1,7 +1,7 @@
-"""Fixture callable : chaîne pédagogique (parcours → palier → dossier → progression → évaluations).
+"""Fixture callable : chaîne pédagogique (parcours → seance → dossier → progression → évaluations).
 
 Modèle canonique aplati (ADR-022) : le Parcours est l'objet racine (rattaché au
-NiveauClasse), il contient des Paliers ; chaque palier porte un DossierTechnique
+NiveauClasse), il contient des Séances ; chaque séance porte un DossierTechnique
 (ressources + QCM de validation). L'élève a une ProgressionParcours (directe, sans
 affectation) déclinée en ProgressionPalier. On résout les Id au fil de l'eau via
 core.database.db (ADR-078). Dépend du socle (classe, élève, professeur) et du
@@ -20,7 +20,7 @@ def _id(row: "dict[str, Any] | None") -> int:
 
 class BlocBFixture(Fixture):
     tables = (
-        "parcours", "palier", "dossier_technique", "ressource_dossier", "qcm",
+        "parcours", "seance", "dossier_technique", "ressource_dossier", "qcm",
         "classe_professeur", "professeur_parcours",
         "progression_parcours", "progression_palier", "activite",
         "evaluation_activite", "evaluation_critere",
@@ -43,10 +43,10 @@ class BlocBFixture(Fixture):
         db.execute("INSERT INTO professeur_parcours (professeur_id, parcours_id) VALUES (?, ?)", (prof, parc))
         db.execute("INSERT INTO classe_professeur (classe_id, professeur_id) VALUES (?, ?)", (classe, prof))
 
-        # Palier -> dossier technique (ressource markdown + QCM de validation).
+        # Seance -> dossier technique (ressource markdown + QCM de validation).
         pal = db.insert(
             "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, parcours_id, CreatedAt, UpdatedAt) "
-            "VALUES (1, 'Palier 1 — Câblage', 'Réseau', 'Câble testé et validé', ?, NOW(), NOW())",
+            "VALUES (1, 'Seance 1 — Câblage', 'Réseau', 'Câble testé et validé', ?, NOW(), NOW())",
             (parc,),
         )
         dt = db.insert(
@@ -64,7 +64,7 @@ class BlocBFixture(Fixture):
             (dt,),
         )
 
-        # Progression directe de l'élève sur le parcours, déclinée par palier.
+        # Progression directe de l'élève sur le parcours, déclinée par seance.
         pe = db.insert(
             "INSERT INTO progression_parcours (Statut, DateDebut, eleve_id, parcours_id, CreatedAt, UpdatedAt) "
             "VALUES ('en_cours', CURDATE(), ?, ?, NOW(), NOW())",

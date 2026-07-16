@@ -36,35 +36,35 @@
                 </div>
                 {{ statut_badge(prog.statut) }}
             </header>
-            {% if prog.paliers %}
+            {% if prog.seances %}
             <ol class="divide-y divide-gray-100">
-                {% for palier in prog.paliers %}
+                {% for seance in prog.seances %}
                 <li class="px-4 py-2 flex items-center justify-between gap-4">
                     <span class="text-sm text-gray-700">
-                        <span class="text-gray-400 mr-2">{{ palier.ordre }}.</span>{{ palier.titre }}
+                        <span class="text-gray-400 mr-2">{{ seance.ordre }}.</span>{{ seance.titre }}
                     </span>
                     <span class="flex items-center gap-3">
-                        {% if palier.qcm_id %}
-                        <a href="/mon-parcours/qcm/{{ palier.progression_palier_id }}"
+                        {% if seance.qcm_id %}
+                        <a href="/mon-parcours/qcm/{{ seance.progression_palier_id }}"
                            class="text-sm text-blue-600 hover:underline">
-                            {{ 'Refaire le QCM' if palier.statut == 'valide' else 'Passer le QCM' }}
+                            {{ 'Refaire le QCM' if seance.statut == 'valide' else 'Passer le QCM' }}
                         </a>
                         {% endif %}
-                        {% if palier.checklist_id %}
-                        <a href="/mon-parcours/checklist/{{ palier.progression_palier_id }}"
+                        {% if seance.checklist_id %}
+                        <a href="/mon-parcours/checklist/{{ seance.progression_palier_id }}"
                            class="text-sm text-blue-600 hover:underline">Checklist</a>
                         {% endif %}
-                        {% if palier.activite_id %}
-                        <a href="/mon-parcours/depot/{{ palier.progression_palier_id }}"
+                        {% if seance.activite_id %}
+                        <a href="/mon-parcours/depot/{{ seance.progression_palier_id }}"
                            class="text-sm text-blue-600 hover:underline">Dépôt</a>
                         {% endif %}
-                        {{ statut_badge(palier.statut) }}
+                        {{ statut_badge(seance.statut) }}
                     </span>
                 </li>
                 {% endfor %}
             </ol>
             {% else %}
-            <p class="px-4 py-3 text-sm text-gray-500 italic">Aucun palier pour ce parcours.</p>
+            <p class="px-4 py-3 text-sm text-gray-500 italic">Aucune séance pour ce parcours.</p>
             {% endif %}
         </section>
         {% endfor %}

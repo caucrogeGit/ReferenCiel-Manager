@@ -1,7 +1,7 @@
 """Tests de l'espace élève « Mon parcours » (lecture seule) sans backend BDD.
 
 `core.database` est mocké : on vérifie le **filtrage par compte** (row-level :
-`eleve.UserId = ?`), l'assemblage parcours + paliers, et le cas d'un compte non
+`eleve.UserId = ?`), l'assemblage parcours + seances, et le cas d'un compte non
 rattaché à un élève. CI-safe (ADR-006).
 """
 from __future__ import annotations
@@ -31,7 +31,7 @@ def test_get_eleve_by_user_filtre_sur_le_compte(monkeypatch: pytest.MonkeyPatch)
     assert eleve is not None and eleve["id"] == 7
 
 
-def test_mon_parcours_assemble_parcours_et_paliers(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_mon_parcours_assemble_parcours_et_seances(monkeypatch: pytest.MonkeyPatch) -> None:
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
         return {"id": 7, "nom": "Doe", "prenom": "Jane"}
 
@@ -41,7 +41,7 @@ def test_mon_parcours_assemble_parcours_et_paliers(monkeypatch: pytest.MonkeyPat
         calls.append((sql, tuple(params)))
         if "FROM progression_parcours" in sql:
             return [{"progression_id": 3, "statut": "en_cours", "parcours_titre": "P1", "version": "1.0"}]
-        return [{"ordre": 1, "titre": "Palier A", "statut": "valide"}]
+        return [{"ordre": 1, "titre": "Seance A", "statut": "valide"}]
 
     monkeypatch.setattr(m, "fetch_one", fake_fetch_one)
     monkeypatch.setattr(m, "fetch_all", fake_fetch_all)
@@ -52,10 +52,10 @@ def test_mon_parcours_assemble_parcours_et_paliers(monkeypatch: pytest.MonkeyPat
     # progressions filtrées sur l'élève résolu (id 7), pas sur le user
     prog_call = next(c for c in calls if "FROM progression_parcours" in c[0])
     assert prog_call[1] == (7,)
-    # paliers assemblés sous chaque progression, filtrés sur la progression
-    palier_call = next(c for c in calls if "FROM progression_palier" in c[0])
-    assert palier_call[1] == (3,)
-    assert data["progressions"][0]["paliers"][0]["titre"] == "Palier A"
+    # seances assemblés sous chaque progression, filtrés sur la progression
+    seance_call = next(c for c in calls if "FROM progression_palier" in c[0])
+    assert seance_call[1] == (3,)
+    assert data["progressions"][0]["seances"][0]["titre"] == "Seance A"
 
 
 def test_mon_parcours_compte_non_rattache_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:

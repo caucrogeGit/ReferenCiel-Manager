@@ -3,7 +3,7 @@
 la progression, organisé **par CLASSE** du professeur connecté.
 
 Liste des classes du prof, puis détail d'une classe (chaque élève et son avancement
-par palier, pour repérer les bloqués / en avance / à évaluer). Route protégée.
+par séance, pour repérer les bloqués / en avance / à évaluer). Route protégée.
 """
 from __future__ import annotations
 

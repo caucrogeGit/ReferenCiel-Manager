@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% block title %}QCM — {{ qcm.palier_titre }}{% endblock %}
+{% block title %}QCM — {{ qcm.seance_titre }}{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto">
@@ -7,7 +7,7 @@
         <h1 class="text-2xl font-bold text-gray-800">QCM</h1>
         <a href="/mon-parcours" class="text-gray-600 hover:underline">← Mon parcours</a>
     </div>
-    <p class="text-gray-600 mb-6">Palier : {{ qcm.palier_titre }}</p>
+    <p class="text-gray-600 mb-6">Séance : {{ qcm.seance_titre }}</p>
 
     {% if qcm.questions %}
     <form method="POST" action="/mon-parcours/qcm/{{ qcm.progression_palier_id }}" class="space-y-6">

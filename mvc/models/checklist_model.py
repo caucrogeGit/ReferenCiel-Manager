@@ -4,8 +4,8 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT checklist.*, seance.Titre AS palier_id_label FROM checklist LEFT JOIN seance ON checklist.seance_id = seance.Id ORDER BY checklist.Id"
-SELECT_BY_ID = "SELECT checklist.*, seance.Titre AS palier_id_label FROM checklist LEFT JOIN seance ON checklist.seance_id = seance.Id WHERE checklist.Id = ?"
+SELECT_ALL   = "SELECT checklist.*, seance.Titre AS seance_id_label FROM checklist LEFT JOIN seance ON checklist.seance_id = seance.Id ORDER BY checklist.Id"
+SELECT_BY_ID = "SELECT checklist.*, seance.Titre AS seance_id_label FROM checklist LEFT JOIN seance ON checklist.seance_id = seance.Id WHERE checklist.Id = ?"
 INSERT       = "INSERT INTO checklist (DecisionFinale, seance_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
 UPDATE       = "UPDATE checklist SET DecisionFinale = ?, seance_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM checklist WHERE Id = ?"
@@ -69,7 +69,7 @@ def count_checklists(q: str | None = None, filters: dict[str, Any] | None = None
 def find_checklists_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT checklist.*, seance.Titre AS palier_id_label FROM checklist LEFT JOIN seance ON checklist.seance_id = seance.Id"
+    base = "SELECT checklist.*, seance.Titre AS seance_id_label FROM checklist LEFT JOIN seance ON checklist.seance_id = seance.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -102,6 +102,6 @@ def find_checklists_for_export(q: str | None = None, sort: str | None = None, di
 
 
 
-def get_palier_choices():
+def get_seance_choices():
     rows = fetch_all("SELECT Id, Titre FROM seance ORDER BY Titre")
     return [(row["Id"], row["Titre"]) for row in rows]

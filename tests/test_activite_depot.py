@@ -1,6 +1,6 @@
 """Tests de persistance Activité + DépôtEleve (ticket 19, sous-lot 4) sans backend BDD.
 
-`core.database` est mocké : `Activite` (lieu d'observation, par palier) et `DepotEleve`
+`core.database` est mocké : `Activite` (lieu d'observation, par seance) et `DepotEleve`
 (l'élève rend un travail : un fichier, rattaché à sa progression et à l'activité). CI-safe.
 """
 from __future__ import annotations
@@ -26,7 +26,7 @@ def _capture_insert(monkeypatch: pytest.MonkeyPatch, module: Any) -> dict[str, A
     return captured
 
 
-def test_activite_rattachee_a_un_palier(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_activite_rattachee_a_un_seance(monkeypatch: pytest.MonkeyPatch) -> None:
     cap = _capture_insert(monkeypatch, act)
     act.add_activite({
         "objectif": "Sertir un câble RJ45",

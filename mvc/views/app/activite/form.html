@@ -15,7 +15,7 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {{ textarea_field(name='objectif', label='Objectif', value=form.value('objectif'), error=form.error('objectif')) }}
         {{ field(name='fichier', label='Fichier', type='text', value=form.value('fichier'), error=form.error('fichier')) }}
-        {{ select_field(name='seance_id', label='Palier', options=form.options.palier_id_choices, selected=form.value('seance_id'), error=form.error('seance_id')) }}
+        {{ select_field(name='seance_id', label='Seance', options=form.options.seance_id_choices, selected=form.value('seance_id'), error=form.error('seance_id')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
             {{ button(label='Annuler', variant='secondary', href='/activite') }}

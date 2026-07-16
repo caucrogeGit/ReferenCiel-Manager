@@ -1,8 +1,8 @@
 # pyright: strict
-"""Espace élève v2 — cocher la checklist d'un palier.
+"""Espace élève v2 — cocher la checklist d'une séance.
 
 Route gardée par `espace_eleve.voir` (préfixe `/mon-parcours`) ; le modèle vérifie
-en plus l'appartenance du palier au compte à chaque appel (palier d'autrui → 404).
+en plus l'appartenance de la séance au compte à chaque appel (séance d'autrui → 404).
 """
 from __future__ import annotations
 

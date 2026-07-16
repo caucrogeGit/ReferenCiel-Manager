@@ -45,7 +45,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Date evaluation', 'DateEvaluation'), ('Appreciation', 'Appreciation'), ('Progression palier id', 'progression_palier_id_label'), ('Activite id', 'activite_id_label'), ('Professeur id', 'professeur_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Date evaluation', 'DateEvaluation'), ('Appreciation', 'Appreciation'), ('Progression séance', 'progression_palier_id_label'), ('Activite id', 'activite_id_label'), ('Professeur id', 'professeur_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
 
 
 class EvaluationActiviteController(BaseController):

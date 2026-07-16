@@ -38,7 +38,7 @@ def test_evaluation_activite_dans_le_contexte_eleve(monkeypatch: pytest.MonkeyPa
         "created_at": "2026-07-10 00:00:00", "updated_at": "2026-07-10 00:00:00",
     })
     assert "INSERT INTO evaluation_activite" in cap["sql"]
-    # contexte : progression (eleve+palier) + activite + prof evaluateur
+    # contexte : progression (eleve+seance) + activite + prof evaluateur
     assert 6 in cap["params"] and 2 in cap["params"] and 1 in cap["params"]
 
 

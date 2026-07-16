@@ -34,8 +34,8 @@ def mes_progressions(eleve_id: int) -> list[dict[str, Any]]:
     )
 
 
-def paliers_progression(progression_id: int) -> list[dict[str, Any]]:
-    """Les paliers d'une progression, dans l'ordre, avec leur statut.
+def seances_progression(progression_id: int) -> list[dict[str, Any]]:
+    """Les seances d'une progression, dans l'ordre, avec leur statut.
 
     Expose `progression_palier_id` (cible des actions de saisie) et `qcm_id`
     (présence d'un QCM à passer, ou NULL) pour la vue « Mon parcours ».
@@ -55,7 +55,7 @@ def paliers_progression(progression_id: int) -> list[dict[str, Any]]:
 
 
 def mon_parcours(user_id: int) -> dict[str, Any] | None:
-    """Vue complète « Mon parcours » du compte : élève + parcours + paliers.
+    """Vue complète « Mon parcours » du compte : élève + parcours + seances.
 
     Renvoie None si le compte n'est rattaché à aucun élève (compte élève non lié).
     """
@@ -64,5 +64,5 @@ def mon_parcours(user_id: int) -> dict[str, Any] | None:
         return None
     progressions = mes_progressions(int(eleve["id"]))
     for prog in progressions:
-        prog["paliers"] = paliers_progression(int(prog["progression_id"]))
+        prog["seances"] = seances_progression(int(prog["progression_id"]))
     return {"eleve": eleve, "progressions": progressions}

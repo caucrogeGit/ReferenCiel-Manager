@@ -11,7 +11,7 @@ from mvc.controllers.evaluation_prof_controller import EvaluationProfController
 def register_evaluation_prof_routes(router: Router) -> None:
     with router.group("/evaluation") as g:
         g.add("GET", "/progression/{id}", EvaluationProfController.progression, name="evaluation-progression")
-        g.add("POST", "/palier/{id}/statut", EvaluationProfController.set_statut, name="evaluation-palier-statut")
+        g.add("POST", "/seance/{id}/statut", EvaluationProfController.set_statut, name="evaluation-seance-statut")
         g.add("GET", "/checklist/{id}", EvaluationProfController.checklist, name="evaluation-checklist")
         g.add("POST", "/checklist/{id}", EvaluationProfController.coche, name="evaluation-checklist-coche")
         g.add("GET", "/activite/{id}", EvaluationProfController.activite, name="evaluation-activite")
