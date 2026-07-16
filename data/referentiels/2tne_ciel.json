@@ -446,7 +446,33 @@
       "criteres_evaluation": [
         {
           "id": "cr-c08-1",
+          "libelle": "Les environnements de développement et de test sont mis en œuvre en tenant compte des contraintes de fonctionnalités et de sécurité"
+        },
+        {
+          "id": "cr-c08-2",
           "libelle": "Le module logiciel est débogué et syntaxiquement correct"
+        },
+        {
+          "id": "cr-c08-3",
+          "libelle": "Les composants logiciels individuels sont développés et testés conformément aux spécifications du cahier des charges et des bonnes pratiques"
+        },
+        {
+          "id": "cr-c08-4",
+          "libelle": "La solution (logicielle et matérielle) est intégrée et testée conformément aux spécifications du cahier des charges et des bonnes pratiques"
+        },
+        {
+          "id": "cr-c08-5",
+          "libelle": "Le code est commenté et le logiciel est documenté"
+        },
+        {
+          "id": "cr-c08-6",
+          "libelle": "Le travail est effectué selon les attentes exprimées de temps, de quantité ou de qualité",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c08-7",
+          "libelle": "Le travail en équipe est conduit de manière solidaire en contribuant par des idées et des efforts",
+          "savoir_etre": true
         }
       ],
       "source_ids": [
@@ -515,7 +541,29 @@
       "criteres_evaluation": [
         {
           "id": "cr-c10-1",
+          "libelle": "Les alertes et problèmes rencontrés sont renseignés"
+        },
+        {
+          "id": "cr-c10-2",
+          "libelle": "Les différents éléments d'un réseau ou d'un système à partir d'un schéma fourni sont identifiés"
+        },
+        {
+          "id": "cr-c10-3",
           "libelle": "La mise à jour des équipements (iOS, OS, logiciel, firmware) est effectuée"
+        },
+        {
+          "id": "cr-c10-4",
+          "libelle": "Les optimisations nécessaires sont effectuées"
+        },
+        {
+          "id": "cr-c10-5",
+          "libelle": "Le travail en équipe est conduit de manière solidaire en contribuant par des idées et des efforts",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c10-6",
+          "libelle": "Le travail est préparé de façon à satisfaire les exigences de qualité, d'efficacité et d'échéancier",
+          "savoir_etre": true
         }
       ],
       "source_ids": [
@@ -812,6 +860,29 @@
           "cr-c11-5",
           "cr-c11-6",
           "cr-c11-7"
+        ]
+      },
+      {
+        "competence": "C10",
+        "criteres": [
+          "cr-c10-1",
+          "cr-c10-2",
+          "cr-c10-3",
+          "cr-c10-4",
+          "cr-c10-5",
+          "cr-c10-6"
+        ]
+      },
+      {
+        "competence": "C08",
+        "criteres": [
+          "cr-c08-1",
+          "cr-c08-2",
+          "cr-c08-3",
+          "cr-c08-4",
+          "cr-c08-5",
+          "cr-c08-6",
+          "cr-c08-7"
         ]
       }
     ],
