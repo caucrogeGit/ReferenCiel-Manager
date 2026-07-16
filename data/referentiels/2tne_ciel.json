@@ -226,7 +226,29 @@
       "criteres_evaluation": [
         {
           "id": "cr-c01-1",
+          "libelle": "La présentation (typographie, orthographe, illustration, lisibilité) est soignée et soutient le discours avec des enchaînements cohérents"
+        },
+        {
+          "id": "cr-c01-2",
           "libelle": "La présentation orale (support et expression) est de qualité et claire"
+        },
+        {
+          "id": "cr-c01-3",
+          "libelle": "L'argumentation développée lors de la présentation et de l'échange est de qualité"
+        },
+        {
+          "id": "cr-c01-4",
+          "libelle": "L'argumentation tient compte des éventuelles situations de handicap des personnes avec lesquelles il interagit"
+        },
+        {
+          "id": "cr-c01-5",
+          "libelle": "Le style, le ton et la terminologie utilisés sont adaptés à la personne et aux circonstances",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c01-6",
+          "libelle": "L'attitude, les comportements et le langage adoptés sont conformes aux règles de la profession, la réaction est adaptée au contexte",
+          "savoir_etre": true
         }
       ],
       "source_ids": [
@@ -326,7 +348,29 @@
       "criteres_evaluation": [
         {
           "id": "cr-c06-1",
+          "libelle": "Les exigences du cahier des charges sont respectées"
+        },
+        {
+          "id": "cr-c06-2",
+          "libelle": "Les tests sont effectués"
+        },
+        {
+          "id": "cr-c06-3",
           "libelle": "Les résultats attendus sont vérifiés"
+        },
+        {
+          "id": "cr-c06-4",
+          "libelle": "La procédure de test est respectée"
+        },
+        {
+          "id": "cr-c06-5",
+          "libelle": "Le travail est effectué sans vouloir tromper, abuser, léser ou blesser les autres",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c06-6",
+          "libelle": "Face à un ensemble de faits, des actions appropriées à poser sont décidées",
+          "savoir_etre": true
         }
       ],
       "source_ids": [
@@ -416,7 +460,48 @@
       "criteres_evaluation": [
         {
           "id": "cr-c09-1",
+          "libelle": "L'ensemble des éléments pour l'installation du système est complet et vérifié par rapport au cahier des charges"
+        },
+        {
+          "id": "cr-c09-2",
           "libelle": "Les éléments du système sont installés et raccordés selon une procédure"
+        },
+        {
+          "id": "cr-c09-3",
+          "libelle": "La configuration est réalisée"
+        },
+        {
+          "id": "cr-c09-4",
+          "libelle": "La mise en service est réalisée"
+        },
+        {
+          "id": "cr-c09-5",
+          "libelle": "L'état de l'installation est renseigné de manière écrite ou orale"
+        },
+        {
+          "id": "cr-c09-6",
+          "libelle": "Les risques d'une situation de travail sont repérés et les mesures appropriées pour sa santé, sa sécurité et celle des autres sont adoptées",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c09-7",
+          "libelle": "Le travail est préparé de façon à satisfaire les exigences de qualité, d'efficacité et d'échéancier",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c09-8",
+          "libelle": "Le travail est effectué selon les attentes exprimées de temps, de quantité ou de qualité",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c09-9",
+          "libelle": "La résolution d'un problème nouveau imprévu est réussie en utilisant ses propres moyens conformément aux règles de la fonction",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c09-10",
+          "libelle": "Des tâches diverses dans des domaines et contextes variés sont accomplies",
+          "savoir_etre": true
         }
       ],
       "source_ids": [
@@ -440,8 +525,40 @@
     {
       "id": "comp-c11",
       "code": "C11",
-      "intitule": "Maintenir un système électronique ou informatique",
-      "criteres_evaluation": [],
+      "intitule": "Maintenir un système électronique ou réseau informatique",
+      "criteres_evaluation": [
+        {
+          "id": "cr-c11-1",
+          "libelle": "L'intervention est préparée"
+        },
+        {
+          "id": "cr-c11-2",
+          "libelle": "Le dysfonctionnement est constaté"
+        },
+        {
+          "id": "cr-c11-3",
+          "libelle": "La maintenance ou la réparation est réalisée"
+        },
+        {
+          "id": "cr-c11-4",
+          "libelle": "La fiche d'intervention est correctement renseignée"
+        },
+        {
+          "id": "cr-c11-5",
+          "libelle": "Les risques d'une situation de travail sont repérés et les mesures appropriées pour sa santé, sa sécurité et celle des autres sont adoptées",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c11-6",
+          "libelle": "Le déroulement des tâches de travail est observé avec attention et de façon soutenue de façon à en contrôler le résultat attendu",
+          "savoir_etre": true
+        },
+        {
+          "id": "cr-c11-7",
+          "libelle": "Des idées, pratiques, ressources inhabituelles sont introduites pour l'avancement de son travail ou de celui des autres",
+          "savoir_etre": true
+        }
+      ],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -580,6 +697,29 @@
           "C06",
           "C08"
         ]
+      },
+      {
+        "activite": "E3",
+        "competences": [
+          "C03",
+          "C07",
+          "C09"
+        ]
+      },
+      {
+        "activite": "E4",
+        "competences": [
+          "C04",
+          "C09"
+        ]
+      },
+      {
+        "activite": "E5",
+        "competences": [
+          "C01",
+          "C04",
+          "C11"
+        ]
       }
     ],
     "competences_criteres": [
@@ -598,7 +738,12 @@
       {
         "competence": "C06",
         "criteres": [
-          "cr-c06-1"
+          "cr-c06-1",
+          "cr-c06-2",
+          "cr-c06-3",
+          "cr-c06-4",
+          "cr-c06-5",
+          "cr-c06-6"
         ]
       },
       {
@@ -629,6 +774,44 @@
           "cr-c07-10",
           "cr-c07-11",
           "cr-c07-12"
+        ]
+      },
+      {
+        "competence": "C01",
+        "criteres": [
+          "cr-c01-1",
+          "cr-c01-2",
+          "cr-c01-3",
+          "cr-c01-4",
+          "cr-c01-5",
+          "cr-c01-6"
+        ]
+      },
+      {
+        "competence": "C09",
+        "criteres": [
+          "cr-c09-1",
+          "cr-c09-2",
+          "cr-c09-3",
+          "cr-c09-4",
+          "cr-c09-5",
+          "cr-c09-6",
+          "cr-c09-7",
+          "cr-c09-8",
+          "cr-c09-9",
+          "cr-c09-10"
+        ]
+      },
+      {
+        "competence": "C11",
+        "criteres": [
+          "cr-c11-1",
+          "cr-c11-2",
+          "cr-c11-3",
+          "cr-c11-4",
+          "cr-c11-5",
+          "cr-c11-6",
+          "cr-c11-7"
         ]
       }
     ],
