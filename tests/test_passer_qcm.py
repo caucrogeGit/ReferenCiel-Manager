@@ -35,7 +35,7 @@ def _install(
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
         if "FROM progression_seance pp" in sql:
             return seance
-        if "FROM qcm WHERE seance_id" in sql:
+        if "FROM qcm q" in sql and "JOIN dossier_technique" in sql:
             return {"id": 9}
         if "FROM choix_qcm WHERE Id" in sql:
             choix_id = int(params[0])
