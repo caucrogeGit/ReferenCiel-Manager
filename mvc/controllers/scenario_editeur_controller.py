@@ -221,6 +221,35 @@ class ScenarioEditeurController(BaseController):
         )
         return pole_id, comp_id
 
+    @staticmethod
+    def _ouvrir_sur_selection(
+        arbre: "dict[str, Any] | None",
+        pole_id: "int | None",
+        competence_id: "int | None",
+        activite_ids: list[int],
+        critere_ids: list[int],
+    ) -> "tuple[int | None, int | None]":
+        """À l'arrivée sur l'étape (aucun item explicitement demandé), ouvre le
+        premier pôle et la première compétence QUI ONT des cases cochées, pour
+        montrer d'emblée les sélections du scénario (sinon l'utilisateur voit un
+        badge de comptage sans pouvoir le rapprocher d'un détail). Un scénario
+        vierge reste sans rien d'ouvert. N'écrase jamais un choix explicite."""
+        if not arbre:
+            return pole_id, competence_id
+        if pole_id is None:
+            pole_id = next(
+                (int(p["Id"]) for p in arbre.get("poles", [])
+                 if any(int(a["Id"]) in activite_ids for a in p.get("activites", []))),
+                None,
+            )
+        if competence_id is None:
+            competence_id = next(
+                (int(c["Id"]) for c in arbre.get("competences", [])
+                 if any(int(cr["Id"]) in critere_ids for cr in c.get("criteres", []))),
+                None,
+            )
+        return pole_id, competence_id
+
     # ── Vue principale ───────────────────────────────────────────────────────
 
     @staticmethod
@@ -243,6 +272,11 @@ class ScenarioEditeurController(BaseController):
         etape = ScenarioEditeurController._etape(request)
         pole_id, competence_id = ScenarioEditeurController._selection_courante(
             request, arbre
+        )
+        # À l'arrivée (pas de choix explicite), ouvrir le 1er item déjà coché pour
+        # rendre les sélections visibles derrière les badges de comptage.
+        pole_id, competence_id = ScenarioEditeurController._ouvrir_sur_selection(
+            arbre, pole_id, competence_id, activite_ids, critere_ids
         )
         steps = ScenarioEditeurController._steps(
             scenario, arbre, referentiels, activite_ids, critere_ids, ressources
