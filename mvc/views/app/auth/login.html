@@ -8,8 +8,12 @@
    la vraie navigation (filtrée par rôle) reprend sa place. #}
 {% block nav %}{% include "partials/nav_login.html" %}{% endblock %}
 
+{# Zone de travail en conteneur flex : le formulaire est centré horizontalement
+   ET verticalement dans l'espace disponible (à droite de la sidebar). #}
+{% block main_class %}flex-1 w-full flex items-center justify-center px-4 pt-10 pb-[15vh]{% endblock %}
+
 {% block content %}
-<div class="max-w-sm mx-auto w-full">
+<div class="max-w-sm w-full">
     <div class="mb-6 text-center">
         <h1 class="text-2xl font-bold text-ink">Connexion</h1>
         <p class="mt-1 text-sm text-muted">Accédez à votre espace RéférenCiel Manager.</p>
