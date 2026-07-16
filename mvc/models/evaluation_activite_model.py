@@ -4,10 +4,10 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT evaluation_activite.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label, professeur.Nom AS professeur_id_label FROM evaluation_activite LEFT JOIN progression_palier ON evaluation_activite.progression_palier_id = progression_palier.Id LEFT JOIN activite ON evaluation_activite.activite_id = activite.Id LEFT JOIN professeur ON evaluation_activite.professeur_id = professeur.Id ORDER BY evaluation_activite.Id"
-SELECT_BY_ID = "SELECT evaluation_activite.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label, professeur.Nom AS professeur_id_label FROM evaluation_activite LEFT JOIN progression_palier ON evaluation_activite.progression_palier_id = progression_palier.Id LEFT JOIN activite ON evaluation_activite.activite_id = activite.Id LEFT JOIN professeur ON evaluation_activite.professeur_id = professeur.Id WHERE evaluation_activite.Id = ?"
-INSERT       = "INSERT INTO evaluation_activite (DateEvaluation, Appreciation, progression_palier_id, activite_id, professeur_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE evaluation_activite SET DateEvaluation = ?, Appreciation = ?, progression_palier_id = ?, activite_id = ?, professeur_id = ?, UpdatedAt = ? WHERE Id = ?"
+SELECT_ALL   = "SELECT evaluation_activite.*, progression_seance.Statut AS progression_seance_id_label, activite.Objectif AS activite_id_label, professeur.Nom AS professeur_id_label FROM evaluation_activite LEFT JOIN progression_seance ON evaluation_activite.progression_seance_id = progression_seance.Id LEFT JOIN activite ON evaluation_activite.activite_id = activite.Id LEFT JOIN professeur ON evaluation_activite.professeur_id = professeur.Id ORDER BY evaluation_activite.Id"
+SELECT_BY_ID = "SELECT evaluation_activite.*, progression_seance.Statut AS progression_seance_id_label, activite.Objectif AS activite_id_label, professeur.Nom AS professeur_id_label FROM evaluation_activite LEFT JOIN progression_seance ON evaluation_activite.progression_seance_id = progression_seance.Id LEFT JOIN activite ON evaluation_activite.activite_id = activite.Id LEFT JOIN professeur ON evaluation_activite.professeur_id = professeur.Id WHERE evaluation_activite.Id = ?"
+INSERT       = "INSERT INTO evaluation_activite (DateEvaluation, Appreciation, progression_seance_id, activite_id, professeur_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE evaluation_activite SET DateEvaluation = ?, Appreciation = ?, progression_seance_id = ?, activite_id = ?, professeur_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM evaluation_activite WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_evaluation_activite_by_id(id):
 
 
 def add_evaluation_activite(data):
-    return insert(INSERT, (data["date_evaluation"], data["appreciation"], data["progression_palier_id"], data["activite_id"], data["professeur_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["date_evaluation"], data["appreciation"], data["progression_seance_id"], data["activite_id"], data["professeur_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_evaluation_activite(id, data):
-    execute(UPDATE, (data["date_evaluation"], data["appreciation"], data["progression_palier_id"], data["activite_id"], data["professeur_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["date_evaluation"], data["appreciation"], data["progression_seance_id"], data["activite_id"], data["professeur_id"], datetime.now(timezone.utc), id))
 
 
 def delete_evaluation_activite(id):
@@ -40,8 +40,8 @@ def bulk_delete_evaluation_activites(ids):
 
 
 _SEARCH_COLS  = ['evaluation_activite.Appreciation']
-_ALLOWED_SORT = {"date_evaluation": "evaluation_activite.DateEvaluation", "appreciation": "evaluation_activite.Appreciation", "progression_palier_id": "evaluation_activite.progression_palier_id", "activite_id": "evaluation_activite.activite_id", "professeur_id": "evaluation_activite.professeur_id", "created_at": "evaluation_activite.CreatedAt", "updated_at": "evaluation_activite.UpdatedAt", "id": "evaluation_activite.Id"}
-_ALLOWED_FILTERS = {"progression_palier_id": "evaluation_activite.progression_palier_id", "activite_id": "evaluation_activite.activite_id", "professeur_id": "evaluation_activite.professeur_id"}
+_ALLOWED_SORT = {"date_evaluation": "evaluation_activite.DateEvaluation", "appreciation": "evaluation_activite.Appreciation", "progression_seance_id": "evaluation_activite.progression_seance_id", "activite_id": "evaluation_activite.activite_id", "professeur_id": "evaluation_activite.professeur_id", "created_at": "evaluation_activite.CreatedAt", "updated_at": "evaluation_activite.UpdatedAt", "id": "evaluation_activite.Id"}
+_ALLOWED_FILTERS = {"progression_seance_id": "evaluation_activite.progression_seance_id", "activite_id": "evaluation_activite.activite_id", "professeur_id": "evaluation_activite.professeur_id"}
 _DEFAULT_SORT = "evaluation_activite.Id"
 
 
@@ -69,7 +69,7 @@ def count_evaluation_activites(q: str | None = None, filters: dict[str, Any] | N
 def find_evaluation_activites_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT evaluation_activite.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label, professeur.Nom AS professeur_id_label FROM evaluation_activite LEFT JOIN progression_palier ON evaluation_activite.progression_palier_id = progression_palier.Id LEFT JOIN activite ON evaluation_activite.activite_id = activite.Id LEFT JOIN professeur ON evaluation_activite.professeur_id = professeur.Id"
+    base = "SELECT evaluation_activite.*, progression_seance.Statut AS progression_seance_id_label, activite.Objectif AS activite_id_label, professeur.Nom AS professeur_id_label FROM evaluation_activite LEFT JOIN progression_seance ON evaluation_activite.progression_seance_id = progression_seance.Id LEFT JOIN activite ON evaluation_activite.activite_id = activite.Id LEFT JOIN professeur ON evaluation_activite.professeur_id = professeur.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -102,8 +102,8 @@ def find_evaluation_activites_for_export(q: str | None = None, sort: str | None 
 
 
 
-def get_progression_palier_choices():
-    rows = fetch_all("SELECT Id, Statut FROM progression_palier ORDER BY Statut")
+def get_progression_seance_choices():
+    rows = fetch_all("SELECT Id, Statut FROM progression_seance ORDER BY Statut")
     return [(row["Id"], row["Statut"]) for row in rows]
 
 

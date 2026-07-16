@@ -21,7 +21,7 @@ from mvc.models.depot_saisie_model import enregistrer_depot, get_activite_depots
 class DepotEleveSaisieController:
     @staticmethod
     def show(request: Request) -> Response:
-        """L'activité et les dépôts (`GET /mon-parcours/depot/<progression_palier_id>`)."""
+        """L'activité et les dépôts (`GET /mon-parcours/depot/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_activite_depots(pp_id, user_id) if user_id is not None else None
@@ -35,7 +35,7 @@ class DepotEleveSaisieController:
 
     @staticmethod
     def submit(request: Request) -> Response:
-        """Reçoit et enregistre un dépôt (`POST /mon-parcours/depot/<progression_palier_id>`)."""
+        """Reçoit et enregistre un dépôt (`POST /mon-parcours/depot/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_activite_depots(pp_id, user_id) if user_id is not None else None

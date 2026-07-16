@@ -67,7 +67,7 @@ def suivi_eleves(classe_id: int) -> list[dict[str, Any]]:
         "FROM eleve e "
         "JOIN progression_parcours pe ON pe.eleve_id = e.Id "
         "JOIN parcours p ON p.Id = pe.parcours_id "
-        "LEFT JOIN progression_palier pp ON pp.progression_parcours_id = pe.Id "
+        "LEFT JOIN progression_seance pp ON pp.progression_parcours_id = pe.Id "
         "WHERE e.classe_id = ? "
         "GROUP BY pe.Id, e.Nom, e.Prenom, p.Titre, pe.Statut "
         "ORDER BY e.Nom, e.Prenom, p.Titre",

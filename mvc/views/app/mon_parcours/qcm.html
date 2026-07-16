@@ -10,7 +10,7 @@
     <p class="text-gray-600 mb-6">Séance : {{ qcm.seance_titre }}</p>
 
     {% if qcm.questions %}
-    <form method="POST" action="/mon-parcours/qcm/{{ qcm.progression_palier_id }}" class="space-y-6">
+    <form method="POST" action="/mon-parcours/qcm/{{ qcm.progression_seance_id }}" class="space-y-6">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {% for question in qcm.questions %}
         <fieldset class="bg-white shadow rounded p-4">

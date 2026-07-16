@@ -4,10 +4,10 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT depot_eleve.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label FROM depot_eleve LEFT JOIN progression_palier ON depot_eleve.progression_palier_id = progression_palier.Id LEFT JOIN activite ON depot_eleve.activite_id = activite.Id ORDER BY depot_eleve.Id"
-SELECT_BY_ID = "SELECT depot_eleve.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label FROM depot_eleve LEFT JOIN progression_palier ON depot_eleve.progression_palier_id = progression_palier.Id LEFT JOIN activite ON depot_eleve.activite_id = activite.Id WHERE depot_eleve.Id = ?"
-INSERT       = "INSERT INTO depot_eleve (Fichier, Commentaire, DateDepot, progression_palier_id, activite_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE depot_eleve SET Fichier = ?, Commentaire = ?, DateDepot = ?, progression_palier_id = ?, activite_id = ?, UpdatedAt = ? WHERE Id = ?"
+SELECT_ALL   = "SELECT depot_eleve.*, progression_seance.Statut AS progression_seance_id_label, activite.Objectif AS activite_id_label FROM depot_eleve LEFT JOIN progression_seance ON depot_eleve.progression_seance_id = progression_seance.Id LEFT JOIN activite ON depot_eleve.activite_id = activite.Id ORDER BY depot_eleve.Id"
+SELECT_BY_ID = "SELECT depot_eleve.*, progression_seance.Statut AS progression_seance_id_label, activite.Objectif AS activite_id_label FROM depot_eleve LEFT JOIN progression_seance ON depot_eleve.progression_seance_id = progression_seance.Id LEFT JOIN activite ON depot_eleve.activite_id = activite.Id WHERE depot_eleve.Id = ?"
+INSERT       = "INSERT INTO depot_eleve (Fichier, Commentaire, DateDepot, progression_seance_id, activite_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE depot_eleve SET Fichier = ?, Commentaire = ?, DateDepot = ?, progression_seance_id = ?, activite_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM depot_eleve WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_depot_eleve_by_id(id):
 
 
 def add_depot_eleve(data):
-    return insert(INSERT, (data["fichier"], data["commentaire"], data["date_depot"], data["progression_palier_id"], data["activite_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["fichier"], data["commentaire"], data["date_depot"], data["progression_seance_id"], data["activite_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_depot_eleve(id, data):
-    execute(UPDATE, (data["fichier"], data["commentaire"], data["date_depot"], data["progression_palier_id"], data["activite_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["fichier"], data["commentaire"], data["date_depot"], data["progression_seance_id"], data["activite_id"], datetime.now(timezone.utc), id))
 
 
 def delete_depot_eleve(id):
@@ -40,8 +40,8 @@ def bulk_delete_depot_eleves(ids):
 
 
 _SEARCH_COLS  = ['depot_eleve.Fichier', 'depot_eleve.Commentaire']
-_ALLOWED_SORT = {"fichier": "depot_eleve.Fichier", "commentaire": "depot_eleve.Commentaire", "date_depot": "depot_eleve.DateDepot", "progression_palier_id": "depot_eleve.progression_palier_id", "activite_id": "depot_eleve.activite_id", "created_at": "depot_eleve.CreatedAt", "updated_at": "depot_eleve.UpdatedAt", "id": "depot_eleve.Id"}
-_ALLOWED_FILTERS = {"progression_palier_id": "depot_eleve.progression_palier_id", "activite_id": "depot_eleve.activite_id"}
+_ALLOWED_SORT = {"fichier": "depot_eleve.Fichier", "commentaire": "depot_eleve.Commentaire", "date_depot": "depot_eleve.DateDepot", "progression_seance_id": "depot_eleve.progression_seance_id", "activite_id": "depot_eleve.activite_id", "created_at": "depot_eleve.CreatedAt", "updated_at": "depot_eleve.UpdatedAt", "id": "depot_eleve.Id"}
+_ALLOWED_FILTERS = {"progression_seance_id": "depot_eleve.progression_seance_id", "activite_id": "depot_eleve.activite_id"}
 _DEFAULT_SORT = "depot_eleve.Id"
 
 
@@ -69,7 +69,7 @@ def count_depot_eleves(q: str | None = None, filters: dict[str, Any] | None = No
 def find_depot_eleves_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT depot_eleve.*, progression_palier.Statut AS progression_palier_id_label, activite.Objectif AS activite_id_label FROM depot_eleve LEFT JOIN progression_palier ON depot_eleve.progression_palier_id = progression_palier.Id LEFT JOIN activite ON depot_eleve.activite_id = activite.Id"
+    base = "SELECT depot_eleve.*, progression_seance.Statut AS progression_seance_id_label, activite.Objectif AS activite_id_label FROM depot_eleve LEFT JOIN progression_seance ON depot_eleve.progression_seance_id = progression_seance.Id LEFT JOIN activite ON depot_eleve.activite_id = activite.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -102,8 +102,8 @@ def find_depot_eleves_for_export(q: str | None = None, sort: str | None = None, 
 
 
 
-def get_progression_palier_choices():
-    rows = fetch_all("SELECT Id, Statut FROM progression_palier ORDER BY Statut")
+def get_progression_seance_choices():
+    rows = fetch_all("SELECT Id, Statut FROM progression_seance ORDER BY Statut")
     return [(row["Id"], row["Statut"]) for row in rows]
 
 

@@ -37,16 +37,16 @@ def mes_progressions(eleve_id: int) -> list[dict[str, Any]]:
 def seances_progression(progression_id: int) -> list[dict[str, Any]]:
     """Les seances d'une progression, dans l'ordre, avec leur statut.
 
-    Expose `progression_palier_id` (cible des actions de saisie) et `qcm_id`
+    Expose `progression_seance_id` (cible des actions de saisie) et `qcm_id`
     (présence d'un QCM à passer, ou NULL) pour la vue « Mon parcours ».
     """
     return fetch_all(
-        "SELECT pp.Id AS progression_palier_id, pa.Ordre AS ordre, pa.Titre AS titre, "
+        "SELECT pp.Id AS progression_seance_id, pa.Ordre AS ordre, pa.Titre AS titre, "
         "pp.Statut AS statut, "
         "(SELECT MIN(Id) FROM qcm WHERE seance_id = pa.Id) AS qcm_id, "
         "(SELECT MIN(Id) FROM checklist WHERE seance_id = pa.Id) AS checklist_id, "
         "(SELECT MIN(Id) FROM activite WHERE seance_id = pa.Id) AS activite_id "
-        "FROM progression_palier pp "
+        "FROM progression_seance pp "
         "JOIN seance pa ON pa.Id = pp.seance_id "
         "WHERE pp.progression_parcours_id = ? "
         "ORDER BY pa.Ordre",

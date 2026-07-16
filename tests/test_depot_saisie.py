@@ -18,7 +18,7 @@ def _install(monkeypatch: pytest.MonkeyPatch, *, seance: dict[str, Any] | None, 
     inserts: list[tuple[str, tuple[Any, ...]]] = []
 
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
-        if "FROM progression_palier pp" in sql:
+        if "FROM progression_seance pp" in sql:
             return seance
         if "FROM activite WHERE seance_id" in sql:
             return activite
@@ -36,7 +36,7 @@ def _install(monkeypatch: pytest.MonkeyPatch, *, seance: dict[str, Any] | None, 
 def test_enregistre_le_depot_avec_chemin_seance_et_activite(monkeypatch: pytest.MonkeyPatch) -> None:
     inserts = _install(
         monkeypatch,
-        seance={"progression_palier_id": 1, "seance_id": 5, "seance_titre": "P"},
+        seance={"progression_seance_id": 1, "seance_id": 5, "seance_titre": "P"},
         activite={"id": 9, "consigne": None},
     )
 
@@ -46,7 +46,7 @@ def test_enregistre_le_depot_avec_chemin_seance_et_activite(monkeypatch: pytest.
     assert len(inserts) == 1
     sql, params = inserts[0]
     assert "INSERT INTO depot_eleve" in sql
-    assert params == ("depots/abc.pdf", 1, 9)  # fichier, progression_palier_id, activite_id
+    assert params == ("depots/abc.pdf", 1, 9)  # fichier, progression_seance_id, activite_id
 
 
 def test_seance_d_autrui_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -58,7 +58,7 @@ def test_seance_d_autrui_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_seance_sans_activite_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
     inserts = _install(
         monkeypatch,
-        seance={"progression_palier_id": 1, "seance_id": 5, "seance_titre": "P"},
+        seance={"progression_seance_id": 1, "seance_id": 5, "seance_titre": "P"},
         activite=None,
     )
     assert m.enregistrer_depot(1, 42, "depots/abc.pdf") is None

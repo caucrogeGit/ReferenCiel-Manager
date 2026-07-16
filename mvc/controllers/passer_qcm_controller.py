@@ -20,7 +20,7 @@ from mvc.models.passer_qcm_model import enregistrer_tentative, get_qcm_a_passer
 class PasserQcmController:
     @staticmethod
     def show(request: Request) -> Response:
-        """Le QCM à passer (`GET /mon-parcours/qcm/<progression_palier_id>`)."""
+        """Le QCM à passer (`GET /mon-parcours/qcm/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_qcm_a_passer(pp_id, user_id) if user_id is not None else None
@@ -34,7 +34,7 @@ class PasserQcmController:
 
     @staticmethod
     def submit(request: Request) -> Response:
-        """Enregistre la tentative (`POST /mon-parcours/qcm/<progression_palier_id>`)."""
+        """Enregistre la tentative (`POST /mon-parcours/qcm/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_qcm_a_passer(pp_id, user_id) if user_id is not None else None

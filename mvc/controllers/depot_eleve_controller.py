@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.depot_eleve_model import (
     get_depot_eleve_by_id, add_depot_eleve, update_depot_eleve, delete_depot_eleve, bulk_delete_depot_eleves,
     count_depot_eleves, find_depot_eleves_paginated, find_depot_eleves_for_export,
-    get_progression_palier_choices, get_activite_choices,
+    get_progression_seance_choices, get_activite_choices,
 )
 from mvc.forms.depot_eleve_form import DepotEleveForm
 from core.security.session import get_flash, get_session_id
@@ -19,7 +19,7 @@ def _form_data_from_depot_eleve(record: dict) -> dict:
         "fichier": record.get("Fichier"),
         "commentaire": record.get("Commentaire"),
         "date_depot": record.get("DateDepot"),
-        "progression_palier_id": record.get("progression_palier_id"),
+        "progression_seance_id": record.get("progression_seance_id"),
         "activite_id": record.get("activite_id"),
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
@@ -28,7 +28,7 @@ def _form_data_from_depot_eleve(record: dict) -> dict:
 
 def _depot_eleve_form_options():
     return {
-        "progression_palier_id_choices": get_progression_palier_choices(),
+        "progression_seance_id_choices": get_progression_seance_choices(),
         "activite_id_choices": get_activite_choices(),
     }
 
@@ -44,7 +44,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Fichier', 'Fichier'), ('Commentaire', 'Commentaire'), ('Date depot', 'DateDepot'), ('Progression séance', 'progression_palier_id_label'), ('Activite id', 'activite_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Fichier', 'Fichier'), ('Commentaire', 'Commentaire'), ('Date depot', 'DateDepot'), ('Progression séance', 'progression_seance_id_label'), ('Activite id', 'activite_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
 
 
 class DepotEleveController(BaseController):
@@ -79,19 +79,19 @@ class DepotEleveController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"fichier", "commentaire", "date_depot", "progression_palier_id", "activite_id", "created_at", "updated_at", "id"}:
+        if sort not in {"fichier", "commentaire", "date_depot", "progression_seance_id", "activite_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        progression_palier_id_raw = _query_param(request, "progression_palier_id").strip()
-        progression_palier_id_f = ""
-        if progression_palier_id_raw:
+        progression_seance_id_raw = _query_param(request, "progression_seance_id").strip()
+        progression_seance_id_f = ""
+        if progression_seance_id_raw:
             try:
-                progression_palier_id_f = int(progression_palier_id_raw)
+                progression_seance_id_f = int(progression_seance_id_raw)
             except (TypeError, ValueError):
-                progression_palier_id_f = ""
+                progression_seance_id_f = ""
         activite_id_raw = _query_param(request, "activite_id").strip()
         activite_id_f = ""
         if activite_id_raw:
@@ -100,11 +100,11 @@ class DepotEleveController(BaseController):
             except (TypeError, ValueError):
                 activite_id_f = ""
         relation_filters = {}
-        relation_filters["progression_palier_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_palier_choices()]}
+        relation_filters["progression_seance_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_seance_choices()]}
         relation_filters["activite_id"] = {"options": [{"id": value, "label": label} for value, label in get_activite_choices()]}
         _filters = {}
-        if progression_palier_id_f != "":
-            _filters["progression_palier_id"] = progression_palier_id_f
+        if progression_seance_id_f != "":
+            _filters["progression_seance_id"] = progression_seance_id_f
         if activite_id_f != "":
             _filters["activite_id"] = activite_id_f
         total    = count_depot_eleves(q or None, filters=_filters or None)
@@ -119,7 +119,7 @@ class DepotEleveController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"progression_palier_id": progression_palier_id_f, "activite_id": activite_id_f},
+            "filters": {"progression_seance_id": progression_seance_id_f, "activite_id": activite_id_f},
         })
         return {
                 "depot_eleves": depot_eleves,
@@ -249,18 +249,18 @@ class DepotEleveController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"fichier", "commentaire", "date_depot", "progression_palier_id", "activite_id", "created_at", "updated_at", "id"}:
+        if sort not in {"fichier", "commentaire", "date_depot", "progression_seance_id", "activite_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        progression_palier_id_raw = _query_param(request, "progression_palier_id").strip()
-        progression_palier_id_f = ""
-        if progression_palier_id_raw:
+        progression_seance_id_raw = _query_param(request, "progression_seance_id").strip()
+        progression_seance_id_f = ""
+        if progression_seance_id_raw:
             try:
-                progression_palier_id_f = int(progression_palier_id_raw)
+                progression_seance_id_f = int(progression_seance_id_raw)
             except (TypeError, ValueError):
-                progression_palier_id_f = ""
+                progression_seance_id_f = ""
         activite_id_raw = _query_param(request, "activite_id").strip()
         activite_id_f = ""
         if activite_id_raw:
@@ -269,8 +269,8 @@ class DepotEleveController(BaseController):
             except (TypeError, ValueError):
                 activite_id_f = ""
         _filters = {}
-        if progression_palier_id_f != "":
-            _filters["progression_palier_id"] = progression_palier_id_f
+        if progression_seance_id_f != "":
+            _filters["progression_seance_id"] = progression_seance_id_f
         if activite_id_f != "":
             _filters["activite_id"] = activite_id_f
         rows = find_depot_eleves_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)

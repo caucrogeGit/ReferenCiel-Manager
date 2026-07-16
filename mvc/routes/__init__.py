@@ -52,7 +52,7 @@ from mvc.routes.item_coche_routes import register_item_coche_routes
 from mvc.routes.professeur_compte_routes import register_professeur_compte_routes
 from mvc.routes.professeur_routes import register_professeur_routes
 from mvc.routes.progression_parcours_routes import register_progression_parcours_routes
-from mvc.routes.progression_palier_routes import register_progression_palier_routes
+from mvc.routes.progression_seance_routes import register_progression_seance_routes
 from mvc.routes.qcm_routes import register_qcm_routes
 from mvc.routes.question_qcm_routes import register_question_qcm_routes
 from mvc.routes.section_checklist_routes import register_section_checklist_routes
@@ -121,9 +121,9 @@ register_seance_routes(router)
 
 # Bloc B — AffectationParcours (ticket 17)
 
-# Bloc B — ProgressionParcours + ProgressionPalier (ticket 18)
+# Bloc B — ProgressionParcours + ProgressionSeance (ticket 18)
 register_progression_parcours_routes(router)
-register_progression_palier_routes(router)
+register_progression_seance_routes(router)
 
 # Bloc B — Définition QCM : QCM + QuestionQCM + ChoixQCM (ticket 19, sous-lot 1)
 register_qcm_routes(router)
@@ -234,7 +234,7 @@ RBAC_PREFIX_RULES: dict[str, str] = {
     "/seance": "conception.gerer",
     # Exécution (travail, évaluation) : execution.gerer (admin + professeur).
     "/progression_parcours": "execution.gerer",
-    "/progression_palier": "execution.gerer",
+    "/progression_seance": "execution.gerer",
     "/qcm": "execution.gerer",
     "/question_qcm": "execution.gerer",
     "/choix_qcm": "execution.gerer",

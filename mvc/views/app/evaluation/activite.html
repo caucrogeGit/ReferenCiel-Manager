@@ -10,7 +10,7 @@
     <p class="text-gray-600 mb-6">{{ grille.eleve }} — séance : {{ grille.seance_titre }}</p>
 
     {% if grille.competences %}
-    <form method="POST" action="/evaluation/activite/{{ grille.progression_palier_id }}" class="space-y-6">
+    <form method="POST" action="/evaluation/activite/{{ grille.progression_seance_id }}" class="space-y-6">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {% for competence in grille.competences %}
         <section class="bg-white shadow rounded p-4">

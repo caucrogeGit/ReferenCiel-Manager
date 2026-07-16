@@ -1,0 +1,32 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail de la progression de séance</h1>
+    <div class="space-x-2">
+        {{ button(label='Modifier', variant='primary', href='/progression_seance/edit/' ~ progression_seance.Id) }}
+        <a href="/progression_seance" class="text-gray-600 hover:underline">← Retour</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Statut</p>
+        <p class="text-gray-800">{{ progression_seance.Statut }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Progression eleve</p>
+        <p class="text-gray-800">{{ progression_seance.progression_parcours_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Séance</p>
+        <p class="text-gray-800">{{ progression_seance.seance_id_label }}</p>
+    </div>
+</div>
+
+<form method="post" action="/progression_seance/destroy/{{ progression_seance.Id }}" class="mt-4" data-confirm="Confirmer la suppression ?">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label='Supprimer', variant='danger', type='submit') }}
+</form>
+{% endblock %}

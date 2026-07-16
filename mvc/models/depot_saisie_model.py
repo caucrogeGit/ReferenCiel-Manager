@@ -13,15 +13,15 @@ from typing import Any
 from core.database.db import fetch_all, fetch_one, insert
 
 
-def _seance_de_l_eleve(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
+def _seance_de_l_eleve(progression_seance_id: int, user_id: int) -> dict[str, Any] | None:
     return fetch_one(
-        "SELECT pp.Id AS progression_palier_id, pp.seance_id AS seance_id, pa.Titre AS seance_titre "
-        "FROM progression_palier pp "
+        "SELECT pp.Id AS progression_seance_id, pp.seance_id AS seance_id, pa.Titre AS seance_titre "
+        "FROM progression_seance pp "
         "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
         "JOIN seance pa ON pa.Id = pp.seance_id "
         "WHERE pp.Id = ? AND e.UserId = ?",
-        (progression_palier_id, user_id),
+        (progression_seance_id, user_id),
     )
 
 
@@ -32,9 +32,9 @@ def _activite_du_seance(seance_id: int) -> dict[str, Any] | None:
     )
 
 
-def get_activite_depots(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
+def get_activite_depots(progression_seance_id: int, user_id: int) -> dict[str, Any] | None:
     """Activité de la séance + dépôts déjà remis par l'élève, si la séance lui appartient."""
-    seance = _seance_de_l_eleve(progression_palier_id, user_id)
+    seance = _seance_de_l_eleve(progression_seance_id, user_id)
     if seance is None:
         return None
     activite = _activite_du_seance(int(seance["seance_id"]))
@@ -42,12 +42,12 @@ def get_activite_depots(progression_palier_id: int, user_id: int) -> dict[str, A
         return None
     depots = fetch_all(
         "SELECT Id AS id, Fichier AS fichier, DateDepot AS date_depot "
-        "FROM depot_eleve WHERE progression_palier_id = ? AND activite_id = ? "
+        "FROM depot_eleve WHERE progression_seance_id = ? AND activite_id = ? "
         "ORDER BY DateDepot DESC",
-        (progression_palier_id, activite["id"]),
+        (progression_seance_id, activite["id"]),
     )
     return {
-        "progression_palier_id": progression_palier_id,
+        "progression_seance_id": progression_seance_id,
         "seance_titre": seance["seance_titre"],
         "activite_id": activite["id"],
         "consigne": activite["consigne"],
@@ -56,14 +56,14 @@ def get_activite_depots(progression_palier_id: int, user_id: int) -> dict[str, A
 
 
 def enregistrer_depot(
-    progression_palier_id: int, user_id: int, fichier_path: str
+    progression_seance_id: int, user_id: int, fichier_path: str
 ) -> dict[str, Any] | None:
     """Enregistre un dépôt (fichier déjà stocké) pour l'activité de la séance.
 
     Renvoie {depot_id, activite_id} ou None si la séance n'appartient pas au compte
     ou n'a pas d'activité.
     """
-    seance = _seance_de_l_eleve(progression_palier_id, user_id)
+    seance = _seance_de_l_eleve(progression_seance_id, user_id)
     if seance is None:
         return None
     activite = _activite_du_seance(int(seance["seance_id"]))
@@ -71,8 +71,8 @@ def enregistrer_depot(
         return None
     depot_id = insert(
         "INSERT INTO depot_eleve "
-        "(Fichier, DateDepot, progression_palier_id, activite_id, CreatedAt, UpdatedAt) "
+        "(Fichier, DateDepot, progression_seance_id, activite_id, CreatedAt, UpdatedAt) "
         "VALUES (?, NOW(), ?, ?, NOW(), NOW())",
-        (fichier_path, progression_palier_id, activite["id"]),
+        (fichier_path, progression_seance_id, activite["id"]),
     )
     return {"depot_id": depot_id, "activite_id": int(activite["id"])}

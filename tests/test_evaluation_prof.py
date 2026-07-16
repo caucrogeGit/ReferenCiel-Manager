@@ -36,7 +36,7 @@ def test_set_seance_statut_pose_un_statut_valide(monkeypatch: pytest.MonkeyPatch
 
     assert m.set_seance_statut(3, "valide") is True
     assert len(calls) == 1
-    assert "UPDATE progression_palier SET Statut" in calls[0][0]
+    assert "UPDATE progression_seance SET Statut" in calls[0][0]
     assert calls[0][1] == ("valide", 3)
 
 
@@ -44,7 +44,7 @@ def test_coches_prof_upsert_sans_toucher_l_eleve(monkeypatch: pytest.MonkeyPatch
     calls: list[tuple[str, tuple[Any, ...]]] = []
 
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
-        if "FROM progression_palier WHERE Id" in sql:
+        if "FROM progression_seance WHERE Id" in sql:
             return {"seance_id": 5}
         if "FROM checklist WHERE seance_id" in sql:
             return {"id": 3}

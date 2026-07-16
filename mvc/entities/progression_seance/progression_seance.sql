@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS progression_palier (
+CREATE TABLE IF NOT EXISTS progression_seance (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     Statut VARCHAR(20) NOT NULL,
     progression_parcours_id BIGINT UNSIGNED NOT NULL,

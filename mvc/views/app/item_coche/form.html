@@ -16,7 +16,7 @@
         {{ checkbox(name='coche_eleve', label='Coche eleve', checked=form.value('coche_eleve')) }}
         {{ checkbox(name='coche_professeur', label='Coche professeur', checked=form.value('coche_professeur')) }}
         {{ select_field(name='item_id', label='Item', options=form.options.item_id_choices, selected=form.value('item_id'), error=form.error('item_id')) }}
-        {{ select_field(name='progression_palier_id', label='Progression séance', options=form.options.progression_palier_id_choices, selected=form.value('progression_palier_id'), error=form.error('progression_palier_id')) }}
+        {{ select_field(name='progression_seance_id', label='Progression séance', options=form.options.progression_seance_id_choices, selected=form.value('progression_seance_id'), error=form.error('progression_seance_id')) }}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
             {{ button(label='Annuler', variant='secondary', href='/item_coche') }}

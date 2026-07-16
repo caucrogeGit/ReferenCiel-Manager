@@ -19,12 +19,12 @@ from core.validation import (
 class TentativeQCMBase:
     """Classe de base regenerable de TentativeQCM."""
 
-    def __init__(self, numero_tentative, score, validee, date_tentative, progression_palier_id, created_at, updated_at, id=None):
+    def __init__(self, numero_tentative, score, validee, date_tentative, progression_seance_id, created_at, updated_at, id=None):
         self.numero_tentative = numero_tentative
         self.score = score
         self.validee = validee
         self.date_tentative = date_tentative
-        self.progression_palier_id = progression_palier_id
+        self.progression_seance_id = progression_seance_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -93,15 +93,15 @@ class TentativeQCMBase:
         self._date_tentative = value
 
     @property
-    def progression_palier_id(self):
-        return self._progression_palier_id
+    def progression_seance_id(self):
+        return self._progression_seance_id
 
-    @progression_palier_id.setter
+    @progression_seance_id.setter
     @typed(int)
-    def progression_palier_id(self, value):
+    def progression_seance_id(self, value):
         if value is None:
-            raise ValidationError("progression_palier_id", 'La propriété "progression_palier_id" ne peut pas être nulle.')
-        self._progression_palier_id = value
+            raise ValidationError("progression_seance_id", 'La propriété "progression_seance_id" ne peut pas être nulle.')
+        self._progression_seance_id = value
 
     @property
     def created_at(self):
@@ -132,7 +132,7 @@ class TentativeQCMBase:
             "score": self.score,
             "validee": self.validee,
             "date_tentative": None if self.date_tentative is None else self.date_tentative.isoformat(),
-            "progression_palier_id": self.progression_palier_id,
+            "progression_seance_id": self.progression_seance_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -145,11 +145,11 @@ class TentativeQCMBase:
             score=data["score"],
             validee=data["validee"],
             date_tentative=cls._coerce_datetime(data.get("date_tentative")),
-            progression_palier_id=data["progression_palier_id"],
+            progression_seance_id=data["progression_seance_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"TentativeQCMBase(id={self.id!r}, numero_tentative={self.numero_tentative!r}, score={self.score!r}, validee={self.validee!r}, date_tentative={self.date_tentative!r}, progression_palier_id={self.progression_palier_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"TentativeQCMBase(id={self.id!r}, numero_tentative={self.numero_tentative!r}, score={self.score!r}, validee={self.validee!r}, date_tentative={self.date_tentative!r}, progression_seance_id={self.progression_seance_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

@@ -3,12 +3,12 @@
 {% from "components/ui.html" import button, flash_messages %}
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Liste des progression_paliers</h1>
-    {{ button(label='Nouveau progression_palier', variant='primary', href='/progression_palier/new') }}
+    <h1 class="text-2xl font-bold text-gray-800">Liste des progressions de séance</h1>
+    {{ button(label='Nouveau progression_seance', variant='primary', href='/progression_seance/new') }}
 </div>
 
-<form method="get" action="/progression_palier"
-      hx-get="/progression_palier" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
+<form method="get" action="/progression_seance"
+      hx-get="/progression_seance" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
       class="mb-4 flex gap-2 items-center flex-wrap">
     <input type="search" name="q" value="{{ pagination.q }}"
            placeholder="Rechercher…"
@@ -22,7 +22,7 @@
     </select>
     <select name="seance_id"
             class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-        <option value="">Tous les Seance</option>
+        <option value="">Toutes les séances</option>
         {% for option in relation_filters.seance_id.options %}
         <option value="{{ option.id }}" {{ 'selected' if pagination.filters.seance_id|string == option.id|string else '' }}>{{ option.label }}</option>
         {% endfor %}
@@ -31,18 +31,18 @@
             class="bg-gray-100 text-gray-800 text-sm px-3 py-1.5 rounded font-medium hover:bg-gray-200">
         Rechercher</button>
     {% if pagination.q or pagination.filters %}
-    <a href="/progression_palier"
-       hx-get="/progression_palier" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
+    <a href="/progression_seance"
+       hx-get="/progression_seance" hx-target="#crud-results" hx-swap="innerHTML" hx-push-url="true"
        class="text-sm text-gray-500 hover:underline">Réinitialiser</a>
     {% endif %}
 </form>
 
 <div class="mb-2">
-    <a href="/progression_palier/export-csv?q={{ pagination.q | urlencode }}&amp;sort={{ pagination.sort }}&amp;direction={{ pagination.direction }}{% for key, val in pagination.filters.items() %}{% if val %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
+    <a href="/progression_seance/export-csv?q={{ pagination.q | urlencode }}&amp;sort={{ pagination.sort }}&amp;direction={{ pagination.direction }}{% for key, val in pagination.filters.items() %}{% if val %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
        class="text-sm text-blue-600 hover:underline">Exporter CSV</a>
 </div>
 
 <div id="crud-results">
-    {% include "app/progression_palier/_results.html" %}
+    {% include "app/progression_seance/_results.html" %}
 </div>
 {% endblock %}

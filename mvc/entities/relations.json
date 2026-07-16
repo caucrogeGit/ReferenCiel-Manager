@@ -346,7 +346,7 @@
     },
     {
       "type": "many_to_one",
-      "from": "ProgressionPalier",
+      "from": "ProgressionSeance",
       "to": "ProgressionParcours",
       "name": "progression_parcours",
       "inverse_name": "seances",
@@ -357,7 +357,7 @@
     },
     {
       "type": "many_to_one",
-      "from": "ProgressionPalier",
+      "from": "ProgressionSeance",
       "to": "Seance",
       "name": "seance",
       "inverse_name": "progressions",
@@ -424,10 +424,10 @@
     {
       "type": "many_to_one",
       "from": "TentativeQCM",
-      "to": "ProgressionPalier",
-      "name": "progression_palier",
+      "to": "ProgressionSeance",
+      "name": "progression_seance",
       "inverse_name": "tentatives",
-      "foreign_key": "progression_palier_id",
+      "foreign_key": "progression_seance_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true
@@ -512,10 +512,10 @@
     {
       "type": "many_to_one",
       "from": "ItemCoche",
-      "to": "ProgressionPalier",
-      "name": "progression_palier",
+      "to": "ProgressionSeance",
+      "name": "progression_seance",
       "inverse_name": "cochages_items",
-      "foreign_key": "progression_palier_id",
+      "foreign_key": "progression_seance_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true
@@ -534,10 +534,10 @@
     {
       "type": "many_to_one",
       "from": "DepotEleve",
-      "to": "ProgressionPalier",
-      "name": "progression_palier",
+      "to": "ProgressionSeance",
+      "name": "progression_seance",
       "inverse_name": "depots",
-      "foreign_key": "progression_palier_id",
+      "foreign_key": "progression_seance_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true
@@ -556,10 +556,10 @@
     {
       "type": "many_to_one",
       "from": "EvaluationActivite",
-      "to": "ProgressionPalier",
-      "name": "progression_palier",
+      "to": "ProgressionSeance",
+      "name": "progression_seance",
       "inverse_name": "evaluations",
-      "foreign_key": "progression_palier_id",
+      "foreign_key": "progression_seance_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true

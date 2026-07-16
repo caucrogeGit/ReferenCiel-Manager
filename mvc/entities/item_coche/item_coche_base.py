@@ -19,11 +19,11 @@ from core.validation import (
 class ItemCocheBase:
     """Classe de base regenerable de ItemCoche."""
 
-    def __init__(self, coche_eleve, coche_professeur, item_id, progression_palier_id, created_at, updated_at, id=None):
+    def __init__(self, coche_eleve, coche_professeur, item_id, progression_seance_id, created_at, updated_at, id=None):
         self.coche_eleve = coche_eleve
         self.coche_professeur = coche_professeur
         self.item_id = item_id
-        self.progression_palier_id = progression_palier_id
+        self.progression_seance_id = progression_seance_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -81,15 +81,15 @@ class ItemCocheBase:
         self._item_id = value
 
     @property
-    def progression_palier_id(self):
-        return self._progression_palier_id
+    def progression_seance_id(self):
+        return self._progression_seance_id
 
-    @progression_palier_id.setter
+    @progression_seance_id.setter
     @typed(int)
-    def progression_palier_id(self, value):
+    def progression_seance_id(self, value):
         if value is None:
-            raise ValidationError("progression_palier_id", 'La propriété "progression_palier_id" ne peut pas être nulle.')
-        self._progression_palier_id = value
+            raise ValidationError("progression_seance_id", 'La propriété "progression_seance_id" ne peut pas être nulle.')
+        self._progression_seance_id = value
 
     @property
     def created_at(self):
@@ -119,7 +119,7 @@ class ItemCocheBase:
             "coche_eleve": self.coche_eleve,
             "coche_professeur": self.coche_professeur,
             "item_id": self.item_id,
-            "progression_palier_id": self.progression_palier_id,
+            "progression_seance_id": self.progression_seance_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -131,11 +131,11 @@ class ItemCocheBase:
             coche_eleve=data["coche_eleve"],
             coche_professeur=data["coche_professeur"],
             item_id=data["item_id"],
-            progression_palier_id=data["progression_palier_id"],
+            progression_seance_id=data["progression_seance_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"ItemCocheBase(id={self.id!r}, coche_eleve={self.coche_eleve!r}, coche_professeur={self.coche_professeur!r}, item_id={self.item_id!r}, progression_palier_id={self.progression_palier_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"ItemCocheBase(id={self.id!r}, coche_eleve={self.coche_eleve!r}, coche_professeur={self.coche_professeur!r}, item_id={self.item_id!r}, progression_seance_id={self.progression_seance_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

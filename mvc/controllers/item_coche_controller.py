@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.item_coche_model import (
     get_item_coche_by_id, add_item_coche, update_item_coche, delete_item_coche, bulk_delete_item_coches,
     count_item_coches, find_item_coches_paginated, find_item_coches_for_export,
-    get_item_checklist_choices, get_progression_palier_choices,
+    get_item_checklist_choices, get_progression_seance_choices,
 )
 from mvc.forms.item_coche_form import ItemCocheForm
 from core.security.session import get_flash, get_session_id
@@ -19,7 +19,7 @@ def _form_data_from_item_coche(record: dict) -> dict:
         "coche_eleve": record.get("CocheEleve"),
         "coche_professeur": record.get("CocheProfesseur"),
         "item_id": record.get("item_id"),
-        "progression_palier_id": record.get("progression_palier_id"),
+        "progression_seance_id": record.get("progression_seance_id"),
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
     }
@@ -28,7 +28,7 @@ def _form_data_from_item_coche(record: dict) -> dict:
 def _item_coche_form_options():
     return {
         "item_id_choices": get_item_checklist_choices(),
-        "progression_palier_id_choices": get_progression_palier_choices(),
+        "progression_seance_id_choices": get_progression_seance_choices(),
     }
 
 
@@ -43,7 +43,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Coche eleve', 'CocheEleve'), ('Coche professeur', 'CocheProfesseur'), ('Item id', 'item_id_label'), ('Progression séance', 'progression_palier_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Coche eleve', 'CocheEleve'), ('Coche professeur', 'CocheProfesseur'), ('Item id', 'item_id_label'), ('Progression séance', 'progression_seance_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
 
 
 class ItemCocheController(BaseController):
@@ -78,7 +78,7 @@ class ItemCocheController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"coche_eleve", "coche_professeur", "item_id", "progression_palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"coche_eleve", "coche_professeur", "item_id", "progression_seance_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
@@ -91,21 +91,21 @@ class ItemCocheController(BaseController):
                 item_id_f = int(item_id_raw)
             except (TypeError, ValueError):
                 item_id_f = ""
-        progression_palier_id_raw = _query_param(request, "progression_palier_id").strip()
-        progression_palier_id_f = ""
-        if progression_palier_id_raw:
+        progression_seance_id_raw = _query_param(request, "progression_seance_id").strip()
+        progression_seance_id_f = ""
+        if progression_seance_id_raw:
             try:
-                progression_palier_id_f = int(progression_palier_id_raw)
+                progression_seance_id_f = int(progression_seance_id_raw)
             except (TypeError, ValueError):
-                progression_palier_id_f = ""
+                progression_seance_id_f = ""
         relation_filters = {}
         relation_filters["item_id"] = {"options": [{"id": value, "label": label} for value, label in get_item_checklist_choices()]}
-        relation_filters["progression_palier_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_palier_choices()]}
+        relation_filters["progression_seance_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_seance_choices()]}
         _filters = {}
         if item_id_f != "":
             _filters["item_id"] = item_id_f
-        if progression_palier_id_f != "":
-            _filters["progression_palier_id"] = progression_palier_id_f
+        if progression_seance_id_f != "":
+            _filters["progression_seance_id"] = progression_seance_id_f
         total    = count_item_coches(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -118,7 +118,7 @@ class ItemCocheController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"item_id": item_id_f, "progression_palier_id": progression_palier_id_f},
+            "filters": {"item_id": item_id_f, "progression_seance_id": progression_seance_id_f},
         })
         return {
                 "item_coches": item_coches,
@@ -248,7 +248,7 @@ class ItemCocheController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"coche_eleve", "coche_professeur", "item_id", "progression_palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"coche_eleve", "coche_professeur", "item_id", "progression_seance_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
@@ -260,18 +260,18 @@ class ItemCocheController(BaseController):
                 item_id_f = int(item_id_raw)
             except (TypeError, ValueError):
                 item_id_f = ""
-        progression_palier_id_raw = _query_param(request, "progression_palier_id").strip()
-        progression_palier_id_f = ""
-        if progression_palier_id_raw:
+        progression_seance_id_raw = _query_param(request, "progression_seance_id").strip()
+        progression_seance_id_f = ""
+        if progression_seance_id_raw:
             try:
-                progression_palier_id_f = int(progression_palier_id_raw)
+                progression_seance_id_f = int(progression_seance_id_raw)
             except (TypeError, ValueError):
-                progression_palier_id_f = ""
+                progression_seance_id_f = ""
         _filters = {}
         if item_id_f != "":
             _filters["item_id"] = item_id_f
-        if progression_palier_id_f != "":
-            _filters["progression_palier_id"] = progression_palier_id_f
+        if progression_seance_id_f != "":
+            _filters["progression_seance_id"] = progression_seance_id_f
         rows = find_item_coches_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

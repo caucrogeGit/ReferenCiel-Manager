@@ -10,7 +10,7 @@
     <p class="text-gray-600 mb-6">Séance : {{ checklist.seance_titre }}</p>
 
     {% if checklist.sections %}
-    <form method="POST" action="/mon-parcours/checklist/{{ checklist.progression_palier_id }}" class="space-y-6">
+    <form method="POST" action="/mon-parcours/checklist/{{ checklist.progression_seance_id }}" class="space-y-6">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {% for section in checklist.sections %}
         <section class="bg-white shadow rounded p-4">

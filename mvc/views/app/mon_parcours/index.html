@@ -45,17 +45,17 @@
                     </span>
                     <span class="flex items-center gap-3">
                         {% if seance.qcm_id %}
-                        <a href="/mon-parcours/qcm/{{ seance.progression_palier_id }}"
+                        <a href="/mon-parcours/qcm/{{ seance.progression_seance_id }}"
                            class="text-sm text-blue-600 hover:underline">
                             {{ 'Refaire le QCM' if seance.statut == 'valide' else 'Passer le QCM' }}
                         </a>
                         {% endif %}
                         {% if seance.checklist_id %}
-                        <a href="/mon-parcours/checklist/{{ seance.progression_palier_id }}"
+                        <a href="/mon-parcours/checklist/{{ seance.progression_seance_id }}"
                            class="text-sm text-blue-600 hover:underline">Checklist</a>
                         {% endif %}
                         {% if seance.activite_id %}
-                        <a href="/mon-parcours/depot/{{ seance.progression_palier_id }}"
+                        <a href="/mon-parcours/depot/{{ seance.progression_seance_id }}"
                            class="text-sm text-blue-600 hover:underline">Dépôt</a>
                         {% endif %}
                         {{ statut_badge(seance.statut) }}

@@ -18,9 +18,9 @@
       "unique": false
     },
     {
-      "name": "progression_palier_id",
+      "name": "progression_seance_id",
       "type": "foreign_key",
-      "references": "ProgressionPalier",
+      "references": "ProgressionSeance",
       "required": true
     },
     {

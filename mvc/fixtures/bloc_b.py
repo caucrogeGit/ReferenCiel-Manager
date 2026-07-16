@@ -3,7 +3,7 @@
 Modèle canonique aplati (ADR-022) : le Parcours est l'objet racine (rattaché au
 NiveauClasse), il contient des Séances ; chaque séance porte un DossierTechnique
 (ressources + QCM de validation). L'élève a une ProgressionParcours (directe, sans
-affectation) déclinée en ProgressionPalier. On résout les Id au fil de l'eau via
+affectation) déclinée en ProgressionSeance. On résout les Id au fil de l'eau via
 core.database.db (ADR-078). Dépend du socle (classe, élève, professeur) et du
 référentiel (niveau_classe, critères).
 """
@@ -22,7 +22,7 @@ class BlocBFixture(Fixture):
     tables = (
         "parcours", "seance", "dossier_technique", "ressource_dossier", "qcm",
         "classe_professeur", "professeur_parcours",
-        "progression_parcours", "progression_palier", "activite",
+        "progression_parcours", "progression_seance", "activite",
         "evaluation_activite", "evaluation_critere",
     )
     depends_on = ("niveau_classe", "classe", "eleve", "professeur", "critere_observable")
@@ -71,7 +71,7 @@ class BlocBFixture(Fixture):
             (eleve, parc),
         )
         pp = db.insert(
-            "INSERT INTO progression_palier (Statut, progression_parcours_id, seance_id, CreatedAt, UpdatedAt) "
+            "INSERT INTO progression_seance (Statut, progression_parcours_id, seance_id, CreatedAt, UpdatedAt) "
             "VALUES ('en_cours', ?, ?, NOW(), NOW())",
             (pe, pal),
         )
@@ -80,7 +80,7 @@ class BlocBFixture(Fixture):
             (pal,),
         )
         ea = db.insert(
-            "INSERT INTO evaluation_activite (DateEvaluation, Appreciation, progression_palier_id, activite_id, professeur_id, CreatedAt, UpdatedAt) "
+            "INSERT INTO evaluation_activite (DateEvaluation, Appreciation, progression_seance_id, activite_id, professeur_id, CreatedAt, UpdatedAt) "
             "VALUES (NOW(), 'Bon travail global', ?, ?, ?, NOW(), NOW())",
             (pp, act, prof),
         )

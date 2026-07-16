@@ -7,7 +7,7 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.tentative_qcm_model import (
     get_tentative_qcm_by_id, add_tentative_qcm, update_tentative_qcm, delete_tentative_qcm, bulk_delete_tentative_qcms,
     count_tentative_qcms, find_tentative_qcms_paginated, find_tentative_qcms_for_export,
-    get_progression_palier_choices,
+    get_progression_seance_choices,
 )
 from mvc.forms.tentative_qcm_form import TentativeQCMForm
 from core.security.session import get_flash, get_session_id
@@ -20,7 +20,7 @@ def _form_data_from_tentative_qcm(record: dict) -> dict:
         "score": record.get("Score"),
         "validee": record.get("Validee"),
         "date_tentative": record.get("DateTentative"),
-        "progression_palier_id": record.get("progression_palier_id"),
+        "progression_seance_id": record.get("progression_seance_id"),
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
     }
@@ -28,7 +28,7 @@ def _form_data_from_tentative_qcm(record: dict) -> dict:
 
 def _tentative_qcm_form_options():
     return {
-        "progression_palier_id_choices": get_progression_palier_choices(),
+        "progression_seance_id_choices": get_progression_seance_choices(),
     }
 
 
@@ -43,7 +43,7 @@ def _is_hx_request(request):
     return request.headers.get("HX-Request", "").lower() == "true"
 
 
-_CSV_COLS = [('Numero tentative', 'NumeroTentative'), ('Score', 'Score'), ('Validee', 'Validee'), ('Date tentative', 'DateTentative'), ('Progression séance', 'progression_palier_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
+_CSV_COLS = [('Numero tentative', 'NumeroTentative'), ('Score', 'Score'), ('Validee', 'Validee'), ('Date tentative', 'DateTentative'), ('Progression séance', 'progression_seance_id_label'), ('Created at', 'CreatedAt'), ('Updated at', 'UpdatedAt')]
 
 
 class TentativeQCMController(BaseController):
@@ -78,24 +78,24 @@ class TentativeQCMController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"numero_tentative", "score", "validee", "date_tentative", "progression_palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"numero_tentative", "score", "validee", "date_tentative", "progression_seance_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        progression_palier_id_raw = _query_param(request, "progression_palier_id").strip()
-        progression_palier_id_f = ""
-        if progression_palier_id_raw:
+        progression_seance_id_raw = _query_param(request, "progression_seance_id").strip()
+        progression_seance_id_f = ""
+        if progression_seance_id_raw:
             try:
-                progression_palier_id_f = int(progression_palier_id_raw)
+                progression_seance_id_f = int(progression_seance_id_raw)
             except (TypeError, ValueError):
-                progression_palier_id_f = ""
+                progression_seance_id_f = ""
         relation_filters = {}
-        relation_filters["progression_palier_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_palier_choices()]}
+        relation_filters["progression_seance_id"] = {"options": [{"id": value, "label": label} for value, label in get_progression_seance_choices()]}
         _filters = {}
-        if progression_palier_id_f != "":
-            _filters["progression_palier_id"] = progression_palier_id_f
+        if progression_seance_id_f != "":
+            _filters["progression_seance_id"] = progression_seance_id_f
         total    = count_tentative_qcms(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -108,7 +108,7 @@ class TentativeQCMController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"progression_palier_id": progression_palier_id_f},
+            "filters": {"progression_seance_id": progression_seance_id_f},
         })
         return {
                 "tentative_qcms": tentative_qcms,
@@ -238,21 +238,21 @@ class TentativeQCMController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"numero_tentative", "score", "validee", "date_tentative", "progression_palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"numero_tentative", "score", "validee", "date_tentative", "progression_seance_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        progression_palier_id_raw = _query_param(request, "progression_palier_id").strip()
-        progression_palier_id_f = ""
-        if progression_palier_id_raw:
+        progression_seance_id_raw = _query_param(request, "progression_seance_id").strip()
+        progression_seance_id_f = ""
+        if progression_seance_id_raw:
             try:
-                progression_palier_id_f = int(progression_palier_id_raw)
+                progression_seance_id_f = int(progression_seance_id_raw)
             except (TypeError, ValueError):
-                progression_palier_id_f = ""
+                progression_seance_id_f = ""
         _filters = {}
-        if progression_palier_id_f != "":
-            _filters["progression_palier_id"] = progression_palier_id_f
+        if progression_seance_id_f != "":
+            _filters["progression_seance_id"] = progression_seance_id_f
         rows = find_tentative_qcms_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

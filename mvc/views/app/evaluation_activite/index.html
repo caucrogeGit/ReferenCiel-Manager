@@ -13,11 +13,11 @@
     <input type="search" name="q" value="{{ pagination.q }}"
            placeholder="Rechercher…"
            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-400">
-    <select name="progression_palier_id"
+    <select name="progression_seance_id"
             class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-        <option value="">Tous les ProgressionPalier</option>
-        {% for option in relation_filters.progression_palier_id.options %}
-        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.progression_palier_id|string == option.id|string else '' }}>{{ option.label }}</option>
+        <option value="">Toutes les progressions de séance</option>
+        {% for option in relation_filters.progression_seance_id.options %}
+        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.progression_seance_id|string == option.id|string else '' }}>{{ option.label }}</option>
         {% endfor %}
     </select>
     <select name="activite_id"

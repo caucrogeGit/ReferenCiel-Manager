@@ -54,7 +54,7 @@ def test_cochage_par_eleve_et_professeur_dans_la_progression(monkeypatch: pytest
         "coche_eleve": True,
         "coche_professeur": False,
         "item_id": 7,
-        "progression_palier_id": 2,
+        "progression_seance_id": 2,
         "created_at": "2026-07-10 00:00:00", "updated_at": "2026-07-10 00:00:00",
     })
     assert "INSERT INTO item_coche" in cap["sql"]

@@ -53,7 +53,7 @@ def test_mon_parcours_assemble_parcours_et_seances(monkeypatch: pytest.MonkeyPat
     prog_call = next(c for c in calls if "FROM progression_parcours" in c[0])
     assert prog_call[1] == (7,)
     # seances assemblés sous chaque progression, filtrés sur la progression
-    seance_call = next(c for c in calls if "FROM progression_palier" in c[0])
+    seance_call = next(c for c in calls if "FROM progression_seance" in c[0])
     assert seance_call[1] == (3,)
     assert data["progressions"][0]["seances"][0]["titre"] == "Seance A"
 

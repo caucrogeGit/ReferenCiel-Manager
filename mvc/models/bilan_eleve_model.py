@@ -4,7 +4,7 @@
 Le bilan **fige** un instantané (champ `Synthese`, JSON sérialisé) au moment de sa
 création : niveaux agrégés par compétence + détail des critères évalués. L'agrégation
 remonte la chaîne d'évaluation de l'élève sur une progression :
-`progression_palier → evaluation_activite → evaluation_critere → critere_observable →
+`progression_seance → evaluation_activite → evaluation_critere → critere_observable →
 competence`. SQL visible et paramétré (esprit Forge). Voir le
 [dictionnaire](../../docs/specs/data-dictionary/dictionnaire-bilan.md).
 """
@@ -40,8 +40,8 @@ def lignes_evaluation(progression_parcours_id: int) -> list[dict[str, Any]]:
         "SELECT comp.Id AS competence_id, comp.Code AS competence_code, "
         "comp.Intitule AS competence_intitule, crit.Code AS critere_code, "
         "crit.Libelle AS critere_libelle, ec.Niveau AS niveau "
-        "FROM progression_palier pp "
-        "JOIN evaluation_activite ea ON ea.progression_palier_id = pp.Id "
+        "FROM progression_seance pp "
+        "JOIN evaluation_activite ea ON ea.progression_seance_id = pp.Id "
         "JOIN evaluation_critere ec ON ec.evaluation_activite_id = ea.Id "
         "JOIN critere_observable crit ON crit.Id = ec.critere_id "
         "JOIN competence comp ON comp.Id = crit.competence_id "

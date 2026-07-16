@@ -44,7 +44,7 @@ def test_depot_rend_un_fichier_dans_la_progression(monkeypatch: pytest.MonkeyPat
         "fichier": "depots/rendu-eleve-3.pdf",
         "commentaire": None,
         "date_depot": "2026-09-05 14:30:00",
-        "progression_palier_id": 6,
+        "progression_seance_id": 6,
         "activite_id": 2,
         "created_at": "2026-07-10 00:00:00", "updated_at": "2026-07-10 00:00:00",
     })

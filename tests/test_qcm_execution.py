@@ -1,6 +1,6 @@
 """Tests de persistance de l'exécution QCM (ticket 19, sous-lot 2) sans backend BDD.
 
-`core.database` est mocké : une `TentativeQCM` s'inscrit dans la `ProgressionPalier`
+`core.database` est mocké : une `TentativeQCM` s'inscrit dans la `ProgressionSeance`
 de l'élève (score, validée) et ses `ReponseQCM` figent la justesse (`est_correcte`)
 au moment de la soumission. CI-safe (ADR-006).
 """
@@ -27,19 +27,19 @@ def _capture_insert(monkeypatch: pytest.MonkeyPatch, module: Any) -> dict[str, A
     return captured
 
 
-def test_tentative_dans_la_progression_palier(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_tentative_dans_la_progression_seance(monkeypatch: pytest.MonkeyPatch) -> None:
     cap = _capture_insert(monkeypatch, tent)
     tent.add_tentative_qcm({
         "numero_tentative": 2,
         "score": 100,
         "validee": True,  # porte de passage franchie
         "date_tentative": "2026-09-03 10:00:00",
-        "progression_palier_id": 6,
+        "progression_seance_id": 6,
         "created_at": "2026-07-10 00:00:00",
         "updated_at": "2026-07-10 00:00:00",
     })
     assert "INSERT INTO tentative_qcm" in cap["sql"]
-    assert 6 in cap["params"] and 2 in cap["params"]  # progression_palier + numero
+    assert 6 in cap["params"] and 2 in cap["params"]  # progression_seance + numero
     assert True in cap["params"] and 100 in cap["params"]
 
 

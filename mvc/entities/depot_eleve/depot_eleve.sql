@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS depot_eleve (
     Fichier VARCHAR(255) NOT NULL,
     Commentaire TEXT NULL,
     DateDepot DATETIME NOT NULL,
-    progression_palier_id BIGINT UNSIGNED NOT NULL,
+    progression_seance_id BIGINT UNSIGNED NOT NULL,
     activite_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,

@@ -4,10 +4,10 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT tentative_qcm.*, progression_palier.Statut AS progression_palier_id_label FROM tentative_qcm LEFT JOIN progression_palier ON tentative_qcm.progression_palier_id = progression_palier.Id ORDER BY tentative_qcm.Id"
-SELECT_BY_ID = "SELECT tentative_qcm.*, progression_palier.Statut AS progression_palier_id_label FROM tentative_qcm LEFT JOIN progression_palier ON tentative_qcm.progression_palier_id = progression_palier.Id WHERE tentative_qcm.Id = ?"
-INSERT       = "INSERT INTO tentative_qcm (NumeroTentative, Score, Validee, DateTentative, progression_palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE tentative_qcm SET NumeroTentative = ?, Score = ?, Validee = ?, DateTentative = ?, progression_palier_id = ?, UpdatedAt = ? WHERE Id = ?"
+SELECT_ALL   = "SELECT tentative_qcm.*, progression_seance.Statut AS progression_seance_id_label FROM tentative_qcm LEFT JOIN progression_seance ON tentative_qcm.progression_seance_id = progression_seance.Id ORDER BY tentative_qcm.Id"
+SELECT_BY_ID = "SELECT tentative_qcm.*, progression_seance.Statut AS progression_seance_id_label FROM tentative_qcm LEFT JOIN progression_seance ON tentative_qcm.progression_seance_id = progression_seance.Id WHERE tentative_qcm.Id = ?"
+INSERT       = "INSERT INTO tentative_qcm (NumeroTentative, Score, Validee, DateTentative, progression_seance_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE tentative_qcm SET NumeroTentative = ?, Score = ?, Validee = ?, DateTentative = ?, progression_seance_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM tentative_qcm WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_tentative_qcm_by_id(id):
 
 
 def add_tentative_qcm(data):
-    return insert(INSERT, (data["numero_tentative"], data["score"], data["validee"], data["date_tentative"], data["progression_palier_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["numero_tentative"], data["score"], data["validee"], data["date_tentative"], data["progression_seance_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_tentative_qcm(id, data):
-    execute(UPDATE, (data["numero_tentative"], data["score"], data["validee"], data["date_tentative"], data["progression_palier_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["numero_tentative"], data["score"], data["validee"], data["date_tentative"], data["progression_seance_id"], datetime.now(timezone.utc), id))
 
 
 def delete_tentative_qcm(id):
@@ -40,8 +40,8 @@ def bulk_delete_tentative_qcms(ids):
 
 
 _SEARCH_COLS  = []
-_ALLOWED_SORT = {"numero_tentative": "tentative_qcm.NumeroTentative", "score": "tentative_qcm.Score", "validee": "tentative_qcm.Validee", "date_tentative": "tentative_qcm.DateTentative", "progression_palier_id": "tentative_qcm.progression_palier_id", "created_at": "tentative_qcm.CreatedAt", "updated_at": "tentative_qcm.UpdatedAt", "id": "tentative_qcm.Id"}
-_ALLOWED_FILTERS = {"progression_palier_id": "tentative_qcm.progression_palier_id"}
+_ALLOWED_SORT = {"numero_tentative": "tentative_qcm.NumeroTentative", "score": "tentative_qcm.Score", "validee": "tentative_qcm.Validee", "date_tentative": "tentative_qcm.DateTentative", "progression_seance_id": "tentative_qcm.progression_seance_id", "created_at": "tentative_qcm.CreatedAt", "updated_at": "tentative_qcm.UpdatedAt", "id": "tentative_qcm.Id"}
+_ALLOWED_FILTERS = {"progression_seance_id": "tentative_qcm.progression_seance_id"}
 _DEFAULT_SORT = "tentative_qcm.Id"
 
 
@@ -69,7 +69,7 @@ def count_tentative_qcms(q: str | None = None, filters: dict[str, Any] | None = 
 def find_tentative_qcms_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT tentative_qcm.*, progression_palier.Statut AS progression_palier_id_label FROM tentative_qcm LEFT JOIN progression_palier ON tentative_qcm.progression_palier_id = progression_palier.Id"
+    base = "SELECT tentative_qcm.*, progression_seance.Statut AS progression_seance_id_label FROM tentative_qcm LEFT JOIN progression_seance ON tentative_qcm.progression_seance_id = progression_seance.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -102,6 +102,6 @@ def find_tentative_qcms_for_export(q: str | None = None, sort: str | None = None
 
 
 
-def get_progression_palier_choices():
-    rows = fetch_all("SELECT Id, Statut FROM progression_palier ORDER BY Statut")
+def get_progression_seance_choices():
+    rows = fetch_all("SELECT Id, Statut FROM progression_seance ORDER BY Statut")
     return [(row["Id"], row["Statut"]) for row in rows]

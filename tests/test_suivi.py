@@ -45,7 +45,7 @@ def test_suivi_eleves_filtre_sur_la_classe(monkeypatch: pytest.MonkeyPatch) -> N
     assert "FROM eleve" in captured["sql"]
     assert "e.classe_id = ?" in captured["sql"]
     assert "progression_parcours" in captured["sql"]
-    assert "progression_palier" in captured["sql"]
+    assert "progression_seance" in captured["sql"]
     assert 42 in captured["params"]  # filtre sur la classe
     # les statuts de seance agreges sont passes en parametres (SQL parametre)
     assert "valide" in captured["params"] and "bloque" in captured["params"]

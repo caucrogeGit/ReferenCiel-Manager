@@ -26,7 +26,7 @@ def _install(monkeypatch: pytest.MonkeyPatch, *, seance: dict[str, Any] | None) 
     calls: list[tuple[str, tuple[Any, ...]]] = []
 
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
-        if "FROM progression_palier pp" in sql:
+        if "FROM progression_seance pp" in sql:
             return seance
         if "FROM checklist WHERE seance_id" in sql:
             return {"id": 3}
@@ -49,7 +49,7 @@ def _install(monkeypatch: pytest.MonkeyPatch, *, seance: dict[str, Any] | None) 
 
 
 def test_coche_tous_les_items_et_preserve_le_prof(monkeypatch: pytest.MonkeyPatch) -> None:
-    calls = _install(monkeypatch, seance={"progression_palier_id": 1, "seance_id": 5, "seance_titre": "P"})
+    calls = _install(monkeypatch, seance={"progression_seance_id": 1, "seance_id": 5, "seance_titre": "P"})
 
     res = m.enregistrer_coches(1, 42, {10, 12})
 

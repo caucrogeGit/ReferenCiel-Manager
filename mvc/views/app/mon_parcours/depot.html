@@ -16,7 +16,7 @@
     <p class="text-sm text-gray-600 mb-4">Consigne fournie : <span class="font-mono">{{ activite.consigne }}</span></p>
     {% endif %}
 
-    <form method="POST" action="/mon-parcours/depot/{{ activite.progression_palier_id }}"
+    <form method="POST" action="/mon-parcours/depot/{{ activite.progression_seance_id }}"
           enctype="multipart/form-data" class="bg-white shadow rounded p-5 mb-8 space-y-4">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div>

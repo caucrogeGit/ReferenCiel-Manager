@@ -1,5 +1,5 @@
 """FICHIER GENERE PAR FORGE.
-Base regenerable de l'entite ProgressionPalier.
+Base regenerable de l'entite ProgressionSeance.
 Ne pas y ajouter de logique metier manuelle.
 """
 
@@ -16,8 +16,8 @@ from core.validation import (
 )
 
 
-class ProgressionPalierBase:
-    """Classe de base regenerable de ProgressionPalier."""
+class ProgressionSeanceBase:
+    """Classe de base regenerable de ProgressionSeance."""
 
     def __init__(self, statut, progression_parcours_id, seance_id, created_at, updated_at, id=None):
         self.statut = statut
@@ -112,7 +112,7 @@ class ProgressionPalierBase:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ProgressionPalierBase":
+    def from_dict(cls, data: dict[str, Any]) -> "ProgressionSeanceBase":
         return cls(
             id=data["id"],
             statut=data["statut"],
@@ -123,5 +123,5 @@ class ProgressionPalierBase:
         )
 
     def __repr__(self) -> str:
-        return f"ProgressionPalierBase(id={self.id!r}, statut={self.statut!r}, progression_parcours_id={self.progression_parcours_id!r}, seance_id={self.seance_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"ProgressionSeanceBase(id={self.id!r}, statut={self.statut!r}, progression_parcours_id={self.progression_parcours_id!r}, seance_id={self.seance_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

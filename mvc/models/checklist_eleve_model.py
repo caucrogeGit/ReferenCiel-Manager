@@ -5,7 +5,7 @@ L'élève auto-déclare les items faits (`item_coche.CocheEleve`) sur un de **se
 seances. La **validation** reste au professeur (`item_coche.CocheProfesseur`, non
 touché ici) : cocher côté élève ne change donc pas le statut de la séance. Sécurité
 row-level vérifiée à chaque appel (la séance doit appartenir au compte). Upsert
-idempotent via la clé unique `(item_id, progression_palier_id)`.
+idempotent via la clé unique `(item_id, progression_seance_id)`.
 """
 from __future__ import annotations
 
@@ -15,15 +15,15 @@ from core.database.db import execute, fetch_all, fetch_one
 from core.database.transaction import transaction
 
 
-def _seance_de_l_eleve(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
+def _seance_de_l_eleve(progression_seance_id: int, user_id: int) -> dict[str, Any] | None:
     return fetch_one(
-        "SELECT pp.Id AS progression_palier_id, pp.seance_id AS seance_id, pa.Titre AS seance_titre "
-        "FROM progression_palier pp "
+        "SELECT pp.Id AS progression_seance_id, pp.seance_id AS seance_id, pa.Titre AS seance_titre "
+        "FROM progression_seance pp "
         "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
         "JOIN seance pa ON pa.Id = pp.seance_id "
         "WHERE pp.Id = ? AND e.UserId = ?",
-        (progression_palier_id, user_id),
+        (progression_seance_id, user_id),
     )
 
 
@@ -33,9 +33,9 @@ def _checklist_du_seance(seance_id: int) -> dict[str, Any] | None:
     )
 
 
-def get_checklist(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
+def get_checklist(progression_seance_id: int, user_id: int) -> dict[str, Any] | None:
     """Checklist de la séance (sections → items + état coché de l'élève) si elle lui appartient."""
-    seance = _seance_de_l_eleve(progression_palier_id, user_id)
+    seance = _seance_de_l_eleve(progression_seance_id, user_id)
     if seance is None:
         return None
     checklist = _checklist_du_seance(int(seance["seance_id"]))
@@ -51,12 +51,12 @@ def get_checklist(progression_palier_id: int, user_id: int) -> dict[str, Any] | 
             "COALESCE(ic.CocheEleve, 0) AS coche_eleve "
             "FROM item_checklist i "
             "LEFT JOIN item_coche ic "
-            "  ON ic.item_id = i.Id AND ic.progression_palier_id = ? "
+            "  ON ic.item_id = i.Id AND ic.progression_seance_id = ? "
             "WHERE i.section_id = ? ORDER BY i.Id",
-            (progression_palier_id, section["id"]),
+            (progression_seance_id, section["id"]),
         )
     return {
-        "progression_palier_id": progression_palier_id,
+        "progression_seance_id": progression_seance_id,
         "seance_titre": seance["seance_titre"],
         "checklist_id": checklist["id"],
         "sections": sections,
@@ -64,15 +64,15 @@ def get_checklist(progression_palier_id: int, user_id: int) -> dict[str, Any] | 
 
 
 def enregistrer_coches(
-    progression_palier_id: int, user_id: int, items_coches: set[int]
+    progression_seance_id: int, user_id: int, items_coches: set[int]
 ) -> dict[str, Any] | None:
     """Enregistre l'auto-cochage de l'élève sur TOUS les items de la checklist.
 
     `items_coches` : ids d'items cochés. Les autres sont remis à 0. Upsert sur la
-    clé `(item_id, progression_palier_id)`, sans jamais toucher `CocheProfesseur`.
+    clé `(item_id, progression_seance_id)`, sans jamais toucher `CocheProfesseur`.
     Renvoie {items, coches} ou None si la séance n'appartient pas au compte.
     """
-    seance = _seance_de_l_eleve(progression_palier_id, user_id)
+    seance = _seance_de_l_eleve(progression_seance_id, user_id)
     if seance is None:
         return None
     checklist = _checklist_du_seance(int(seance["seance_id"]))
@@ -92,10 +92,10 @@ def enregistrer_coches(
         for iid in ids:
             execute(
                 "INSERT INTO item_coche "
-                "(CocheEleve, CocheProfesseur, item_id, progression_palier_id, CreatedAt, UpdatedAt) "
+                "(CocheEleve, CocheProfesseur, item_id, progression_seance_id, CreatedAt, UpdatedAt) "
                 "VALUES (?, 0, ?, ?, NOW(), NOW()) "
                 "ON DUPLICATE KEY UPDATE CocheEleve = VALUES(CocheEleve), UpdatedAt = NOW()",
-                (1 if iid in items_coches else 0, iid, progression_palier_id),
+                (1 if iid in items_coches else 0, iid, progression_seance_id),
                 tx=tx,
             )
     return {"items": len(ids), "coches": len(coches)}

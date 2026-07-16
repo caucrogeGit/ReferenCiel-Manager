@@ -18,7 +18,7 @@ from mvc.models.checklist_eleve_model import enregistrer_coches, get_checklist
 class ChecklistEleveController:
     @staticmethod
     def show(request: Request) -> Response:
-        """La checklist à cocher (`GET /mon-parcours/checklist/<progression_palier_id>`)."""
+        """La checklist à cocher (`GET /mon-parcours/checklist/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_checklist(pp_id, user_id) if user_id is not None else None
@@ -32,7 +32,7 @@ class ChecklistEleveController:
 
     @staticmethod
     def submit(request: Request) -> Response:
-        """Enregistre le cochage (`POST /mon-parcours/checklist/<progression_palier_id>`)."""
+        """Enregistre le cochage (`POST /mon-parcours/checklist/<progression_seance_id>`)."""
         user_id = get_authenticated_user_id(request)
         pp_id = int(request.route("id") or "0")
         data = get_checklist(pp_id, user_id) if user_id is not None else None

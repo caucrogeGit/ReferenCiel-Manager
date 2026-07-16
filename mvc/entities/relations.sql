@@ -277,15 +277,15 @@ ALTER TABLE progression_parcours
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
-ALTER TABLE progression_palier
-    ADD CONSTRAINT fk_progression_palier_progression_parcours_id
+ALTER TABLE progression_seance
+    ADD CONSTRAINT fk_progression_seance_progression_parcours_id
     FOREIGN KEY (progression_parcours_id)
     REFERENCES progression_parcours (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
-ALTER TABLE progression_palier
-    ADD CONSTRAINT fk_progression_palier_seance_id
+ALTER TABLE progression_seance
+    ADD CONSTRAINT fk_progression_seance_seance_id
     FOREIGN KEY (seance_id)
     REFERENCES seance (Id)
     ON DELETE RESTRICT
@@ -327,9 +327,9 @@ ALTER TABLE choix_qcm
     ON UPDATE RESTRICT;
 
 ALTER TABLE tentative_qcm
-    ADD CONSTRAINT fk_tentative_qcm_progression_palier_id
-    FOREIGN KEY (progression_palier_id)
-    REFERENCES progression_palier (Id)
+    ADD CONSTRAINT fk_tentative_qcm_progression_seance_id
+    FOREIGN KEY (progression_seance_id)
+    REFERENCES progression_seance (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -383,9 +383,9 @@ ALTER TABLE item_coche
     ON UPDATE RESTRICT;
 
 ALTER TABLE item_coche
-    ADD CONSTRAINT fk_item_coche_progression_palier_id
-    FOREIGN KEY (progression_palier_id)
-    REFERENCES progression_palier (Id)
+    ADD CONSTRAINT fk_item_coche_progression_seance_id
+    FOREIGN KEY (progression_seance_id)
+    REFERENCES progression_seance (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -397,9 +397,9 @@ ALTER TABLE activite
     ON UPDATE RESTRICT;
 
 ALTER TABLE depot_eleve
-    ADD CONSTRAINT fk_depot_eleve_progression_palier_id
-    FOREIGN KEY (progression_palier_id)
-    REFERENCES progression_palier (Id)
+    ADD CONSTRAINT fk_depot_eleve_progression_seance_id
+    FOREIGN KEY (progression_seance_id)
+    REFERENCES progression_seance (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -411,9 +411,9 @@ ALTER TABLE depot_eleve
     ON UPDATE RESTRICT;
 
 ALTER TABLE evaluation_activite
-    ADD CONSTRAINT fk_evaluation_activite_progression_palier_id
-    FOREIGN KEY (progression_palier_id)
-    REFERENCES progression_palier (Id)
+    ADD CONSTRAINT fk_evaluation_activite_progression_seance_id
+    FOREIGN KEY (progression_seance_id)
+    REFERENCES progression_seance (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 

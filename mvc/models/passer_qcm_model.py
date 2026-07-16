@@ -5,7 +5,7 @@ L'élève **connecté** répond au QCM d'un de **ses** seances ; on fige la just
 de chaque réponse, on calcule le score (%), on enregistre la tentative et on met
 à jour le statut de la séance (100 % → validé, sinon en cours ; une séance déjà validé
 ne régresse jamais). La sécurité **row-level** est vérifiée à chaque appel :
-le `progression_palier` doit appartenir à l'élève du compte (`eleve.UserId`).
+le `progression_seance` doit appartenir à l'élève du compte (`eleve.UserId`).
 Tentatives multiples : chaque envoi crée une nouvelle `tentative_qcm`.
 """
 from __future__ import annotations
@@ -19,16 +19,16 @@ _STATUT_VALIDE = "valide"
 _STATUT_EN_COURS = "en_cours"
 
 
-def _seance_de_l_eleve(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
+def _seance_de_l_eleve(progression_seance_id: int, user_id: int) -> dict[str, Any] | None:
     """La séance de progression s'il appartient bien au compte (sécurité row-level)."""
     return fetch_one(
-        "SELECT pp.Id AS progression_palier_id, pp.seance_id AS seance_id, pa.Titre AS seance_titre "
-        "FROM progression_palier pp "
+        "SELECT pp.Id AS progression_seance_id, pp.seance_id AS seance_id, pa.Titre AS seance_titre "
+        "FROM progression_seance pp "
         "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
         "JOIN seance pa ON pa.Id = pp.seance_id "
         "WHERE pp.Id = ? AND e.UserId = ?",
-        (progression_palier_id, user_id),
+        (progression_seance_id, user_id),
     )
 
 
@@ -38,13 +38,13 @@ def _qcm_du_seance(seance_id: int) -> dict[str, Any] | None:
     )
 
 
-def get_qcm_a_passer(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
+def get_qcm_a_passer(progression_seance_id: int, user_id: int) -> dict[str, Any] | None:
     """QCM de la séance (questions + choix) si la séance appartient au compte.
 
     None si la séance n'est pas à cet élève, ou si la séance n'a pas de QCM.
     N'expose PAS la bonne réponse (le corrigé reste côté serveur).
     """
-    seance = _seance_de_l_eleve(progression_palier_id, user_id)
+    seance = _seance_de_l_eleve(progression_seance_id, user_id)
     if seance is None:
         return None
     qcm = _qcm_du_seance(int(seance["seance_id"]))
@@ -62,31 +62,31 @@ def get_qcm_a_passer(progression_palier_id: int, user_id: int) -> dict[str, Any]
             (question["id"],),
         )
     return {
-        "progression_palier_id": progression_palier_id,
+        "progression_seance_id": progression_seance_id,
         "seance_titre": seance["seance_titre"],
         "qcm_id": qcm["id"],
         "questions": questions,
     }
 
 
-def _prochain_numero(progression_palier_id: int) -> int:
+def _prochain_numero(progression_seance_id: int) -> int:
     row = fetch_one(
         "SELECT COALESCE(MAX(NumeroTentative), 0) AS n "
-        "FROM tentative_qcm WHERE progression_palier_id = ?",
-        (progression_palier_id,),
+        "FROM tentative_qcm WHERE progression_seance_id = ?",
+        (progression_seance_id,),
     )
     return (int(row["n"]) + 1) if row is not None else 1
 
 
 def enregistrer_tentative(
-    progression_palier_id: int, user_id: int, reponses: dict[int, int]
+    progression_seance_id: int, user_id: int, reponses: dict[int, int]
 ) -> dict[str, Any] | None:
     """Enregistre une tentative (transactionnelle) et met à jour le statut de la séance.
 
     `reponses` : {question_id: choix_id choisi}. Renvoie {score, total, validee,
     numero} ou None si la séance n'appartient pas au compte / n'a pas de QCM.
     """
-    seance = _seance_de_l_eleve(progression_palier_id, user_id)
+    seance = _seance_de_l_eleve(progression_seance_id, user_id)
     if seance is None:
         return None
     qcm = _qcm_du_seance(int(seance["seance_id"]))
@@ -118,14 +118,14 @@ def enregistrer_tentative(
 
     score = round(100 * corrects / total) if total > 0 else 0
     validee = total > 0 and corrects == total
-    numero = _prochain_numero(progression_palier_id)
+    numero = _prochain_numero(progression_seance_id)
 
     with transaction() as tx:
         tentative_id = insert(
             "INSERT INTO tentative_qcm "
-            "(NumeroTentative, Score, Validee, DateTentative, progression_palier_id, CreatedAt, UpdatedAt) "
+            "(NumeroTentative, Score, Validee, DateTentative, progression_seance_id, CreatedAt, UpdatedAt) "
             "VALUES (?, ?, ?, NOW(), ?, NOW(), NOW())",
-            (numero, score, 1 if validee else 0, progression_palier_id),
+            (numero, score, 1 if validee else 0, progression_seance_id),
             tx=tx,
         )
         for qid, choix_id, est_correcte in corriges:
@@ -139,8 +139,8 @@ def enregistrer_tentative(
         # 100 % → validé ; sinon en cours. Une séance déjà validé ne régresse pas.
         nouveau_statut = _STATUT_VALIDE if validee else _STATUT_EN_COURS
         execute(
-            "UPDATE progression_palier SET Statut = ? WHERE Id = ? AND Statut <> ?",
-            (nouveau_statut, progression_palier_id, _STATUT_VALIDE),
+            "UPDATE progression_seance SET Statut = ? WHERE Id = ? AND Statut <> ?",
+            (nouveau_statut, progression_seance_id, _STATUT_VALIDE),
             tx=tx,
         )
 

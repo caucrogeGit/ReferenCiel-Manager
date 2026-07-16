@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS tentative_qcm (
     Score INT NOT NULL,
     Validee BOOLEAN NOT NULL,
     DateTentative DATETIME NOT NULL,
-    progression_palier_id BIGINT UNSIGNED NOT NULL,
+    progression_seance_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

@@ -27,7 +27,7 @@ def _install(monkeypatch: pytest.MonkeyPatch, *, ctx: dict[str, Any] | None, eva
     cap: dict[str, list[Any]] = {"insert": [], "execute": []}
 
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
-        if "FROM progression_palier pp" in sql:
+        if "FROM progression_seance pp" in sql:
             return ctx
         if "FROM professeur WHERE UserId" in sql:
             return prof_fiche
@@ -61,7 +61,7 @@ def test_cree_l_evaluation_et_upsert_les_niveaux_valides(monkeypatch: pytest.Mon
     assert res == {"notes": 2}  # le niveau hors échelle (8) est ignoré
     # evaluation_activite créée avec le professeur du compte connecté
     assert len(cap["insert"]) == 1
-    assert cap["insert"][0][1] == (1, 9, 2)  # progression_palier, activite, professeur
+    assert cap["insert"][0][1] == (1, 9, 2)  # progression_seance, activite, professeur
     # upsert d'un evaluation_critere par critère valide
     paires = {(c[1][0], c[1][2]) for c in cap["execute"]}  # (niveau, critere_id)
     assert paires == {("atteint", 7), ("depasse", 9)}

@@ -19,10 +19,10 @@ from core.validation import (
 class DepotEleveBase:
     """Classe de base regenerable de DepotEleve."""
 
-    def __init__(self, fichier, date_depot, progression_palier_id, activite_id, created_at, updated_at, id=None, commentaire=None):
+    def __init__(self, fichier, date_depot, progression_seance_id, activite_id, created_at, updated_at, id=None, commentaire=None):
         self.fichier = fichier
         self.date_depot = date_depot
-        self.progression_palier_id = progression_palier_id
+        self.progression_seance_id = progression_seance_id
         self.activite_id = activite_id
         self.created_at = created_at
         self.updated_at = updated_at
@@ -84,15 +84,15 @@ class DepotEleveBase:
         self._date_depot = value
 
     @property
-    def progression_palier_id(self):
-        return self._progression_palier_id
+    def progression_seance_id(self):
+        return self._progression_seance_id
 
-    @progression_palier_id.setter
+    @progression_seance_id.setter
     @typed(int)
-    def progression_palier_id(self, value):
+    def progression_seance_id(self, value):
         if value is None:
-            raise ValidationError("progression_palier_id", 'La propriété "progression_palier_id" ne peut pas être nulle.')
-        self._progression_palier_id = value
+            raise ValidationError("progression_seance_id", 'La propriété "progression_seance_id" ne peut pas être nulle.')
+        self._progression_seance_id = value
 
     @property
     def activite_id(self):
@@ -133,7 +133,7 @@ class DepotEleveBase:
             "fichier": self.fichier,
             "commentaire": self.commentaire,
             "date_depot": None if self.date_depot is None else self.date_depot.isoformat(),
-            "progression_palier_id": self.progression_palier_id,
+            "progression_seance_id": self.progression_seance_id,
             "activite_id": self.activite_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
@@ -146,12 +146,12 @@ class DepotEleveBase:
             fichier=data["fichier"],
             commentaire=data["commentaire"],
             date_depot=cls._coerce_datetime(data.get("date_depot")),
-            progression_palier_id=data["progression_palier_id"],
+            progression_seance_id=data["progression_seance_id"],
             activite_id=data["activite_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"DepotEleveBase(id={self.id!r}, fichier={self.fichier!r}, commentaire={self.commentaire!r}, date_depot={self.date_depot!r}, progression_palier_id={self.progression_palier_id!r}, activite_id={self.activite_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"DepotEleveBase(id={self.id!r}, fichier={self.fichier!r}, commentaire={self.commentaire!r}, date_depot={self.date_depot!r}, progression_seance_id={self.progression_seance_id!r}, activite_id={self.activite_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

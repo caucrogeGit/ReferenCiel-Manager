@@ -6,4 +6,4 @@ class TentativeQCMForm(Form):
     score = IntegerField(label="Score", required=True)
     validee = BooleanField(label="Validee")
     date_tentative = DateTimeField(label="Date tentative", required=True)
-    progression_palier_id = RelationField(label="Progression séance", target="ProgressionPalier", required=True, choices_key="progression_palier_id_choices")
+    progression_seance_id = RelationField(label="Progression séance", target="ProgressionSeance", required=True, choices_key="progression_seance_id_choices")

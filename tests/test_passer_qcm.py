@@ -33,7 +33,7 @@ def _install(
     cap: dict[str, Any] = {"execute": [], "insert": []}
 
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
-        if "FROM progression_palier pp" in sql:
+        if "FROM progression_seance pp" in sql:
             return seance
         if "FROM qcm WHERE seance_id" in sql:
             return {"id": 9}
@@ -65,7 +65,7 @@ def _install(
     return cap
 
 
-_SEANCE = {"progression_palier_id": 1, "seance_id": 5, "seance_titre": "P"}
+_SEANCE = {"progression_seance_id": 1, "seance_id": 5, "seance_titre": "P"}
 
 
 def test_score_partiel_ne_valide_pas_le_seance(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -80,7 +80,7 @@ def test_score_partiel_ne_valide_pas_le_seance(monkeypatch: pytest.MonkeyPatch) 
     # tentative : score 50, non validée
     assert cap["insert"][0][1] == (1, 50, 0, 1)
     # deux réponses figées + une mise à jour de statut vers en_cours
-    maj = [c for c in cap["execute"] if "UPDATE progression_palier" in c[0]][0]
+    maj = [c for c in cap["execute"] if "UPDATE progression_seance" in c[0]][0]
     assert "en_cours" in maj[1]
 
 
@@ -93,7 +93,7 @@ def test_tout_juste_valide_le_seance(monkeypatch: pytest.MonkeyPatch) -> None:
 
     assert res is not None and res["validee"] is True and res["score"] == 100
     assert cap["insert"][0][1] == (1, 100, 1, 1)  # Validee = 1
-    maj = [c for c in cap["execute"] if "UPDATE progression_palier" in c[0]][0]
+    maj = [c for c in cap["execute"] if "UPDATE progression_seance" in c[0]][0]
     assert "valide" in maj[1]
     # garde anti-régression : ne met à jour que si la séance n'est pas déjà validé
     assert "Statut <> ?" in maj[0]

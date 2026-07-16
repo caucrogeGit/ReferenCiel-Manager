@@ -34,7 +34,7 @@
                 </td>
                 <td class="px-3 py-2 text-right">
                     {% if seance.checklist_id %}
-                    <a href="/evaluation/checklist/{{ seance.progression_palier_id }}" class="text-blue-600 hover:underline">
+                    <a href="/evaluation/checklist/{{ seance.progression_seance_id }}" class="text-blue-600 hover:underline">
                         {{ seance.coches_prof }}/{{ seance.coches_eleve }} <span class="text-gray-400">(prof/élève)</span>
                     </a>
                     {% else %}<span class="text-gray-400">—</span>{% endif %}
@@ -42,12 +42,12 @@
                 <td class="px-3 py-2 text-right">
                     {{ seance.nb_depots }}
                     {% if seance.activite_id %}
-                    <br><a href="/evaluation/activite/{{ seance.progression_palier_id }}"
+                    <br><a href="/evaluation/activite/{{ seance.progression_seance_id }}"
                            class="text-blue-600 hover:underline text-xs">Noter</a>
                     {% endif %}
                 </td>
                 <td class="px-3 py-2">
-                    <form method="POST" action="/evaluation/seance/{{ seance.progression_palier_id }}/statut"
+                    <form method="POST" action="/evaluation/seance/{{ seance.progression_seance_id }}/statut"
                           class="flex items-center gap-2">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="progression_id" value="{{ progression.id }}">

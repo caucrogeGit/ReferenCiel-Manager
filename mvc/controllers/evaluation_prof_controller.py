@@ -42,7 +42,7 @@ class EvaluationProfController:
 
     @staticmethod
     def set_statut(request: Request) -> Response:
-        """Pose le statut d'une séance (`POST /evaluation/seance/<progression_palier_id>/statut`)."""
+        """Pose le statut d'une séance (`POST /evaluation/seance/<progression_seance_id>/statut`)."""
         pp_id = int(request.route("id") or "0")
         statut = request.form("statut", "")
         progression_id = request.form("progression_id", "0")
@@ -53,7 +53,7 @@ class EvaluationProfController:
 
     @staticmethod
     def checklist(request: Request) -> Response:
-        """Revue de la checklist d'une séance (`GET /evaluation/checklist/<progression_palier_id>`)."""
+        """Revue de la checklist d'une séance (`GET /evaluation/checklist/<progression_seance_id>`)."""
         pp_id = int(request.route("id") or "0")
         data = get_checklist_review(pp_id)
         if data is None:
@@ -66,7 +66,7 @@ class EvaluationProfController:
 
     @staticmethod
     def coche(request: Request) -> Response:
-        """Confirme la checklist (`POST /evaluation/checklist/<progression_palier_id>`)."""
+        """Confirme la checklist (`POST /evaluation/checklist/<progression_seance_id>`)."""
         pp_id = int(request.route("id") or "0")
         data = get_checklist_review(pp_id)
         if data is None:
@@ -86,7 +86,7 @@ class EvaluationProfController:
 
     @staticmethod
     def activite(request: Request) -> Response:
-        """Grille de notation par critères (`GET /evaluation/activite/<progression_palier_id>`)."""
+        """Grille de notation par critères (`GET /evaluation/activite/<progression_seance_id>`)."""
         pp_id = int(request.route("id") or "0")
         data = get_grille(pp_id)
         if data is None:
@@ -99,7 +99,7 @@ class EvaluationProfController:
 
     @staticmethod
     def noter(request: Request) -> Response:
-        """Enregistre la notation (`POST /evaluation/activite/<progression_palier_id>`)."""
+        """Enregistre la notation (`POST /evaluation/activite/<progression_seance_id>`)."""
         pp_id = int(request.route("id") or "0")
         data = get_grille(pp_id)
         if data is None:
