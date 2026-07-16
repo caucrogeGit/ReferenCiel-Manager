@@ -256,8 +256,8 @@ ALTER TABLE parcours
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
-ALTER TABLE palier
-    ADD CONSTRAINT fk_palier_parcours_id
+ALTER TABLE seance
+    ADD CONSTRAINT fk_seance_parcours_id
     FOREIGN KEY (parcours_id)
     REFERENCES parcours (Id)
     ON DELETE RESTRICT
@@ -285,9 +285,9 @@ ALTER TABLE progression_palier
     ON UPDATE RESTRICT;
 
 ALTER TABLE progression_palier
-    ADD CONSTRAINT fk_progression_palier_palier_id
-    FOREIGN KEY (palier_id)
-    REFERENCES palier (Id)
+    ADD CONSTRAINT fk_progression_palier_seance_id
+    FOREIGN KEY (seance_id)
+    REFERENCES seance (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -299,9 +299,9 @@ ALTER TABLE qcm
     ON UPDATE RESTRICT;
 
 ALTER TABLE dossier_technique
-    ADD CONSTRAINT fk_dossier_technique_palier_id
-    FOREIGN KEY (palier_id)
-    REFERENCES palier (Id)
+    ADD CONSTRAINT fk_dossier_technique_seance_id
+    FOREIGN KEY (seance_id)
+    REFERENCES seance (Id)
     ON DELETE CASCADE
     ON UPDATE RESTRICT;
 
@@ -355,9 +355,9 @@ ALTER TABLE reponse_qcm
     ON UPDATE RESTRICT;
 
 ALTER TABLE checklist
-    ADD CONSTRAINT fk_checklist_palier_id
-    FOREIGN KEY (palier_id)
-    REFERENCES palier (Id)
+    ADD CONSTRAINT fk_checklist_seance_id
+    FOREIGN KEY (seance_id)
+    REFERENCES seance (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
@@ -390,9 +390,9 @@ ALTER TABLE item_coche
     ON UPDATE RESTRICT;
 
 ALTER TABLE activite
-    ADD CONSTRAINT fk_activite_palier_id
-    FOREIGN KEY (palier_id)
-    REFERENCES palier (Id)
+    ADD CONSTRAINT fk_activite_seance_id
+    FOREIGN KEY (seance_id)
+    REFERENCES seance (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 

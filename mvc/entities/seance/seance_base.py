@@ -1,5 +1,5 @@
 """FICHIER GENERE PAR FORGE.
-Base regenerable de l'entite Palier.
+Base regenerable de l'entite Seance.
 Ne pas y ajouter de logique metier manuelle.
 """
 
@@ -16,8 +16,8 @@ from core.validation import (
 )
 
 
-class PalierBase:
-    """Classe de base regenerable de Palier."""
+class SeanceBase:
+    """Classe de base regenerable de Seance."""
 
     def __init__(self, ordre, titre, parcours_id, created_at, updated_at, id=None, theme=None, production_attendue=None):
         self.ordre = ordre
@@ -142,7 +142,7 @@ class PalierBase:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "PalierBase":
+    def from_dict(cls, data: dict[str, Any]) -> "SeanceBase":
         return cls(
             id=data["id"],
             ordre=data["ordre"],
@@ -155,5 +155,5 @@ class PalierBase:
         )
 
     def __repr__(self) -> str:
-        return f"PalierBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, parcours_id={self.parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"SeanceBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, parcours_id={self.parcours_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

@@ -4,11 +4,11 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT palier.*, parcours.Titre AS parcours_id_label FROM palier LEFT JOIN parcours ON palier.parcours_id = parcours.Id ORDER BY palier.Id"
-SELECT_BY_ID = "SELECT palier.*, parcours.Titre AS parcours_id_label FROM palier LEFT JOIN parcours ON palier.parcours_id = parcours.Id WHERE palier.Id = ?"
-INSERT       = "INSERT INTO palier (Ordre, Titre, Theme, ProductionAttendue, parcours_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE palier SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, parcours_id = ?, UpdatedAt = ? WHERE Id = ?"
-DELETE       = "DELETE FROM palier WHERE Id = ?"
+SELECT_ALL   = "SELECT seance.*, parcours.Titre AS parcours_id_label FROM seance LEFT JOIN parcours ON seance.parcours_id = parcours.Id ORDER BY seance.Id"
+SELECT_BY_ID = "SELECT seance.*, parcours.Titre AS parcours_id_label FROM seance LEFT JOIN parcours ON seance.parcours_id = parcours.Id WHERE seance.Id = ?"
+INSERT       = "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, parcours_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE seance SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, parcours_id = ?, UpdatedAt = ? WHERE Id = ?"
+DELETE       = "DELETE FROM seance WHERE Id = ?"
 
 
 def get_paliers():
@@ -36,13 +36,13 @@ def bulk_delete_paliers(ids):
     if not ids:
         return
     placeholders = ", ".join("?" for _ in ids)
-    execute("DELETE FROM palier WHERE Id IN (" + placeholders + ")", list(ids))
+    execute("DELETE FROM seance WHERE Id IN (" + placeholders + ")", list(ids))
 
 
-_SEARCH_COLS  = ['palier.Titre', 'palier.Theme', 'palier.ProductionAttendue']
-_ALLOWED_SORT = {"ordre": "palier.Ordre", "titre": "palier.Titre", "theme": "palier.Theme", "production_attendue": "palier.ProductionAttendue", "parcours_id": "palier.parcours_id", "id": "palier.Id"}
-_ALLOWED_FILTERS = {"parcours_id": "palier.parcours_id"}
-_DEFAULT_SORT = "palier.Id"
+_SEARCH_COLS  = ['seance.Titre', 'seance.Theme', 'seance.ProductionAttendue']
+_ALLOWED_SORT = {"ordre": "seance.Ordre", "titre": "seance.Titre", "theme": "seance.Theme", "production_attendue": "seance.ProductionAttendue", "parcours_id": "seance.parcours_id", "id": "seance.Id"}
+_ALLOWED_FILTERS = {"parcours_id": "seance.parcours_id"}
+_DEFAULT_SORT = "seance.Id"
 
 
 def count_paliers(q: str | None = None, filters: dict[str, Any] | None = None) -> int:
@@ -59,9 +59,9 @@ def count_paliers(q: str | None = None, filters: dict[str, Any] | None = None) -
             clauses.append(col + " = ?")
             params.append(val)
     if clauses:
-        sql = "SELECT COUNT(*) AS total FROM palier WHERE " + " AND ".join(clauses)
+        sql = "SELECT COUNT(*) AS total FROM seance WHERE " + " AND ".join(clauses)
     else:
-        sql = "SELECT COUNT(*) AS total FROM palier"
+        sql = "SELECT COUNT(*) AS total FROM seance"
     row = fetch_one(sql, params)
     return row["total"] if row else 0
 
@@ -69,7 +69,7 @@ def count_paliers(q: str | None = None, filters: dict[str, Any] | None = None) -
 def find_paliers_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT palier.*, parcours.Titre AS parcours_id_label FROM palier LEFT JOIN parcours ON palier.parcours_id = parcours.Id"
+    base = "SELECT seance.*, parcours.Titre AS parcours_id_label FROM seance LEFT JOIN parcours ON seance.parcours_id = parcours.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:

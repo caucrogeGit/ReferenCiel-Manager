@@ -87,6 +87,7 @@ nav:
       - ADR-022 — Parcours objet canonique (aplatissement): adr/022-parcours-objet-canonique-aplatissement.md
       - ADR-023 — Modèle générique voie professionnelle: adr/023-modele-generique-voie-professionnelle.md
       - ADR-024 — Génération PDF (WeasyPrint): adr/024-generation-pdf-cote-application-weasyprint.md
+      - ADR-025 — Renommage Séquence/Séance: adr/025-renommage-sequence-seance.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md

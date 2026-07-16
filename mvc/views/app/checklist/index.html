@@ -13,11 +13,11 @@
     <input type="search" name="q" value="{{ pagination.q }}"
            placeholder="Rechercher…"
            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-400">
-    <select name="palier_id"
+    <select name="seance_id"
             class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
         <option value="">Tous les Palier</option>
-        {% for option in relation_filters.palier_id.options %}
-        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.palier_id|string == option.id|string else '' }}>{{ option.label }}</option>
+        {% for option in relation_filters.seance_id.options %}
+        <option value="{{ option.id }}" {{ 'selected' if pagination.filters.seance_id|string == option.id|string else '' }}>{{ option.label }}</option>
         {% endfor %}
     </select>
     <button type="submit"

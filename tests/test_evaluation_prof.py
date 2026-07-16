@@ -45,8 +45,8 @@ def test_coches_prof_upsert_sans_toucher_l_eleve(monkeypatch: pytest.MonkeyPatch
 
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
         if "FROM progression_palier WHERE Id" in sql:
-            return {"palier_id": 5}
-        if "FROM checklist WHERE palier_id" in sql:
+            return {"seance_id": 5}
+        if "FROM checklist WHERE seance_id" in sql:
             return {"id": 3}
         return None
 

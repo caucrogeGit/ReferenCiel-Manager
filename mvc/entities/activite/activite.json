@@ -19,9 +19,9 @@
       "unique": false
     },
     {
-      "name": "palier_id",
+      "name": "seance_id",
       "type": "foreign_key",
-      "references": "Palier",
+      "references": "Seance",
       "required": true
     }
   ],

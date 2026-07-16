@@ -19,8 +19,8 @@ from core.validation import (
 class ActiviteBase:
     """Classe de base regenerable de Activite."""
 
-    def __init__(self, palier_id, created_at, updated_at, id=None, objectif=None, fichier=None):
-        self.palier_id = palier_id
+    def __init__(self, seance_id, created_at, updated_at, id=None, objectif=None, fichier=None):
+        self.seance_id = seance_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -73,15 +73,15 @@ class ActiviteBase:
         self._fichier = value
 
     @property
-    def palier_id(self):
-        return self._palier_id
+    def seance_id(self):
+        return self._seance_id
 
-    @palier_id.setter
+    @seance_id.setter
     @typed(int)
-    def palier_id(self, value):
+    def seance_id(self, value):
         if value is None:
-            raise ValidationError("palier_id", 'La propriété "palier_id" ne peut pas être nulle.')
-        self._palier_id = value
+            raise ValidationError("seance_id", 'La propriété "seance_id" ne peut pas être nulle.')
+        self._seance_id = value
 
     @property
     def created_at(self):
@@ -110,7 +110,7 @@ class ActiviteBase:
             "id": self.id,
             "objectif": self.objectif,
             "fichier": self.fichier,
-            "palier_id": self.palier_id,
+            "seance_id": self.seance_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -121,11 +121,11 @@ class ActiviteBase:
             id=data["id"],
             objectif=data["objectif"],
             fichier=data["fichier"],
-            palier_id=data["palier_id"],
+            seance_id=data["seance_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"ActiviteBase(id={self.id!r}, objectif={self.objectif!r}, fichier={self.fichier!r}, palier_id={self.palier_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"ActiviteBase(id={self.id!r}, objectif={self.objectif!r}, fichier={self.fichier!r}, seance_id={self.seance_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

@@ -31,7 +31,7 @@ def test_activite_rattachee_a_un_palier(monkeypatch: pytest.MonkeyPatch) -> None
     act.add_activite({
         "objectif": "Sertir un câble RJ45",
         "fichier": None,
-        "palier_id": 4,
+        "seance_id": 4,
         "created_at": "2026-07-10 00:00:00", "updated_at": "2026-07-10 00:00:00",
     })
     assert "INSERT INTO activite" in cap["sql"]

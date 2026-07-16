@@ -38,10 +38,10 @@ def get_progression_detail(progression_id: int) -> dict[str, Any] | None:
         "(SELECT COUNT(*) FROM item_coche ic WHERE ic.progression_palier_id = pp.Id AND ic.CocheEleve = 1) AS coches_eleve, "
         "(SELECT COUNT(*) FROM item_coche ic WHERE ic.progression_palier_id = pp.Id AND ic.CocheProfesseur = 1) AS coches_prof, "
         "(SELECT COUNT(*) FROM depot_eleve d WHERE d.progression_palier_id = pp.Id) AS nb_depots, "
-        "(SELECT MIN(Id) FROM checklist c WHERE c.palier_id = pa.Id) AS checklist_id, "
-        "(SELECT MIN(Id) FROM activite a WHERE a.palier_id = pa.Id) AS activite_id "
+        "(SELECT MIN(Id) FROM checklist c WHERE c.seance_id = pa.Id) AS checklist_id, "
+        "(SELECT MIN(Id) FROM activite a WHERE a.seance_id = pa.Id) AS activite_id "
         "FROM progression_palier pp "
-        "JOIN palier pa ON pa.Id = pp.palier_id "
+        "JOIN seance pa ON pa.Id = pp.seance_id "
         "WHERE pp.progression_parcours_id = ? "
         "ORDER BY pa.Ordre",
         (progression_id,),
@@ -63,15 +63,15 @@ def set_palier_statut(progression_palier_id: int, statut: str) -> bool:
 def get_checklist_review(progression_palier_id: int) -> dict[str, Any] | None:
     """La checklist d'un palier avec le cochage élève ET prof, pour confirmation."""
     palier = fetch_one(
-        "SELECT pp.Id AS id, pp.palier_id AS palier_id, pp.progression_parcours_id AS progression_id, "
+        "SELECT pp.Id AS id, pp.seance_id AS seance_id, pp.progression_parcours_id AS progression_id, "
         "pa.Titre AS palier_titre "
-        "FROM progression_palier pp JOIN palier pa ON pa.Id = pp.palier_id WHERE pp.Id = ?",
+        "FROM progression_palier pp JOIN seance pa ON pa.Id = pp.seance_id WHERE pp.Id = ?",
         (progression_palier_id,),
     )
     if palier is None:
         return None
     checklist = fetch_one(
-        "SELECT Id AS id FROM checklist WHERE palier_id = ? ORDER BY Id LIMIT 1", (palier["palier_id"],)
+        "SELECT Id AS id FROM checklist WHERE seance_id = ? ORDER BY Id LIMIT 1", (palier["seance_id"],)
     )
     if checklist is None:
         return None
@@ -102,12 +102,12 @@ def enregistrer_coches_prof(
     """Pose `CocheProfesseur` sur TOUS les items (confirmés → 1, sinon 0), sans
     toucher `CocheEleve`. Upsert sur la clé unique. None si palier/checklist absents."""
     palier = fetch_one(
-        "SELECT palier_id AS palier_id FROM progression_palier WHERE Id = ?", (progression_palier_id,)
+        "SELECT seance_id AS seance_id FROM progression_palier WHERE Id = ?", (progression_palier_id,)
     )
     if palier is None:
         return None
     checklist = fetch_one(
-        "SELECT Id AS id FROM checklist WHERE palier_id = ? ORDER BY Id LIMIT 1", (palier["palier_id"],)
+        "SELECT Id AS id FROM checklist WHERE seance_id = ? ORDER BY Id LIMIT 1", (palier["seance_id"],)
     )
     if checklist is None:
         return None

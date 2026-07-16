@@ -27,9 +27,9 @@ def _contexte(progression_palier_id: int) -> dict[str, Any] | None:
     return fetch_one(
         "SELECT pp.Id AS pp_id, pp.progression_parcours_id AS progression_id, "
         "pa.Titre AS palier_titre, e.Nom AS nom, e.Prenom AS prenom, "
-        "(SELECT MIN(Id) FROM activite a WHERE a.palier_id = pa.Id) AS activite_id "
+        "(SELECT MIN(Id) FROM activite a WHERE a.seance_id = pa.Id) AS activite_id "
         "FROM progression_palier pp "
-        "JOIN palier pa ON pa.Id = pp.palier_id "
+        "JOIN seance pa ON pa.Id = pp.seance_id "
         "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
         "WHERE pp.Id = ?",

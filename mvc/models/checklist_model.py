@@ -4,10 +4,10 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT checklist.*, palier.Titre AS palier_id_label FROM checklist LEFT JOIN palier ON checklist.palier_id = palier.Id ORDER BY checklist.Id"
-SELECT_BY_ID = "SELECT checklist.*, palier.Titre AS palier_id_label FROM checklist LEFT JOIN palier ON checklist.palier_id = palier.Id WHERE checklist.Id = ?"
-INSERT       = "INSERT INTO checklist (DecisionFinale, palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
-UPDATE       = "UPDATE checklist SET DecisionFinale = ?, palier_id = ?, UpdatedAt = ? WHERE Id = ?"
+SELECT_ALL   = "SELECT checklist.*, seance.Titre AS palier_id_label FROM checklist LEFT JOIN seance ON checklist.seance_id = seance.Id ORDER BY checklist.Id"
+SELECT_BY_ID = "SELECT checklist.*, seance.Titre AS palier_id_label FROM checklist LEFT JOIN seance ON checklist.seance_id = seance.Id WHERE checklist.Id = ?"
+INSERT       = "INSERT INTO checklist (DecisionFinale, seance_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?)"
+UPDATE       = "UPDATE checklist SET DecisionFinale = ?, seance_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM checklist WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_checklist_by_id(id):
 
 
 def add_checklist(data):
-    return insert(INSERT, (data["decision_finale"], data["palier_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["decision_finale"], data["seance_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_checklist(id, data):
-    execute(UPDATE, (data["decision_finale"], data["palier_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["decision_finale"], data["seance_id"], datetime.now(timezone.utc), id))
 
 
 def delete_checklist(id):
@@ -40,8 +40,8 @@ def bulk_delete_checklists(ids):
 
 
 _SEARCH_COLS  = ['checklist.DecisionFinale']
-_ALLOWED_SORT = {"decision_finale": "checklist.DecisionFinale", "palier_id": "checklist.palier_id", "created_at": "checklist.CreatedAt", "updated_at": "checklist.UpdatedAt", "id": "checklist.Id"}
-_ALLOWED_FILTERS = {"palier_id": "checklist.palier_id"}
+_ALLOWED_SORT = {"decision_finale": "checklist.DecisionFinale", "seance_id": "checklist.seance_id", "created_at": "checklist.CreatedAt", "updated_at": "checklist.UpdatedAt", "id": "checklist.Id"}
+_ALLOWED_FILTERS = {"seance_id": "checklist.seance_id"}
 _DEFAULT_SORT = "checklist.Id"
 
 
@@ -69,7 +69,7 @@ def count_checklists(q: str | None = None, filters: dict[str, Any] | None = None
 def find_checklists_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT checklist.*, palier.Titre AS palier_id_label FROM checklist LEFT JOIN palier ON checklist.palier_id = palier.Id"
+    base = "SELECT checklist.*, seance.Titre AS palier_id_label FROM checklist LEFT JOIN seance ON checklist.seance_id = seance.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -103,5 +103,5 @@ def find_checklists_for_export(q: str | None = None, sort: str | None = None, di
 
 
 def get_palier_choices():
-    rows = fetch_all("SELECT Id, Titre FROM palier ORDER BY Titre")
+    rows = fetch_all("SELECT Id, Titre FROM seance ORDER BY Titre")
     return [(row["Id"], row["Titre"]) for row in rows]

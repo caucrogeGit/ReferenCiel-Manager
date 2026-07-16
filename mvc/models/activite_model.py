@@ -4,10 +4,10 @@ from typing import Any
 
 from core.database.db import fetch_one, fetch_all, execute, insert
 
-SELECT_ALL   = "SELECT activite.*, palier.Titre AS palier_id_label FROM activite LEFT JOIN palier ON activite.palier_id = palier.Id ORDER BY activite.Id"
-SELECT_BY_ID = "SELECT activite.*, palier.Titre AS palier_id_label FROM activite LEFT JOIN palier ON activite.palier_id = palier.Id WHERE activite.Id = ?"
-INSERT       = "INSERT INTO activite (Objectif, Fichier, palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE activite SET Objectif = ?, Fichier = ?, palier_id = ?, UpdatedAt = ? WHERE Id = ?"
+SELECT_ALL   = "SELECT activite.*, seance.Titre AS palier_id_label FROM activite LEFT JOIN seance ON activite.seance_id = seance.Id ORDER BY activite.Id"
+SELECT_BY_ID = "SELECT activite.*, seance.Titre AS palier_id_label FROM activite LEFT JOIN seance ON activite.seance_id = seance.Id WHERE activite.Id = ?"
+INSERT       = "INSERT INTO activite (Objectif, Fichier, seance_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE activite SET Objectif = ?, Fichier = ?, seance_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM activite WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_activite_by_id(id):
 
 
 def add_activite(data):
-    return insert(INSERT, (data["objectif"], data["fichier"], data["palier_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["objectif"], data["fichier"], data["seance_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_activite(id, data):
-    execute(UPDATE, (data["objectif"], data["fichier"], data["palier_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["objectif"], data["fichier"], data["seance_id"], datetime.now(timezone.utc), id))
 
 
 def delete_activite(id):
@@ -40,8 +40,8 @@ def bulk_delete_activites(ids):
 
 
 _SEARCH_COLS  = ['activite.Objectif', 'activite.Fichier']
-_ALLOWED_SORT = {"objectif": "activite.Objectif", "fichier": "activite.Fichier", "palier_id": "activite.palier_id", "created_at": "activite.CreatedAt", "updated_at": "activite.UpdatedAt", "id": "activite.Id"}
-_ALLOWED_FILTERS = {"palier_id": "activite.palier_id"}
+_ALLOWED_SORT = {"objectif": "activite.Objectif", "fichier": "activite.Fichier", "seance_id": "activite.seance_id", "created_at": "activite.CreatedAt", "updated_at": "activite.UpdatedAt", "id": "activite.Id"}
+_ALLOWED_FILTERS = {"seance_id": "activite.seance_id"}
 _DEFAULT_SORT = "activite.Id"
 
 
@@ -69,7 +69,7 @@ def count_activites(q: str | None = None, filters: dict[str, Any] | None = None)
 def find_activites_paginated(q: str | None = None, sort: str | None = None, direction: str = "asc", limit: int = 10, offset: int = 0, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     sort_col = _ALLOWED_SORT.get(sort or "", _DEFAULT_SORT)
     sort_dir = "DESC" if direction == "desc" else "ASC"
-    base = "SELECT activite.*, palier.Titre AS palier_id_label FROM activite LEFT JOIN palier ON activite.palier_id = palier.Id"
+    base = "SELECT activite.*, seance.Titre AS palier_id_label FROM activite LEFT JOIN seance ON activite.seance_id = seance.Id"
     clauses: list[str] = []
     params: list[Any] = []
     if q and _SEARCH_COLS:
@@ -103,5 +103,5 @@ def find_activites_for_export(q: str | None = None, sort: str | None = None, dir
 
 
 def get_palier_choices():
-    rows = fetch_all("SELECT Id, Titre FROM palier ORDER BY Titre")
+    rows = fetch_all("SELECT Id, Titre FROM seance ORDER BY Titre")
     return [(row["Id"], row["Titre"]) for row in rows]

@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS progression_palier (
     Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     Statut VARCHAR(20) NOT NULL,
     progression_parcours_id BIGINT UNSIGNED NOT NULL,
-    palier_id BIGINT UNSIGNED NOT NULL,
+    seance_id BIGINT UNSIGNED NOT NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

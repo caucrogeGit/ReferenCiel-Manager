@@ -313,10 +313,10 @@
     },
     {
       "type": "many_to_one",
-      "from": "Palier",
+      "from": "Seance",
       "to": "Parcours",
       "name": "parcours",
-      "inverse_name": "paliers",
+      "inverse_name": "seances",
       "foreign_key": "parcours_id",
       "nullable": false,
       "on_delete": "restrict",
@@ -349,7 +349,7 @@
       "from": "ProgressionPalier",
       "to": "ProgressionParcours",
       "name": "progression_parcours",
-      "inverse_name": "paliers",
+      "inverse_name": "seances",
       "foreign_key": "progression_parcours_id",
       "nullable": false,
       "on_delete": "restrict",
@@ -358,10 +358,10 @@
     {
       "type": "many_to_one",
       "from": "ProgressionPalier",
-      "to": "Palier",
-      "name": "palier",
+      "to": "Seance",
+      "name": "seance",
       "inverse_name": "progressions",
-      "foreign_key": "palier_id",
+      "foreign_key": "seance_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true
@@ -380,10 +380,10 @@
     {
       "type": "many_to_one",
       "from": "DossierTechnique",
-      "to": "Palier",
-      "name": "palier",
+      "to": "Seance",
+      "name": "seance",
       "inverse_name": "dossier_technique",
-      "foreign_key": "palier_id",
+      "foreign_key": "seance_id",
       "nullable": false,
       "on_delete": "cascade",
       "index": true
@@ -468,10 +468,10 @@
     {
       "type": "many_to_one",
       "from": "Checklist",
-      "to": "Palier",
-      "name": "palier",
+      "to": "Seance",
+      "name": "seance",
       "inverse_name": "checklists",
-      "foreign_key": "palier_id",
+      "foreign_key": "seance_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true
@@ -523,10 +523,10 @@
     {
       "type": "many_to_one",
       "from": "Activite",
-      "to": "Palier",
-      "name": "palier",
+      "to": "Seance",
+      "name": "seance",
       "inverse_name": "activites",
-      "foreign_key": "palier_id",
+      "foreign_key": "seance_id",
       "nullable": false,
       "on_delete": "restrict",
       "index": true

@@ -17,7 +17,7 @@ def _form_data_from_checklist(record: dict) -> dict:
     """Convertit les colonnes SQL vers les noms de champs du formulaire."""
     return {
         "decision_finale": record.get("DecisionFinale"),
-        "palier_id": record.get("palier_id"),
+        "seance_id": record.get("seance_id"),
         "created_at": record.get("CreatedAt"),
         "updated_at": record.get("UpdatedAt"),
     }
@@ -75,13 +75,13 @@ class ChecklistController(BaseController):
     def _list_context(request):
         q         = _query_param(request, "q").strip()
         sort      = _query_param(request, "sort")
-        if sort not in {"decision_finale", "palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"decision_finale", "seance_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
         limit  = 20
-        palier_id_raw = _query_param(request, "palier_id").strip()
+        palier_id_raw = _query_param(request, "seance_id").strip()
         palier_id_f = ""
         if palier_id_raw:
             try:
@@ -89,10 +89,10 @@ class ChecklistController(BaseController):
             except (TypeError, ValueError):
                 palier_id_f = ""
         relation_filters = {}
-        relation_filters["palier_id"] = {"options": [{"id": value, "label": label} for value, label in get_palier_choices()]}
+        relation_filters["seance_id"] = {"options": [{"id": value, "label": label} for value, label in get_palier_choices()]}
         _filters = {}
         if palier_id_f != "":
-            _filters["palier_id"] = palier_id_f
+            _filters["seance_id"] = palier_id_f
         total    = count_checklists(q or None, filters=_filters or None)
         pagination_state = Pagination(request, total, limit)
         limit = pagination_state.limit
@@ -105,7 +105,7 @@ class ChecklistController(BaseController):
         pagination = pagination_state.to_dict()
         pagination.update({
             "q": q, "sort": sort, "direction": direction,
-            "filters": {"palier_id": palier_id_f},
+            "filters": {"seance_id": palier_id_f},
         })
         return {
                 "checklists": checklists,
@@ -235,12 +235,12 @@ class ChecklistController(BaseController):
     def export_csv(request: Request) -> Response:
         q = _query_param(request, "q").strip()
         sort = _query_param(request, "sort")
-        if sort not in {"decision_finale", "palier_id", "created_at", "updated_at", "id"}:
+        if sort not in {"decision_finale", "seance_id", "created_at", "updated_at", "id"}:
             sort = ""
         direction = _query_param(request, "direction", "desc")
         if direction not in ("asc", "desc"):
             direction = "asc"
-        palier_id_raw = _query_param(request, "palier_id").strip()
+        palier_id_raw = _query_param(request, "seance_id").strip()
         palier_id_f = ""
         if palier_id_raw:
             try:
@@ -249,7 +249,7 @@ class ChecklistController(BaseController):
                 palier_id_f = ""
         _filters = {}
         if palier_id_f != "":
-            _filters["palier_id"] = palier_id_f
+            _filters["seance_id"] = palier_id_f
         rows = find_checklists_for_export(q=q or None, sort=sort or None, direction=direction, filters=_filters or None)
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_ALL)

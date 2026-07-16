@@ -15,20 +15,20 @@ from core.database.db import fetch_all, fetch_one, insert
 
 def _palier_de_l_eleve(progression_palier_id: int, user_id: int) -> dict[str, Any] | None:
     return fetch_one(
-        "SELECT pp.Id AS progression_palier_id, pp.palier_id AS palier_id, pa.Titre AS palier_titre "
+        "SELECT pp.Id AS progression_palier_id, pp.seance_id AS seance_id, pa.Titre AS palier_titre "
         "FROM progression_palier pp "
         "JOIN progression_parcours pe ON pe.Id = pp.progression_parcours_id "
         "JOIN eleve e ON e.Id = pe.eleve_id "
-        "JOIN palier pa ON pa.Id = pp.palier_id "
+        "JOIN seance pa ON pa.Id = pp.seance_id "
         "WHERE pp.Id = ? AND e.UserId = ?",
         (progression_palier_id, user_id),
     )
 
 
-def _activite_du_palier(palier_id: int) -> dict[str, Any] | None:
+def _activite_du_palier(seance_id: int) -> dict[str, Any] | None:
     return fetch_one(
-        "SELECT Id AS id, Fichier AS consigne FROM activite WHERE palier_id = ? ORDER BY Id LIMIT 1",
-        (palier_id,),
+        "SELECT Id AS id, Fichier AS consigne FROM activite WHERE seance_id = ? ORDER BY Id LIMIT 1",
+        (seance_id,),
     )
 
 
@@ -37,7 +37,7 @@ def get_activite_depots(progression_palier_id: int, user_id: int) -> dict[str, A
     palier = _palier_de_l_eleve(progression_palier_id, user_id)
     if palier is None:
         return None
-    activite = _activite_du_palier(int(palier["palier_id"]))
+    activite = _activite_du_palier(int(palier["seance_id"]))
     if activite is None:
         return None
     depots = fetch_all(
@@ -66,7 +66,7 @@ def enregistrer_depot(
     palier = _palier_de_l_eleve(progression_palier_id, user_id)
     if palier is None:
         return None
-    activite = _activite_du_palier(int(palier["palier_id"]))
+    activite = _activite_du_palier(int(palier["seance_id"]))
     if activite is None:
         return None
     depot_id = insert(

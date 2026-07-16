@@ -20,7 +20,7 @@ def _install(monkeypatch: pytest.MonkeyPatch, *, palier: dict[str, Any] | None, 
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
         if "FROM progression_palier pp" in sql:
             return palier
-        if "FROM activite WHERE palier_id" in sql:
+        if "FROM activite WHERE seance_id" in sql:
             return activite
         return None
 
@@ -36,7 +36,7 @@ def _install(monkeypatch: pytest.MonkeyPatch, *, palier: dict[str, Any] | None, 
 def test_enregistre_le_depot_avec_chemin_palier_et_activite(monkeypatch: pytest.MonkeyPatch) -> None:
     inserts = _install(
         monkeypatch,
-        palier={"progression_palier_id": 1, "palier_id": 5, "palier_titre": "P"},
+        palier={"progression_palier_id": 1, "seance_id": 5, "palier_titre": "P"},
         activite={"id": 9, "consigne": None},
     )
 
@@ -58,7 +58,7 @@ def test_palier_d_autrui_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_palier_sans_activite_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
     inserts = _install(
         monkeypatch,
-        palier={"progression_palier_id": 1, "palier_id": 5, "palier_titre": "P"},
+        palier={"progression_palier_id": 1, "seance_id": 5, "palier_titre": "P"},
         activite=None,
     )
     assert m.enregistrer_depot(1, 42, "depots/abc.pdf") is None

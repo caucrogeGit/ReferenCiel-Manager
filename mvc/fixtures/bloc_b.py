@@ -45,12 +45,12 @@ class BlocBFixture(Fixture):
 
         # Palier -> dossier technique (ressource markdown + QCM de validation).
         pal = db.insert(
-            "INSERT INTO palier (Ordre, Titre, Theme, ProductionAttendue, parcours_id, CreatedAt, UpdatedAt) "
+            "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, parcours_id, CreatedAt, UpdatedAt) "
             "VALUES (1, 'Palier 1 — Câblage', 'Réseau', 'Câble testé et validé', ?, NOW(), NOW())",
             (parc,),
         )
         dt = db.insert(
-            "INSERT INTO dossier_technique (Titre, palier_id, CreatedAt, UpdatedAt) VALUES (?, ?, NOW(), NOW())",
+            "INSERT INTO dossier_technique (Titre, seance_id, CreatedAt, UpdatedAt) VALUES (?, ?, NOW(), NOW())",
             ("Dossier technique — Câblage", pal),
         )
         db.execute(
@@ -71,12 +71,12 @@ class BlocBFixture(Fixture):
             (eleve, parc),
         )
         pp = db.insert(
-            "INSERT INTO progression_palier (Statut, progression_parcours_id, palier_id, CreatedAt, UpdatedAt) "
+            "INSERT INTO progression_palier (Statut, progression_parcours_id, seance_id, CreatedAt, UpdatedAt) "
             "VALUES ('en_cours', ?, ?, NOW(), NOW())",
             (pe, pal),
         )
         act = db.insert(
-            "INSERT INTO activite (Objectif, palier_id, CreatedAt, UpdatedAt) VALUES ('Câbler et mesurer une liaison', ?, NOW(), NOW())",
+            "INSERT INTO activite (Objectif, seance_id, CreatedAt, UpdatedAt) VALUES ('Câbler et mesurer une liaison', ?, NOW(), NOW())",
             (pal,),
         )
         ea = db.insert(

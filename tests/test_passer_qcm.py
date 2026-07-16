@@ -35,7 +35,7 @@ def _install(
     def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
         if "FROM progression_palier pp" in sql:
             return palier
-        if "FROM qcm WHERE palier_id" in sql:
+        if "FROM qcm WHERE seance_id" in sql:
             return {"id": 9}
         if "FROM choix_qcm WHERE Id" in sql:
             choix_id = int(params[0])
@@ -65,7 +65,7 @@ def _install(
     return cap
 
 
-_PALIER = {"progression_palier_id": 1, "palier_id": 5, "palier_titre": "P"}
+_PALIER = {"progression_palier_id": 1, "seance_id": 5, "palier_titre": "P"}
 
 
 def test_score_partiel_ne_valide_pas_le_palier(monkeypatch: pytest.MonkeyPatch) -> None:

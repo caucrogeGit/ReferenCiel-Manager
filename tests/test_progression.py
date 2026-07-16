@@ -47,7 +47,7 @@ def test_progression_palier_porte_l_etat_du_palier(monkeypatch: pytest.MonkeyPat
     pp.add_progression_palier({
         "statut": "valide",  # porte de passage franchie
         "progression_parcours_id": 1,
-        "palier_id": 5,
+        "seance_id": 5,
         "created_at": "2026-07-10 00:00:00",
         "updated_at": "2026-07-10 00:00:00",
     })
