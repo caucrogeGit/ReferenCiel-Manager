@@ -87,7 +87,11 @@
    url : URL de base ; le paramètre `param` y est ajouté (ex. "pole").
    target : sélecteur du bloc maître-détail à remplacer (ex. "#bloc-poles").
    On réémet le bloc ENTIER (swap outerHTML) et non la seule colonne de détail :
-   ainsi la surbrillance de l'item actif suit la navigation. --- #}
+   ainsi la surbrillance de l'item actif suit la navigation.
+   Pas de hx-push-url : sélectionner un item maître est un état d'UI éphémère,
+   pas une navigation. On ne l'inscrit donc pas dans l'URL — un rafraîchissement
+   revient à l'étape « rien de sélectionné » (seule l'étape ?etape=… est poussée,
+   par le stepper). Le href reste complet pour le mode sans JS. --- #}
 {% macro master_list(items, current_id, url, param, target) %}
 <ul class="flex flex-col gap-1" role="tablist">
     {% for item in items %}
@@ -97,7 +101,6 @@
            hx-get="{{ url }}&{{ param }}={{ item.id }}"
            hx-target="{{ target }}"
            hx-swap="outerHTML"
-           hx-push-url="true"
            role="tab" {% if is_current %}aria-selected="true"{% endif %}
            class="flex items-center justify-between gap-2 py-2.5 px-3 rounded-[10px] text-sm transition
                   {% if is_current %}bg-forge-soft border-l-2 border-forge font-semibold text-ink
