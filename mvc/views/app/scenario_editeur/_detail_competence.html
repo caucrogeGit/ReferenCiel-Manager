@@ -28,32 +28,45 @@
         master_name="competence",
         master_value=competence_id
     ) }}
-    {# Indicateurs de réussite du critère — définis par le professeur (0..n).
-       RÉFÉRENTIEL-level : partagés par tous les scénarios sur ce critère. #}
+    {# Indicateurs de réussite du critère — définis par le professeur (0..n),
+       RÉFÉRENTIEL-level (partagés par les scénarios utilisant ce critère).
+       N'apparaissent QUE si le critère est retenu (coché) dans le scénario. #}
+    {% if c.Id in critere_ids %}
     <div class="pl-8 pr-2 -mt-0.5 mb-2 flex flex-col gap-1">
         {% for ind in c.indicateurs %}
         <div class="flex items-start gap-1.5 text-xs text-muted">
             <span class="mt-1 size-1 shrink-0 rounded-full bg-faint"></span>
             <span class="flex-1">{{ ind.Libelle }}</span>
+            {# Chaque indicateur validé peut être supprimé (icône X). #}
             <form method="post" action="{{ base_url }}/indicateur/{{ ind.Id }}/supprimer"
                   hx-post="{{ base_url }}/indicateur/{{ ind.Id }}/supprimer"
                   hx-target="#detail-competence" hx-swap="innerHTML" class="shrink-0 leading-none">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <input type="hidden" name="competence" value="{{ competence_id }}">
-                <button type="submit" class="text-faint hover:text-forge" title="Supprimer l'indicateur" aria-label="Supprimer l'indicateur">&times;</button>
+                <button type="submit" class="flex items-center justify-center size-5 rounded text-faint hover:text-red-600 hover:bg-cream transition"
+                        title="Supprimer l'indicateur" aria-label="Supprimer l'indicateur">
+                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </form>
         </div>
         {% endfor %}
+        {# Saisir puis VALIDER (coche) : au retour, l'indicateur rejoint la liste
+           ci-dessus (avec sa croix de suppression) et un nouveau champ vide
+           réapparaît pour saisir le suivant. #}
         <form method="post" action="{{ base_url }}/critere/{{ c.Id }}/indicateur"
               hx-post="{{ base_url }}/critere/{{ c.Id }}/indicateur"
               hx-target="#detail-competence" hx-swap="innerHTML" class="flex items-center gap-1.5">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <input type="hidden" name="competence" value="{{ competence_id }}">
-            <input type="text" name="libelle" required placeholder="Ajouter un indicateur…"
+            <input type="text" name="libelle" required placeholder="Ajouter un indicateur de réussite…"
                    class="flex-1 min-w-0 text-xs py-1 px-2 rounded-md border border-field bg-surface focus:outline-none focus:border-forge">
-            <button type="submit" class="shrink-0 text-xs font-medium py-1 px-2 rounded-md bg-forge-soft text-forge-dark hover:bg-forge-border">+</button>
+            <button type="submit" class="shrink-0 flex items-center justify-center size-6 rounded-md bg-forge-soft text-forge-dark hover:bg-forge-border transition"
+                    title="Valider l'indicateur" aria-label="Valider l'indicateur">
+                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
         </form>
     </div>
+    {% endif %}
     {% else %}
     {{ empty_state("Aucun critère pour cette compétence.") }}
     {% endfor %}
