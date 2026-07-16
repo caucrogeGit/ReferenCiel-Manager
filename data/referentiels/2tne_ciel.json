@@ -59,25 +59,6 @@
       "code": "E1",
       "intitule": "Étude et conception de produits électroniques",
       "pole_id": "pole-real-maint-elec",
-      "taches": [
-        "Analyse et saisie d'un schéma ou d'une carte électronique à partir d'un cahier des charges",
-        "Placement et routage d'une carte électronique et génération des fichiers de fabrication",
-        "Réalisation d'un prototype et mise au point d'une carte électronique",
-        "Intégration dans son environnement"
-      ],
-      "conditions_exercice": {
-        "autonomie": "T1 et T3 : partielle ; T2 et T4 : complète"
-      },
-      "resultats_attendus": [
-        {
-          "id": "ra-e1-1",
-          "libelle": "Le placement et le routage de la carte électronique sont conformes aux IPC"
-        },
-        {
-          "id": "ra-e1-2",
-          "libelle": "Le prototype réalisé et mis au point est conforme au cahier des charges"
-        }
-      ],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -87,20 +68,6 @@
       "code": "E2",
       "intitule": "Tests et essais",
       "pole_id": "pole-real-maint-elec",
-      "taches": [
-        "Tests et mesures nécessaires à la vérification d'une carte ou d'un système électronique communicant",
-        "Mise en place d'un environnement de tests",
-        "Application d'un protocole de tests et de mesures"
-      ],
-      "conditions_exercice": {
-        "autonomie": "totale dans le périmètre de la procédure"
-      },
-      "resultats_attendus": [
-        {
-          "id": "ra-e2-1",
-          "libelle": "Les processus de tests et de validation du produit sont mis en œuvre conformément au mode opératoire"
-        }
-      ],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -110,9 +77,6 @@
       "code": "E3",
       "intitule": "Production et assemblages d'ensembles électroniques",
       "pole_id": "pole-real-maint-elec",
-      "taches": [],
-      "conditions_exercice": {},
-      "resultats_attendus": [],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -122,9 +86,6 @@
       "code": "E4",
       "intitule": "Intégration matérielle et logicielle",
       "pole_id": "pole-real-maint-elec",
-      "taches": [],
-      "conditions_exercice": {},
-      "resultats_attendus": [],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -134,9 +95,6 @@
       "code": "E5",
       "intitule": "Maintenance et réparation de produits électroniques",
       "pole_id": "pole-real-maint-elec",
-      "taches": [],
-      "conditions_exercice": {},
-      "resultats_attendus": [],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -146,9 +104,6 @@
       "code": "R1",
       "intitule": "Accompagnement du client",
       "pole_id": "pole-reseaux",
-      "taches": [],
-      "conditions_exercice": {},
-      "resultats_attendus": [],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -158,22 +113,6 @@
       "code": "R2",
       "intitule": "Installation et qualification",
       "pole_id": "pole-reseaux",
-      "taches": [
-        "Prise en compte de la demande du client",
-        "Vérification du dossier, interprétation des plans d'exécution",
-        "Préparation du chantier",
-        "Réalisation des opérations avec intégration des contraintes client et contrôle",
-        "Recettage de l'installation"
-      ],
-      "conditions_exercice": {
-        "autonomie": "partielle"
-      },
-      "resultats_attendus": [
-        {
-          "id": "ra-r2-1",
-          "libelle": "Le cahier de recette (PV de livraison) est rempli et validé par le client"
-        }
-      ],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -183,21 +122,6 @@
       "code": "R3",
       "intitule": "Exploitation et maintien en condition opérationnelle",
       "pole_id": "pole-reseaux",
-      "taches": [
-        "Réalisation d'un diagnostic de premier niveau",
-        "Configuration matérielle et logicielle des équipements",
-        "Intégration de nouveaux équipements",
-        "Mise à jour des équipements"
-      ],
-      "conditions_exercice": {
-        "autonomie": "partielle"
-      },
-      "resultats_attendus": [
-        {
-          "id": "ra-r3-1",
-          "libelle": "Le défaut est identifié, corrigé et la documentation est éventuellement mise à jour"
-        }
-      ],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -207,9 +131,6 @@
       "code": "R5",
       "intitule": "Maintenance des réseaux informatiques",
       "pole_id": "pole-reseaux",
-      "taches": [],
-      "conditions_exercice": {},
-      "resultats_attendus": [],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -219,9 +140,6 @@
       "code": "D1",
       "intitule": "Élaboration et appropriation d'un cahier des charges",
       "pole_id": "pole-donnee-cyber",
-      "taches": [],
-      "conditions_exercice": {},
-      "resultats_attendus": [],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -231,24 +149,6 @@
       "code": "D2",
       "intitule": "Développement et validation de solutions logicielles",
       "pole_id": "pole-donnee-cyber",
-      "taches": [
-        "Modélisation d'une solution logicielle",
-        "Développement, utilisation ou adaptation de composants logiciels",
-        "Tests et validation"
-      ],
-      "conditions_exercice": {
-        "autonomie": "partielle"
-      },
-      "resultats_attendus": [
-        {
-          "id": "ra-d2-1",
-          "libelle": "Les composants logiciels sont développés et testés"
-        },
-        {
-          "id": "ra-d2-2",
-          "libelle": "Les solutions logicielles sont conformes aux spécifications du cahier des charges"
-        }
-      ],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -258,9 +158,6 @@
       "code": "D3",
       "intitule": "Gestion d'incidents",
       "pole_id": "pole-donnee-cyber",
-      "taches": [],
-      "conditions_exercice": {},
-      "resultats_attendus": [],
       "source_ids": [
         "referentiel-bac-pro-ciel"
       ]
@@ -974,22 +871,6 @@
           "cr-c08-5",
           "cr-c08-6",
           "cr-c08-7"
-        ]
-      }
-    ],
-    "activites_resultats_attendus": [
-      {
-        "activite": "E1",
-        "resultats": [
-          "ra-e1-1",
-          "ra-e1-2"
-        ]
-      },
-      {
-        "activite": "D2",
-        "resultats": [
-          "ra-d2-1",
-          "ra-d2-2"
         ]
       }
     ],
