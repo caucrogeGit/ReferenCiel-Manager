@@ -46,6 +46,11 @@ DB_ADMIN_LOGIN=
 DB_ADMIN_PWD=
 DB_APP_LOGIN=
 DB_APP_PWD=
+# Taille du pool de connexions applicatif (défaut Forge : 5). Dimensionner sur le
+# pic de connexions SIMULTANÉES : une classe entière (~30 élèves) qui se connecte
+# en même temps que le prof lance la séance. Sous ce pic, un pool trop petit
+# épuise les connexions et renvoie des 500 au login (retour Forge 023). Max 64.
+DB_POOL_SIZE=32
 
 # MFA (forge-mvc-mfa, ADR-014) : clé Fernet de chiffrement des secrets TOTP.
 # Obligatoire dès que la MFA est utilisée. Générer une clé PROPRE à chaque

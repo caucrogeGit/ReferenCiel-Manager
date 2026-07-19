@@ -136,3 +136,4 @@ nav:
       - Retour 020 — fixtures, références, ordre & scénario cohérent: banc-essai/retour-020-fixtures-references-ordre-et-scenario-coherent.md
       - Retour 021 — session orpheline, split SQL en commentaire & cycle serveur: banc-essai/retour-021-authmiddleware-session-orpheline-et-split-sql-commentaire.md
       - Retour 022 — opt-ins média, core.http.bearer absent & audio sans BDD: banc-essai/retour-022-optins-media-core-http-bearer-absent-et-audio-sans-bdd.md
+      - Retour 023 — pool MariaDB sans attente, épuisé sous concurrence: banc-essai/retour-023-pool-mariadb-sans-attente-epuise-sous-concurrence.md
