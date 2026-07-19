@@ -348,7 +348,7 @@ Règles pédagogiques fortes :
 - le référentiel officiel donne le cadre ;
 - le JSON canonique niveau-classe formalise la partie réellement exploitée pour une classe ou un niveau ;
 - le scénario pédagogique définit l'intention ;
-- le starter Welcome rend cette intention réutilisable ;
+- le starter Welcome est une source réutilisable d'où l'on crée une séquence (trace de provenance, §4) ;
 - la séquence pédagogique organise le travail élève ;
 - l'affectation transforme une séquence publiée en travail réel pour une classe ou un élève, et en fige un instantané (ADR-026) ;
 - la séance découpe la séquence en unités de travail ordonnées ;
@@ -361,7 +361,7 @@ Règles pédagogiques fortes :
 - la progression garde l'état réel de l'élève ;
 - le suivi professeur permet d'identifier les élèves bloqués, en avance ou à évaluer.
 
-> Révision (2026-07-19) : vocabulaire aligné sur l'ADR-025 (Séquence / Séance) ; fusion de l'objet « activité » dans la séance et versionnement par instantané à l'affectation actés par l'ADR-026. Le statut de « starter Welcome » (objet réutilisable ou simple provenance d'une séquence) reste à trancher dans un ticket dédié.
+> Révision (2026-07-19) : vocabulaire aligné sur l'ADR-025 (Séquence / Séance) ; fusion de l'objet « activité » dans la séance et versionnement par instantané à l'affectation actés par l'ADR-026. Le « starter Welcome » n'est **pas** un objet métier (table supprimée, ADR-022) : c'est une **source réutilisable** d'où l'on crée une séquence, dont la provenance sera tracée par un champ ajouté avec SEQ-02.
 
 ## 13. Méthode de construction
 
@@ -438,7 +438,6 @@ Objets principaux à prévoir :
 - IndicateurRéussite ;
 - NiveauAcquisition ;
 - Scenario ;
-- StarterWelcome ;
 - SequencePedagogique ;
 - SeancePedagogique ;
 - ElementSeance (composition ordonnée de la séance, jalon SEQ-03) ;
@@ -466,7 +465,6 @@ Définition pédagogique :
 - critère ;
 - indicateur de réussite ;
 - scénario ;
-- starter Welcome ;
 - séquence ;
 - séance ;
 - dossier technique ;
