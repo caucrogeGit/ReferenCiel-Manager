@@ -55,12 +55,20 @@ def _as_int(value: Any) -> int:
     return int(cast("int", value))
 
 
+# Un nom de table ne peut pas être un paramètre SQL (`?`) : il est interpolé en
+# f-string. Cette liste blanche garantit que seuls des littéraux connus du module
+# atteignent l'interpolation, même si un appelant futur passait une valeur externe.
+_TABLES_UPSERT = frozenset({"formation", "niveau_classe"})
+
+
 def _upsert_par_code(table: str, code: str, intitule: str, type_: "str | None" = None) -> int:
     """Insère ou met à jour une entité identifiée par sa colonne `Code` unique.
 
     `type_` alimente la colonne `Type` (formation, ADR-023) quand elle existe ;
     laissé à None pour les tables sans cette colonne (ex. niveau_classe).
     """
+    if table not in _TABLES_UPSERT:
+        raise ValueError(f"table non autorisée pour l'upsert : {table!r}")
     existant = db.fetch_one(f"SELECT Id FROM {table} WHERE Code = ?", (code,))
     if existant is not None:
         if type_ is not None:
