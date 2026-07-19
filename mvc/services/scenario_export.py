@@ -22,6 +22,7 @@ def _export_dict(data: dict[str, Any]) -> dict[str, Any]:
     referentiel: "dict[str, Any] | None" = data.get("referentiel")
     activites: list[dict[str, Any]] = data.get("activites", [])
     contexte: list[dict[str, Any]] = data.get("contexte", [])
+    connaissances: list[dict[str, Any]] = data.get("connaissances", [])
     ressources: list[dict[str, Any]] = data.get("ressources", [])
     return {
         "titre": scenario.get("Titre"),
@@ -58,6 +59,23 @@ def _export_dict(data: dict[str, Any]) -> dict[str, Any]:
                 ],
             }
             for a in activites
+        ],
+        "connaissances": [
+            {
+                "code": g.get("code"),
+                "intitule": g.get("intitule"),
+                "connaissances": [
+                    {
+                        "libelle": k.get("libelle"),
+                        "niveau_officiel": k.get("niveau_officiel"),
+                        "niveau_cible": k.get("niveau_cible"),
+                        "statut": k.get("statut"),
+                        "statut_label": k.get("statut_label"),
+                    }
+                    for k in g.get("connaissances", [])
+                ],
+            }
+            for g in connaissances
         ],
         "ressources": [
             {"nom": r.get("NomOriginal"), "type": r.get("MimeType"), "taille": r.get("Taille")}
@@ -105,6 +123,22 @@ def rendre_markdown(data: dict[str, Any]) -> str:
                     out.append(f"  - {cr['libelle']}{marque}")
                     for ind in cr["indicateurs"]:
                         out.append(f"    - ✓ {ind}")
+            out.append("")
+    if e["connaissances"]:
+        out += ["## Connaissances associées", ""]
+        for g in e["connaissances"]:
+            out.append(f"### {g['code']} — {g['intitule']}")
+            out.append("")
+            for k in g["connaissances"]:
+                details: list[str] = []
+                if k["niveau_cible"] is not None:
+                    details.append(f"cible {k['niveau_cible']}")
+                if k["niveau_officiel"] is not None:
+                    details.append(f"officiel {k['niveau_officiel']}")
+                if k["statut_label"]:
+                    details.append(str(k["statut_label"]))
+                suffixe = f" — {', '.join(details)}" if details else ""
+                out.append(f"- {k['libelle']}{suffixe}")
             out.append("")
     if e["ressources"]:
         out += ["## Ressources", ""]

@@ -23,6 +23,10 @@ from mvc.models.scenario_editeur_model import (
     list_professeurs,
     list_ressources,
 )
+from mvc.models.sequence_connaissance_model import (
+    get_connaissances_retenues,
+    get_sequence_id_for_scenario,
+)
 from mvc.services.pdf import render_pdf
 
 # Champs de contexte affichés, avec leur libellé (miroir de _etape_contexte.html).
@@ -130,12 +134,20 @@ def assembler_scenario(scenario_id: int) -> dict[str, Any]:
 
     comp_par_id = _competences_par_id(arbre, get_critere_ids(scenario_id))
     liens = liens_activite_competence(int(referentiel_id)) if referentiel_id else {}
+
+    # Connaissances associées portées par la séquence appairée (ADR-028).
+    sequence_id = get_sequence_id_for_scenario(scenario_id)
+    connaissances: list[dict[str, Any]] = (
+        get_connaissances_retenues(sequence_id, int(referentiel_id))
+        if sequence_id is not None and referentiel_id else []
+    )
     return {
         "scenario": scenario,
         "referentiel": referentiel,
         "co_auteurs": _co_auteurs(scenario_id) if scenario.get("CoIntervention") else [],
         "contexte": _contexte(scenario),
         "activites": _activites(arbre, get_activite_ids(scenario_id), comp_par_id, liens),
+        "connaissances": connaissances,
         "ressources": list_ressources(scenario_id),
     }
 

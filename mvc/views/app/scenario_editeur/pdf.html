@@ -93,6 +93,26 @@
     <p class="empty">Aucune activité avec compétence évaluée.</p>
   {% endif %}
 
+  <h2>Connaissances associées</h2>
+  {% if connaissances %}
+    {% for g in connaissances %}
+    <div class="tree">
+      <div class="node comp"><span class="code">{{ g.code }}</span> {{ g.intitule }}</div>
+      <div class="branch">
+        {% for k in g.connaissances %}
+        <div class="node crit"><span class="dot">•</span> {{ k.libelle }}<span class="pole">
+          {%- if k.niveau_cible is not none %} · cible {{ k.niveau_cible }}{% endif -%}
+          {%- if k.niveau_officiel is not none %} · officiel {{ k.niveau_officiel }}{% endif -%}
+          {%- if k.statut_label %} · {{ k.statut_label }}{% endif -%}
+        </span></div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="empty">Aucune connaissance associée.</p>
+  {% endif %}
+
   <h2>Ressources</h2>
   {% if ressources %}
     <ul>

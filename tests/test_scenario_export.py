@@ -41,6 +41,17 @@ _DATA: dict[str, Any] = {
             ],
         },
     ],
+    "connaissances": [
+        {
+            "code": "C06", "intitule": "Valider la conformité",
+            "connaissances": [
+                {"libelle": "Réseaux informatiques", "niveau_officiel": 3,
+                 "niveau_cible": 2, "statut": "mobilisee", "statut_label": "Mobilisée"},
+                {"libelle": "Modèles en couches", "niveau_officiel": None,
+                 "niveau_cible": None, "statut": None, "statut_label": None},
+            ],
+        },
+    ],
     "ressources": [
         {"NomOriginal": "schema.pdf", "MimeType": "application/pdf", "Taille": 1234},
     ],
@@ -60,6 +71,12 @@ def test_json_valide_et_structure() -> None:
     crit = doc["activites"][0]["competences"][0]["criteres"]
     assert crit[0]["indicateurs"] == ["Continuité OK"]
     assert crit[1]["savoir_etre"] is True
+    grp = doc["connaissances"][0]
+    assert grp["code"] == "C06"
+    assert grp["connaissances"][0] == {
+        "libelle": "Réseaux informatiques", "niveau_officiel": 3,
+        "niveau_cible": 2, "statut": "mobilisee", "statut_label": "Mobilisée",
+    }
     assert doc["ressources"][0]["nom"] == "schema.pdf"
 
 
@@ -79,13 +96,16 @@ def test_markdown_contient_les_sections() -> None:
     assert "· 2tne-ciel" in md
     assert "*Co-intervention : Marie Bernard*" in md
     for section in ("## Intention", "## Objectifs", "## Contexte", "## Liaison au référentiel",
-                    "## Ressources"):
+                    "## Connaissances associées", "## Ressources"):
         assert section in md
     assert "### A1 — Câblage" in md
     assert "- **C03** Câbler" in md
     assert "  - Le câble est conforme" in md
     assert "    - ✓ Continuité OK" in md
     assert "*(savoir-être)*" in md          # critère savoir-être marqué
+    assert "### C06 — Valider la conformité" in md
+    assert "- Réseaux informatiques — cible 2, officiel 3, Mobilisée" in md
+    assert "- Modèles en couches" in md     # sans détail (ni niveau ni statut)
     assert "- schema.pdf (application/pdf)" in md
 
 

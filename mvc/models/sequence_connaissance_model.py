@@ -7,6 +7,7 @@ tunnel scénario (évite les races entre requêtes HTMX concurrentes).
 """
 
 from datetime import datetime, timezone
+from typing import Any
 
 from core.database.db import fetch_all, fetch_one, execute, insert
 
@@ -49,6 +50,47 @@ def get_arbre_connaissances(ref_id):
     for comp in competences:
         comp["connaissances"] = par_comp.get(comp["Id"], [])
     return competences
+
+
+def get_sequence_id_for_scenario(scenario_id: int) -> "int | None":
+    """Séquence appairée à un scénario (1-1). None si aucune."""
+    row = fetch_one(
+        "SELECT sequence_id FROM scenario_sequence WHERE scenario_id = ? LIMIT 1",
+        (scenario_id,),
+    )
+    return row["sequence_id"] if row else None
+
+
+def get_connaissances_retenues(sequence_id: int, ref_id: int) -> "list[dict[str, Any]]":
+    """Connaissances retenues par la séquence, groupées par compétence.
+
+    Structure d'export commune (PDF, Markdown, JSON) : liste de compétences,
+    chacune avec ses connaissances retenues (niveau officiel + cible + statut).
+    Les compétences sans connaissance retenue sont omises.
+    """
+    liens = get_liens_by_sequence(sequence_id)
+    groupes = []
+    for comp in get_arbre_connaissances(ref_id):
+        retenues = []
+        for k in comp["connaissances"]:
+            lien = liens.get(k["Id"])
+            if lien is None:
+                continue
+            statut = lien["Statut"]
+            retenues.append({
+                "libelle": k["Libelle"],
+                "niveau_officiel": k["NiveauTaxonomique"],
+                "niveau_cible": lien["NiveauCible"],
+                "statut": statut,
+                "statut_label": STATUT_LABELS.get(statut) if statut else None,
+            })
+        if retenues:
+            groupes.append({
+                "code": comp["Code"],
+                "intitule": comp["Intitule"],
+                "connaissances": retenues,
+            })
+    return groupes
 
 
 def get_liens_by_sequence(sequence_id):
