@@ -307,7 +307,7 @@
       "name": "niveau_classe",
       "inverse_name": "sequences",
       "foreign_key": "niveau_classe_id",
-      "nullable": false,
+      "nullable": true,
       "on_delete": "restrict",
       "index": true
     },

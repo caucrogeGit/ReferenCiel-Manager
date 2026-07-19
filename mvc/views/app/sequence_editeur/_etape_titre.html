@@ -23,12 +23,13 @@
         </div>
 
         <div>
-            <label for="niveau_classe_id" class="block text-sm text-muted mb-1">Niveau de classe {{ obligation(true) }}</label>
-            <select id="niveau_classe_id" name="niveau_classe_id" required
+            <label for="niveau_classe_id" class="block text-sm text-muted mb-1">Niveau de classe {{ obligation(false) }}</label>
+            <select id="niveau_classe_id" name="niveau_classe_id"
                     class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
                            focus:outline-none focus:ring-2 focus:ring-forge">
+                <option value="">À préciser…</option>
                 {% for value, texte in niveau_classe_id_choices %}
-                <option value="{{ value }}"{% if value|string == (sequence.niveau_classe_id|string) %} selected{% endif %}>{{ texte }}</option>
+                <option value="{{ value }}"{% if sequence.niveau_classe_id is not none and value|string == (sequence.niveau_classe_id|string) %} selected{% endif %}>{{ texte }}</option>
                 {% endfor %}
             </select>
         </div>

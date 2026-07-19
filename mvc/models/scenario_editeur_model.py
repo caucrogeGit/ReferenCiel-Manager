@@ -10,6 +10,19 @@ from typing import Any
 
 from core.database.db import execute, fetch_all, fetch_one, insert
 from core.database.transaction import transaction
+from mvc.services.scenario_tunnel import slug
+
+# INSERT d'une séquence minimale (ADR-029) : née appairée à un scénario, sans
+# niveau (nullable, renseigné ensuite dans le tunnel) ni cadre.
+_INSERT_SEQUENCE_JUMELLE = (
+    "INSERT INTO sequence (Identifiant, Titre, Statut, ActiviteGlissante, OrdreImpose, "
+    "niveau_classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, 'brouillon', 0, 0, ?, NOW(), NOW())"
+)
+_INSERT_SCENARIO = (
+    "INSERT INTO scenario (Titre, Intention, Statut, Version, CoIntervention, referentiel_id, "
+    "CreatedAt, UpdatedAt) VALUES (?, '', 'brouillon', '0.1.0', 0, ?, NOW(), NOW())"
+)
+_LIER_PAIRE = "INSERT INTO scenario_sequence (scenario_id, sequence_id) VALUES (?, ?)"
 
 
 def list_scenarios() -> list[dict[str, Any]]:
@@ -45,12 +58,46 @@ def creer_scenario(titre: str, referentiel_id: "int | None") -> int:
     Avec référentiel : point d'entrée dont formation, niveau et débouchés se
     déduisent. Sans référentiel (`None`) : la finalisation ne requiert que le
     contexte (voir `recalculer_statut`). Le reste se remplit par sections.
+
+    ADR-029 : la paire naît ensemble. Le scénario ET sa séquence jumelle (titre
+    partagé, niveau vide, identifiant dérivé) ET le lien sont écrits dans une
+    seule transaction — tout ou rien.
     """
-    return insert(
-        "INSERT INTO scenario (Titre, Intention, Statut, Version, CoIntervention, referentiel_id, CreatedAt, UpdatedAt) "
-        "VALUES (?, '', 'brouillon', '0.1.0', 0, ?, NOW(), NOW())",
-        (titre, referentiel_id),
+    with transaction() as tx:
+        scenario_id = insert(_INSERT_SCENARIO, (titre, referentiel_id), tx=tx)
+        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (slug(titre), titre, None), tx=tx)
+        execute(_LIER_PAIRE, (scenario_id, sequence_id), tx=tx)
+    return scenario_id
+
+
+def lister_scenarios_sans_sequence() -> list[dict[str, Any]]:
+    """Scénarios sans séquence appairée (orphelins à backfiller, ADR-029)."""
+    return fetch_all(
+        "SELECT s.Id, s.Titre FROM scenario s "
+        "LEFT JOIN scenario_sequence ss ON ss.scenario_id = s.Id "
+        "WHERE ss.Id IS NULL ORDER BY s.Id"
     )
+
+
+def creer_sequence_jumelle(scenario_id: int, titre: str) -> int:
+    """Crée et lie la séquence jumelle d'un scénario existant (backfill ADR-029)."""
+    with transaction() as tx:
+        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (slug(titre), titre, None), tx=tx)
+        execute(_LIER_PAIRE, (scenario_id, sequence_id), tx=tx)
+    return sequence_id
+
+
+def creer_sequence_et_scenario(identifiant: str, titre: str, niveau_classe_id: "int | None") -> int:
+    """Séquence-first (ADR-029) : crée la séquence ET son scénario jumeau (hors
+    référentiel) ET le lien, en une transaction. Retourne l'id de la séquence.
+
+    L'appelant garantit l'unicité du titre du scénario (contrainte UNIQUE).
+    """
+    with transaction() as tx:
+        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (identifiant, titre, niveau_classe_id), tx=tx)
+        scenario_id = insert(_INSERT_SCENARIO, (titre, None), tx=tx)
+        execute(_LIER_PAIRE, (scenario_id, sequence_id), tx=tx)
+    return sequence_id
 
 
 def list_professeurs(exclure_user_id: "int | None" = None) -> list[dict[str, Any]]:

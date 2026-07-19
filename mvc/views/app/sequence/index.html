@@ -20,10 +20,10 @@
            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
   </div>
   <div class="mb-3">
-    <label class="block text-sm text-gray-600 mb-1" for="niveau_classe_id">Niveau de classe {{ obligation(true) }}</label>
-    <select id="niveau_classe_id" name="niveau_classe_id" required
+    <label class="block text-sm text-gray-600 mb-1" for="niveau_classe_id">Niveau de classe {{ obligation(false) }}</label>
+    <select id="niveau_classe_id" name="niveau_classe_id"
             class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <option value="">Choisir…</option>
+      <option value="">À préciser plus tard</option>
       {% for value, texte in niveau_classe_id_choices %}
       <option value="{{ value }}">{{ texte }}</option>
       {% endfor %}

@@ -81,7 +81,8 @@
       "name": "niveau_classe_id",
       "type": "foreign_key",
       "references": "NiveauClasse",
-      "required": true
+      "required": false,
+      "nullable": true
     }
   ],
   "options": {

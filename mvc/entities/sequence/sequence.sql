@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS sequence (
     PositionnementProgression TEXT NULL,
     DureeEstimee VARCHAR(100) NULL,
     ModalitesEvaluation TEXT NULL,
-    niveau_classe_id BIGINT UNSIGNED NOT NULL,
+    niveau_classe_id BIGINT UNSIGNED NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

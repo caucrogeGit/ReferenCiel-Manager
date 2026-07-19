@@ -19,13 +19,12 @@ from core.validation import (
 class SequenceBase:
     """Classe de base regenerable de Sequence."""
 
-    def __init__(self, identifiant, titre, statut, activite_glissante, ordre_impose, niveau_classe_id, created_at, updated_at, id=None, presentation=None, prerequis=None, positionnement_progression=None, duree_estimee=None, modalites_evaluation=None):
+    def __init__(self, identifiant, titre, statut, activite_glissante, ordre_impose, created_at, updated_at, id=None, presentation=None, prerequis=None, positionnement_progression=None, duree_estimee=None, modalites_evaluation=None, niveau_classe_id=None):
         self.identifiant = identifiant
         self.titre = titre
         self.statut = statut
         self.activite_glissante = activite_glissante
         self.ordre_impose = ordre_impose
-        self.niveau_classe_id = niveau_classe_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
@@ -34,6 +33,7 @@ class SequenceBase:
         self.positionnement_progression = positionnement_progression
         self.duree_estimee = duree_estimee
         self.modalites_evaluation = modalites_evaluation
+        self.niveau_classe_id = niveau_classe_id
 
     @staticmethod
     def _coerce_datetime(value):
@@ -180,9 +180,11 @@ class SequenceBase:
 
     @niveau_classe_id.setter
     @typed(int)
+    @nullable
     def niveau_classe_id(self, value):
         if value is None:
-            raise ValidationError("niveau_classe_id", 'La propriété "niveau_classe_id" ne peut pas être nulle.')
+            self._niveau_classe_id = None
+            return
         self._niveau_classe_id = value
 
     @property

@@ -14,11 +14,11 @@ from mvc.helpers.htmx import est_htmx
 from mvc.services.sequence_tunnel import borner_etape, navigation, parse_id, steps
 from mvc.models.sequence_model import (
     get_sequence_by_id,
-    add_sequence,
     update_identite,
     update_cadre,
     get_niveau_classe_choices,
 )
+from mvc.models.scenario_editeur_model import creer_sequence_et_scenario, titre_existe
 from mvc.models.seance_model import count_seances, find_seances_paginated
 from mvc.models.sequence_connaissance_model import (
     get_referentiel_id_for_sequence,
@@ -50,24 +50,28 @@ class SequenceEditeurController(BaseController):
 
     @staticmethod
     def nouveau(request: Request) -> Response:
-        """Création inline depuis la liste, puis ouverture de l'éditeur tunnel."""
+        """Création inline (séquence-first, ADR-029) : crée la paire séquence +
+        scénario jumeau, puis ouvre l'éditeur tunnel. Niveau facultatif (nullable,
+        renseigné ensuite dans l'étape Titre)."""
         identifiant = (request.form("identifiant", "") or "").strip()
         titre = (request.form("titre", "") or "").strip()
         niveau = parse_id(request.form("niveau_classe_id", ""))
         niveaux_valides = {value for value, _ in get_niveau_classe_choices()}
-        if not identifiant or not titre or niveau not in niveaux_valides:
+        if niveau is not None and niveau not in niveaux_valides:
+            niveau = None
+        if not identifiant or not titre:
             return BaseController.redirect(
                 "/sequence", request=request,
-                flash="Identifiant, titre et niveau de classe sont obligatoires.", level="success",
+                flash="L'identifiant et le titre sont obligatoires.", level="success",
             )
-        data = {
-            "identifiant": identifiant, "titre": titre, "presentation": None,
-            "statut": "brouillon", "activite_glissante": 0, "ordre_impose": 0,
-            "prerequis": None, "positionnement_progression": None,
-            "duree_estimee": None, "modalites_evaluation": None,
-            "niveau_classe_id": niveau,
-        }
-        sid = add_sequence(data)
+        # Le scénario jumeau porte le même titre, et le titre du scénario est unique.
+        if titre_existe(titre):
+            return BaseController.redirect(
+                "/sequence", request=request,
+                flash=f"Un scénario s'intitule déjà « {titre} ». Choisissez un autre titre !",
+                level="success",
+            )
+        sid = creer_sequence_et_scenario(identifiant, titre, niveau)
         return BaseController.redirect(f"/sequence/editeur/{sid}")
 
     @staticmethod
@@ -91,14 +95,13 @@ class SequenceEditeurController(BaseController):
         sequence = get_sequence_by_id(sid)
         if sequence is None:
             return BaseController.not_found()
-        niveau = parse_id(request.form("niveau_classe_id", ""))
         data = {
             "identifiant": (request.form("identifiant", "") or "").strip(),
             "titre": (request.form("titre", "") or "").strip(),
             "activite_glissante": 1 if request.form("activite_glissante", "") else 0,
             "ordre_impose": 1 if request.form("ordre_impose", "") else 0,
-            # niveau_classe_id est NOT NULL : à défaut, on conserve l'existant.
-            "niveau_classe_id": niveau if niveau is not None else sequence.get("niveau_classe_id"),
+            # niveau_classe_id est nullable (ADR-029) : vide -> None.
+            "niveau_classe_id": parse_id(request.form("niveau_classe_id", "")),
         }
         update_identite(sid, data)
         return SequenceEditeurController._retour_sauvegarde(request, sid)
