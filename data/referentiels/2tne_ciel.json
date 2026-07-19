@@ -1,7 +1,7 @@
 {
   "type": "referentiel_niveau_classe",
   "identifiant": "2tne-ciel",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "sources": [
     {
       "source_id": "referentiel-bac-pro-ciel",
@@ -17,8 +17,8 @@
     }
   ],
   "provenance": {
-    "date_extraction": "2026-07-06",
-    "methode": "extraction manuelle representative (v0.1.0, partielle, a completer)",
+    "date_extraction": "2026-07-19",
+    "methode": "extraction manuelle representative (v0.2.0, connaissances associees ajoutees par competence)",
     "point_entree": "referentiel_officiel"
   },
   "formation": {
@@ -168,6 +168,28 @@
       "id": "comp-c01",
       "code": "C01",
       "intitule": "Communiquer en situation professionnelle (français/anglais)",
+      "connaissances": [
+        {
+          "libelle": "Communication interpersonnelle",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Théorie de la communication : composantes, enjeux, registre de langage, discours expert",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Communication écrite : cahier des charges, dossier de présentation",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Communication orale : verbal, non-verbal, écoute active, empathie, reformulation",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Règles de présentation et de typographie",
+          "niveau_taxonomique": 3
+        }
+      ],
       "criteres_evaluation": [
         {
           "id": "cr-c01-1",
@@ -204,6 +226,24 @@
       "id": "comp-c03",
       "code": "C03",
       "intitule": "Participer à un projet",
+      "connaissances": [
+        {
+          "libelle": "Outils de suivi",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Budgétisation des moyens humains et matériels",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Gestion de commande",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Méthodologie de projet",
+          "niveau_taxonomique": 3
+        }
+      ],
       "criteres_evaluation": [
         {
           "id": "cr-c03-1",
@@ -245,6 +285,44 @@
       "id": "comp-c04",
       "code": "C04",
       "intitule": "Analyser une structure matérielle et logicielle",
+      "connaissances": [
+        {
+          "libelle": "Infrastructures matérielles et logicielles centralisées, décentralisées ou réparties",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Documents d'architecture métier : synoptique, schéma de câblage, etc.",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Acteurs réglementaires et référentiels de bonnes pratiques : CNIL, ANSSI, NIS, Cybermalveillance.gouv.fr, etc.",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "SysML : exigences, séquences, blocs, blocs internes",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Structures électroniques analogiques et numériques",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Structures programmables",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Programmation en langage évolué",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Électronique analogique",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Anglais technique",
+          "niveau_taxonomique": 2
+        }
+      ],
       "criteres_evaluation": [
         {
           "id": "cr-c04-1",
@@ -290,6 +368,32 @@
       "id": "comp-c06",
       "code": "C06",
       "intitule": "Valider la conformité d'une installation",
+      "connaissances": [
+        {
+          "libelle": "Réseaux informatiques : protocoles, équipements et outils usuels",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Principes des modèles en couches",
+          "niveau_taxonomique": 1
+        },
+        {
+          "libelle": "Architecture des réseaux industriels et tertiaires",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Structures matérielles analogiques et numériques",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Structures programmables",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Appareils de mesure",
+          "niveau_taxonomique": 3
+        }
+      ],
       "criteres_evaluation": [
         {
           "id": "cr-c06-1",
@@ -326,6 +430,36 @@
       "id": "comp-c07",
       "code": "C07",
       "intitule": "Réaliser des maquettes et prototypes",
+      "connaissances": [
+        {
+          "libelle": "Technologies de boîtiers de composants : CMS, traversants, connectiques",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Technologies de fabrication d'un circuit imprimé",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Procédés industriels de pose et de brasure",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Procédés de prototypage",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Normes IPC",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Normes qualité, sécurité, environnement",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Développement durable appliqué aux produits électroniques et aux services numériques",
+          "niveau_taxonomique": 2
+        }
+      ],
       "criteres_evaluation": [
         {
           "id": "cr-c07-1",
@@ -388,6 +522,28 @@
       "id": "comp-c08",
       "code": "C08",
       "intitule": "Coder",
+      "connaissances": [
+        {
+          "libelle": "Langages de développement et interfaces de développement associées",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Outils de modélisation",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Politiques et référentiels de sécurisation des applications",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Infrastructures matérielles et logicielles",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Principes fondamentaux de programmation : variables, conditions, boucles et fonctions",
+          "niveau_taxonomique": 3
+        }
+      ],
       "criteres_evaluation": [
         {
           "id": "cr-c08-1",
@@ -428,6 +584,60 @@
       "id": "comp-c09",
       "code": "C09",
       "intitule": "Installer les éléments d'un système électronique ou informatique",
+      "connaissances": [
+        {
+          "libelle": "Plans mécaniques et architecturaux 2D et 3D",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Schémas électriques, électroniques et réseaux",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Technologies de raccordement : filaire, optique, fluidique, etc.",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Appareils de mesure : multimètre, oscilloscope, etc.",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Habilitation électrique B1V",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Outillage mécanique et spécifique",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "AIPR",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Modèles OSI et TCP/IP",
+          "niveau_taxonomique": 1
+        },
+        {
+          "libelle": "Protocoles usuels IPv4",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Éléments actifs d'un réseau",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Internet des objets",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Serveurs et ordinateurs : Windows, Linux, machines virtuelles, etc.",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Architecture d'un réseau ou d'un système",
+          "niveau_taxonomique": 2
+        }
+      ],
       "criteres_evaluation": [
         {
           "id": "cr-c09-1",
@@ -482,6 +692,24 @@
       "id": "comp-c10",
       "code": "C10",
       "intitule": "Exploiter un réseau informatique",
+      "connaissances": [
+        {
+          "libelle": "Lignes de commandes des équipements",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Méthodes de connexion à distance à un équipement",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Systèmes d'exploitation UNIX et Windows",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Bonnes pratiques en sécurité informatique",
+          "niveau_taxonomique": 2
+        }
+      ],
       "criteres_evaluation": [
         {
           "id": "cr-c10-1",
@@ -518,6 +746,44 @@
       "id": "comp-c11",
       "code": "C11",
       "intitule": "Maintenir un système électronique ou réseau informatique",
+      "connaissances": [
+        {
+          "libelle": "Structures électroniques analogiques et numériques",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Structures programmables",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Caractérisation de signaux simples",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Appareils de mesure : multimètre, oscilloscope, générateur, etc.",
+          "niveau_taxonomique": 3
+        },
+        {
+          "libelle": "Formation à l'habilitation électrique BR",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Économie de la maintenance",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Normes qualité, sécurité, environnement",
+          "niveau_taxonomique": 1
+        },
+        {
+          "libelle": "Types de maintenance",
+          "niveau_taxonomique": 2
+        },
+        {
+          "libelle": "Normes IPC spécifiques à la réparation",
+          "niveau_taxonomique": 2
+        }
+      ],
       "criteres_evaluation": [
         {
           "id": "cr-c11-1",
