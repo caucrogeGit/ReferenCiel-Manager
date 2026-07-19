@@ -1,6 +1,7 @@
 """Routes du contrôleur SequenceController (ADR-068)."""
 from core.http.router import Router
 from mvc.controllers.sequence_controller import SequenceController
+from mvc.controllers.sequence_connaissance_controller import SequenceConnaissanceController
 
 
 def register_sequence_routes(router: Router) -> None:
@@ -13,6 +14,10 @@ def register_sequence_routes(router: Router) -> None:
         g.add("GET", "/show/{id}", SequenceController.show, name="sequence-show")
         g.add("GET", "/edit/{id}", SequenceController.edit, name="sequence-edit")
         g.add("POST", "/update/{id}", SequenceController.update, name="sequence-update")
+        g.add("GET", "/{id}/connaissances", SequenceConnaissanceController.afficher, name="sequence-connaissances")
+        g.add("POST", "/{id}/connaissance/basculer", SequenceConnaissanceController.basculer, name="sequence-connaissance-basculer")
+        g.add("POST", "/{id}/connaissance/niveau", SequenceConnaissanceController.niveau, name="sequence-connaissance-niveau")
+        g.add("POST", "/{id}/connaissance/statut", SequenceConnaissanceController.statut, name="sequence-connaissance-statut")
         g.add("POST", "/destroy/{id}", SequenceController.destroy, name="sequence-destroy")
         g.add("POST", "/bulk-delete", SequenceController.bulk_delete, name="sequence-bulk_delete")
         g.add("POST", "/bulk-delete-confirm", SequenceController.bulk_delete_confirm, name="sequence-bulk_delete_confirm")

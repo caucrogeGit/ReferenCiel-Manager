@@ -10,6 +10,7 @@ from mvc.models.sequence_model import (
     get_niveau_classe_choices,
 )
 from mvc.forms.sequence_form import SequenceForm
+from mvc.controllers.sequence_connaissance_controller import contexte_connaissances
 from core.security.session import get_flash, get_session_id
 
 
@@ -161,8 +162,10 @@ class SequenceController(BaseController):
         sequence = get_sequence_by_id(id)
         if sequence is None:
             return BaseController.not_found()
+        context = {"sequence": sequence, "flash": get_flash(get_session_id(request))}
+        context.update(contexte_connaissances(id))
         return BaseController.render("app/sequence/show.html",
-            context={"sequence": sequence, "flash": get_flash(get_session_id(request))},
+            context=context,
             request=request)
 
     @staticmethod
