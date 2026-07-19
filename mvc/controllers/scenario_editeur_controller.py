@@ -44,6 +44,7 @@ from mvc.models.scenario_editeur_model import (
     list_ressources,
     list_scenarios,
     supprimer_ressource,
+    supprimer_scenario,
 )
 from mvc.services.scenario_pdf import construire_pdf
 from mvc.services.scenario_tunnel import (
@@ -96,6 +97,29 @@ class ScenarioEditeurController(BaseController):
             )
         scenario_id = creer_scenario(titre, referentiel_id)
         return BaseController.redirect(f"/conception/scenario/{scenario_id}")
+
+    @staticmethod
+    def supprimer(request: Request) -> Response:
+        scenario_id = parse_id(request.route("id"))
+        if scenario_id is None:
+            return BaseController.not_found()
+        scenario = get_scenario(scenario_id)
+        if scenario is None:
+            return BaseController.not_found()
+        # Un scénario « utilisé » par des élèves est verrouillé (comme pour le
+        # recalcul de statut) : sa suppression casserait en cascade des données de
+        # suivi. On refuse côté serveur, en plus de masquer le bouton côté liste.
+        if scenario.get("Statut") == "utilise":
+            return BaseController.redirect_with_flash(
+                request, "/conception/scenario",
+                "Ce scénario est utilisé : il ne peut pas être supprimé.", "error",
+            )
+        titre = str(scenario.get("Titre") or "")
+        supprimer_scenario(scenario_id)
+        return BaseController.redirect_with_flash(
+            request, "/conception/scenario",
+            f"Scénario « {titre} » supprimé.", "success",
+        )
 
     # ── Vue principale ───────────────────────────────────────────────────────
 

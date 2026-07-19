@@ -288,3 +288,9 @@ def get_ressource(ressource_id: int, scenario_id: int) -> "dict[str, Any] | None
 
 def supprimer_ressource(ressource_id: int) -> None:
     execute("DELETE FROM scenario_ressource WHERE Id = ?", (ressource_id,))
+
+
+def supprimer_scenario(scenario_id: int) -> None:
+    """Supprime un scénario. Ses pivots (activités, critères, ressources,
+    co-auteurs, séquences) partent en CASCADE (FK ON DELETE CASCADE)."""
+    execute("DELETE FROM scenario WHERE Id = ?", (scenario_id,))
