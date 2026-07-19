@@ -228,6 +228,16 @@ def import_referentiel(canonical: dict[str, Any]) -> ImportReport:
             )
             comp_map[str(comp["code"])] = cid
             rapport.compte("competences")
+            for conn in comp.get("connaissances", []):
+                try:
+                    db.insert(
+                        "INSERT INTO connaissance (Libelle, NiveauTaxonomique, competence_id, "
+                        "CreatedAt, UpdatedAt) VALUES (?, ?, ?, NOW(), NOW())",
+                        (conn["libelle"], conn.get("niveau_taxonomique"), cid),
+                    )
+                    rapport.compte("connaissances")
+                except Exception as exc:  # noqa: BLE001
+                    rapport.echec(f"connaissance {conn.get('libelle')}", exc)
             for crit in comp.get("criteres_evaluation", []):
                 try:
                     crit_id = db.insert(

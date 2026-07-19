@@ -38,6 +38,7 @@ class _FakeDb:
         self._seq = 0
         self._referentiel_existe = referentiel_existe
         self.inserts: list[str] = []
+        self.insert_params: list[tuple[str, tuple[Any, ...]]] = []
         self.executes: list[str] = []
 
     def fetch_one(self, sql: str, params: Sequence[Any] = (), *, tx: object = None) -> dict[str, Any] | None:
@@ -48,6 +49,7 @@ class _FakeDb:
     def insert(self, sql: str, params: Sequence[Any] = (), *, tx: object = None) -> int:
         self._seq += 1
         self.inserts.append(sql)
+        self.insert_params.append((sql, tuple(params)))
         return self._seq
 
     def execute(self, sql: str, params: Sequence[Any] = (), *, tx: object = None) -> int:
@@ -101,3 +103,40 @@ def test_validateur_accepte_exemple_et_refuse_document_casse(canonical: dict[str
     assert validate_referentiel_canonical(canonical) == []
     erreurs = validate_referentiel_canonical({"type": "referentiel_niveau_classe"})
     assert erreurs  # au moins une propriété requise manquante
+
+
+def test_import_connaissances_par_competence(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Les connaissances d'une compétence sont insérées (ADR-028), niveau nullable.
+
+    Le niveau taxonomique officiel est repris tel quel ; absent, il vaut None
+    (colonne NiveauTaxonomique nullable).
+    """
+    fake = _FakeDb()
+    _brancher(monkeypatch, fake)
+    canonical: dict[str, Any] = {
+        "type": "referentiel_niveau_classe",
+        "identifiant": "test-conn",
+        "formation": {"code": "CIEL", "intitule": "CIEL", "type": "BAC_PRO"},
+        "competences": [
+            {
+                "id": "c1", "code": "C06", "intitule": "Valider la conformité",
+                "source_ids": [],
+                "connaissances": [
+                    {"libelle": "Réseaux informatiques", "niveau_taxonomique": 3},
+                    {"libelle": "Principes des modèles en couches"},
+                ],
+                "criteres_evaluation": [],
+            }
+        ],
+    }
+
+    rapport = imp.import_referentiel(canonical)
+
+    assert rapport.erreurs == []
+    assert rapport.inseres.get("connaissances") == 2
+    conn_inserts = [p for (sql, p) in fake.insert_params if "INSERT INTO connaissance" in sql]
+    assert len(conn_inserts) == 2
+    # (Libelle, NiveauTaxonomique, competence_id) : niveau explicite puis None.
+    assert conn_inserts[0][0] == "Réseaux informatiques"
+    assert conn_inserts[0][1] == 3
+    assert conn_inserts[1][1] is None
