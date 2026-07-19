@@ -38,11 +38,13 @@ def titre_existe_autre(titre: str, sauf_id: int) -> bool:
     ) is not None
 
 
-def creer_scenario(titre: str, referentiel_id: int) -> int:
-    """Crée un scénario rattaché à un référentiel dès sa naissance (ADR-019/ADR-023).
+def creer_scenario(titre: str, referentiel_id: "int | None") -> int:
+    """Crée un scénario. Le référentiel est **facultatif** (ADR-027 : matières non
+    adossées à un référentiel, comme les enseignements généraux).
 
-    Le référentiel est le point d'entrée : formation, niveau et débouchés s'en
-    déduisent. Le reste (contexte, liaison, ressources) se remplit par sections.
+    Avec référentiel : point d'entrée dont formation, niveau et débouchés se
+    déduisent. Sans référentiel (`None`) : la finalisation ne requiert que le
+    contexte (voir `recalculer_statut`). Le reste se remplit par sections.
     """
     return insert(
         "INSERT INTO scenario (Titre, Intention, Statut, Version, CoIntervention, referentiel_id, CreatedAt, UpdatedAt) "
@@ -130,27 +132,33 @@ def recalculer_statut(scenario_id: int) -> None:
 
     Le statut est stocké en base (pas de calcul à la lecture) mais tenu à jour à
     chaque écriture qui peut le faire changer, donc jamais falsifiable.
-      - « finalise » : contexte complet ET au moins une activité ET au moins un
-        critère (la compétence est impliquée par le critère) ;
+      - avec référentiel : « finalise » = contexte complet ET au moins une activité
+        ET au moins un critère (la compétence est impliquée par le critère) ;
+      - **sans référentiel** (ADR-027, matière non adossée) : « finalise » = contexte
+        complet seul (pas de compétences/critères à exiger) ;
       - « brouillon » : sinon.
     Un scénario « utilise » (utilisé par des élèves) est verrouillé : on n'y touche pas.
     """
     row = fetch_one(
-        "SELECT Statut, " + ", ".join(_CHAMPS_CONTEXTE) + " FROM scenario WHERE Id = ?",
+        "SELECT Statut, referentiel_id, " + ", ".join(_CHAMPS_CONTEXTE) + " FROM scenario WHERE Id = ?",
         (scenario_id,),
     )
     if row is None or row["Statut"] == "utilise":
         return
     contexte_complet = all(row[champ] for champ in _CHAMPS_CONTEXTE)
-    n_act = fetch_one(
-        "SELECT COUNT(*) AS n FROM scenario_activite WHERE scenario_id = ?", (scenario_id,)
-    )
-    n_crit = fetch_one(
-        "SELECT COUNT(*) AS n FROM scenario_critere WHERE scenario_id = ?", (scenario_id,)
-    )
-    a_activite = bool(n_act and int(n_act["n"]) > 0)
-    a_critere = bool(n_crit and int(n_crit["n"]) > 0)
-    statut = "finalise" if (contexte_complet and a_activite and a_critere) else "brouillon"
+    if row["referentiel_id"] is None:
+        # Hors référentiel : le contexte complet suffit à finaliser.
+        statut = "finalise" if contexte_complet else "brouillon"
+    else:
+        n_act = fetch_one(
+            "SELECT COUNT(*) AS n FROM scenario_activite WHERE scenario_id = ?", (scenario_id,)
+        )
+        n_crit = fetch_one(
+            "SELECT COUNT(*) AS n FROM scenario_critere WHERE scenario_id = ?", (scenario_id,)
+        )
+        a_activite = bool(n_act and int(n_act["n"]) > 0)
+        a_critere = bool(n_crit and int(n_crit["n"]) > 0)
+        statut = "finalise" if (contexte_complet and a_activite and a_critere) else "brouillon"
     execute(
         "UPDATE scenario SET Statut = ?, UpdatedAt = NOW() WHERE Id = ?",
         (statut, scenario_id),

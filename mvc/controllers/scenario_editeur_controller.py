@@ -77,16 +77,17 @@ class ScenarioEditeurController(BaseController):
 
     @staticmethod
     def nouveau(request: Request) -> Response:
-        # Le référentiel est obligatoire dès la création (ADR-023) : formation,
-        # niveau et débouchés s'en déduisent. On vérifie côté serveur qu'il existe.
+        # Titre obligatoire ; référentiel FACULTATIF (ADR-027 : matières non
+        # adossées à un référentiel). S'il est fourni, il doit être valide ;
+        # laissé vide = scénario hors référentiel (finalisable sur le seul contexte).
         titre = request.form("titre", "").strip()
         referentiel_id = parse_id(request.form("referentiel_id", ""))
         refs_valides = {int(r["Id"]) for r in list_referentiels()}
-        if not titre or referentiel_id is None or referentiel_id not in refs_valides:
+        if not titre or (referentiel_id is not None and referentiel_id not in refs_valides):
             return BaseController.redirect(
                 "/conception/scenario",
                 request=request,
-                flash="Titre et référentiel sont obligatoires pour créer un scénario.",
+                flash="Le titre est obligatoire (et le référentiel, s'il est choisi, doit être valide).",
                 level="success",
             )
         # Le titre d'un scénario est unique.

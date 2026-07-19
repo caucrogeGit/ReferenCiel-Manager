@@ -12,13 +12,14 @@
     <input id="titre" name="titre" type="text" required placeholder="Titre du scénario"
            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
   </div>
-  {# Référentiel obligatoire dès la création (ADR-023) : formation, niveau et
-     débouchés s'en déduisent. Même design que le champ titre, placé en dessous. #}
+  {# Référentiel FACULTATIF (ADR-027) : les matières non adossées à un référentiel
+     (enseignements généraux, PSE, chef-d'œuvre…) n'en ont pas. Laisser « Aucun »
+     crée un scénario hors référentiel, finalisable sur le seul contexte. #}
   <div class="mb-3">
-    <label class="block text-sm text-gray-600 mb-1" for="referentiel_id">Référentiel {{ obligation(true) }}</label>
-    <select id="referentiel_id" name="referentiel_id" required
+    <label class="block text-sm text-gray-600 mb-1" for="referentiel_id">Référentiel {{ obligation(false) }}</label>
+    <select id="referentiel_id" name="referentiel_id"
             class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <option value="">Choisir un référentiel…</option>
+      <option value="">Aucun (matière hors référentiel)</option>
       {% for r in referentiels %}
       <option value="{{ r.Id }}">{{ r.Identifiant }}{% if r.formation_intitule %} — {{ r.formation_intitule }}{% endif %}</option>
       {% endfor %}
