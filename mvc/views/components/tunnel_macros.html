@@ -23,6 +23,17 @@
      aria-label="Étapes du scénario">
     {% for step in steps %}
     {%- set is_current = (step.key == current) -%}
+    {% if step.inactif %}
+    {# Étape grisée, non cliquable (ex. Liaison référentiel d'un scénario hors
+       référentiel, ADR-027). Rendue en <div> pour couper la navigation. #}
+    <div class="flex-1 flex items-center justify-between gap-2 py-2.5 px-3 rounded-[10px] text-sm text-faint"
+         aria-disabled="true" title="Scénario hors référentiel : aucune liaison à faire">
+        <span class="flex items-center gap-2 text-nowrap">
+            <svg class="shrink-0 size-4 text-faint" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Étape non applicable"><circle cx="12" cy="12" r="9"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+            {{ step.label }}
+        </span>
+    </div>
+    {% else %}
     <a href="{{ base_url }}?etape={{ step.key }}"
        hx-get="{{ base_url }}?etape={{ step.key }}"
        hx-target="#tunnel-corps"
@@ -49,6 +60,7 @@
         </span>
         {% endif %}
     </a>
+    {% endif %}
     {% endfor %}
 </nav>
 {% endmacro %}

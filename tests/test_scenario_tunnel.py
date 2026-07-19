@@ -66,6 +66,7 @@ def test_navigation_bornes_du_tunnel() -> None:
 def _scenario_complet() -> dict[str, Any]:
     return {
         "Titre": "Réseau local",
+        "referentiel_id": 1,  # adossé à un référentiel (cas normal)
         "DescriptionContexte": "x",
         "Problematique": "x",
         "MaterielsLogiciels": "x",
@@ -87,6 +88,15 @@ def test_steps_contexte_incomplet_et_liaison_vide() -> None:
     assert done["contexte"] is False
     assert done["liaison"] is False  # il faut activité ET critère
     assert done["ressources"] is True  # facultatives : ne bloque jamais
+
+
+def test_steps_hors_referentiel_liaison_grisee() -> None:
+    # Sans référentiel (ADR-027) : l'étape Liaison est inactive et ne bloque pas.
+    scenario = _scenario_complet()
+    scenario["referentiel_id"] = None
+    liaison = next(s for s in steps(scenario, activite_ids=[], critere_ids=[]) if s["key"] == "liaison")
+    assert liaison["inactif"] is True
+    assert liaison["done"] is True
 
 
 # ── Sélection du maître-détail ──────────────────────────────────────────────

@@ -84,6 +84,9 @@ def steps(
     #  - Ressources : facultatives -> l'étape ne bloque jamais.
     contexte_complet = all(scenario.get(champ) for champ in _CHAMPS_CONTEXTE)
     liaison_complete = len(activite_ids) > 0 and len(critere_ids) > 0
+    # Scénario hors référentiel (ADR-027) : l'étape Liaison ne s'applique pas, on
+    # la grise et elle ne bloque pas la complétion.
+    hors_referentiel = scenario.get("referentiel_id") is None
 
     return [
         {
@@ -103,7 +106,8 @@ def steps(
             # Le code du référentiel (ex. « ciel-2tne ») est rappelé sous le titre.
             "label": LIBELLES["liaison"],
             "badge": "",
-            "done": liaison_complete,
+            "done": True if hors_referentiel else liaison_complete,
+            "inactif": hors_referentiel,
         },
         {
             "key": "ressources",

@@ -7,12 +7,15 @@
 {% from "components/ui.html" import button, empty_state, obligation %}
 
 {% if not arbre %}
-{# Pas de référentiel rattaché : le tunnel ne peut pas continuer. On demande
-   le rattachement avant de montrer quoi que ce soit d'autre. #}
+{# Scénario hors référentiel (ADR-027) : aucune liaison à faire. On l'indique
+   clairement, tout en laissant la possibilité d'en rattacher un si besoin. #}
 <section class="bg-surface border border-line rounded-card p-7">
-    <h2 class="text-base font-semibold text-ink">Référentiel du scénario</h2>
+    <h2 class="text-base font-semibold text-ink">Scénario hors référentiel</h2>
     <p class="mt-0.5 mb-4 text-sm text-muted">
-        Choisissez le référentiel avant de sélectionner les activités et les critères.
+        Ce scénario n'est <strong>pas</strong> adossé à un référentiel : il n'y a
+        <strong>aucune liaison</strong> à faire, et il se finalise sur le seul
+        contexte (ADR-027). Pour le rattacher malgré tout à un référentiel,
+        choisissez-en un ci-dessous.
     </p>
     <form method="post" action="{{ base_url }}/referentiel"
           class="flex gap-3 items-end max-w-lg">
