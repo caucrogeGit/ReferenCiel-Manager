@@ -801,17 +801,6 @@
     },
     {
       "type": "many_to_one",
-      "from": "SavoirAssocie",
-      "to": "Sequence",
-      "name": "sequence",
-      "inverse_name": "savoirs_associes",
-      "foreign_key": "sequence_id",
-      "nullable": false,
-      "on_delete": "cascade",
-      "index": true
-    },
-    {
-      "type": "many_to_one",
       "from": "SeanceCompetence",
       "to": "Seance",
       "name": "seance",

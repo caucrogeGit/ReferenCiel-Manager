@@ -590,13 +590,6 @@ ALTER TABLE formation_niveau
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
 
-ALTER TABLE savoir_associe
-    ADD CONSTRAINT fk_savoir_associe_sequence_id
-    FOREIGN KEY (sequence_id)
-    REFERENCES sequence (Id)
-    ON DELETE CASCADE
-    ON UPDATE RESTRICT;
-
 ALTER TABLE seance_competence
     ADD CONSTRAINT fk_seance_competence_seance_id
     FOREIGN KEY (seance_id)
