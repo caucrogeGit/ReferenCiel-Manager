@@ -138,6 +138,29 @@ et l'ancienne `ProgressionEleve`.
 - **Gel par instantané (ADR-026)** : une séquence est **figée à l'affectation** ;
   modifier le maître n'affecte **pas** les progressions déjà figées.
 
+### Cycle de vie de la paire Scénario ↔ Séquence
+
+- **Appairage 1-1 obligatoire.** L'objet de conception réel est la **paire** : à toute
+  séquence correspond exactement un scénario et réciproquement, **inséparables**. Un
+  scénario n'est **pas** un objet réutilisable qui vivrait seul durablement ni partagé
+  entre séquences.
+- **Titre : autorité au Scénario.** Le titre est porté par le **scénario** ; la séquence
+  l'affiche depuis lui (les deux portent donc toujours le même titre, sans double source
+  de vérité).
+- **Création (deux entrées, même résultat : une paire).**
+  - *Séquence d'abord* : on remplit la séquence (y compris les champs « cadre ») et le
+    **scénario est créé en même temps** avec ces valeurs.
+  - *Scénario d'abord* (tunnel actuel) : on crée le scénario, puis on **lie** une séquence ;
+    le « cadre » de la séquence est alors **lu depuis le scénario**.
+  - Dans les deux cas, on aboutit à une paire appairée ; aucun des deux ne reste seul.
+- **Finalisation à trois niveaux** (complétude **dérivée**, cohérente ADR-026 — « finalisé »
+  n'est pas un statut persisté) :
+  - **Scénario finalisé** = tout son tunnel obligatoire est saisi ;
+  - **Séquence finalisée** = tout son tunnel obligatoire est saisi ;
+  - **Ensemble finalisé** = les deux finalisés.
+  - La **publication** (`statut = publié`) s'applique à l'**ensemble** et n'est possible que
+    si l'ensemble est finalisé.
+
 ## Portée
 
 Couvre `Séquence`, `Séance`, `DossierTechnique`, `RessourceDossier`, `QCM`,
