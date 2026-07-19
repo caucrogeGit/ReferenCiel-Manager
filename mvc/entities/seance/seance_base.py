@@ -19,7 +19,7 @@ from core.validation import (
 class SeanceBase:
     """Classe de base regenerable de Seance."""
 
-    def __init__(self, ordre, titre, sequence_id, created_at, updated_at, id=None, theme=None, production_attendue=None):
+    def __init__(self, ordre, titre, sequence_id, created_at, updated_at, id=None, theme=None, production_attendue=None, objectif_operationnel=None, consigne_generale=None, duree_estimee_minutes=None, modalite_pedagogique=None, condition_realisation=None, condition_validation=None, remediation=None):
         self.ordre = ordre
         self.titre = titre
         self.sequence_id = sequence_id
@@ -28,6 +28,13 @@ class SeanceBase:
         self.id = id
         self.theme = theme
         self.production_attendue = production_attendue
+        self.objectif_operationnel = objectif_operationnel
+        self.consigne_generale = consigne_generale
+        self.duree_estimee_minutes = duree_estimee_minutes
+        self.modalite_pedagogique = modalite_pedagogique
+        self.condition_realisation = condition_realisation
+        self.condition_validation = condition_validation
+        self.remediation = remediation
 
     @staticmethod
     def _coerce_datetime(value):
@@ -97,6 +104,97 @@ class SeanceBase:
         self._production_attendue = value
 
     @property
+    def objectif_operationnel(self):
+        return self._objectif_operationnel
+
+    @objectif_operationnel.setter
+    @typed(str)
+    @nullable
+    def objectif_operationnel(self, value):
+        if value is None:
+            self._objectif_operationnel = None
+            return
+        self._objectif_operationnel = value
+
+    @property
+    def consigne_generale(self):
+        return self._consigne_generale
+
+    @consigne_generale.setter
+    @typed(str)
+    @nullable
+    def consigne_generale(self, value):
+        if value is None:
+            self._consigne_generale = None
+            return
+        self._consigne_generale = value
+
+    @property
+    def duree_estimee_minutes(self):
+        return self._duree_estimee_minutes
+
+    @duree_estimee_minutes.setter
+    @typed(int)
+    @nullable
+    def duree_estimee_minutes(self, value):
+        if value is None:
+            self._duree_estimee_minutes = None
+            return
+        self._duree_estimee_minutes = value
+
+    @property
+    def modalite_pedagogique(self):
+        return self._modalite_pedagogique
+
+    @modalite_pedagogique.setter
+    @typed(str)
+    @nullable
+    def modalite_pedagogique(self, value):
+        if value is None:
+            self._modalite_pedagogique = None
+            return
+        self._modalite_pedagogique = value
+
+    @property
+    def condition_realisation(self):
+        return self._condition_realisation
+
+    @condition_realisation.setter
+    @typed(str)
+    @nullable
+    def condition_realisation(self, value):
+        if value is None:
+            self._condition_realisation = None
+            return
+        self._condition_realisation = value
+
+    @property
+    def condition_validation(self):
+        return self._condition_validation
+
+    @condition_validation.setter
+    @typed(str)
+    @nullable
+    def condition_validation(self, value):
+        if value is None:
+            self._condition_validation = None
+            return
+        self._condition_validation = value
+
+    @property
+    def remediation(self):
+        return self._remediation
+
+    @remediation.setter
+    @typed(str)
+    @nullable
+    def remediation(self, value):
+        if value is None:
+            self._remediation = None
+            return
+        self._remediation = value
+
+    @property
     def sequence_id(self):
         return self._sequence_id
 
@@ -136,6 +234,13 @@ class SeanceBase:
             "titre": self.titre,
             "theme": self.theme,
             "production_attendue": self.production_attendue,
+            "objectif_operationnel": self.objectif_operationnel,
+            "consigne_generale": self.consigne_generale,
+            "duree_estimee_minutes": self.duree_estimee_minutes,
+            "modalite_pedagogique": self.modalite_pedagogique,
+            "condition_realisation": self.condition_realisation,
+            "condition_validation": self.condition_validation,
+            "remediation": self.remediation,
             "sequence_id": self.sequence_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
@@ -149,11 +254,18 @@ class SeanceBase:
             titre=data["titre"],
             theme=data["theme"],
             production_attendue=data["production_attendue"],
+            objectif_operationnel=data["objectif_operationnel"],
+            consigne_generale=data["consigne_generale"],
+            duree_estimee_minutes=data["duree_estimee_minutes"],
+            modalite_pedagogique=data["modalite_pedagogique"],
+            condition_realisation=data["condition_realisation"],
+            condition_validation=data["condition_validation"],
+            remediation=data["remediation"],
             sequence_id=data["sequence_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"SeanceBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, sequence_id={self.sequence_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"SeanceBase(id={self.id!r}, ordre={self.ordre!r}, titre={self.titre!r}, theme={self.theme!r}, production_attendue={self.production_attendue!r}, objectif_operationnel={self.objectif_operationnel!r}, consigne_generale={self.consigne_generale!r}, duree_estimee_minutes={self.duree_estimee_minutes!r}, modalite_pedagogique={self.modalite_pedagogique!r}, condition_realisation={self.condition_realisation!r}, condition_validation={self.condition_validation!r}, remediation={self.remediation!r}, sequence_id={self.sequence_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

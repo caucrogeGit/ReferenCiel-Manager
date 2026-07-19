@@ -49,6 +49,35 @@
       "unique": false
     },
     {
+      "name": "prerequis",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "positionnement_progression",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "duree_estimee",
+      "type": "string",
+      "max_length": 100,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "modalites_evaluation",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
       "name": "niveau_classe_id",
       "type": "foreign_key",
       "references": "NiveauClasse",

@@ -35,6 +35,56 @@
       "unique": false
     },
     {
+      "name": "objectif_operationnel",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "consigne_generale",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "duree_estimee_minutes",
+      "type": "integer",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "modalite_pedagogique",
+      "type": "string",
+      "max_length": 100,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "condition_realisation",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "condition_validation",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "remediation",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
       "name": "sequence_id",
       "type": "foreign_key",
       "references": "Sequence",

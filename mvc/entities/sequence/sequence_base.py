@@ -19,7 +19,7 @@ from core.validation import (
 class SequenceBase:
     """Classe de base regenerable de Sequence."""
 
-    def __init__(self, identifiant, titre, statut, activite_glissante, ordre_impose, niveau_classe_id, created_at, updated_at, id=None, presentation=None):
+    def __init__(self, identifiant, titre, statut, activite_glissante, ordre_impose, niveau_classe_id, created_at, updated_at, id=None, presentation=None, prerequis=None, positionnement_progression=None, duree_estimee=None, modalites_evaluation=None):
         self.identifiant = identifiant
         self.titre = titre
         self.statut = statut
@@ -30,6 +30,10 @@ class SequenceBase:
         self.updated_at = updated_at
         self.id = id
         self.presentation = presentation
+        self.prerequis = prerequis
+        self.positionnement_progression = positionnement_progression
+        self.duree_estimee = duree_estimee
+        self.modalites_evaluation = modalites_evaluation
 
     @staticmethod
     def _coerce_datetime(value):
@@ -119,6 +123,58 @@ class SequenceBase:
         self._ordre_impose = value
 
     @property
+    def prerequis(self):
+        return self._prerequis
+
+    @prerequis.setter
+    @typed(str)
+    @nullable
+    def prerequis(self, value):
+        if value is None:
+            self._prerequis = None
+            return
+        self._prerequis = value
+
+    @property
+    def positionnement_progression(self):
+        return self._positionnement_progression
+
+    @positionnement_progression.setter
+    @typed(str)
+    @nullable
+    def positionnement_progression(self, value):
+        if value is None:
+            self._positionnement_progression = None
+            return
+        self._positionnement_progression = value
+
+    @property
+    def duree_estimee(self):
+        return self._duree_estimee
+
+    @duree_estimee.setter
+    @typed(str)
+    @nullable
+    def duree_estimee(self, value):
+        if value is None:
+            self._duree_estimee = None
+            return
+        self._duree_estimee = value
+
+    @property
+    def modalites_evaluation(self):
+        return self._modalites_evaluation
+
+    @modalites_evaluation.setter
+    @typed(str)
+    @nullable
+    def modalites_evaluation(self, value):
+        if value is None:
+            self._modalites_evaluation = None
+            return
+        self._modalites_evaluation = value
+
+    @property
     def niveau_classe_id(self):
         return self._niveau_classe_id
 
@@ -160,6 +216,10 @@ class SequenceBase:
             "statut": self.statut,
             "activite_glissante": self.activite_glissante,
             "ordre_impose": self.ordre_impose,
+            "prerequis": self.prerequis,
+            "positionnement_progression": self.positionnement_progression,
+            "duree_estimee": self.duree_estimee,
+            "modalites_evaluation": self.modalites_evaluation,
             "niveau_classe_id": self.niveau_classe_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
@@ -175,11 +235,15 @@ class SequenceBase:
             statut=data["statut"],
             activite_glissante=data["activite_glissante"],
             ordre_impose=data["ordre_impose"],
+            prerequis=data["prerequis"],
+            positionnement_progression=data["positionnement_progression"],
+            duree_estimee=data["duree_estimee"],
+            modalites_evaluation=data["modalites_evaluation"],
             niveau_classe_id=data["niveau_classe_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"SequenceBase(id={self.id!r}, identifiant={self.identifiant!r}, titre={self.titre!r}, presentation={self.presentation!r}, statut={self.statut!r}, activite_glissante={self.activite_glissante!r}, ordre_impose={self.ordre_impose!r}, niveau_classe_id={self.niveau_classe_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"SequenceBase(id={self.id!r}, identifiant={self.identifiant!r}, titre={self.titre!r}, presentation={self.presentation!r}, statut={self.statut!r}, activite_glissante={self.activite_glissante!r}, ordre_impose={self.ordre_impose!r}, prerequis={self.prerequis!r}, positionnement_progression={self.positionnement_progression!r}, duree_estimee={self.duree_estimee!r}, modalites_evaluation={self.modalites_evaluation!r}, niveau_classe_id={self.niveau_classe_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 
