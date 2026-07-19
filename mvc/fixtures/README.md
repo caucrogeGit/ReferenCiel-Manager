@@ -60,7 +60,7 @@ callable multi-tables `referentiel.py`, sans erreur de clé étrangère ni doubl
 |---|---|---|---|
 | Admin | `admin@referenciel.local` | `admin1234` | administration, import, socle |
 | Professeur | `prof@referenciel.local` | `prof1234` | `/mes-classes`, `/suivi`, `/bilan` |
-| Élève | `eleve@referenciel.local` | `eleve1234` | `/mon-parcours` |
+| Élève | `eleve@referenciel.local` | `eleve1234` | `/ma-sequence` |
 
 > Mots de passe de **démo** uniquement. La politique réelle (ADR-014) et la MFA
 > (ADR-015) s'appliquent au fonctionnement normal.
