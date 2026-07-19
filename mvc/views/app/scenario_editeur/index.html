@@ -45,16 +45,26 @@
         {%- if s.referentiel_identifiant %}{{ s.referentiel_identifiant }}{% endif -%}
         {%- if s.CoIntervention %} · co-intervention{% endif -%}
       </p>
-      {# Livrable fini : téléchargement réservé aux scénarios finalisés (ou
-         utilisés, contenu figé) — ADR-024. #}
+      {# Livrable fini : exports réservés aux scénarios finalisés (ou utilisés,
+         contenu figé) — ADR-024 (PDF) + Markdown et JSON. Au-dessus de l'overlay. #}
       {% if s.Statut in ('finalise', 'utilise') %}
-      <a href="/conception/scenario/{{ s.Id }}/pdf"
-         class="relative z-10 inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
-                text-forge-dark bg-forge-soft border border-forge-border hover:bg-forge-border transition"
-         title="Télécharger le scénario en PDF" aria-label="Télécharger le PDF de {{ s.Titre }}">
-        <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-        PDF
-      </a>
+      <div class="relative z-10 flex items-center gap-1.5">
+        <a href="/conception/scenario/{{ s.Id }}/pdf"
+           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+                  text-forge-dark bg-forge-soft border border-forge-border hover:bg-forge-border transition"
+           title="Télécharger le scénario en PDF" aria-label="Télécharger le PDF de {{ s.Titre }}">
+          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          PDF
+        </a>
+        <a href="/conception/scenario/{{ s.Id }}/md"
+           class="inline-flex items-center px-3 py-1 rounded-[10px] text-xs font-semibold
+                  text-subtle bg-cream border border-line hover:border-forge transition"
+           title="Télécharger le scénario en Markdown" aria-label="Télécharger le Markdown de {{ s.Titre }}">MD</a>
+        <a href="/conception/scenario/{{ s.Id }}/json"
+           class="inline-flex items-center px-3 py-1 rounded-[10px] text-xs font-semibold
+                  text-subtle bg-cream border border-line hover:border-forge transition"
+           title="Télécharger le scénario en JSON" aria-label="Télécharger le JSON de {{ s.Titre }}">JSON</a>
+      </div>
       {% endif %}
     </div>
     {# Suppression, SOUS le référentiel. Modale de confirmation partagée

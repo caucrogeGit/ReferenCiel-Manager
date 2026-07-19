@@ -112,8 +112,12 @@ def _co_auteurs(scenario_id: int) -> list[str]:
     ]
 
 
-def construire_pdf(scenario_id: int) -> bytes:
-    """Assemble le PDF d'un scénario. L'appelant garantit qu'il est finalisé."""
+def assembler_scenario(scenario_id: int) -> dict[str, Any]:
+    """Rassemble les données d'un scénario pour l'export (PDF, Markdown, JSON).
+
+    Structure commune : `scenario`, `referentiel`, `co_auteurs`, `contexte`
+    (libellé/valeur), `activites` (avec compétences et critères) et `ressources`.
+    """
     scenario = get_scenario(scenario_id)
     if scenario is None:
         raise ValueError(f"scénario {scenario_id} introuvable")
@@ -126,7 +130,7 @@ def construire_pdf(scenario_id: int) -> bytes:
 
     comp_par_id = _competences_par_id(arbre, get_critere_ids(scenario_id))
     liens = liens_activite_competence(int(referentiel_id)) if referentiel_id else {}
-    context: dict[str, Any] = {
+    return {
         "scenario": scenario,
         "referentiel": referentiel,
         "co_auteurs": _co_auteurs(scenario_id) if scenario.get("CoIntervention") else [],
@@ -134,5 +138,11 @@ def construire_pdf(scenario_id: int) -> bytes:
         "activites": _activites(arbre, get_activite_ids(scenario_id), comp_par_id, liens),
         "ressources": list_ressources(scenario_id),
     }
-    html = template_manager.render("app/scenario_editeur/pdf.html", context)
+
+
+def construire_pdf(scenario_id: int) -> bytes:
+    """Assemble le PDF d'un scénario. L'appelant garantit qu'il est finalisé."""
+    html = template_manager.render(
+        "app/scenario_editeur/pdf.html", assembler_scenario(scenario_id)
+    )
     return render_pdf(html)

@@ -9,6 +9,7 @@ pure du tunnel (étapes, complétion dérivée, sélection) vit dans
 référentiel (ADR-018).
 """
 import html
+from collections.abc import Callable
 from typing import Any
 
 from core.http.request import Request
@@ -47,6 +48,7 @@ from mvc.models.scenario_editeur_model import (
     supprimer_scenario,
 )
 from mvc.services.scenario_pdf import construire_pdf
+from mvc.services.scenario_export import construire_json, construire_markdown
 from mvc.services.scenario_tunnel import (
     borner_etape,
     navigation,
@@ -374,29 +376,50 @@ class ScenarioEditeurController(BaseController):
             "success",
         )
 
-    # ── Export PDF (ADR-024) ─────────────────────────────────────────────────
+    # ── Export : PDF, Markdown, JSON (ADR-024) ───────────────────────────────
 
     @staticmethod
-    def telecharger_pdf(request: Request) -> Response:
+    def _telecharger(
+        request: Request, extension: str, mime: str,
+        construire: "Callable[[int], bytes | str]",
+    ) -> Response:
+        """Télécharge un export du scénario. Réservé aux scénarios finalisés (ou
+        déjà utilisés : contenu complet et figé)."""
         scenario_id = parse_id(request.route("id"))
         if scenario_id is None:
             return BaseController.not_found()
         scenario = get_scenario(scenario_id)
         if scenario is None:
             return BaseController.not_found()
-        # Réservé aux scénarios finalisés (ou déjà utilisés : contenu complet, figé).
         if scenario.get("Statut") not in ("finalise", "utilise"):
             return BaseController.redirect_with_flash(
                 request,
                 f"/conception/scenario/{scenario_id}?etape=titre",
-                "Le PDF n'est disponible que pour un scénario finalisé.",
+                "L'export n'est disponible que pour un scénario finalisé.",
                 "error",
             )
-        pdf = construire_pdf(scenario_id)
         nom = slug(str(scenario.get("Titre") or "scenario"))
         return Response(
             200,
-            pdf,
-            "application/pdf",
-            headers={"Content-Disposition": f'attachment; filename="scenario-{nom}.pdf"'},
+            construire(scenario_id),
+            mime,
+            headers={"Content-Disposition": f'attachment; filename="scenario-{nom}.{extension}"'},
+        )
+
+    @staticmethod
+    def telecharger_pdf(request: Request) -> Response:
+        return ScenarioEditeurController._telecharger(
+            request, "pdf", "application/pdf", construire_pdf
+        )
+
+    @staticmethod
+    def telecharger_md(request: Request) -> Response:
+        return ScenarioEditeurController._telecharger(
+            request, "md", "text/markdown; charset=utf-8", construire_markdown
+        )
+
+    @staticmethod
+    def telecharger_json(request: Request) -> Response:
+        return ScenarioEditeurController._telecharger(
+            request, "json", "application/json; charset=utf-8", construire_json
         )
