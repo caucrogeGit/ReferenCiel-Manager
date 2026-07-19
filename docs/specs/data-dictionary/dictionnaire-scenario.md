@@ -36,7 +36,7 @@ ciblant des compétences (et leurs critères observables).
 | `objectifs` | text | non | objectifs pédagogiques visés (facultatif, complète l'intention) |
 | `statut` | string | oui | cycle de vie : `brouillon` \| `publie` \| `archive` |
 | `version` | string | oui | versionnement (semver ou libre) |
-| `referentiel_id` | many_to_one → ReferentielNiveauClasse | oui | référentiel-source (cadre) |
+| `referentiel_id` | many_to_one → ReferentielNiveauClasse | **non** | référentiel-source (cadre) ; **facultatif** — absent pour une matière hors référentiel (ADR-027) |
 | `auteur_id` | many_to_one → Professeur | oui | professeur auteur |
 
 Relations :
@@ -67,6 +67,11 @@ Relations :
   starter/séquence) → `archive` (retiré de l'usage courant). Un scénario **publié** ne se
   modifie pas librement (versionnement à venir, cohérent avec le référentiel).
 - **Intention obligatoire** : un scénario sans `intention` n'a pas de sens.
+- **Référentiel facultatif (ADR-027)** : un scénario peut être **hors référentiel**
+  (matières non adossées : enseignements généraux…). Alors `referentiel_id` est NULL,
+  l'étape « Liaison référentiel » du tunnel est **grisée**, et la **finalisation ne
+  requiert que le contexte** (pas d'activité ni de critère). Avec référentiel :
+  contexte **+ ≥1 activité + ≥1 critère**.
 - **Ciblage** : un scénario **devrait** cibler au moins une compétence (règle métier ;
   non contrainte au niveau du schéma pour le m2m).
 - **Provenance / cadre** : tout scénario référence un `referentiel_id` existant ; il

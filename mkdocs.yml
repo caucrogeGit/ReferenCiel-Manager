@@ -89,6 +89,7 @@ nav:
       - ADR-024 — Génération PDF (WeasyPrint): adr/024-generation-pdf-cote-application-weasyprint.md
       - ADR-025 — Renommage Séquence/Séance: adr/025-renommage-sequence-seance.md
       - ADR-026 — Versionnement objets pédagogiques publiés: adr/026-versionnement-objets-pedagogiques-publies.md
+      - ADR-027 — Scénario hors référentiel: adr/027-scenario-hors-referentiel.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
