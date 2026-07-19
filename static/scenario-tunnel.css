@@ -52,15 +52,15 @@
 }
 
 /* Boutons d'export de la carte scénario (PDF / MarkDown / JSON).
-   Graphite (couleur « ink » de la charte) : natif à la palette chaude du projet,
-   et nettement distinct du badge orange clair « Finalisé » (sombre vs clair) et du
-   rouge « Supprimer ». Défini ici en CSS pur (charte non exposée en classes JIT). */
+   Sable / taupe doux : pastel et natif à la palette chaude du projet, mais d'une
+   teinte NEUTRE — donc distinct du pêche du badge « Finalisé » et du rouge
+   « Supprimer ». Défini ici en CSS pur (charte non exposée en classes JIT). */
 .btn-export {
-  color: #faf8f4;             /* cream (texte clair) */
-  background: #211f1a;        /* ink (charte) */
-  border: 1px solid #211f1a;
+  color: #5d574c;            /* muted (texte doux, lisible) */
+  background: #f4efe6;       /* sable très doux */
+  border: 1px solid #e6ddce; /* taupe clair */
 }
 .btn-export:hover {
-  background: #403b32;        /* subtle (légèrement plus clair) */
-  border-color: #403b32;
+  background: #ece5d8;       /* un cran plus soutenu */
+  border-color: #d8cdba;
 }
