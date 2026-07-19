@@ -245,10 +245,14 @@ class ScenarioEditeurController(BaseController):
                 f"/conception/scenario/{scenario_id}", request=request, flash=msg, level="success"
             )
         enregistrer_titre(scenario_id, titre, co_intervention, co_auteur_ids)
-        # Auto-enregistrement HTMX : on renvoie une zone d'erreur vide (efface un
-        # message précédent). Sans JS, le <noscript> soumet le formulaire (redirection).
+        # Auto-enregistrement HTMX : le toast « Enregistré » est hors-bande, et son
+        # contenu restant (vide) efface la zone d'erreur #titre-erreur (cible du
+        # formulaire) — donc un message d'unicité précédent disparaît. Sans JS, le
+        # <noscript> soumet le formulaire (redirection ci-dessous).
         if htmx:
-            return Response(body="")
+            return BaseController.render(
+                "app/scenario_editeur/_sauvegarde_oob.html", context={}, request=request
+            )
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Titre enregistrée."
         )
@@ -276,7 +280,7 @@ class ScenarioEditeurController(BaseController):
         # le formulaire et on retombe sur la redirection ci-dessous.
         if est_htmx(request):
             return BaseController.render(
-                "app/scenario_editeur/_statut_oob.html",
+                "app/scenario_editeur/_feedback_ecriture.html",
                 context={"scenario": get_scenario(scenario_id)},
                 request=request,
             )

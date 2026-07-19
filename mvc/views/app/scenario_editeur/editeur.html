@@ -11,7 +11,13 @@
 {% block content %}
 {{ flash_messages(flash) }}
 
-<div class="mb-6">
+{# `relative` : ancre le toast « ✓ Enregistré » en absolu, en haut à droite de
+   l'en-tête, au niveau du badge de statut (voir _sauvegarde_oob.html). #}
+<div class="mb-6 relative">
+    {# Ancre du toast « ✓ Enregistré » (auto-save temps réel). Vide au chargement ;
+       les réponses HTMX y injectent le toast hors-bande. Hors de #tunnel-corps :
+       persiste à travers les swaps de fragments. #}
+    <span id="scenario-sauvegarde"></span>
     <div class="flex items-center gap-3">
         <h1 class="text-[28px] font-extrabold tracking-tight text-ink">
             {{ scenario.Titre or "Scénario sans titre" }}

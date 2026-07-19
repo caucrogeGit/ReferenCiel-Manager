@@ -1,0 +1,15 @@
+{# Toast « ✓ Enregistré » émis HORS-BANDE après chaque écriture du tunnel.
+
+   L'éditeur enregistre en temps réel (pas de bouton « Enregistrer », ADR-019) :
+   ce toast confirme la sauvegarde à l'utilisateur. Cible : le placeholder
+   <span id="scenario-sauvegarde"> de editeur.html. Apparition + disparition en
+   CSS pur (static/scenario-tunnel.css). À n'inclure QUE dans des réponses HTMX
+   (jamais au rendu complet : cela dupliquerait l'id et jouerait l'animation à
+   tort au chargement). #}
+<span id="scenario-sauvegarde" hx-swap-oob="true" class="toast-enregistre" role="status" aria-live="polite">
+  <svg class="toast-enregistre__icone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+       fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+  Enregistré
+</span>

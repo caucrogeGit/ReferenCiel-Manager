@@ -1,0 +1,52 @@
+/* Toast « ✓ Enregistré » du tunnel de scénario (auto-save, ADR-019).
+
+   L'éditeur enregistre en temps réel, sans bouton « Enregistrer ». Ce toast
+   discret rassure l'utilisateur : il est injecté HORS-BANDE (hx-swap-oob) après
+   chaque écriture, puis apparaît et s'efface tout seul.
+
+   CSS pur : la CSP du projet (style-src 'self', script-src 'self') interdit le
+   style inline ET le JS inline ; l'animation évite donc tout JavaScript. Styling
+   autonome (pas de classes Tailwind) pour ne pas dépendre du JIT de tailwind.css. */
+
+@keyframes toast-enregistre-apparition {
+  0%   { opacity: 0; transform: translateX(8px); }
+  10%  { opacity: 1; transform: translateX(0); }
+  75%  { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(0); }
+}
+
+.toast-enregistre {
+  /* Ancré en haut à droite de l'en-tête du scénario (.mb-6.relative), au niveau
+     du badge de statut. Absolu = hors du flux, donc aucun décalage de mise en page. */
+  position: absolute;
+  top: 0.25rem;
+  right: 0;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  color: #15803d;                 /* vert « success » discret */
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.10);
+  pointer-events: none;           /* purement informatif, ne capte pas la souris */
+  animation: toast-enregistre-apparition 2.4s ease forwards;
+}
+
+.toast-enregistre__icone {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+/* Accessibilité : sans le glissement vertical pour qui réduit les animations. */
+@media (prefers-reduced-motion: reduce) {
+  .toast-enregistre { animation: toast-enregistre-fondu 2.4s ease forwards; }
+  @keyframes toast-enregistre-fondu {
+    0% { opacity: 0; } 10% { opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; }
+  }
+}

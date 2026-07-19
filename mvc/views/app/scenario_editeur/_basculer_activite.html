@@ -8,5 +8,5 @@
 {% include "app/scenario_editeur/_bloc_poles.html" %}
 {% set oob = true %}
 {% include "app/scenario_editeur/_bloc_competences.html" %}
-{# Cocher une activité peut compléter la liaison : badge de statut hors-bande. #}
-{% include "app/scenario_editeur/_statut_oob.html" %}
+{# Cocher une activité est une écriture : badge de statut + toast « Enregistré ». #}
+{% include "app/scenario_editeur/_feedback_ecriture.html" %}
