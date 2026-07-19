@@ -80,6 +80,18 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   nationale — **Parcours → Séquence**, **Palier → Séance**, partout (entités,
   tables, routes, vues, docs). Identifiants ASCII (`sequence`, `seance`),
   libellés accentués. Déroulé en 6 phases, la feuille d'abord. Annote ADR-022.
+- `026-versionnement-objets-pedagogiques-publies.md` (**Accepté**) : « finalisé »
+  = complétude **dérivée** (non un statut persisté) ; versionnement par snapshot
+  à la publication.
+- `027-scenario-hors-referentiel.md` (**Accepté**) : le référentiel devient
+  **facultatif** pour un scénario (matières non adossées). Finalisation à deux
+  régimes, étape « Liaison référentiel » grisée. Amende ADR-023.
+- `028-connaissances-associees-ancrage-referentiel.md` (**Accepté**) : les
+  **connaissances associées** sont des objets du référentiel (entité
+  `Connaissance`, ancrée à la compétence, niveau taxonomique officiel).
+  **Retrait de `savoir_associe`** (doublon libre de SEQ-02). Nouveau lien
+  Séquence ↔ Connaissance portant le **niveau cible** (≠ officiel), le **statut**
+  pédagogique et un commentaire. Branchement de l'import.
 
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
