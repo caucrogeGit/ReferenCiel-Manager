@@ -65,6 +65,12 @@
     </div>
 </div>
 
+<div class="bg-white shadow rounded p-6 mt-4">
+    <div id="savoirs-associes">
+        {% include "app/sequence/_savoirs.html" %}
+    </div>
+</div>
+
 <form method="post" action="/sequence/destroy/{{ sequence.Id }}" class="mt-4" data-confirm="Confirmer la suppression ?">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     {{ button(label='Supprimer', variant='danger', type='submit') }}

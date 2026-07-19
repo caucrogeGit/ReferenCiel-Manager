@@ -13,6 +13,8 @@ def register_sequence_routes(router: Router) -> None:
         g.add("GET", "/show/{id}", SequenceController.show, name="sequence-show")
         g.add("GET", "/edit/{id}", SequenceController.edit, name="sequence-edit")
         g.add("POST", "/update/{id}", SequenceController.update, name="sequence-update")
+        g.add("POST", "/{id}/savoir/ajouter", SequenceController.ajouter_savoir, name="sequence-savoir-ajouter")
+        g.add("POST", "/savoir/{sid}/supprimer", SequenceController.supprimer_savoir, name="sequence-savoir-supprimer")
         g.add("POST", "/destroy/{id}", SequenceController.destroy, name="sequence-destroy")
         g.add("POST", "/bulk-delete", SequenceController.bulk_delete, name="sequence-bulk_delete")
         g.add("POST", "/bulk-delete-confirm", SequenceController.bulk_delete_confirm, name="sequence-bulk_delete_confirm")

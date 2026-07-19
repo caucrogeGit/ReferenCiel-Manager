@@ -9,6 +9,9 @@ from mvc.models.sequence_model import (
     count_sequences, find_sequences_paginated, find_sequences_for_export,
     get_niveau_classe_choices,
 )
+from mvc.models.savoir_associe_model import (
+    get_savoirs_by_sequence, get_savoir_by_id, add_savoir, delete_savoir,
+)
 from mvc.forms.sequence_form import SequenceForm
 from core.security.session import get_flash, get_session_id
 
@@ -162,7 +165,11 @@ class SequenceController(BaseController):
         if sequence is None:
             return BaseController.not_found()
         return BaseController.render("app/sequence/show.html",
-            context={"sequence": sequence, "flash": get_flash(get_session_id(request))},
+            context={
+                "sequence": sequence,
+                "savoirs": get_savoirs_by_sequence(id),
+                "flash": get_flash(get_session_id(request)),
+            },
             request=request)
 
     @staticmethod
@@ -198,6 +205,45 @@ class SequenceController(BaseController):
         update_sequence(id, form.cleaned_data)
         return BaseController.redirect_with_flash(
             request, f"/sequence/show/{id}", "Séquence mise à jour.")
+
+    # ── Savoirs associés (liste libre, SEQ-02) ───────────────────────────────
+    #
+    # Édités depuis la page de détail de la séquence. Écriture ciblée d'un seul
+    # savoir, puis retour du fragment #savoirs-associes (ou redirection sans JS).
+
+    @staticmethod
+    def _rendre_savoirs(request: Request, sequence_id: int) -> Response:
+        if not _is_hx_request(request):
+            return BaseController.redirect(f"/sequence/show/{sequence_id}", request=request)
+        sequence = get_sequence_by_id(sequence_id)
+        return BaseController.render("app/sequence/_savoirs.html",
+            context={
+                "sequence": sequence,
+                "savoirs": get_savoirs_by_sequence(sequence_id),
+            },
+            request=request)
+
+    @staticmethod
+    def ajouter_savoir(request: Request) -> Response:
+        id = SequenceController._parse_id(request.route("id"))
+        if id is None or get_sequence_by_id(id) is None:
+            return BaseController.not_found()
+        libelle = (request.form("libelle", "") or "").strip()
+        if libelle:
+            add_savoir(id, libelle)
+        return SequenceController._rendre_savoirs(request, id)
+
+    @staticmethod
+    def supprimer_savoir(request: Request) -> Response:
+        sid = SequenceController._parse_id(request.route("sid"))
+        if sid is None:
+            return BaseController.not_found()
+        savoir = get_savoir_by_id(sid)
+        if savoir is None:
+            return BaseController.not_found()
+        sequence_id = savoir["sequence_id"]
+        delete_savoir(sid)
+        return SequenceController._rendre_savoirs(request, sequence_id)
 
     @staticmethod
     def destroy(request: Request) -> Response:
