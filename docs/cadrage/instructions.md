@@ -29,16 +29,15 @@ L'application doit gérer :
 - les indicateurs de réussite pédagogiques ;
 - les scénarios pédagogiques ;
 - les starters Welcome ;
-- les parcours élèves ;
-- les paliers ;
+- les séquences pédagogiques ;
+- les séances pédagogiques ;
 - les dossiers techniques ;
 - les QCM de compréhension ;
-- les activités ;
 - les checklists ;
 - les ressources élèves et professeur ;
 - les affectations à des classes ou à des élèves ;
 - la progression individuelle des élèves ;
-- le suivi professeur par classe, niveau, parcours, palier et compétence ;
+- le suivi professeur par classe, niveau, séquence, séance et compétence ;
 - les évaluations par critères ;
 - les bilans exploitables par le professeur.
 
@@ -310,7 +309,7 @@ RéférenCiel Manager est une application métier persistée centrée sur :
 - les vues de référentiel par niveau de classe ;
 - les scénarios pédagogiques ;
 - les starters Welcome ;
-- les parcours élèves ;
+- les séquences pédagogiques ;
 - le suivi professeur ;
 - l'évaluation par critères ;
 - la progression contrôlée ;
@@ -333,14 +332,11 @@ Référentiel
 -> compétences
 -> critères observables
 -> scénario pédagogique
--> starter Welcome
--> parcours
--> affectation à une classe ou à un élève
--> paliers
--> dossier technique
--> QCM de compréhension
--> activité
--> checklist
+-> starter Welcome (source réutilisable)
+-> séquence pédagogique
+-> séances pédagogiques
+-> contenus de la séance (dossier technique, QCM de compréhension, checklist, travail pratique...)
+-> affectation à une classe ou à un élève (fige un instantané de la séquence, ADR-026)
 -> progression élève
 -> suivi professeur
 -> évaluation par critères
@@ -353,17 +349,19 @@ Règles pédagogiques fortes :
 - le JSON canonique niveau-classe formalise la partie réellement exploitée pour une classe ou un niveau ;
 - le scénario pédagogique définit l'intention ;
 - le starter Welcome rend cette intention réutilisable ;
-- le parcours organise le travail élève ;
-- l'affectation transforme un parcours disponible en travail réel pour une classe ou un élève ;
-- le palier découpe le parcours en étapes ;
+- la séquence pédagogique organise le travail élève ;
+- l'affectation transforme une séquence publiée en travail réel pour une classe ou un élève, et en fige un instantané (ADR-026) ;
+- la séance découpe la séquence en unités de travail ordonnées ;
 - le dossier technique apporte les connaissances nécessaires ;
 - le QCM vérifie la compréhension du dossier technique ;
 - le QCM ne valide pas une compétence ;
-- l'activité est le lieu d'observation des compétences ;
-- l'évaluation des compétences se fait dans l'activité, à partir de critères observables ;
+- la séance est le lieu de réalisation du travail et d'observation des compétences (l'ancien objet « activité » autonome est fondu dans la séance) ;
+- l'évaluation des compétences se fait dans la séance, à partir de critères observables ;
 - la checklist guide l'élève et le professeur ;
 - la progression garde l'état réel de l'élève ;
 - le suivi professeur permet d'identifier les élèves bloqués, en avance ou à évaluer.
+
+> Révision (2026-07-19) : vocabulaire aligné sur l'ADR-025 (Séquence / Séance) ; fusion de l'objet « activité » dans la séance et versionnement par instantané à l'affectation actés par l'ADR-026. Le statut de « starter Welcome » (objet réutilisable ou simple provenance d'une séquence) reste à trancher dans un ticket dédié.
 
 ## 13. Méthode de construction
 
@@ -440,22 +438,20 @@ Objets principaux à prévoir :
 - IndicateurRéussite ;
 - NiveauAcquisition ;
 - Scenario ;
-- VersionScenario ;
 - StarterWelcome ;
-- VersionStarter ;
-- Parcours ;
-- VersionParcours ;
-- Palier ;
+- SequencePedagogique ;
+- SeancePedagogique ;
+- ElementSeance (composition ordonnée de la séance, jalon SEQ-03) ;
+- InstantaneAffectation (copie figée d'une séquence, ADR-026) ;
 - DocumentTechnique ;
 - QCM ;
 - QuestionQCM ;
 - ChoixQCM ;
-- Activité ;
 - Checklist ;
 - ItemChecklist ;
 - Affectation ;
 - Progression ;
-- ÉvaluationActivité ;
+- ÉvaluationSéance ;
 - ÉvaluationCritère ;
 - Ressource ;
 - DépôtÉlève.
@@ -471,11 +467,10 @@ Définition pédagogique :
 - indicateur de réussite ;
 - scénario ;
 - starter Welcome ;
-- parcours ;
-- palier ;
+- séquence ;
+- séance ;
 - dossier technique ;
 - QCM ;
-- activité ;
 - checklist ;
 - règle de passage.
 
@@ -495,14 +490,14 @@ Exécution élève :
 Règle forte :
 
 ```text
-Un parcours publié et affecté ne doit pas changer sous les pieds d'un élève.
+Une séquence publiée et affectée ne doit pas changer sous les pieds d'un élève (figée par instantané à l'affectation, ADR-026).
 ```
 
 ## 17. Versionnement
 
 Un objet pédagogique publié ne doit pas être modifié librement s'il est déjà utilisé.
 
-On affecte une version publiée, jamais un brouillon mutable.
+On fige un instantané de la séquence à l'affectation ; l'exécution élève référence cet instantané, jamais la définition vivante (ADR-026). « Finalisé » n'est pas un statut : c'est un indicateur de complétude dérivé des données.
 
 Statuts à prévoir :
 
@@ -512,18 +507,7 @@ publie
 archive
 ```
 
-Objets à versionner dès que nécessaire :
-
-- référentiel ;
-- vue de référentiel niveau-classe ;
-- scénario ;
-- starter Welcome ;
-- parcours ;
-- palier ;
-- dossier technique ;
-- activité ;
-- QCM ;
-- checklist.
+Le figeage se fait par **instantané à l'affectation** (ADR-026), pas par des objets `Version*` explicites (écartés pour l'instant). Une séquence non affectée reste librement éditable ; une fois affectée, son instantané est immuable et porte l'exécution élève.
 
 ## 18. Architecture attendue
 
@@ -683,7 +667,7 @@ Ne pas confondre QCM et compétence.
 
 Ne pas remplacer l'espace professeur par un simple back-office admin.
 
-Ne pas modifier un parcours publié et affecté sans stratégie de versionnement.
+Ne pas modifier une séquence publiée et affectée : elle est figée par instantané à l'affectation (ADR-026).
 
 Ne pas exposer les ressources professeur à l'élève.
 
