@@ -22,6 +22,10 @@ def _form_data_from_sequence(record: dict) -> dict:
         "statut": record.get("Statut"),
         "activite_glissante": record.get("ActiviteGlissante"),
         "ordre_impose": record.get("OrdreImpose"),
+        "prerequis": record.get("Prerequis"),
+        "positionnement_progression": record.get("PositionnementProgression"),
+        "duree_estimee": record.get("DureeEstimee"),
+        "modalites_evaluation": record.get("ModalitesEvaluation"),
         "niveau_classe_id": record.get("niveau_classe_id"),
     }
 

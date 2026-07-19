@@ -20,6 +20,13 @@ def _form_data_from_seance(record: dict) -> dict:
         "titre": record.get("Titre"),
         "theme": record.get("Theme"),
         "production_attendue": record.get("ProductionAttendue"),
+        "objectif_operationnel": record.get("ObjectifOperationnel"),
+        "consigne_generale": record.get("ConsigneGenerale"),
+        "duree_estimee_minutes": record.get("DureeEstimeeMinutes"),
+        "modalite_pedagogique": record.get("ModalitePedagogique"),
+        "condition_realisation": record.get("ConditionRealisation"),
+        "condition_validation": record.get("ConditionValidation"),
+        "remediation": record.get("Remediation"),
         "sequence_id": record.get("sequence_id"),
     }
 

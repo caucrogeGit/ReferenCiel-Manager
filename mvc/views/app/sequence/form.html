@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% block content %}
 {% from "components/ui.html" import button, flash_messages %}
-{% from "components/forms.html" import field, textarea_field, select_field, checkbox %}
+{% from "components/forms.html" import field, textarea_field, select_field, checkbox, fieldset %}
 {{ flash_messages(flash) }}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
@@ -20,6 +20,12 @@
         {{ checkbox(name='activite_glissante', label='Activite glissante', checked=form.value('activite_glissante')) }}
         {{ checkbox(name='ordre_impose', label='Ordre impose', checked=form.value('ordre_impose')) }}
         {{ select_field(name='niveau_classe_id', label='Niveau classe', options=form.options.niveau_classe_id_choices, selected=form.value('niveau_classe_id'), error=form.error('niveau_classe_id')) }}
+        {% call fieldset("Cadre institutionnel (facultatif)") %}
+        {{ textarea_field(name='prerequis', label='Prérequis', value=form.value('prerequis'), error=form.error('prerequis'), rows=3) }}
+        {{ textarea_field(name='positionnement_progression', label='Positionnement dans la progression', value=form.value('positionnement_progression'), error=form.error('positionnement_progression'), rows=3) }}
+        {{ field(name='duree_estimee', label='Durée estimée', type='text', value=form.value('duree_estimee'), error=form.error('duree_estimee')) }}
+        {{ textarea_field(name='modalites_evaluation', label="Modalités d'évaluation", value=form.value('modalites_evaluation'), error=form.error('modalites_evaluation'), rows=3) }}
+        {% endcall %}
         <div class="flex gap-4 pt-2">
             {{ button(label='Enregistrer', variant='primary', type='submit') }}
             {{ button(label='Annuler', variant='secondary', href='/sequence') }}

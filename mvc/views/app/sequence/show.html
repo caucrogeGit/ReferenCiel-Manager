@@ -35,6 +35,30 @@
         <p class="text-sm text-gray-500">Ordre impose</p>
         <p class="text-gray-800">{{ sequence.OrdreImpose }}</p>
     </div>
+    {% if sequence.Prerequis %}
+    <div>
+        <p class="text-sm text-gray-500">Prérequis</p>
+        <p class="text-gray-800 whitespace-pre-line">{{ sequence.Prerequis }}</p>
+    </div>
+    {% endif %}
+    {% if sequence.PositionnementProgression %}
+    <div>
+        <p class="text-sm text-gray-500">Positionnement dans la progression</p>
+        <p class="text-gray-800 whitespace-pre-line">{{ sequence.PositionnementProgression }}</p>
+    </div>
+    {% endif %}
+    {% if sequence.DureeEstimee %}
+    <div>
+        <p class="text-sm text-gray-500">Durée estimée</p>
+        <p class="text-gray-800">{{ sequence.DureeEstimee }}</p>
+    </div>
+    {% endif %}
+    {% if sequence.ModalitesEvaluation %}
+    <div>
+        <p class="text-sm text-gray-500">Modalités d'évaluation</p>
+        <p class="text-gray-800 whitespace-pre-line">{{ sequence.ModalitesEvaluation }}</p>
+    </div>
+    {% endif %}
     <div>
         <p class="text-sm text-gray-500">Niveau classe</p>
         <p class="text-gray-800">{{ sequence.niveau_classe_id_label }}</p>

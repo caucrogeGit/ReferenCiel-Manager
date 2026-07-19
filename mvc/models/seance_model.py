@@ -6,8 +6,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT seance.*, sequence.Titre AS sequence_id_label FROM seance LEFT JOIN sequence ON seance.sequence_id = sequence.Id ORDER BY seance.Id"
 SELECT_BY_ID = "SELECT seance.*, sequence.Titre AS sequence_id_label FROM seance LEFT JOIN sequence ON seance.sequence_id = sequence.Id WHERE seance.Id = ?"
-INSERT       = "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, sequence_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE seance SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, sequence_id = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO seance (Ordre, Titre, Theme, ProductionAttendue, ObjectifOperationnel, ConsigneGenerale, DureeEstimeeMinutes, ModalitePedagogique, ConditionRealisation, ConditionValidation, Remediation, sequence_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE seance SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, ObjectifOperationnel = ?, ConsigneGenerale = ?, DureeEstimeeMinutes = ?, ModalitePedagogique = ?, ConditionRealisation = ?, ConditionValidation = ?, Remediation = ?, sequence_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM seance WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_seance_by_id(id):
 
 
 def add_seance(data):
-    return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["sequence_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["objectif_operationnel"], data["consigne_generale"], data["duree_estimee_minutes"], data["modalite_pedagogique"], data["condition_realisation"], data["condition_validation"], data["remediation"], data["sequence_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_seance(id, data):
-    execute(UPDATE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["sequence_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["objectif_operationnel"], data["consigne_generale"], data["duree_estimee_minutes"], data["modalite_pedagogique"], data["condition_realisation"], data["condition_validation"], data["remediation"], data["sequence_id"], datetime.now(timezone.utc), id))
 
 
 def delete_seance(id):

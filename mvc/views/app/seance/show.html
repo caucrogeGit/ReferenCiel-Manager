@@ -27,6 +27,48 @@
         <p class="text-sm text-gray-500">Production attendue</p>
         <p class="text-gray-800">{{ seance.ProductionAttendue }}</p>
     </div>
+    {% if seance.ObjectifOperationnel %}
+    <div>
+        <p class="text-sm text-gray-500">Objectif opérationnel</p>
+        <p class="text-gray-800 whitespace-pre-line">{{ seance.ObjectifOperationnel }}</p>
+    </div>
+    {% endif %}
+    {% if seance.ConsigneGenerale %}
+    <div>
+        <p class="text-sm text-gray-500">Consigne générale</p>
+        <p class="text-gray-800 whitespace-pre-line">{{ seance.ConsigneGenerale }}</p>
+    </div>
+    {% endif %}
+    {% if seance.DureeEstimeeMinutes is not none %}
+    <div>
+        <p class="text-sm text-gray-500">Durée estimée</p>
+        <p class="text-gray-800">{{ seance.DureeEstimeeMinutes }} min</p>
+    </div>
+    {% endif %}
+    {% if seance.ModalitePedagogique %}
+    <div>
+        <p class="text-sm text-gray-500">Modalité pédagogique</p>
+        <p class="text-gray-800">{{ seance.ModalitePedagogique }}</p>
+    </div>
+    {% endif %}
+    {% if seance.ConditionRealisation %}
+    <div>
+        <p class="text-sm text-gray-500">Conditions de réalisation</p>
+        <p class="text-gray-800 whitespace-pre-line">{{ seance.ConditionRealisation }}</p>
+    </div>
+    {% endif %}
+    {% if seance.ConditionValidation %}
+    <div>
+        <p class="text-sm text-gray-500">Conditions de validation</p>
+        <p class="text-gray-800 whitespace-pre-line">{{ seance.ConditionValidation }}</p>
+    </div>
+    {% endif %}
+    {% if seance.Remediation %}
+    <div>
+        <p class="text-sm text-gray-500">Remédiation</p>
+        <p class="text-gray-800 whitespace-pre-line">{{ seance.Remediation }}</p>
+    </div>
+    {% endif %}
     <div>
         <p class="text-sm text-gray-500">Séquence</p>
         <p class="text-gray-800">{{ seance.sequence_id_label }}</p>

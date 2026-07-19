@@ -6,8 +6,8 @@ from core.database.db import fetch_one, fetch_all, execute, insert
 
 SELECT_ALL   = "SELECT sequence.*, niveau_classe.Code AS niveau_classe_id_label FROM sequence LEFT JOIN niveau_classe ON sequence.niveau_classe_id = niveau_classe.Id ORDER BY sequence.Id"
 SELECT_BY_ID = "SELECT sequence.*, niveau_classe.Code AS niveau_classe_id_label FROM sequence LEFT JOIN niveau_classe ON sequence.niveau_classe_id = niveau_classe.Id WHERE sequence.Id = ?"
-INSERT       = "INSERT INTO sequence (Identifiant, Titre, Presentation, Statut, ActiviteGlissante, OrdreImpose, niveau_classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-UPDATE       = "UPDATE sequence SET Identifiant = ?, Titre = ?, Presentation = ?, Statut = ?, ActiviteGlissante = ?, OrdreImpose = ?, niveau_classe_id = ?, UpdatedAt = ? WHERE Id = ?"
+INSERT       = "INSERT INTO sequence (Identifiant, Titre, Presentation, Statut, ActiviteGlissante, OrdreImpose, Prerequis, PositionnementProgression, DureeEstimee, ModalitesEvaluation, niveau_classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+UPDATE       = "UPDATE sequence SET Identifiant = ?, Titre = ?, Presentation = ?, Statut = ?, ActiviteGlissante = ?, OrdreImpose = ?, Prerequis = ?, PositionnementProgression = ?, DureeEstimee = ?, ModalitesEvaluation = ?, niveau_classe_id = ?, UpdatedAt = ? WHERE Id = ?"
 DELETE       = "DELETE FROM sequence WHERE Id = ?"
 
 
@@ -20,11 +20,11 @@ def get_sequence_by_id(id):
 
 
 def add_sequence(data):
-    return insert(INSERT, (data["identifiant"], data["titre"], data["presentation"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["niveau_classe_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
+    return insert(INSERT, (data["identifiant"], data["titre"], data["presentation"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["prerequis"], data["positionnement_progression"], data["duree_estimee"], data["modalites_evaluation"], data["niveau_classe_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 
 
 def update_sequence(id, data):
-    execute(UPDATE, (data["identifiant"], data["titre"], data["presentation"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["niveau_classe_id"], datetime.now(timezone.utc), id))
+    execute(UPDATE, (data["identifiant"], data["titre"], data["presentation"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["prerequis"], data["positionnement_progression"], data["duree_estimee"], data["modalites_evaluation"], data["niveau_classe_id"], datetime.now(timezone.utc), id))
 
 
 def delete_sequence(id):
