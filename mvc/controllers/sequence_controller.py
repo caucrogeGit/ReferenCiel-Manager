@@ -5,7 +5,7 @@ from core.http.response import Response
 from core.mvc.controller import BaseController
 from core.mvc.view.pagination import Pagination
 from mvc.models.sequence_model import (
-    get_sequence_by_id, add_sequence, update_sequence, delete_sequence, bulk_delete_sequences,
+    get_sequences, get_sequence_by_id, add_sequence, update_sequence, delete_sequence, bulk_delete_sequences,
     count_sequences, find_sequences_paginated, find_sequences_for_export,
     get_niveau_classe_choices,
 )
@@ -125,9 +125,15 @@ class SequenceController(BaseController):
 
     @staticmethod
     def index(request: Request) -> Response:
-        context = SequenceController._list_context(request)
-        template = "app/sequence/_results.html" if _is_hx_request(request) else "app/sequence/index.html"
-        return BaseController.render(template, context=context, request=request)
+        # Grille de cartes (même design que la liste des scénarios) : toutes les
+        # séquences, création inline en tête. Le tri/filtre/CSV restent servis par
+        # leurs routes dédiées, mais ne surchargent plus cette page.
+        context = {
+            "sequences": get_sequences(),
+            "niveau_classe_id_choices": get_niveau_classe_choices(),
+            "flash": get_flash(get_session_id(request)),
+        }
+        return BaseController.render("app/sequence/index.html", context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:

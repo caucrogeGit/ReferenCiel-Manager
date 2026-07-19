@@ -14,6 +14,7 @@ from mvc.helpers.htmx import est_htmx
 from mvc.services.sequence_tunnel import borner_etape, navigation, parse_id, steps
 from mvc.models.sequence_model import (
     get_sequence_by_id,
+    add_sequence,
     update_identite,
     update_cadre,
     get_niveau_classe_choices,
@@ -46,6 +47,28 @@ def _contexte_editeur(sequence: dict, etape: str) -> dict:
 
 
 class SequenceEditeurController(BaseController):
+
+    @staticmethod
+    def nouveau(request: Request) -> Response:
+        """Création inline depuis la liste, puis ouverture de l'éditeur tunnel."""
+        identifiant = (request.form("identifiant", "") or "").strip()
+        titre = (request.form("titre", "") or "").strip()
+        niveau = parse_id(request.form("niveau_classe_id", ""))
+        niveaux_valides = {value for value, _ in get_niveau_classe_choices()}
+        if not identifiant or not titre or niveau not in niveaux_valides:
+            return BaseController.redirect(
+                "/sequence", request=request,
+                flash="Identifiant, titre et niveau de classe sont obligatoires.", level="success",
+            )
+        data = {
+            "identifiant": identifiant, "titre": titre, "presentation": None,
+            "statut": "brouillon", "activite_glissante": 0, "ordre_impose": 0,
+            "prerequis": None, "positionnement_progression": None,
+            "duree_estimee": None, "modalites_evaluation": None,
+            "niveau_classe_id": niveau,
+        }
+        sid = add_sequence(data)
+        return BaseController.redirect(f"/sequence/editeur/{sid}")
 
     @staticmethod
     def editeur(request: Request) -> Response:
