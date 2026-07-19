@@ -52,15 +52,15 @@
 }
 
 /* Boutons d'export de la carte scénario (PDF / MarkDown / JSON).
-   Bleu volontairement distinct de l'orange du badge « Finalisé » et du rouge
-   « Supprimer ». Défini ici (CSS pur) car les teintes Tailwind voulues ne sont
-   pas toutes compilées par le JIT. */
+   Graphite (couleur « ink » de la charte) : natif à la palette chaude du projet,
+   et nettement distinct du badge orange clair « Finalisé » (sombre vs clair) et du
+   rouge « Supprimer ». Défini ici en CSS pur (charte non exposée en classes JIT). */
 .btn-export {
-  color: #1d4ed8;              /* bleu 700 */
-  background: #eff6ff;         /* bleu 50 */
-  border: 1px solid #bfdbfe;   /* bleu 200 */
+  color: #faf8f4;             /* cream (texte clair) */
+  background: #211f1a;        /* ink (charte) */
+  border: 1px solid #211f1a;
 }
 .btn-export:hover {
-  background: #dbeafe;         /* bleu 100 */
-  border-color: #93c5fd;      /* bleu 300 */
+  background: #403b32;        /* subtle (légèrement plus clair) */
+  border-color: #403b32;
 }
