@@ -27,13 +27,14 @@ def update_sequence(id, data):
     execute(UPDATE, (data["identifiant"], data["titre"], data["presentation"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["prerequis"], data["positionnement_progression"], data["duree_estimee"], data["modalites_evaluation"], data["niveau_classe_id"], datetime.now(timezone.utc), id))
 
 
-UPDATE_IDENTITE = "UPDATE sequence SET Identifiant = ?, Titre = ?, ActiviteGlissante = ?, OrdreImpose = ?, niveau_classe_id = ?, UpdatedAt = ? WHERE Id = ?"
+UPDATE_IDENTITE = "UPDATE sequence SET Titre = ?, ActiviteGlissante = ?, OrdreImpose = ?, niveau_classe_id = ?, UpdatedAt = ? WHERE Id = ?"
 UPDATE_CADRE    = "UPDATE sequence SET Prerequis = ?, PositionnementProgression = ?, DureeEstimee = ?, ModalitesEvaluation = ?, UpdatedAt = ? WHERE Id = ?"
 
 
 def update_identite(id, data):
-    """Auto-save de l'étape Titre du tunnel (colonnes d'identité seulement)."""
-    execute(UPDATE_IDENTITE, (data["identifiant"], data["titre"], data["activite_glissante"], data["ordre_impose"], data["niveau_classe_id"], datetime.now(timezone.utc), id))
+    """Auto-save de l'étape Titre du tunnel. L'Identifiant (technique, dérivé du
+    titre à la création) n'est pas géré par le professeur : on n'y touche pas."""
+    execute(UPDATE_IDENTITE, (data["titre"], data["activite_glissante"], data["ordre_impose"], data["niveau_classe_id"], datetime.now(timezone.utc), id))
 
 
 def update_cadre(id, data):

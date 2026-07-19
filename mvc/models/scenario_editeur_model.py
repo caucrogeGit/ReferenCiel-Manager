@@ -87,14 +87,15 @@ def creer_sequence_jumelle(scenario_id: int, titre: str) -> int:
     return sequence_id
 
 
-def creer_sequence_et_scenario(identifiant: str, titre: str, niveau_classe_id: "int | None") -> int:
+def creer_sequence_et_scenario(titre: str, niveau_classe_id: "int | None") -> int:
     """Séquence-first (ADR-029) : crée la séquence ET son scénario jumeau (hors
     référentiel) ET le lien, en une transaction. Retourne l'id de la séquence.
 
+    L'identifiant technique est dérivé du titre (le professeur ne le gère pas).
     L'appelant garantit l'unicité du titre du scénario (contrainte UNIQUE).
     """
     with transaction() as tx:
-        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (identifiant, titre, niveau_classe_id), tx=tx)
+        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (slug(titre), titre, niveau_classe_id), tx=tx)
         scenario_id = insert(_INSERT_SCENARIO, (titre, None), tx=tx)
         execute(_LIER_PAIRE, (scenario_id, sequence_id), tx=tx)
     return sequence_id

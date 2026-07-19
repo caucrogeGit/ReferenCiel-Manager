@@ -51,18 +51,17 @@ class SequenceEditeurController(BaseController):
     @staticmethod
     def nouveau(request: Request) -> Response:
         """Création inline (séquence-first, ADR-029) : crée la paire séquence +
-        scénario jumeau, puis ouvre l'éditeur tunnel. Niveau facultatif (nullable,
-        renseigné ensuite dans l'étape Titre)."""
-        identifiant = (request.form("identifiant", "") or "").strip()
+        scénario jumeau, puis ouvre l'éditeur tunnel. Seul le titre est obligatoire ;
+        l'identifiant est dérivé du titre, le niveau se renseigne ensuite."""
         titre = (request.form("titre", "") or "").strip()
         niveau = parse_id(request.form("niveau_classe_id", ""))
         niveaux_valides = {value for value, _ in get_niveau_classe_choices()}
         if niveau is not None and niveau not in niveaux_valides:
             niveau = None
-        if not identifiant or not titre:
+        if not titre:
             return BaseController.redirect(
                 "/sequence", request=request,
-                flash="L'identifiant et le titre sont obligatoires.", level="success",
+                flash="Le titre est obligatoire.", level="success",
             )
         # Le scénario jumeau porte le même titre, et le titre du scénario est unique.
         if titre_existe(titre):
@@ -71,7 +70,7 @@ class SequenceEditeurController(BaseController):
                 flash=f"Un scénario s'intitule déjà « {titre} ». Choisissez un autre titre !",
                 level="success",
             )
-        sid = creer_sequence_et_scenario(identifiant, titre, niveau)
+        sid = creer_sequence_et_scenario(titre, niveau)
         return BaseController.redirect(f"/sequence/editeur/{sid}")
 
     @staticmethod
@@ -96,7 +95,6 @@ class SequenceEditeurController(BaseController):
         if sequence is None:
             return BaseController.not_found()
         data = {
-            "identifiant": (request.form("identifiant", "") or "").strip(),
             "titre": (request.form("titre", "") or "").strip(),
             "activite_glissante": 1 if request.form("activite_glissante", "") else 0,
             "ordre_impose": 1 if request.form("ordre_impose", "") else 0,

@@ -10,11 +10,6 @@
 <form method="post" action="/sequence/nouveau" class="bg-white shadow rounded p-4 mb-6 max-w-xl">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
   <div class="mb-3">
-    <label class="block text-sm text-gray-600 mb-1" for="identifiant">Identifiant {{ obligation(true) }}</label>
-    <input id="identifiant" name="identifiant" type="text" required placeholder="Ex. SEQ-RESEAU-01"
-           class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-  </div>
-  <div class="mb-3">
     <label class="block text-sm text-gray-600 mb-1" for="titre">Titre {{ obligation(true) }}</label>
     <input id="titre" name="titre" type="text" required placeholder="Titre de la séquence"
            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -44,8 +39,7 @@
       {{ statut_scenario(s.Statut) }}
     </div>
     <p class="text-sm text-gray-500 mt-1">
-      {%- if s.Identifiant %}{{ s.Identifiant }}{% endif -%}
-      {%- if s.niveau_classe_id_label %} · {{ s.niveau_classe_id_label }}{% endif -%}
+      {{ s.niveau_classe_id_label or "Niveau à préciser" }}
     </p>
     <div class="mt-3">
       <form method="post" action="/sequence/destroy/{{ s.Id }}" class="relative z-10 inline-block"

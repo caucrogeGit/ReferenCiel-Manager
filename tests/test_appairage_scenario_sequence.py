@@ -69,11 +69,12 @@ def test_sequence_first_cree_la_paire(monkeypatch: pytest.MonkeyPatch) -> None:
     rec = _Rec()
     _patch(monkeypatch, rec)
 
-    sequence_id = m.creer_sequence_et_scenario("SEQ-1", "Titre B", 5)
+    sequence_id = m.creer_sequence_et_scenario("Titre B", 5)
 
     assert sequence_id == 1  # 1er insert = séquence
     assert "INSERT INTO sequence " in rec.inserts[0][0]
-    assert rec.inserts[0][1] == ("SEQ-1", "Titre B", 5)
+    # identifiant dérivé du titre (non géré par le professeur)
+    assert rec.inserts[0][1] == ("titre-b", "Titre B", 5)
     assert "INSERT INTO scenario " in rec.inserts[1][0]
     # titre partagé, scénario hors référentiel (referentiel_id None)
     assert rec.inserts[1][1] == ("Titre B", None)
