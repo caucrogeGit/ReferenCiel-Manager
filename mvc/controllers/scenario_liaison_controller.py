@@ -113,10 +113,12 @@ class ScenarioLiaisonController(BaseController):
         # Basculer une ACTIVITÉ change la validité des compétences (relation n-n) :
         # on renvoie le bloc Pôles (cible du swap) ET le bloc Compétences rafraîchi
         # hors-bande (hx-swap-oob). Basculer un critère ne touche que les critères.
+        # Les deux réponses réémettent le badge de statut hors-bande (le cochage
+        # peut compléter la liaison et faire passer le scénario en « finalisé »).
         template = (
             "app/scenario_editeur/_basculer_activite.html"
             if fragment == "poles"
-            else "app/scenario_editeur/_bloc_competences.html"
+            else "app/scenario_editeur/_basculer_critere.html"
         )
         return BaseController.render(template, context=context, request=request)
 

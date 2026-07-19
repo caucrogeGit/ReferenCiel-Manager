@@ -269,10 +269,17 @@ class ScenarioEditeurController(BaseController):
             request.form("espaces_formation", "").strip(),
         )
         recalculer_statut(scenario_id)
-        # Auto-enregistrement HTMX (à la saisie) : 204, pas de rechargement. Sans JS,
-        # le <noscript> soumet le formulaire et on retombe sur la redirection.
+        # Auto-enregistrement HTMX (à la saisie) : le contexte complet peut faire
+        # basculer le statut en « finalisé ». Le formulaire est en hx-swap="none",
+        # donc on renvoie UNIQUEMENT le badge hors-bande (hx-swap-oob) : l'en-tête
+        # se met à jour, rien d'autre n'est touché. Sans JS, le <noscript> soumet
+        # le formulaire et on retombe sur la redirection ci-dessous.
         if est_htmx(request):
-            return Response(status=204)
+            return BaseController.render(
+                "app/scenario_editeur/_statut_oob.html",
+                context={"scenario": get_scenario(scenario_id)},
+                request=request,
+            )
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Contexte enregistrée."
         )

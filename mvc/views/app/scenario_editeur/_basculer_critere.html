@@ -1,0 +1,8 @@
+{# Réponse HTMX au basculement d'un critère.
+
+   Cocher/décocher un critère peut faire passer le scénario en « finalisé »
+   (contexte complet + ≥1 activité + ≥1 critère). On renvoie donc :
+   - le bloc Compétences, cible normale du swap (#bloc-competences) ;
+   - le badge de statut rafraîchi HORS-BANDE (hx-swap-oob), pour l'en-tête. #}
+{% include "app/scenario_editeur/_bloc_competences.html" %}
+{% include "app/scenario_editeur/_statut_oob.html" %}

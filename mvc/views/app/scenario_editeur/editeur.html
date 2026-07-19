@@ -16,7 +16,10 @@
         <h1 class="text-[28px] font-extrabold tracking-tight text-ink">
             {{ scenario.Titre or "Scénario sans titre" }}
         </h1>
-        {{ statut_scenario(scenario.Statut) }}
+        {# Cible du rafraîchissement hors-bande (hx-swap-oob) : le statut est
+           recalculé côté serveur à chaque écriture du tunnel (contexte, cochage),
+           et le badge suit sans recharger la page. Voir _statut_oob.html. #}
+        <span id="scenario-statut">{{ statut_scenario(scenario.Statut) }}</span>
     </div>
     {% if referentiel %}
     {# Le référentiel appartient à une FORMATION (ADR-023) : ici la famille de

@@ -1,0 +1,9 @@
+{# Badge de statut du scénario, émis HORS-BANDE (hx-swap-oob).
+
+   Rendu par les réponses HTMX qui recalculent le statut (saisie du contexte,
+   cochage d'une activité ou d'un critère), pour que le badge de l'en-tête
+   (<span id="scenario-statut"> dans editeur.html) passe en direct de
+   « Brouillon » à « Finalisé » sans recharger la page. À n'inclure QUE dans des
+   réponses HTMX (jamais au rendu complet : cela dupliquerait l'id). #}
+{% from "components/ui.html" import statut_scenario %}
+<span id="scenario-statut" hx-swap-oob="true">{{ statut_scenario(scenario.Statut) }}</span>
