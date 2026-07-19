@@ -1,3 +1,4 @@
+# pyright: strict
 """Récupération de médias depuis un site de streaming (yt-dlp), sans IHM.
 
 Version « classe » du script Zenity, pensée pour une application web Forge :
@@ -24,6 +25,7 @@ import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from shutil import which
+from typing import Any
 from urllib.parse import urlparse
 
 
@@ -50,8 +52,37 @@ class VideoQuality:
     label: str
 
 
+@dataclass
+class _HeightInfo:
+    """Agrégat interne des caractéristiques d'une hauteur (résolution)."""
+
+    fps: float = 0.0
+    hdr: bool = False
+    size: int = 0
+
+
 # Extensions produites qu'on ne considère PAS comme le média final.
 _TEMP_SUFFIXES = {".part", ".ytdl", ".temp"}
+
+
+def _get(obj: Any, key: str) -> Any:
+    """Accès sûr à `obj[key]` pour du JSON non typé, sans narrower vers dict.
+
+    Renvoie None si `obj` n'expose pas `.get`. Garde tout en `Any` (pas
+    d'``isinstance(obj, dict)`` qui, sur un ``Any``, dégrade en ``Unknown`` et
+    casse le typage strict).
+    """
+    getter = getattr(obj, "get", None)
+    return getter(key) if callable(getter) else None
+
+
+def _as_positive_number(value: Any) -> float | None:
+    """Nombre strictement positif si `value` en est un (hors booléen), sinon None."""
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)) and value > 0:
+        return float(value)
+    return None
 
 
 class MediaFetcher:
@@ -96,41 +127,46 @@ class MediaFetcher:
         self._guard(url)
         completed = self._run(["--no-playlist", "--dump-single-json", url])
         try:
-            data = json.loads(completed.stdout)
+            data: Any = json.loads(completed.stdout)
         except json.JSONDecodeError as exc:
             raise MediaFetchError(f"Analyse impossible : {exc}") from exc
 
-        by_height: dict[int, dict[str, object]] = {}
-        for fmt in data.get("formats", []):
-            vcodec = fmt.get("vcodec")
-            height = fmt.get("height")
+        by_height: dict[int, _HeightInfo] = {}
+        formats: Any = _get(data, "formats") or []
+        for fmt in formats:
+            vcodec = _get(fmt, "vcodec")
+            height = _get(fmt, "height")
             if not vcodec or vcodec == "none":
                 continue
-            if not isinstance(height, int) or height <= 0:
+            if isinstance(height, bool) or not isinstance(height, int) or height <= 0:
                 continue
-            info = by_height.setdefault(height, {"fps": 0.0, "hdr": False, "size": 0})
-            fps = fmt.get("fps")
-            if isinstance(fps, (int, float)):
-                info["fps"] = max(float(info["fps"]), float(fps))  # type: ignore[arg-type]
-            hdr = fmt.get("dynamic_range")
-            if hdr and hdr != "SDR":
-                info["hdr"] = True
-            size = fmt.get("filesize") or fmt.get("filesize_approx")
-            if isinstance(size, (int, float)) and size > 0:
-                info["size"] = max(int(info["size"]), int(size))  # type: ignore[arg-type]
 
-        qualities: list[VideoQuality] = []
-        for height in sorted(by_height, reverse=True):
-            info = by_height[height]
-            label = f"{height}p"
-            if float(info["fps"]) >= 50:  # type: ignore[arg-type]
-                label += f" | {round(float(info['fps']))} images/s"  # type: ignore[arg-type]
-            if info["hdr"]:
+            info = by_height.setdefault(height, _HeightInfo())
+
+            fps = _as_positive_number(_get(fmt, "fps"))
+            if fps is not None:
+                info.fps = max(info.fps, fps)
+
+            hdr = _get(fmt, "dynamic_range")
+            if isinstance(hdr, str) and hdr and hdr != "SDR":
+                info.hdr = True
+
+            taille = _as_positive_number(_get(fmt, "filesize") or _get(fmt, "filesize_approx"))
+            if taille is not None:
+                info.size = max(info.size, int(taille))
+
+        qualites: list[VideoQuality] = []
+        for hauteur in sorted(by_height, reverse=True):
+            info = by_height[hauteur]
+            label = f"{hauteur}p"
+            if info.fps >= 50:
+                label += f" | {round(info.fps)} images/s"
+            if info.hdr:
                 label += " | HDR"
-            if int(info["size"]):  # type: ignore[arg-type]
-                label += f" | ~{self._human_size(int(info['size']))}"  # type: ignore[arg-type]
-            qualities.append(VideoQuality(height=height, label=label))
-        return qualities
+            if info.size:
+                label += f" | ~{self._human_size(info.size)}"
+            qualites.append(VideoQuality(height=hauteur, label=label))
+        return qualites
 
     # ── Récupération ────────────────────────────────────────────────────────
 
@@ -151,7 +187,7 @@ class MediaFetcher:
     def fetch_video(self, url: str, max_height: int) -> Path:
         """Télécharge la vidéo (avec son) jusqu'à `max_height`, remux MP4."""
         self._guard(url)
-        if not isinstance(max_height, int) or max_height <= 0:
+        if max_height <= 0:
             raise MediaFetchError("Résolution demandée invalide.")
         selector = (
             f"bestvideo*[height<={max_height}]+bestaudio/best[height<={max_height}]"
@@ -173,8 +209,8 @@ class MediaFetcher:
         workdir = Path(tempfile.mkdtemp(dir=self._config.download_dir))
         output = str(workdir / "%(title)s [%(id)s].%(ext)s")
         self._run(
-            options
-            + [
+            [
+                *options,
                 "--windows-filenames",
                 "--max-filesize", str(self._config.max_bytes),
                 "--no-progress",
@@ -195,7 +231,7 @@ class MediaFetcher:
             raise MediaFetchError("Fichier trop volumineux.")
         return media
 
-    def _run(self, args: list[str]) -> "subprocess.CompletedProcess[str]":
+    def _run(self, args: list[str]) -> subprocess.CompletedProcess[str]:
         """Exécute yt-dlp SANS shell (URL en argument), avec timeout."""
         try:
             completed = subprocess.run(
