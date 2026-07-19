@@ -798,6 +798,55 @@
       "nullable": false,
       "on_delete": "restrict",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "SavoirAssocie",
+      "to": "Sequence",
+      "name": "sequence",
+      "inverse_name": "savoirs_associes",
+      "foreign_key": "sequence_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "SeanceCompetence",
+      "to": "Seance",
+      "name": "seance",
+      "inverse_name": "competences_evaluees",
+      "foreign_key": "seance_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "SeanceCompetence",
+      "to": "Competence",
+      "name": "competence",
+      "inverse_name": "seances_competences",
+      "foreign_key": "competence_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
+    },
+    {
+      "type": "many_to_many",
+      "from": "Seance",
+      "to": "CritereObservable",
+      "name": "criteres",
+      "inverse_name": "seances",
+      "pivot": {
+        "table": "seance_critere",
+        "from_key": "seance_id",
+        "to_key": "critere_observable_id",
+        "id": true,
+        "unique_pair": true,
+        "on_delete": "cascade",
+        "fields": []
+      }
     }
   ]
 }

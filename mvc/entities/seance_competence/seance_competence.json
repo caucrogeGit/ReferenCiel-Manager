@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "name": "SeanceCompetence",
+  "table": "seance_competence",
+  "fields": [
+    {
+      "name": "seance_id",
+      "type": "foreign_key",
+      "references": "Seance",
+      "required": true
+    },
+    {
+      "name": "competence_id",
+      "type": "foreign_key",
+      "references": "Competence",
+      "required": true
+    },
+    {
+      "name": "role",
+      "type": "string",
+      "max_length": 20,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

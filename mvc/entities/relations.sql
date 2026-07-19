@@ -589,3 +589,42 @@ ALTER TABLE formation_niveau
     REFERENCES niveau_classe (Id)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT;
+
+ALTER TABLE savoir_associe
+    ADD CONSTRAINT fk_savoir_associe_sequence_id
+    FOREIGN KEY (sequence_id)
+    REFERENCES sequence (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;
+
+ALTER TABLE seance_competence
+    ADD CONSTRAINT fk_seance_competence_seance_id
+    FOREIGN KEY (seance_id)
+    REFERENCES seance (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;
+
+ALTER TABLE seance_competence
+    ADD CONSTRAINT fk_seance_competence_competence_id
+    FOREIGN KEY (competence_id)
+    REFERENCES competence (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;
+
+CREATE TABLE IF NOT EXISTS seance_critere (
+    id INT NOT NULL AUTO_INCREMENT,
+    seance_id INT NOT NULL,
+    critere_observable_id INT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_seance_critere (seance_id, critere_observable_id),
+    INDEX idx_seance_critere_seance_id (seance_id),
+    INDEX idx_seance_critere_critere_observable_id (critere_observable_id),
+    CONSTRAINT fk_seance_critere_seance_id
+        FOREIGN KEY (seance_id)
+        REFERENCES seance (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_seance_critere_critere_observable_id
+        FOREIGN KEY (critere_observable_id)
+        REFERENCES critere_observable (id)
+        ON DELETE CASCADE
+);
