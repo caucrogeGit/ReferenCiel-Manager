@@ -20,6 +20,7 @@ def register_sequence_routes(router: Router) -> None:
         g.add("GET", "/edit/{id}", SequenceController.edit, name="sequence-edit")
         g.add("POST", "/update/{id}", SequenceController.update, name="sequence-update")
         g.add("GET", "/{id}/connaissances", SequenceConnaissanceController.afficher, name="sequence-connaissances")
+        g.add("POST", "/{id}/referentiel", SequenceConnaissanceController.rattacher_referentiel, name="sequence-referentiel")
         g.add("POST", "/{id}/connaissance/basculer", SequenceConnaissanceController.basculer, name="sequence-connaissance-basculer")
         g.add("POST", "/{id}/connaissance/niveau", SequenceConnaissanceController.niveau, name="sequence-connaissance-niveau")
         g.add("POST", "/{id}/connaissance/statut", SequenceConnaissanceController.statut, name="sequence-connaissance-statut")

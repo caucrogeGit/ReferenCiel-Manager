@@ -32,6 +32,15 @@ def get_referentiel_id_for_sequence(sequence_id):
     return row["ref"] if row and row["ref"] is not None else None
 
 
+def get_scenario_id_for_sequence(sequence_id):
+    """Scénario appairé à la séquence (1-1, ADR-029). None si aucun."""
+    row = fetch_one(
+        "SELECT scenario_id FROM scenario_sequence WHERE sequence_id = ? LIMIT 1",
+        (sequence_id,),
+    )
+    return row["scenario_id"] if row else None
+
+
 def get_arbre_connaissances(ref_id):
     """Compétences du référentiel, chacune avec ses connaissances (niveau officiel)."""
     competences = fetch_all(

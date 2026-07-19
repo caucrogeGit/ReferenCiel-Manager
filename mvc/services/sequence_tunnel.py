@@ -15,7 +15,7 @@ ETAPES: tuple[str, ...] = ("titre", "cadre", "connaissances", "seances")
 LIBELLES: dict[str, str] = {
     "titre": "Titre",
     "cadre": "Cadre institutionnel",
-    "connaissances": "Connaissances",
+    "connaissances": "Savoirs associés",
     "seances": "Séances",
 }
 
@@ -35,25 +35,24 @@ def borner_etape(raw: str) -> str:
 
 def steps(
     sequence: dict[str, Any],
-    ref_id: "int | None",
     nb_connaissances: int,
     nb_seances: int,
 ) -> list[dict[str, Any]]:
     """Barre d'étapes : la complétion est DÉRIVÉE des données, jamais persistée.
 
-    - Titre : identifiant et titre remplis (obligatoires à la création).
+    - Titre : le titre est rempli (obligatoire à la création).
     - Cadre institutionnel : facultatif (ne bloque jamais).
-    - Connaissances : au moins une connaissance retenue ; grisée si la séquence
-      n'a pas de référentiel (scénario hors référentiel ou non appairé), ADR-027.
+    - Savoirs associés : au moins une connaissance retenue. L'étape reste
+      accessible même sans référentiel : on peut y en rattacher un (via le
+      scénario appairé) pour débloquer la sélection.
     - Séances : au moins une séance rattachée.
     """
-    hors_referentiel = ref_id is None
     return [
         {
             "key": "titre",
             "label": LIBELLES["titre"],
             "badge": "",
-            "done": bool(sequence.get("Titre")) and bool(sequence.get("Identifiant")),
+            "done": bool(sequence.get("Titre")),
         },
         {
             "key": "cadre",
@@ -65,8 +64,7 @@ def steps(
             "key": "connaissances",
             "label": LIBELLES["connaissances"],
             "badge": str(nb_connaissances) if nb_connaissances else "",
-            "done": True if hors_referentiel else nb_connaissances > 0,
-            "inactif": hors_referentiel,
+            "done": nb_connaissances > 0,
         },
         {
             "key": "seances",

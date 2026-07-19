@@ -4,13 +4,38 @@
    Tout passe par HTMX (hx-post/hx-get), sans JS inline (CSP script-src 'self').
    Chaque interaction re-rend ce fragment dans #connaissances-sequence. #}
 {%- set base = "/sequence/" ~ sequence_id -%}
-<h2 class="text-sm font-semibold text-gray-700 mb-3">Connaissances associées</h2>
+<h2 class="text-sm font-semibold text-gray-700 mb-3">Savoirs associés</h2>
 
 {% if ref_absent %}
-<p class="text-sm text-faint">
-    Aucun référentiel lié à cette séquence — il n'y a pas de connaissances à
-    associer. Les connaissances proviennent du référentiel du scénario appairé.
+{# Pas de référentiel sur le scénario appairé : on propose d'en rattacher un
+   (retour terrain). Le choix se pose sur le scénario jumeau et débloque la
+   sélection des savoirs. #}
+<p class="text-sm text-muted mb-3">
+    Les savoirs associés proviennent du référentiel. Cette séquence n'est pas
+    encore rattachée à un référentiel — choisissez-en un pour accéder à la
+    sélection.
 </p>
+{% if referentiels %}
+<form method="post" action="{{ base }}/referentiel"
+      hx-post="{{ base }}/referentiel" hx-target="#connaissances-sequence" hx-swap="innerHTML"
+      class="flex gap-2 items-end max-w-lg">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="flex-1">
+        <label for="referentiel_id" class="block text-sm text-muted mb-1">Référentiel</label>
+        <select id="referentiel_id" name="referentiel_id" required
+                class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
+                       focus:outline-none focus:ring-2 focus:ring-forge">
+            <option value="">Choisir un référentiel</option>
+            {% for r in referentiels %}
+            <option value="{{ r.Id }}">{{ r.Identifiant }} ({{ r.Version }})</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="shrink-0 px-4 py-2 rounded-[10px] text-sm font-semibold text-ink bg-forge hover:bg-forge-dark transition">Rattacher</button>
+</form>
+{% else %}
+<p class="text-sm text-faint">Aucun référentiel disponible. Importez-en un d'abord.</p>
+{% endif %}
 {% elif not competences %}
 <p class="text-sm text-faint">Ce référentiel ne contient aucune compétence.</p>
 {% else %}
