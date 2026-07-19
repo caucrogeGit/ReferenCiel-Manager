@@ -92,3 +92,21 @@ def test_backfill_cree_la_jumelle(monkeypatch: pytest.MonkeyPatch) -> None:
     assert "INSERT INTO sequence " in rec.inserts[0][0]
     assert rec.inserts[0][1] == ("test", "Test", None)
     assert rec.execs[0][1] == (42, 1)  # (scenario_id existant, sequence_id neuve)
+
+
+def _statuts(sc: "str | None", sq: "str | None") -> object:
+    def _f(sql: str, params: Sequence[Any] = (), *, tx: object = None) -> "dict[str, Any] | None":
+        return {"statut_scenario": sc, "statut_sequence": sq}
+    return _f
+
+
+def test_verrou_referentiel_paire_finalisee(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Le référentiel est verrouillé dès qu'un côté est finalisé (ou utilisé)."""
+    monkeypatch.setattr(m, "fetch_one", _statuts("brouillon", "brouillon"))
+    assert m.paire_est_finalisee(1) is False
+    monkeypatch.setattr(m, "fetch_one", _statuts("finalise", "brouillon"))
+    assert m.paire_est_finalisee(1) is True  # scénario finalisé
+    monkeypatch.setattr(m, "fetch_one", _statuts("brouillon", "finalise"))
+    assert m.paire_est_finalisee(1) is True  # séquence finalisée
+    monkeypatch.setattr(m, "fetch_one", _statuts("utilise", None))
+    assert m.paire_est_finalisee(1) is True  # utilisé verrouille aussi

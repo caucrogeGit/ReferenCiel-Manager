@@ -24,7 +24,10 @@ from mvc.models.sequence_connaissance_model import (
 )
 from mvc.models.sequence_model import get_sequence_by_id
 from mvc.models.referentiel_atelier_model import list_referentiels
-from mvc.models.scenario_editeur_model import enregistrer_referentiel as _rattacher_referentiel
+from mvc.models.scenario_editeur_model import (
+    enregistrer_referentiel as _rattacher_referentiel,
+    paire_est_finalisee,
+)
 
 _NIVEAUX = [("", "—"), ("1", "1"), ("2", "2"), ("3", "3"), ("4", "4")]
 _STATUTS = [("", "—")] + [(v, STATUT_LABELS[v]) for v in STATUT_LABELS]
@@ -50,11 +53,15 @@ def contexte_connaissances(sequence_id, competence_id=None):
     ref_id = get_referentiel_id_for_sequence(sequence_id)
     if ref_id is None:
         # Pas de référentiel : on propose d'en rattacher un (via le scénario
-        # appairé) pour débloquer la sélection des savoirs.
+        # appairé), SAUF si la paire est finalisée — le référentiel est alors
+        # verrouillé des deux côtés (retour terrain).
+        scenario_id = get_scenario_id_for_sequence(sequence_id)
+        verrouille = paire_est_finalisee(int(scenario_id)) if scenario_id is not None else False
         return {
             "sequence_id": sequence_id,
             "ref_absent": True,
-            "referentiels": list_referentiels(),
+            "referentiel_verrouille": verrouille,
+            "referentiels": [] if verrouille else list_referentiels(),
             "competences": [],
             "liens": {},
             "competence_id": None,
@@ -106,7 +113,12 @@ class SequenceConnaissanceController(BaseController):
             return BaseController.not_found()
         referentiel_id = _parse_id(request.form("referentiel_id", ""))
         scenario_id = get_scenario_id_for_sequence(sequence_id)
-        if referentiel_id is not None and scenario_id is not None:
+        # Verrou : on ne change pas le référentiel d'une paire finalisée.
+        if (
+            referentiel_id is not None
+            and scenario_id is not None
+            and not paire_est_finalisee(int(scenario_id))
+        ):
             _rattacher_referentiel(int(scenario_id), referentiel_id)
         return SequenceConnaissanceController._rendre(request, sequence_id, None)
 

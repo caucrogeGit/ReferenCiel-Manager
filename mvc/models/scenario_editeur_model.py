@@ -221,6 +221,31 @@ def enregistrer_referentiel(scenario_id: int, referentiel_id: int) -> None:
     )
 
 
+# Statuts qui verrouillent le référentiel : dès qu'un objet est finalisé (ou
+# utilisé), changer le référentiel invaliderait compétences/critères/savoirs déjà
+# sélectionnés. Le verrou vaut des deux côtés de la paire (ADR-029).
+_STATUTS_VERROUILLES = ("finalise", "utilise")
+
+
+def paire_est_finalisee(scenario_id: int) -> bool:
+    """Vrai si le scénario OU sa séquence appairée est finalisé : le référentiel
+    est alors verrouillé des deux côtés (retour terrain)."""
+    row = fetch_one(
+        "SELECT sc.Statut AS statut_scenario, sq.Statut AS statut_sequence "
+        "FROM scenario sc "
+        "LEFT JOIN scenario_sequence ss ON ss.scenario_id = sc.Id "
+        "LEFT JOIN sequence sq ON sq.Id = ss.sequence_id "
+        "WHERE sc.Id = ?",
+        (scenario_id,),
+    )
+    if row is None:
+        return False
+    return (
+        row["statut_scenario"] in _STATUTS_VERROUILLES
+        or row["statut_sequence"] in _STATUTS_VERROUILLES
+    )
+
+
 def get_activite_ids(scenario_id: int) -> list[int]:
     rows = fetch_all(
         "SELECT activite_professionnelle_id FROM scenario_activite WHERE scenario_id = ?",

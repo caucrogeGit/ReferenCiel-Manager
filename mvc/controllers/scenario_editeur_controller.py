@@ -44,6 +44,7 @@ from mvc.models.scenario_editeur_model import (
     recalculer_statut,
     list_ressources,
     list_scenarios,
+    paire_est_finalisee,
     supprimer_ressource,
     supprimer_scenario,
 )
@@ -169,6 +170,9 @@ class ScenarioEditeurController(BaseController):
             "professeurs": list_professeurs(exclure_user_id=get_authenticated_user_id(request)),
             "referentiels": referentiels,
             "referentiel": referentiel,
+            # Verrou du référentiel : plus de rattachement une fois la paire
+            # (scénario ou séquence) finalisée.
+            "referentiel_verrouille": paire_est_finalisee(scenario_id),
             "arbre": arbre,
             "activite_ids": activite_ids,
             "critere_ids": critere_ids,
@@ -320,6 +324,12 @@ class ScenarioEditeurController(BaseController):
         scenario_id = parse_id(request.route("id"))
         if scenario_id is None or get_scenario(scenario_id) is None:
             return BaseController.not_found()
+        # Verrou : le référentiel ne change plus une fois la paire finalisée.
+        if paire_est_finalisee(scenario_id):
+            return BaseController.redirect(
+                f"/conception/scenario/{scenario_id}", request=request,
+                flash="Le référentiel est verrouillé : le scénario ou sa séquence est finalisé.",
+            )
         referentiel_id = parse_id(request.form("referentiel_id", ""))
         if referentiel_id is not None:
             enregistrer_referentiel(scenario_id, referentiel_id)

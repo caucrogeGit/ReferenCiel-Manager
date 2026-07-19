@@ -8,8 +8,14 @@
 
 {% if ref_absent %}
 {# Pas de référentiel sur le scénario appairé : on propose d'en rattacher un
-   (retour terrain). Le choix se pose sur le scénario jumeau et débloque la
-   sélection des savoirs. #}
+   (retour terrain), SAUF si la paire est finalisée — le référentiel est alors
+   verrouillé des deux côtés. #}
+{% if referentiel_verrouille %}
+<p class="text-sm text-faint">
+    Le référentiel est <strong>verrouillé</strong> : le scénario ou la séquence
+    est finalisé, on ne peut plus le changer.
+</p>
+{% else %}
 <p class="text-sm text-muted mb-3">
     Les savoirs associés proviennent du référentiel. Cette séquence n'est pas
     encore rattachée à un référentiel — choisissez-en un pour accéder à la
@@ -35,6 +41,7 @@
 </form>
 {% else %}
 <p class="text-sm text-faint">Aucun référentiel disponible. Importez-en un d'abord.</p>
+{% endif %}
 {% endif %}
 {% elif not competences %}
 <p class="text-sm text-faint">Ce référentiel ne contient aucune compétence.</p>

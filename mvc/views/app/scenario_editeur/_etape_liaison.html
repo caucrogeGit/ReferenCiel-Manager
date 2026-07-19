@@ -14,9 +14,16 @@
     <p class="mt-0.5 mb-4 text-sm text-muted">
         Ce scénario n'est <strong>pas</strong> adossé à un référentiel : il n'y a
         <strong>aucune liaison</strong> à faire, et il se finalise sur le seul
-        contexte (ADR-027). Pour le rattacher malgré tout à un référentiel,
-        choisissez-en un ci-dessous.
+        contexte (ADR-027).
+        {% if not referentiel_verrouille %}Pour le rattacher malgré tout à un référentiel,
+        choisissez-en un ci-dessous.{% endif %}
     </p>
+    {% if referentiel_verrouille %}
+    <p class="text-sm text-faint">
+        Le référentiel est <strong>verrouillé</strong> : le scénario ou sa séquence
+        est finalisé, on ne peut plus le rattacher.
+    </p>
+    {% else %}
     <form method="post" action="{{ base_url }}/referentiel"
           class="flex gap-3 items-end max-w-lg">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -33,6 +40,7 @@
         </div>
         {{ button("Rattacher", variant="primary", type="submit") }}
     </form>
+    {% endif %}
 </section>
 
 {% else %}
