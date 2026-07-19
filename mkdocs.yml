@@ -88,11 +88,13 @@ nav:
       - ADR-023 — Modèle générique voie professionnelle: adr/023-modele-generique-voie-professionnelle.md
       - ADR-024 — Génération PDF (WeasyPrint): adr/024-generation-pdf-cote-application-weasyprint.md
       - ADR-025 — Renommage Séquence/Séance: adr/025-renommage-sequence-seance.md
+      - ADR-026 — Versionnement objets pédagogiques publiés: adr/026-versionnement-objets-pedagogiques-publies.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
       - Ticket 02 — Contrat JSON canonique: tickets/ticket-02-contrat-json-canonique.md
       - Ticket 22 — Bac à sable outils pédagogiques: tickets/ticket-22-bac-a-sable-outils-pedagogiques.md
+      - Ticket SEQ-02 — Enrichissement institutionnel séquence/séance: tickets/seq-02-enrichissement-institutionnel-sequence-seance.md
   - Spécifications:
       - JSON canonique: specs/json-canonique/README.md
       - Contrat — référentiel niveau-classe: specs/json-canonique/contrat-referentiel-niveau-classe.md
@@ -105,6 +107,7 @@ nav:
       - Registre des sources: specs/json-canonique/registre-des-sources.md
       - Trace — JSON canonique CIEL 2TNE: specs/json-canonique/traces/trace-creation-json-canonique-ciel-2tne.md
       - Capitalisation — fichier .scpro CPRO: specs/json-canonique/traces/capitalisation-fichier-scpro-cpro.md
+      - Schéma base — domaine Séance: schema/schema-base-seance.md
   - Procédures:
       - Montée de squelette Forge: procedures/montee-squelette-forge.md
       - Créer un JSON canonique de référentiel: procedures/creation-json-canonique-referentiel.md
