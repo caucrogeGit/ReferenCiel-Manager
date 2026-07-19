@@ -1,6 +1,6 @@
 # ADR-026 : Versionnement et immutabilité des objets pédagogiques publiés et affectés
 
-**Statut :** Proposé
+**Statut :** Accepté
 **Date :** 2026-07-19
 
 Cet ADR est le livrable documentaire du jalon **SEQ-01** de la refonte du domaine
@@ -43,7 +43,7 @@ doivent référencer **soit** la définition vivante éditable, **soit** une ins
 figée. Ce choix détermine les clés étrangères et **ne se rattrape pas** une fois
 des données élèves accumulées. Il doit donc être tranché avant `ElementSeance`.
 
-## Décision (proposée)
+## Décision
 
 **Principe : une séquence est figée à l'affectation. L'exécution élève référence
 l'instance figée, jamais la définition vivante éditable.**
@@ -66,10 +66,15 @@ l'instance figée, jamais la définition vivante éditable.**
 4. **Édition libre du maître** : l'auteur continue d'éditer la définition
    « maître ». Les affectations existantes ne bougent pas ; une nouvelle
    affectation refige à partir de l'état courant.
-5. **Mécanisme concret recommandé** : un **instantané par copie** (snapshot),
-   plutôt qu'un graphe d'objets `Version*` complet. Plus léger pour l'échelle
-   actuelle (une séquence réelle, un auteur), et extensible vers des `Version*`
-   explicites si le besoin se prouve.
+5. **Mécanisme retenu : l'instantané par copie (snapshot).** À l'affectation, on
+   copie la définition dans de nouvelles lignes rattachées à l'affectation, et
+   l'exécution y pointe. Chaque copie figée porte **dès le départ** un
+   `origine_id` (vers le maître copié) et un `fige_le` (horodatage) : coût nul
+   aujourd'hui, mais cela préserve la possibilité de reconstruire une lignée de
+   versions plus tard. Les objets `Version*` explicites sont **écartés pour
+   l'instant** (voir Alternatives), réintroductibles si la réutilisation entre
+   classes, années ou établissements le justifie — la bascule snapshot → `Version*`
+   reste alors possible sans perte, puisqu'une copie figée *est* déjà une version.
 6. **Cardinalité** : la relation scénario ↔ séquence est **1-1** (déjà imposée en
    base par les contraintes `UNIQUE` sur `scenario_id` et sur `sequence_id` de
    `scenario_sequence`). L'immutabilité est donc portée uniquement par
