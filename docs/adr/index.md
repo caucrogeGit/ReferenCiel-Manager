@@ -93,6 +93,12 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   Séquence ↔ Connaissance portant le **niveau cible** (≠ officiel), le **statut**
   pédagogique et un commentaire. Branchement de l'import.
 
+- `029-appairage-scenario-sequence-a-la-creation.md` (**Accepté**) : réalise
+  l'invariant **1-1 Scénario ↔ Séquence** (aujourd'hui déclaré mais jamais
+  peuplé). La paire **naît ensemble**, atomiquement, quel que soit le point
+  d'entrée ; `sequence.niveau_classe_id` devient **nullable** ; backfill des
+  scénarios orphelins existants.
+
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
 Le gabarit `000-template.md` n'est pas une décision : c'est la trame.
