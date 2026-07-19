@@ -1,6 +1,6 @@
 # ADR-027 : Scénario hors référentiel (matières non adossées)
 
-**Statut :** Proposé
+**Statut :** Accepté
 **Date :** 2026-07-19
 
 ## Contexte

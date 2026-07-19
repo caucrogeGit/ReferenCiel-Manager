@@ -3,6 +3,8 @@
 **Statut :** Accepté
 **Date :** 2026-07-15
 
+> **Amendé par [ADR-027](027-scenario-hors-referentiel.md) (2026-07-19).** Le référentiel — obligatoire ici pour un scénario — devient **facultatif** pour les matières **non adossées** à un référentiel (enseignements généraux, PSE, chef-d'œuvre). Un scénario peut alors exister avec `referentiel_id` NULL et se finalise sur le seul contexte.
+
 ## Contexte
 
 Le cœur « référentiel » lie aujourd'hui un référentiel à **exactement une
