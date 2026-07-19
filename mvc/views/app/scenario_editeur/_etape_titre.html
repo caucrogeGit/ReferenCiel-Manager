@@ -4,19 +4,8 @@
 {% from "components/ui.html" import button, obligation %}
 
 <section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
-    {# Téléchargement PDF : réservé aux scénarios finalisés (ou déjà utilisés,
-       contenu complet et figé). Lien GET, téléchargement direct (ADR-024). #}
-    {% if scenario.Statut in ('finalise', 'utilise') %}
-    <div class="flex justify-end mb-5">
-        <a href="{{ base_url }}/pdf"
-           class="inline-flex items-center gap-2 px-3 py-2 rounded-[10px] text-sm font-semibold
-                  text-forge-dark bg-forge-soft border border-forge-border hover:bg-forge-border transition"
-           title="Télécharger le scénario en PDF" aria-label="Télécharger le scénario en PDF">
-            <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-            Télécharger le PDF
-        </a>
-    </div>
-    {% endif %}
+    {# Le téléchargement PDF a migré vers la carte de la liste des scénarios
+       (index.html) : c'est là qu'on récupère le livrable fini (ADR-024). #}
     {# Auto-enregistrement : chaque champ se sauvegarde à sa sortie (événement
        « change »). La réponse HTMX alimente la zone d'erreur du titre (#titre-erreur) :
        vide si tout va bien, message si le titre est déjà pris (unicité). Le POST

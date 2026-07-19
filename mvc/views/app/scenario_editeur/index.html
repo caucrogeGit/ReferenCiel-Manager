@@ -29,16 +29,53 @@
 
 <div class="grid gap-3 md:grid-cols-2">
   {% for s in scenarios %}
-  <a href="/conception/scenario/{{ s.Id }}" class="block bg-white shadow rounded p-4 hover:ring-2 hover:ring-blue-500">
+  <div class="relative bg-white shadow rounded p-4 hover:ring-2 hover:ring-blue-500 transition">
+    {# Lien principal en overlay : toute la carte ouvre l'éditeur (motif
+       stretched-link, sans <a> imbriqués). Le bouton PDF passe au-dessus (z-10). #}
+    <a href="/conception/scenario/{{ s.Id }}" class="absolute inset-0"
+       aria-label="Ouvrir le scénario {{ s.Titre }}"></a>
     <div class="flex justify-between items-center gap-2">
       <h2 class="text-lg font-semibold text-gray-800">{{ s.Titre }}</h2>
       {{ statut_scenario(s.Statut) }}
     </div>
-    <p class="text-sm text-gray-500 mt-1">
-      {%- if s.referentiel_identifiant %}{{ s.referentiel_identifiant }}{% endif -%}
-      {%- if s.CoIntervention %} · co-intervention{% endif -%}
-    </p>
-  </a>
+    {# Référentiel (à gauche) et bouton PDF (à droite, sous le badge « Finalisé »).
+       Au-dessus de l'overlay (z-10) pour rester cliquable. #}
+    <div class="flex justify-between items-center gap-2 mt-1">
+      <p class="text-sm text-gray-500">
+        {%- if s.referentiel_identifiant %}{{ s.referentiel_identifiant }}{% endif -%}
+        {%- if s.CoIntervention %} · co-intervention{% endif -%}
+      </p>
+      {# Livrable fini : téléchargement réservé aux scénarios finalisés (ou
+         utilisés, contenu figé) — ADR-024. #}
+      {% if s.Statut in ('finalise', 'utilise') %}
+      <a href="/conception/scenario/{{ s.Id }}/pdf"
+         class="relative z-10 inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+                text-forge-dark bg-forge-soft border border-forge-border hover:bg-forge-border transition"
+         title="Télécharger le scénario en PDF" aria-label="Télécharger le PDF de {{ s.Titre }}">
+        <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        PDF
+      </a>
+      {% endif %}
+    </div>
+    {# Suppression, SOUS le référentiel. Modale de confirmation partagée
+       (form[data-confirm], ui-behaviors.js). Interdite pour un scénario utilisé
+       (verrou côté serveur aussi). Au-dessus de l'overlay (z-10). #}
+    {% if s.Statut != 'utilise' %}
+    <div class="mt-3">
+      <form method="post" action="/conception/scenario/{{ s.Id }}/supprimer" class="relative z-10 inline-block"
+            data-confirm="Supprimer définitivement le scénario « {{ s.Titre }} » ? Cette action est irréversible.">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+                       text-white bg-red-600 hover:bg-red-700 transition"
+                title="Supprimer le scénario" aria-label="Supprimer le scénario {{ s.Titre }}">
+          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Supprimer
+        </button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
   {% else %}
   <p class="text-gray-500">Aucun scénario. Créez-en un ci-dessus.</p>
   {% endfor %}
