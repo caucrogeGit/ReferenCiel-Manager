@@ -621,3 +621,17 @@ CREATE TABLE IF NOT EXISTS seance_critere (
         REFERENCES critere_observable (id)
         ON DELETE CASCADE
 );
+
+ALTER TABLE sequence_connaissance
+    ADD CONSTRAINT fk_sequence_connaissance_sequence_id
+    FOREIGN KEY (sequence_id)
+    REFERENCES sequence (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;
+
+ALTER TABLE sequence_connaissance
+    ADD CONSTRAINT fk_sequence_connaissance_connaissance_id
+    FOREIGN KEY (connaissance_id)
+    REFERENCES connaissance (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;

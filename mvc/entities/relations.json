@@ -836,6 +836,28 @@
         "on_delete": "cascade",
         "fields": []
       }
+    },
+    {
+      "type": "many_to_one",
+      "from": "SequenceConnaissance",
+      "to": "Sequence",
+      "name": "sequence",
+      "inverse_name": "connaissances_liees",
+      "foreign_key": "sequence_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "SequenceConnaissance",
+      "to": "Connaissance",
+      "name": "connaissance",
+      "inverse_name": "sequences_liees",
+      "foreign_key": "connaissance_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
     }
   ]
 }

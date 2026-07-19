@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "name": "SequenceConnaissance",
+  "table": "sequence_connaissance",
+  "fields": [
+    {
+      "name": "sequence_id",
+      "type": "foreign_key",
+      "references": "Sequence",
+      "required": true
+    },
+    {
+      "name": "connaissance_id",
+      "type": "foreign_key",
+      "references": "Connaissance",
+      "required": true
+    },
+    {
+      "name": "niveau_cible",
+      "type": "integer",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "statut",
+      "type": "string",
+      "max_length": 20,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "commentaire",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

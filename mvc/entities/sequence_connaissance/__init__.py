@@ -1,0 +1,1 @@
+from .sequence_connaissance import SequenceConnaissance as SequenceConnaissance

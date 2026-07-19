@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS sequence_connaissance (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    sequence_id BIGINT UNSIGNED NOT NULL,
+    connaissance_id BIGINT UNSIGNED NOT NULL,
+    NiveauCible INT NULL,
+    Statut VARCHAR(20) NULL,
+    Commentaire TEXT NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
