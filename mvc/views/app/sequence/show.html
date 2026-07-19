@@ -65,10 +65,10 @@
     </div>
 </div>
 
-<div class="bg-white shadow rounded p-6 mt-4">
-    <div id="connaissances-sequence">
-        {% include "app/sequence/_connaissances.html" %}
-    </div>
+<div class="mt-4">
+    <a href="/sequence/editeur/{{ sequence.Id }}" class="text-sm text-blue-600 hover:underline">
+        Ouvrir l'éditeur (cadre, connaissances, séances) →
+    </a>
 </div>
 
 <form method="post" action="/sequence/destroy/{{ sequence.Id }}" class="mt-4" data-confirm="Confirmer la suppression ?">

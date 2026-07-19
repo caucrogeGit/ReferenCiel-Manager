@@ -1,0 +1,36 @@
+{# Éditeur de séquence — page maître du tunnel (miroir de l'éditeur scénario).
+
+   On ne quitte jamais cette page : chaque interaction (changement d'étape,
+   auto-save, cochage d'une connaissance) régénère un fragment via HTMX. Sans JS,
+   les mêmes liens font une navigation classique et la page rend l'étape demandée. #}
+{% extends "layouts/base.html" %}
+{% from "components/ui.html" import flash_messages %}
+
+{% block title %}{{ sequence.Titre or "Séquence sans titre" }} — {{ app_name }}{% endblock %}
+
+{% block content %}
+{{ flash_messages(flash) }}
+
+<div class="mb-6 relative">
+    {# Ancre du toast « ✓ Enregistré » (auto-save). Vide au chargement ; les
+       réponses HTMX y injectent le toast hors-bande. Hors de #tunnel-corps :
+       persiste à travers les swaps de fragments. #}
+    <span id="sequence-sauvegarde"></span>
+    <div class="flex items-center gap-3">
+        <a href="/sequence" class="text-sm text-muted hover:text-ink transition">← Séquences</a>
+    </div>
+    <h1 class="mt-1 text-[28px] font-extrabold tracking-tight text-ink">
+        {{ sequence.Titre or "Séquence sans titre" }}
+    </h1>
+    <p class="mt-1 text-sm text-muted">
+        {%- if sequence.Identifiant %}<span class="font-medium text-ink">{{ sequence.Identifiant }}</span>{% endif -%}
+        {%- if sequence.niveau_classe_id_label %} · {{ sequence.niveau_classe_id_label }}{% endif -%}
+    </p>
+</div>
+
+{# Cible HTMX de la navigation d'étape : le stepper ET le contenu de l'étape sont
+   régénérés ensemble. Le contrôleur renvoie ici le partial _corps.html seul. #}
+<div id="tunnel-corps">
+    {% include "app/sequence_editeur/_corps.html" %}
+</div>
+{% endblock %}

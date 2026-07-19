@@ -27,6 +27,20 @@ def update_sequence(id, data):
     execute(UPDATE, (data["identifiant"], data["titre"], data["presentation"], data["statut"], data["activite_glissante"], data["ordre_impose"], data["prerequis"], data["positionnement_progression"], data["duree_estimee"], data["modalites_evaluation"], data["niveau_classe_id"], datetime.now(timezone.utc), id))
 
 
+UPDATE_IDENTITE = "UPDATE sequence SET Identifiant = ?, Titre = ?, ActiviteGlissante = ?, OrdreImpose = ?, niveau_classe_id = ?, UpdatedAt = ? WHERE Id = ?"
+UPDATE_CADRE    = "UPDATE sequence SET Prerequis = ?, PositionnementProgression = ?, DureeEstimee = ?, ModalitesEvaluation = ?, UpdatedAt = ? WHERE Id = ?"
+
+
+def update_identite(id, data):
+    """Auto-save de l'étape Titre du tunnel (colonnes d'identité seulement)."""
+    execute(UPDATE_IDENTITE, (data["identifiant"], data["titre"], data["activite_glissante"], data["ordre_impose"], data["niveau_classe_id"], datetime.now(timezone.utc), id))
+
+
+def update_cadre(id, data):
+    """Auto-save de l'étape Cadre institutionnel (colonnes SEQ-02 seulement)."""
+    execute(UPDATE_CADRE, (data["prerequis"], data["positionnement_progression"], data["duree_estimee"], data["modalites_evaluation"], datetime.now(timezone.utc), id))
+
+
 def delete_sequence(id):
     execute(DELETE, (id,))
 

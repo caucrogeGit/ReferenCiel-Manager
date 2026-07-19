@@ -2,6 +2,7 @@
 from core.http.router import Router
 from mvc.controllers.sequence_controller import SequenceController
 from mvc.controllers.sequence_connaissance_controller import SequenceConnaissanceController
+from mvc.controllers.sequence_editeur_controller import SequenceEditeurController
 
 
 def register_sequence_routes(router: Router) -> None:
@@ -12,6 +13,9 @@ def register_sequence_routes(router: Router) -> None:
         g.add("GET", "/new", SequenceController.new, name="sequence-new")
         g.add("POST", "/create", SequenceController.create, name="sequence-create")
         g.add("GET", "/show/{id}", SequenceController.show, name="sequence-show")
+        g.add("GET", "/editeur/{id}", SequenceEditeurController.editeur, name="sequence-editeur")
+        g.add("POST", "/{id}/identite", SequenceEditeurController.enregistrer_identite, name="sequence-identite")
+        g.add("POST", "/{id}/cadre", SequenceEditeurController.enregistrer_cadre, name="sequence-cadre")
         g.add("GET", "/edit/{id}", SequenceController.edit, name="sequence-edit")
         g.add("POST", "/update/{id}", SequenceController.update, name="sequence-update")
         g.add("GET", "/{id}/connaissances", SequenceConnaissanceController.afficher, name="sequence-connaissances")

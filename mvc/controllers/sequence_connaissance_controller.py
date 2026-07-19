@@ -74,7 +74,9 @@ class SequenceConnaissanceController(BaseController):
     @staticmethod
     def _rendre(request: Request, sequence_id: int, competence_id) -> Response:
         if not est_htmx(request):
-            return BaseController.redirect(f"/sequence/show/{sequence_id}", request=request)
+            return BaseController.redirect(
+                f"/sequence/editeur/{sequence_id}?etape=connaissances", request=request
+            )
         return BaseController.render(
             "app/sequence/_connaissances.html",
             context=contexte_connaissances(sequence_id, competence_id),
