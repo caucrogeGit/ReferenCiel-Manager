@@ -44,8 +44,13 @@ Relations :
 - `competences` (**many_to_many** → Competence, pivot `scenario_competence`) : les
   **compétences visées** par l'intention ;
 - `criteres` (**many_to_many** → CritereObservable, pivot `scenario_critere`) : les
-  **critères observables** retenus pour l'évaluation (l'évaluation se fait dans
-  l'activité, à partir de critères, instructions §12).
+  **critères observables** retenus pour l'évaluation (l'évaluation se fait dans la séance, à partir de critères, instructions §12).
+
+> **Frontière Scénario ↔ Séquence (SEQ-02, décision A).** Le scénario **porte le
+> cadre** pédagogique — intention, objectifs, contexte, problématique, compétences et
+> critères — que la séquence (1-1) **lit** sans le dupliquer. La séquence n'ajoute que
+> son incrémental (prérequis, positionnement, durée, modalités, savoirs associés).
+> Voir [dictionnaire Séquence](dictionnaire-sequence.md).
 
 ## Relations (récapitulatif)
 
@@ -67,7 +72,7 @@ Relations :
 - **Provenance / cadre** : tout scénario référence un `referentiel_id` existant ; il
   s'inscrit dans un référentiel niveau-classe.
 - **Le QCM ne valide pas une compétence** ; le scénario porte l'intention, l'évaluation
-  des compétences se fait plus loin, dans l'activité, via les critères observables.
+  des compétences se fait plus loin, dans la séance, via les critères observables.
 
 ## Portée
 
