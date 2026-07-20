@@ -65,15 +65,11 @@
         {% endfor %}
     </div>
 
-    {# ── Colonne détail : connaissances de la compétence active ── #}
+    {# ── Colonne détail : connaissances de la compétence active ──
+       Pas de rappel de la compétence ici : la colonne maître (à gauche) la
+       surligne déjà. #}
     <div>
         {% if comp_active %}
-        <div class="bg-cream rounded-[10px] px-3 py-2.5 mb-2">
-            <p class="text-sm font-semibold text-ink">
-                <span class="font-mono text-xs text-faint mr-1">{{ comp_active.Code }}</span>
-                {{ comp_active.Intitule }}
-            </p>
-        </div>
         {% if comp_active.connaissances %}
         <div class="flex flex-col gap-1.5">
             {% for k in comp_active.connaissances %}
