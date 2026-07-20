@@ -25,6 +25,12 @@ from mvc.models.sequence_connaissance_model import (
 )
 from mvc.models.sequence_model import get_sequence_by_id
 from mvc.models.referentiel_atelier_model import list_referentiels
+from mvc.models.savoir_libre_model import (
+    get_savoirs_libres,
+    ajouter_savoir_libre,
+    get_savoir_libre,
+    supprimer_savoir_libre,
+)
 from mvc.models.scenario_editeur_model import (
     enregistrer_referentiel as _rattacher_referentiel,
     paire_est_finalisee,
@@ -63,6 +69,8 @@ def contexte_connaissances(sequence_id, competence_id=None):
             "ref_absent": True,
             "referentiel_verrouille": verrouille,
             "referentiels": [] if verrouille else list_referentiels(),
+            # Savoirs libres (ADR-030) : le professeur les saisit lui-même.
+            "savoirs_libres": get_savoirs_libres(sequence_id),
             "competences": [],
             "liens": {},
             "competence_id": None,
@@ -122,6 +130,33 @@ class SequenceConnaissanceController(BaseController):
             and not paire_est_finalisee(int(scenario_id))
         ):
             _rattacher_referentiel(int(scenario_id), referentiel_id)
+        return SequenceConnaissanceController._rendre(request, sequence_id, None)
+
+    # ── Savoirs libres (séquence hors référentiel, ADR-030) ──────────────────
+    #
+    # Saisie libre par le professeur, comme les indicateurs de réussite. Écriture
+    # ciblée d'un seul savoir, puis retour du fragment #connaissances-sequence.
+
+    @staticmethod
+    def ajouter_savoir(request: Request) -> Response:
+        sequence_id = _parse_id(request.route("id"))
+        if sequence_id is None or get_sequence_by_id(sequence_id) is None:
+            return BaseController.not_found()
+        libelle = (request.form("libelle", "") or "").strip()
+        if libelle:
+            ajouter_savoir_libre(sequence_id, libelle)
+        return SequenceConnaissanceController._rendre(request, sequence_id, None)
+
+    @staticmethod
+    def supprimer_savoir(request: Request) -> Response:
+        savoir_id = _parse_id(request.route("sid"))
+        if savoir_id is None:
+            return BaseController.not_found()
+        savoir = get_savoir_libre(savoir_id)
+        if savoir is None:
+            return BaseController.not_found()
+        sequence_id = savoir["sequence_id"]
+        supprimer_savoir_libre(savoir_id)
         return SequenceConnaissanceController._rendre(request, sequence_id, None)
 
     @staticmethod

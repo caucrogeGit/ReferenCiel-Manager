@@ -635,3 +635,10 @@ ALTER TABLE sequence_connaissance
     REFERENCES connaissance (Id)
     ON DELETE CASCADE
     ON UPDATE RESTRICT;
+
+ALTER TABLE savoir_libre
+    ADD CONSTRAINT fk_savoir_libre_sequence_id
+    FOREIGN KEY (sequence_id)
+    REFERENCES sequence (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;

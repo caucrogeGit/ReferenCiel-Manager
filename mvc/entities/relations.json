@@ -858,6 +858,17 @@
       "nullable": false,
       "on_delete": "cascade",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "SavoirLibre",
+      "to": "Sequence",
+      "name": "sequence",
+      "inverse_name": "savoirs_libres",
+      "foreign_key": "sequence_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
     }
   ]
 }

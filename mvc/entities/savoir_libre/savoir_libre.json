@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "name": "SavoirLibre",
+  "table": "savoir_libre",
+  "fields": [
+    {
+      "name": "libelle",
+      "type": "text",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "sequence_id",
+      "type": "foreign_key",
+      "references": "Sequence",
+      "required": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}
