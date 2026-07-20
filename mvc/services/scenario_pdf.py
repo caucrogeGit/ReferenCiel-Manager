@@ -27,6 +27,7 @@ from mvc.models.sequence_connaissance_model import (
     get_connaissances_retenues,
     get_sequence_id_for_scenario,
 )
+from mvc.models.savoir_libre_model import get_savoirs_libres
 from mvc.services.pdf import render_pdf
 
 # Champs de contexte affichés, avec leur libellé (miroir de _etape_contexte.html).
@@ -135,11 +136,16 @@ def assembler_scenario(scenario_id: int) -> dict[str, Any]:
     comp_par_id = _competences_par_id(arbre, get_critere_ids(scenario_id))
     liens = liens_activite_competence(int(referentiel_id)) if referentiel_id else {}
 
-    # Connaissances associées portées par la séquence appairée (ADR-028).
+    # Savoirs de la séquence appairée : connaissances structurées si référentiel
+    # (ADR-028), sinon savoirs libres saisis par le professeur (ADR-030).
     sequence_id = get_sequence_id_for_scenario(scenario_id)
     connaissances: list[dict[str, Any]] = (
         get_connaissances_retenues(sequence_id, int(referentiel_id))
         if sequence_id is not None and referentiel_id else []
+    )
+    savoirs_libres: list[str] = (
+        [str(s["Libelle"]) for s in get_savoirs_libres(sequence_id)]
+        if sequence_id is not None and not referentiel_id else []
     )
     return {
         "scenario": scenario,
@@ -148,6 +154,7 @@ def assembler_scenario(scenario_id: int) -> dict[str, Any]:
         "contexte": _contexte(scenario),
         "activites": _activites(arbre, get_activite_ids(scenario_id), comp_par_id, liens),
         "connaissances": connaissances,
+        "savoirs_libres": savoirs_libres,
         "ressources": list_ressources(scenario_id),
     }
 

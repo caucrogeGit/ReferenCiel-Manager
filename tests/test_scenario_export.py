@@ -109,6 +109,20 @@ def test_markdown_contient_les_sections() -> None:
     assert "- schema.pdf (application/pdf)" in md
 
 
+def test_export_savoirs_libres_hors_referentiel() -> None:
+    """Séquence hors référentiel : les savoirs libres figurent dans MD et JSON (ADR-030)."""
+    data: dict[str, Any] = {
+        **_DATA, "referentiel": None, "activites": [], "connaissances": [],
+        "savoirs_libres": ["Lire un plan", "Utiliser un multimètre"],
+    }
+    doc = json.loads(rendre_json(data))
+    assert doc["savoirs_libres"] == ["Lire un plan", "Utiliser un multimètre"]
+    md = rendre_markdown(data)
+    assert "## Savoirs associés" in md
+    assert "- Lire un plan" in md
+    assert "- Utiliser un multimètre" in md
+
+
 def test_markdown_minimal_sans_referentiel_ni_co_intervention() -> None:
     data: dict[str, Any] = {
         "scenario": {"Titre": "Séance libre", "Statut": "finalise", "CoIntervention": 0,

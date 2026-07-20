@@ -6,11 +6,12 @@ adossées) ; avec référentiel, ce sont les connaissances structurées qui prim
 """
 
 from datetime import datetime, timezone
+from typing import Any
 
 from core.database.db import fetch_all, fetch_one, execute, insert
 
 
-def get_savoirs_libres(sequence_id):
+def get_savoirs_libres(sequence_id: int) -> "list[dict[str, Any]]":
     """Savoirs libres d'une séquence, dans l'ordre de saisie."""
     return fetch_all(
         "SELECT Id, Libelle FROM savoir_libre WHERE sequence_id = ? ORDER BY Id",

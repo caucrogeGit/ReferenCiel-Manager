@@ -23,6 +23,7 @@ def _export_dict(data: dict[str, Any]) -> dict[str, Any]:
     activites: list[dict[str, Any]] = data.get("activites", [])
     contexte: list[dict[str, Any]] = data.get("contexte", [])
     connaissances: list[dict[str, Any]] = data.get("connaissances", [])
+    savoirs_libres: list[str] = data.get("savoirs_libres", [])
     ressources: list[dict[str, Any]] = data.get("ressources", [])
     return {
         "titre": scenario.get("Titre"),
@@ -77,6 +78,7 @@ def _export_dict(data: dict[str, Any]) -> dict[str, Any]:
             }
             for g in connaissances
         ],
+        "savoirs_libres": list(savoirs_libres),
         "ressources": [
             {"nom": r.get("NomOriginal"), "type": r.get("MimeType"), "taille": r.get("Taille")}
             for r in ressources
@@ -140,6 +142,11 @@ def rendre_markdown(data: dict[str, Any]) -> str:
                 suffixe = f" — {', '.join(details)}" if details else ""
                 out.append(f"- {k['libelle']}{suffixe}")
             out.append("")
+    if e["savoirs_libres"]:
+        out += ["## Savoirs associés", ""]
+        for s in e["savoirs_libres"]:
+            out.append(f"- {s}")
+        out.append("")
     if e["ressources"]:
         out += ["## Ressources", ""]
         for r in e["ressources"]:

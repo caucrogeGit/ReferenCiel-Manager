@@ -113,6 +113,13 @@
     <p class="empty">Aucune connaissance associée.</p>
   {% endif %}
 
+  {% if savoirs_libres %}
+  <h2>Savoirs associés</h2>
+  <ul>
+    {% for s in savoirs_libres %}<li>{{ s }}</li>{% endfor %}
+  </ul>
+  {% endif %}
+
   <h2>Ressources</h2>
   {% if ressources %}
     <ul>
