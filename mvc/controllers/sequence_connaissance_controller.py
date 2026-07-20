@@ -13,6 +13,7 @@ from core.mvc.controller import BaseController
 from mvc.helpers.htmx import est_htmx
 from mvc.models.sequence_connaissance_model import (
     STATUT_LABELS,
+    NIVEAUX_TAXONOMIE,
     get_referentiel_id_for_sequence,
     get_scenario_id_for_sequence,
     get_arbre_connaissances,
@@ -78,6 +79,7 @@ def contexte_connaissances(sequence_id, competence_id=None):
         "liens": get_liens_by_sequence(sequence_id),
         "competence_id": competence_id,
         "niveaux": _NIVEAUX,
+        "niveaux_taxonomie": NIVEAUX_TAXONOMIE,
         "statuts": _STATUTS,
     }
 

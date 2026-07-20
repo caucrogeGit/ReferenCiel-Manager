@@ -20,6 +20,15 @@ STATUT_LABELS = {
     "consolidee": "Consolidée",
 }
 
+# Niveaux taxonomiques officiels du référentiel (Bac Pro CIEL). Le niveau 4
+# n'est pas utilisé en Bac Pro (objectif méthodologique de niveau supérieur).
+NIVEAUX_TAXONOMIE = {
+    1: "Information",
+    2: "Expression",
+    3: "Maîtrise d'outils",
+    4: "Maîtrise méthodologique",
+}
+
 
 def get_referentiel_id_for_sequence(sequence_id):
     """Référentiel de la séquence, via son scénario appairé. None si aucun."""

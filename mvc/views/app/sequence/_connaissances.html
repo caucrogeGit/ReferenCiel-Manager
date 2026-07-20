@@ -86,7 +86,8 @@
                            class="mt-0.5 w-4 h-4 accent-forge shrink-0">
                     <span class="flex-1 min-w-0 text-sm text-ink">{{ k.Libelle }}</span>
                     {% if k.NiveauTaxonomique is not none %}
-                    <span class="shrink-0 text-xs text-faint" title="Niveau officiel du référentiel">off. {{ k.NiveauTaxonomique }}</span>
+                    <span class="shrink-0 grid place-items-center size-5 rounded-full bg-forge-soft text-forge-dark text-[11px] font-semibold"
+                          title="Niveau officiel {{ k.NiveauTaxonomique }} — {{ niveaux_taxonomie.get(k.NiveauTaxonomique, '') }}">{{ k.NiveauTaxonomique }}</span>
                     {% endif %}
                     <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
                 </form>
@@ -135,4 +136,11 @@
         {% endif %}
     </div>
 </div>
+<p class="mt-4 text-xs text-faint">
+    La pastille indique le <strong>niveau taxonomique officiel</strong> du référentiel :
+    <span class="text-forge-dark font-semibold">1</span> Information ·
+    <span class="text-forge-dark font-semibold">2</span> Expression ·
+    <span class="text-forge-dark font-semibold">3</span> Maîtrise d'outils ·
+    <span class="text-forge-dark font-semibold">4</span> Maîtrise méthodologique.
+</p>
 {% endif %}
