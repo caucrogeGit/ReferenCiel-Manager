@@ -41,10 +41,17 @@ class _Tx:
         return False
 
 
+def _no_row(sql: str, params: Sequence[Any] = (), *, tx: object = None) -> None:
+    """fetch_one qui ne trouve rien (identifiant libre : pas de suffixe)."""
+    return None
+
+
 def _patch(monkeypatch: pytest.MonkeyPatch, rec: _Rec) -> None:
     monkeypatch.setattr(m, "insert", rec.insert)
     monkeypatch.setattr(m, "execute", rec.execute)
     monkeypatch.setattr(m, "transaction", lambda: _Tx())
+    # _identifiant_sequence_unique interroge fetch_one : aucune collision ici.
+    monkeypatch.setattr(m, "fetch_one", _no_row)
 
 
 def test_scenario_first_cree_la_paire(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -98,6 +105,20 @@ def _statuts(sc: "str | None", sq: "str | None") -> object:
     def _f(sql: str, params: Sequence[Any] = (), *, tx: object = None) -> "dict[str, Any] | None":
         return {"statut_scenario": sc, "statut_sequence": sq}
     return _f
+
+
+def test_identifiant_sequence_suffixe_en_cas_de_collision(monkeypatch: pytest.MonkeyPatch) -> None:
+    """L'identifiant de séquence est suffixé si le slug est déjà pris (uq_sequence_identifiant)."""
+    existants: set[str] = {"test"}
+
+    def _fo(sql: str, params: Sequence[Any] = (), *, tx: object = None) -> "dict[str, Any] | None":
+        return {"x": 1} if params and params[0] in existants else None
+
+    monkeypatch.setattr(m, "fetch_one", _fo)
+    assert m._identifiant_sequence_unique("test") == "test-2"  # pyright: ignore[reportPrivateUsage]
+    existants.add("test-2")
+    assert m._identifiant_sequence_unique("test") == "test-3"  # pyright: ignore[reportPrivateUsage]
+    assert m._identifiant_sequence_unique("libre") == "libre"  # pyright: ignore[reportPrivateUsage]
 
 
 def test_verrou_referentiel_paire_finalisee(monkeypatch: pytest.MonkeyPatch) -> None:

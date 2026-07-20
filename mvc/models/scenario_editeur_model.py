@@ -25,6 +25,23 @@ _INSERT_SCENARIO = (
 _LIER_PAIRE = "INSERT INTO scenario_sequence (scenario_id, sequence_id) VALUES (?, ?)"
 
 
+def _identifiant_sequence_unique(base: str) -> str:
+    """Identifiant de séquence unique : base, base-2, base-3… (uq_sequence_identifiant).
+
+    L'identifiant technique est dérivé du titre (slug). Comme deux scénarios
+    peuvent porter le même titre, et qu'une séquence dissociée garde son
+    identifiant, on suffixe pour éviter la collision sur la contrainte d'unicité.
+    """
+    candidat = base
+    n = 1
+    while fetch_one(
+        "SELECT 1 AS x FROM sequence WHERE Identifiant = ? LIMIT 1", (candidat,)
+    ) is not None:
+        n += 1
+        candidat = f"{base}-{n}"
+    return candidat
+
+
 def list_scenarios() -> list[dict[str, Any]]:
     """Tous les scénarios, les plus récemment modifiés d'abord."""
     return fetch_all(
@@ -65,7 +82,7 @@ def creer_scenario(titre: str, referentiel_id: "int | None") -> int:
     """
     with transaction() as tx:
         scenario_id = insert(_INSERT_SCENARIO, (titre, referentiel_id), tx=tx)
-        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (slug(titre), titre, None), tx=tx)
+        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (_identifiant_sequence_unique(slug(titre)), titre, None), tx=tx)
         execute(_LIER_PAIRE, (scenario_id, sequence_id), tx=tx)
     return scenario_id
 
@@ -82,7 +99,7 @@ def lister_scenarios_sans_sequence() -> list[dict[str, Any]]:
 def creer_sequence_jumelle(scenario_id: int, titre: str) -> int:
     """Crée et lie la séquence jumelle d'un scénario existant (backfill ADR-029)."""
     with transaction() as tx:
-        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (slug(titre), titre, None), tx=tx)
+        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (_identifiant_sequence_unique(slug(titre)), titre, None), tx=tx)
         execute(_LIER_PAIRE, (scenario_id, sequence_id), tx=tx)
     return sequence_id
 
@@ -96,7 +113,7 @@ def creer_sequence_et_scenario(titre: str, referentiel_id: "int | None") -> int:
     titre (le professeur ne le gère pas). L'appelant garantit l'unicité du titre.
     """
     with transaction() as tx:
-        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (slug(titre), titre, None), tx=tx)
+        sequence_id = insert(_INSERT_SEQUENCE_JUMELLE, (_identifiant_sequence_unique(slug(titre)), titre, None), tx=tx)
         scenario_id = insert(_INSERT_SCENARIO, (titre, referentiel_id), tx=tx)
         execute(_LIER_PAIRE, (scenario_id, sequence_id), tx=tx)
     return sequence_id
