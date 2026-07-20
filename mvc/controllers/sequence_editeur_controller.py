@@ -19,6 +19,7 @@ from mvc.models.sequence_model import (
     get_niveau_classe_choices,
 )
 from mvc.models.scenario_editeur_model import creer_sequence_et_scenario, titre_existe
+from mvc.models.referentiel_atelier_model import list_referentiels
 from mvc.models.seance_model import count_seances, find_seances_paginated
 from mvc.models.sequence_connaissance_model import get_liens_by_sequence
 from mvc.controllers.sequence_connaissance_controller import contexte_connaissances
@@ -47,13 +48,14 @@ class SequenceEditeurController(BaseController):
     @staticmethod
     def nouveau(request: Request) -> Response:
         """Création inline (séquence-first, ADR-029) : crée la paire séquence +
-        scénario jumeau, puis ouvre l'éditeur tunnel. Seul le titre est obligatoire ;
-        l'identifiant est dérivé du titre, le niveau se renseigne ensuite."""
+        scénario jumeau, puis ouvre l'éditeur tunnel. Le titre est obligatoire ;
+        le référentiel est facultatif (posé sur le scénario jumeau) ; l'identifiant
+        est dérivé du titre et le niveau se renseigne ensuite."""
         titre = (request.form("titre", "") or "").strip()
-        niveau = parse_id(request.form("niveau_classe_id", ""))
-        niveaux_valides = {value for value, _ in get_niveau_classe_choices()}
-        if niveau is not None and niveau not in niveaux_valides:
-            niveau = None
+        referentiel_id = parse_id(request.form("referentiel_id", ""))
+        refs_valides = {int(r["Id"]) for r in list_referentiels()}
+        if referentiel_id is not None and referentiel_id not in refs_valides:
+            referentiel_id = None
         if not titre:
             return BaseController.redirect(
                 "/sequence", request=request,
@@ -66,7 +68,7 @@ class SequenceEditeurController(BaseController):
                 flash=f"Un scénario s'intitule déjà « {titre} ». Choisissez un autre titre !",
                 level="success",
             )
-        sid = creer_sequence_et_scenario(titre, niveau)
+        sid = creer_sequence_et_scenario(titre, referentiel_id)
         return BaseController.redirect(f"/sequence/editeur/{sid}")
 
     @staticmethod

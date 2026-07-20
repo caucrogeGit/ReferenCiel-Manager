@@ -11,6 +11,7 @@ from mvc.models.sequence_model import (
 )
 from mvc.forms.sequence_form import SequenceForm
 from mvc.controllers.sequence_connaissance_controller import contexte_connaissances
+from mvc.models.referentiel_atelier_model import list_referentiels
 from core.security.session import get_flash, get_session_id
 
 
@@ -130,7 +131,7 @@ class SequenceController(BaseController):
         # leurs routes dédiées, mais ne surchargent plus cette page.
         context = {
             "sequences": get_sequences(),
-            "niveau_classe_id_choices": get_niveau_classe_choices(),
+            "referentiels": list_referentiels(),
             "flash": get_flash(get_session_id(request)),
         }
         return BaseController.render("app/sequence/index.html", context=context, request=request)

@@ -14,13 +14,16 @@
     <input id="titre" name="titre" type="text" required placeholder="Titre de la séquence"
            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
   </div>
+  {# Référentiel FACULTATIF (ADR-027), comme à la création d'un scénario : le
+     choix se pose sur le scénario jumeau. « Aucun » crée une paire hors
+     référentiel ; le référentiel se rattache aussi plus tard (étape Savoirs). #}
   <div class="mb-3">
-    <label class="block text-sm text-gray-600 mb-1" for="niveau_classe_id">Niveau de classe {{ obligation(false) }}</label>
-    <select id="niveau_classe_id" name="niveau_classe_id"
+    <label class="block text-sm text-gray-600 mb-1" for="referentiel_id">Référentiel {{ obligation(false) }}</label>
+    <select id="referentiel_id" name="referentiel_id"
             class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <option value="">À préciser plus tard</option>
-      {% for value, texte in niveau_classe_id_choices %}
-      <option value="{{ value }}">{{ texte }}</option>
+      <option value="">Aucun (matière hors référentiel)</option>
+      {% for r in referentiels %}
+      <option value="{{ r.Id }}">{{ r.Identifiant }}{% if r.formation_intitule %} — {{ r.formation_intitule }}{% endif %}</option>
       {% endfor %}
     </select>
   </div>
