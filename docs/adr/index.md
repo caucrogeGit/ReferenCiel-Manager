@@ -99,6 +99,11 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   d'entrée ; `sequence.niveau_classe_id` devient **nullable** ; backfill des
   scénarios orphelins existants.
 
+- `030-savoirs-libres-hors-referentiel.md` (**Accepté**) : **coexistence** dans
+  « Savoirs associés » — avec référentiel, sélection structurée (ADR-028) ; sans
+  référentiel, **savoirs libres** ajoutés en texte libre comme les indicateurs
+  (nouvelle table `savoir_libre`). Amende l'alternative écartée d'ADR-028.
+
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
 Le gabarit `000-template.md` n'est pas une décision : c'est la trame.
