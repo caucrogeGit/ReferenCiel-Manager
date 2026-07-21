@@ -110,6 +110,13 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   éviter les collisions ; pas de ré-appairage auto. Amende le point
   « suppression » différé d'ADR-029.
 
+- `032-modele-seance-tunnel-cascade-evaluation.md` (**Accepté**) : la **séance**
+  devient un **tunnel** ; sélection **en cascade** sans double saisie (la séance
+  pioche dans la liaison du scénario) ; compétences observées + critères +
+  indicateurs ; `ElementSeance` (déroulé ordonné polymorphe) ; **règle
+  d'évaluation** (observations accumulées, le prof arbitre, pas d'auto-validation).
+  Phases A→B→C.
+
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
 Le gabarit `000-template.md` n'est pas une décision : c'est la trame.
