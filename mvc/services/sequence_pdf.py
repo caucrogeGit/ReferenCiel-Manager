@@ -11,6 +11,7 @@ from core.templating.manager import template_manager
 
 from mvc.models.sequence_model import get_sequence_by_id
 from mvc.models.seance_model import get_seances_by_sequence
+from mvc.models.element_seance_model import get_elements, TYPE_LABELS
 from mvc.models.sequence_connaissance_model import (
     get_referentiel_id_for_sequence,
     get_connaissances_retenues,
@@ -34,11 +35,17 @@ def assembler_sequence(sequence_id: int) -> dict[str, Any]:
     savoirs_libres: list[str] = (
         [str(s["Libelle"]) for s in get_savoirs_libres(sequence_id)] if not ref_id else []
     )
+    seances = get_seances_by_sequence(sequence_id)
+    for seance in seances:
+        elements = get_elements(seance["Id"])
+        for el in elements:
+            el["type_label"] = TYPE_LABELS.get(str(el["Type"]), el["Type"])
+        seance["elements"] = elements
     return {
         "sequence": sequence,
         "connaissances": connaissances,
         "savoirs_libres": savoirs_libres,
-        "seances": get_seances_by_sequence(sequence_id),
+        "seances": seances,
     }
 
 

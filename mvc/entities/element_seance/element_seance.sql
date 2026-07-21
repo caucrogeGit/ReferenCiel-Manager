@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS element_seance (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    Ordre INT NOT NULL,
+    Type VARCHAR(30) NOT NULL,
+    Titre VARCHAR(200) NOT NULL,
+    Contenu TEXT NULL,
+    DureeMinutes INT NULL,
+    Obligatoire BOOLEAN NOT NULL,
+    RolePedagogique VARCHAR(60) NULL,
+    seance_id BIGINT UNSIGNED NOT NULL,
+    qcm_id BIGINT UNSIGNED NULL,
+    checklist_id BIGINT UNSIGNED NULL,
+    CreatedAt DATETIME NOT NULL,
+    UpdatedAt DATETIME NOT NULL,
+    PRIMARY KEY (Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

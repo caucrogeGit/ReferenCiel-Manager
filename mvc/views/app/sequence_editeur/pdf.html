@@ -90,6 +90,14 @@
       {% for libelle, valeur in champs %}{% if valeur %}
       <div class="field"><div class="lbl">{{ libelle }}</div><div class="val">{{ valeur }}</div></div>
       {% endif %}{% endfor %}
+      {% if se.elements %}
+      <div class="field"><div class="lbl">Déroulé</div></div>
+      <ol style="margin:2pt 0 4pt 16pt; padding:0;">
+        {% for el in se.elements %}
+        <li style="margin-bottom:3pt;">{{ el.Titre }}<span class="pole"> · {{ el.type_label }}{% if el.DureeMinutes is not none %} · {{ el.DureeMinutes }} min{% endif %}{% if not el.Obligatoire %} · facultatif{% endif %}</span>{% if el.Contenu %}<div class="val">{{ el.Contenu }}</div>{% endif %}</li>
+        {% endfor %}
+      </ol>
+      {% endif %}
     </div>
     {% endfor %}
   {% else %}

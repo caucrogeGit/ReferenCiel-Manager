@@ -642,3 +642,24 @@ ALTER TABLE savoir_libre
     REFERENCES sequence (Id)
     ON DELETE CASCADE
     ON UPDATE RESTRICT;
+
+ALTER TABLE element_seance
+    ADD CONSTRAINT fk_element_seance_seance_id
+    FOREIGN KEY (seance_id)
+    REFERENCES seance (Id)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT;
+
+ALTER TABLE element_seance
+    ADD CONSTRAINT fk_element_seance_qcm_id
+    FOREIGN KEY (qcm_id)
+    REFERENCES qcm (Id)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT;
+
+ALTER TABLE element_seance
+    ADD CONSTRAINT fk_element_seance_checklist_id
+    FOREIGN KEY (checklist_id)
+    REFERENCES checklist (Id)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT;

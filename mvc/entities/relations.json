@@ -869,6 +869,39 @@
       "nullable": false,
       "on_delete": "cascade",
       "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ElementSeance",
+      "to": "Seance",
+      "name": "seance",
+      "inverse_name": "elements",
+      "foreign_key": "seance_id",
+      "nullable": false,
+      "on_delete": "cascade",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ElementSeance",
+      "to": "QCM",
+      "name": "qcm",
+      "inverse_name": "elements_seance",
+      "foreign_key": "qcm_id",
+      "nullable": true,
+      "on_delete": "set_null",
+      "index": true
+    },
+    {
+      "type": "many_to_one",
+      "from": "ElementSeance",
+      "to": "Checklist",
+      "name": "checklist",
+      "inverse_name": "elements_seance",
+      "foreign_key": "checklist_id",
+      "nullable": true,
+      "on_delete": "set_null",
+      "index": true
     }
   ]
 }

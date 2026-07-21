@@ -11,6 +11,7 @@ import json
 from typing import Any
 
 from mvc.services.sequence_pdf import assembler_sequence
+from mvc.models.element_seance_model import TYPE_LABELS
 
 # Champs institutionnels de la séquence (SEQ-02), avec leur libellé.
 _CADRE: tuple[tuple[str, str], ...] = (
@@ -75,6 +76,17 @@ def _export_dict(data: dict[str, Any]) -> dict[str, Any]:
                     for col, libelle in _SEANCE
                     if se.get(col)
                 ],
+                "elements": [
+                    {
+                        "ordre": e.get("Ordre"),
+                        "type": TYPE_LABELS.get(str(e.get("Type")), e.get("Type")),
+                        "titre": e.get("Titre"),
+                        "contenu": e.get("Contenu"),
+                        "duree_minutes": e.get("DureeMinutes"),
+                        "obligatoire": bool(e.get("Obligatoire")),
+                    }
+                    for e in se.get("elements", [])
+                ],
             }
             for se in seances
         ],
@@ -130,6 +142,15 @@ def rendre_markdown(data: dict[str, Any]) -> str:
             out.append("")
             for c in se["champs"]:
                 out += [f"**{c['libelle']}**", "", str(c["valeur"]), ""]
+            if se["elements"]:
+                out += ["**Déroulé :**", ""]
+                for el in se["elements"]:
+                    d = f" ({el['duree_minutes']} min)" if el["duree_minutes"] is not None else ""
+                    opt = "" if el["obligatoire"] else " *(facultatif)*"
+                    out.append(f"{el['ordre']}. **{el['type']}** — {el['titre']}{d}{opt}")
+                    if el["contenu"]:
+                        out.append(f"   {el['contenu']}")
+                out.append("")
 
     return "\n".join(out).rstrip() + "\n"
 

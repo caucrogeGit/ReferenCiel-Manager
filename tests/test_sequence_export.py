@@ -37,6 +37,12 @@ _DATA: dict[str, Any] = {
             "DureeEstimeeMinutes": 90, "ModalitePedagogique": "Atelier",
             "ConditionRealisation": "Poste équipé", "ConditionValidation": None,
             "Remediation": None, "ProductionAttendue": "Câble testé",
+            "elements": [
+                {"Ordre": 1, "Type": "consigne", "Titre": "Présentation",
+                 "Contenu": "Vous intervenez…", "DureeMinutes": 10, "Obligatoire": 1},
+                {"Ordre": 2, "Type": "qcm", "Titre": "QCM de compréhension",
+                 "Contenu": None, "DureeMinutes": 15, "Obligatoire": 0},
+            ],
         },
     ],
 }
@@ -53,6 +59,8 @@ def test_json_structure() -> None:
     seance = doc["seances"][0]
     assert seance["ordre"] == 1 and seance["titre"] == "Sertissage"
     assert seance["duree_minutes"] == 90
+    assert seance["elements"][0]["type"] == "Consigne / présentation"
+    assert seance["elements"][1]["obligatoire"] is False
     # champs : seuls les renseignés (ConsigneGenerale None → absent)
     libelles = [c["libelle"] for c in seance["champs"]]
     assert "Objectif opérationnel" in libelles and "Consigne générale" not in libelles
@@ -69,6 +77,9 @@ def test_markdown_sections() -> None:
     assert "- Réseaux informatiques — cible 2, officiel 3, Mobilisée" in md
     assert "### 1 — Sertissage (90 min)" in md
     assert "**Objectif opérationnel**" in md
+    assert "**Déroulé :**" in md
+    assert "1. **Consigne / présentation** — Présentation (10 min)" in md
+    assert "*(facultatif)*" in md  # le QCM est facultatif
 
 
 def test_markdown_savoirs_libres_hors_referentiel() -> None:

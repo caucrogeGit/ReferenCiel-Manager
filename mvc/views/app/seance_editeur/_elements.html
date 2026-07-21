@@ -1,0 +1,62 @@
+{# Déroulé de la séance (ADR-032 phase B) — contenu interne de #elements-seance.
+   Liste ordonnée d'éléments : chacun s'auto-sauvegarde, se déplace, se supprime ;
+   un formulaire d'ajout en bas. HTMX, sans JS inline. #}
+{%- set base = "/seance/" ~ seance_id -%}
+<h2 class="text-sm font-semibold text-gray-700 mb-3">Déroulé de la séance</h2>
+
+{% if elements %}
+<div class="flex flex-col gap-2 mb-5">
+    {% for el in elements %}
+    <div class="rounded-[10px] border border-line bg-surface p-3">
+        <div class="flex items-center gap-2 mb-2">
+            <span class="shrink-0 size-6 grid place-items-center rounded-full bg-forge-soft text-forge-dark text-xs font-semibold">{{ el.Ordre }}</span>
+            <span class="text-xs font-semibold rounded-full bg-cream text-subtle px-2 py-0.5">{{ type_labels.get(el.Type, el.Type) }}</span>
+            <span class="flex-1"></span>
+            {# Monter / descendre / supprimer #}
+            <form method="post" action="{{ base }}/element/{{ el.Id }}/deplacer" hx-post="{{ base }}/element/{{ el.Id }}/deplacer" hx-target="#elements-seance" hx-swap="innerHTML" class="inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="sens" value="haut">
+                <button type="submit" class="flex items-center justify-center size-6 rounded text-faint hover:text-ink hover:bg-cream transition" title="Monter" aria-label="Monter"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></button>
+            </form>
+            <form method="post" action="{{ base }}/element/{{ el.Id }}/deplacer" hx-post="{{ base }}/element/{{ el.Id }}/deplacer" hx-target="#elements-seance" hx-swap="innerHTML" class="inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="sens" value="bas">
+                <button type="submit" class="flex items-center justify-center size-6 rounded text-faint hover:text-ink hover:bg-cream transition" title="Descendre" aria-label="Descendre"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            </form>
+            <form method="post" action="{{ base }}/element/{{ el.Id }}/supprimer" hx-post="{{ base }}/element/{{ el.Id }}/supprimer" hx-target="#elements-seance" hx-swap="innerHTML" class="inline" data-confirm="Supprimer cet élément ?">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="flex items-center justify-center size-6 rounded text-faint hover:text-red-600 hover:bg-cream transition" title="Supprimer" aria-label="Supprimer"><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </form>
+        </div>
+        {# Édition auto-save de l'élément #}
+        <form method="post" action="{{ base }}/element/{{ el.Id }}/maj" hx-post="{{ base }}/element/{{ el.Id }}/maj" hx-trigger="change" hx-target="#elements-seance" hx-swap="innerHTML" class="space-y-2">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <div class="flex gap-2">
+                <input type="text" name="titre" required value="{{ el.Titre }}" placeholder="Titre" class="flex-1 text-sm py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+                <input type="number" name="duree_minutes" min="0" value="{{ el.DureeMinutes if el.DureeMinutes is not none else '' }}" placeholder="min" class="w-20 text-sm py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+            </div>
+            <textarea name="contenu" rows="2" placeholder="Contenu / consigne…" class="w-full text-sm py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">{{ el.Contenu or "" }}</textarea>
+            <div class="flex items-center gap-3">
+                <input type="text" name="role_pedagogique" value="{{ el.RolePedagogique or '' }}" placeholder="Rôle pédagogique" class="flex-1 text-xs py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+                <label class="flex items-center gap-1.5 text-xs text-muted"><input type="checkbox" name="obligatoire" value="1" {% if el.Obligatoire %}checked{% endif %} class="w-4 h-4 accent-forge"> Obligatoire</label>
+            </div>
+            <noscript><button type="submit" class="text-xs text-forge-dark underline">Enregistrer</button></noscript>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-sm text-faint mb-4">Aucun élément. Ajoutez le premier ci-dessous.</p>
+{% endif %}
+
+{# Formulaire d'ajout #}
+<form method="post" action="{{ base }}/element/ajouter" hx-post="{{ base }}/element/ajouter" hx-target="#elements-seance" hx-swap="innerHTML" class="rounded-[10px] border border-dashed border-field p-3 space-y-2">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="flex gap-2">
+        <select name="type" required class="text-sm py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+            {% for val, txt in types %}<option value="{{ val }}">{{ txt }}</option>{% endfor %}
+        </select>
+        <input type="text" name="titre" required placeholder="Titre de l'élément" class="flex-1 text-sm py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+        <input type="number" name="duree_minutes" min="0" placeholder="min" class="w-20 text-sm py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+        <label class="flex items-center gap-1.5 text-xs text-muted"><input type="checkbox" name="obligatoire" value="1" checked class="w-4 h-4 accent-forge"> Oblig.</label>
+        <button type="submit" class="shrink-0 px-3 py-1.5 rounded-md text-sm font-semibold bg-forge-soft text-forge-dark hover:bg-forge-border transition">Ajouter</button>
+    </div>
+</form>

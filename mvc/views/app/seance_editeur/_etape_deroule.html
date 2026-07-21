@@ -1,0 +1,11 @@
+{# Étape 3 — Déroulé (ADR-032 phase B). Réutilise le fragment #elements-seance
+   (liste ordonnée des éléments : ajout, édition auto-save, déplacement, suppression). #}
+{% from "components/tunnel_macros.html" import tunnel_pager %}
+
+<section class="bg-surface border border-line rounded-card p-7">
+    <div id="elements-seance">
+        {% include "app/seance_editeur/_elements.html" %}
+    </div>
+</section>
+
+{{ tunnel_pager(prev, next, position, total, base_url) }}

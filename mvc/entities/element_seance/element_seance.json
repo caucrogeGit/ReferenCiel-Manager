@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "name": "ElementSeance",
+  "table": "element_seance",
+  "fields": [
+    {
+      "name": "ordre",
+      "type": "integer",
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "max_length": 30,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "titre",
+      "type": "string",
+      "max_length": 200,
+      "required": true,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "contenu",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "duree_minutes",
+      "type": "integer",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "obligatoire",
+      "type": "boolean",
+      "required": false,
+      "nullable": false,
+      "unique": false
+    },
+    {
+      "name": "role_pedagogique",
+      "type": "string",
+      "max_length": 60,
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "seance_id",
+      "type": "foreign_key",
+      "references": "Seance",
+      "required": true
+    },
+    {
+      "name": "qcm_id",
+      "type": "foreign_key",
+      "references": "QCM",
+      "required": false,
+      "nullable": true
+    },
+    {
+      "name": "checklist_id",
+      "type": "foreign_key",
+      "references": "Checklist",
+      "required": false,
+      "nullable": true
+    }
+  ],
+  "options": {
+    "timestamps": true,
+    "soft_delete": false
+  }
+}

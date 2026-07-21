@@ -9,11 +9,12 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-ETAPES: tuple[str, ...] = ("fiche", "competences")
+ETAPES: tuple[str, ...] = ("fiche", "competences", "deroule")
 
 LIBELLES: dict[str, str] = {
     "fiche": "Fiche",
     "competences": "Compétences observées",
+    "deroule": "Déroulé",
 }
 
 
@@ -30,13 +31,14 @@ def borner_etape(raw: str) -> str:
     return raw if raw in ETAPES else "fiche"
 
 
-def steps(seance: dict[str, Any], nb_competences: int) -> list[dict[str, Any]]:
+def steps(seance: dict[str, Any], nb_competences: int, nb_elements: int) -> list[dict[str, Any]]:
     """Barre d'étapes : la complétion est DÉRIVÉE des données, jamais persistée.
 
     - Fiche : titre rempli (obligatoire à la création).
     - Compétences observées : au moins une compétence retenue. L'étape reste
       accessible même sans liaison de référentiel (elle invite alors à en poser
       une côté scénario).
+    - Déroulé : au moins un élément (consigne, vidéo, QCM, TP, dépôt…).
     """
     return [
         {
@@ -50,6 +52,12 @@ def steps(seance: dict[str, Any], nb_competences: int) -> list[dict[str, Any]]:
             "label": LIBELLES["competences"],
             "badge": str(nb_competences) if nb_competences else "",
             "done": nb_competences > 0,
+        },
+        {
+            "key": "deroule",
+            "label": LIBELLES["deroule"],
+            "badge": str(nb_elements) if nb_elements else "",
+            "done": nb_elements > 0,
         },
     ]
 
