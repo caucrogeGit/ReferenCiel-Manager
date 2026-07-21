@@ -104,6 +104,12 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   référentiel, **savoirs libres** ajoutés en texte libre comme les indicateurs
   (nouvelle table `savoir_libre`). Amende l'alternative écartée d'ADR-028.
 
+- `031-suppression-scenario-sequence-dissociation.md` (**Accepté**) : supprimer
+  un scénario ou une séquence **dissocie** (le lien part, le partenaire reste) au
+  lieu de cascader. Orphelins légitimes ; identifiant de séquence suffixé pour
+  éviter les collisions ; pas de ré-appairage auto. Amende le point
+  « suppression » différé d'ADR-029.
+
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
 Le gabarit `000-template.md` n'est pas une décision : c'est la trame.

@@ -93,6 +93,7 @@ nav:
       - ADR-028 — Connaissances associées (ancrage référentiel): adr/028-connaissances-associees-ancrage-referentiel.md
       - ADR-029 — Appairage Scénario ↔ Séquence à la création: adr/029-appairage-scenario-sequence-a-la-creation.md
       - ADR-030 — Savoirs libres hors référentiel: adr/030-savoirs-libres-hors-referentiel.md
+      - ADR-031 — Suppression Scénario/Séquence (dissociation): adr/031-suppression-scenario-sequence-dissociation.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
