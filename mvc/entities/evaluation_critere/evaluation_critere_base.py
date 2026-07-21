@@ -19,13 +19,14 @@ from core.validation import (
 class EvaluationCritereBase:
     """Classe de base regenerable de EvaluationCritere."""
 
-    def __init__(self, niveau, evaluation_activite_id, critere_id, created_at, updated_at, id=None):
+    def __init__(self, niveau, evaluation_activite_id, critere_id, created_at, updated_at, id=None, indicateur_id=None):
         self.niveau = niveau
         self.evaluation_activite_id = evaluation_activite_id
         self.critere_id = critere_id
         self.created_at = created_at
         self.updated_at = updated_at
         self.id = id
+        self.indicateur_id = indicateur_id
 
     @staticmethod
     def _coerce_datetime(value):
@@ -80,6 +81,19 @@ class EvaluationCritereBase:
         self._critere_id = value
 
     @property
+    def indicateur_id(self):
+        return self._indicateur_id
+
+    @indicateur_id.setter
+    @typed(int)
+    @nullable
+    def indicateur_id(self, value):
+        if value is None:
+            self._indicateur_id = None
+            return
+        self._indicateur_id = value
+
+    @property
     def created_at(self):
         return self._created_at
 
@@ -107,6 +121,7 @@ class EvaluationCritereBase:
             "niveau": self.niveau,
             "evaluation_activite_id": self.evaluation_activite_id,
             "critere_id": self.critere_id,
+            "indicateur_id": self.indicateur_id,
             "created_at": None if self.created_at is None else self.created_at.isoformat(),
             "updated_at": None if self.updated_at is None else self.updated_at.isoformat(),
         }
@@ -118,10 +133,11 @@ class EvaluationCritereBase:
             niveau=data["niveau"],
             evaluation_activite_id=data["evaluation_activite_id"],
             critere_id=data["critere_id"],
+            indicateur_id=data["indicateur_id"],
             created_at=cls._coerce_datetime(data.get("created_at")),
             updated_at=cls._coerce_datetime(data.get("updated_at")),
         )
 
     def __repr__(self) -> str:
-        return f"EvaluationCritereBase(id={self.id!r}, niveau={self.niveau!r}, evaluation_activite_id={self.evaluation_activite_id!r}, critere_id={self.critere_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"EvaluationCritereBase(id={self.id!r}, niveau={self.niveau!r}, evaluation_activite_id={self.evaluation_activite_id!r}, critere_id={self.critere_id!r}, indicateur_id={self.indicateur_id!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 

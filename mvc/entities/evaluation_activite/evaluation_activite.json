@@ -18,6 +18,20 @@
       "unique": false
     },
     {
+      "name": "production",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "aide_apportee",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
       "name": "progression_seance_id",
       "type": "foreign_key",
       "references": "ProgressionSeance",
@@ -27,7 +41,15 @@
       "name": "activite_id",
       "type": "foreign_key",
       "references": "Activite",
-      "required": true
+      "required": false,
+      "nullable": true
+    },
+    {
+      "name": "element_seance_id",
+      "type": "foreign_key",
+      "references": "ElementSeance",
+      "required": false,
+      "nullable": true
     },
     {
       "name": "professeur_id",

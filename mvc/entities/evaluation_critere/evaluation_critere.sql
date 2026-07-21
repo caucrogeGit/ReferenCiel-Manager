@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS evaluation_critere (
     Niveau VARCHAR(30) NOT NULL,
     evaluation_activite_id BIGINT UNSIGNED NOT NULL,
     critere_id BIGINT UNSIGNED NOT NULL,
+    indicateur_id BIGINT UNSIGNED NULL,
     CreatedAt DATETIME NOT NULL,
     UpdatedAt DATETIME NOT NULL,
     PRIMARY KEY (Id)

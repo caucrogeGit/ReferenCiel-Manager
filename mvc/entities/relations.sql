@@ -421,7 +421,14 @@ ALTER TABLE evaluation_activite
     ADD CONSTRAINT fk_evaluation_activite_activite_id
     FOREIGN KEY (activite_id)
     REFERENCES activite (Id)
-    ON DELETE RESTRICT
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT;
+
+ALTER TABLE evaluation_activite
+    ADD CONSTRAINT fk_evaluation_activite_element_seance_id
+    FOREIGN KEY (element_seance_id)
+    REFERENCES element_seance (Id)
+    ON DELETE SET NULL
     ON UPDATE RESTRICT;
 
 ALTER TABLE evaluation_activite
@@ -443,6 +450,13 @@ ALTER TABLE evaluation_critere
     FOREIGN KEY (critere_id)
     REFERENCES critere_observable (Id)
     ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE evaluation_critere
+    ADD CONSTRAINT fk_evaluation_critere_indicateur_id
+    FOREIGN KEY (indicateur_id)
+    REFERENCES indicateur_reussite (Id)
+    ON DELETE SET NULL
     ON UPDATE RESTRICT;
 
 ALTER TABLE bilan_eleve
