@@ -6,7 +6,7 @@
     {
       "name": "statut",
       "type": "string",
-      "max_length": 20,
+      "max_length": 30,
       "required": true,
       "nullable": false,
       "unique": false
