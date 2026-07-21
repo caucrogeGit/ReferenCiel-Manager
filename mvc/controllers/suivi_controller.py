@@ -23,6 +23,10 @@ from mvc.models.suivi_model import (
     list_sequences,
     get_sequence_suivi,
     classes_pour_sequence,
+    STATUT_SEANCE_LABELS,
+    list_seances_a_evaluer,
+    get_seance_suivi,
+    eleves_pour_seance,
 )
 
 
@@ -89,5 +93,31 @@ class SuiviController:
         return BaseController.render(
             "app/suivi/sequence.html",
             context={"sequence": sequence, "classes": classes},
+            request=request,
+        )
+
+    # ── Lentille « séances à évaluer » (file de travail) ─────────────────────
+
+    @staticmethod
+    def seances(request: Request) -> Response:
+        """Séances à traiter, triées par « en attente de validation » (`GET /suivi/seances`)."""
+        pid = _professeur_id(request)
+        seances = list_seances_a_evaluer(pid) if pid is not None else []
+        return BaseController.render(
+            "app/suivi/seances.html", context={"seances": seances}, request=request
+        )
+
+    @staticmethod
+    def seance(request: Request) -> Response:
+        """Détail d'une séance : les élèves concernés et leur statut (`GET /suivi/seance/<id>`)."""
+        pid = _professeur_id(request)
+        seance_id = int(request.route("id") or "0")
+        seance = get_seance_suivi(seance_id)
+        if seance is None:
+            return BaseController.not_found()
+        eleves = eleves_pour_seance(seance_id, pid) if pid is not None else []
+        return BaseController.render(
+            "app/suivi/seance.html",
+            context={"seance": seance, "eleves": eleves, "statut_labels": STATUT_SEANCE_LABELS},
             request=request,
         )

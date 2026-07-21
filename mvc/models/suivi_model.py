@@ -53,21 +53,85 @@ def get_classe(classe_id: int) -> dict[str, Any] | None:
     )
 
 
+# Cycle de vie d'une séance côté élève (ADR-032/033). « En attente de validation »
+# = ce que le professeur a à traiter.
+_STATUT_ATTENTE = "en_attente_validation"
+STATUT_SEANCE_LABELS = {
+    "non_commencee": "Non commencée",
+    "en_cours": "En cours",
+    "en_attente_validation": "En attente de validation",
+    "a_reprendre": "À reprendre",
+    "validee": "Validée",
+}
+
+
 def compter_lentilles(professeur_id: int) -> dict[str, int]:
-    """Compteurs pour les tuiles du tableau de bord (classes / séquences suivies)."""
+    """Compteurs pour les tuiles (classes / séquences suivies / séances à évaluer)."""
     row = fetch_one(
-        "SELECT COUNT(DISTINCT c.Id) AS nb_classes, COUNT(DISTINCT pe.sequence_id) AS nb_sequences "
+        "SELECT COUNT(DISTINCT c.Id) AS nb_classes, COUNT(DISTINCT pe.sequence_id) AS nb_sequences, "
+        "COALESCE(SUM(pp.Statut = ?), 0) AS nb_a_evaluer "
         "FROM classe_professeur cp "
         "JOIN classe c ON c.Id = cp.classe_id "
         "LEFT JOIN eleve e ON e.classe_id = c.Id "
         "LEFT JOIN progression_sequence pe ON pe.eleve_id = e.Id "
+        "LEFT JOIN progression_seance pp ON pp.progression_sequence_id = pe.Id "
         "WHERE cp.professeur_id = ?",
-        (professeur_id,),
+        (_STATUT_ATTENTE, professeur_id),
     )
     return {
         "nb_classes": int(row["nb_classes"]) if row else 0,
         "nb_sequences": int(row["nb_sequences"]) if row else 0,
+        "nb_a_evaluer": int(row["nb_a_evaluer"]) if row else 0,
     }
+
+
+def list_seances_a_evaluer(professeur_id: int) -> list[dict[str, Any]]:
+    """Séances où les élèves du prof ont une progression, avec le compte par statut.
+    Triées par « en attente de validation » d'abord — la file de travail (ADR-033)."""
+    return fetch_all(
+        "SELECT se.Id AS id, se.Titre AS seance_titre, sq.Titre AS sequence_titre, "
+        "COALESCE(SUM(pp.Statut = 'en_attente_validation'), 0) AS nb_attente, "
+        "COALESCE(SUM(pp.Statut = 'a_reprendre'), 0) AS nb_a_reprendre, "
+        "COALESCE(SUM(pp.Statut = 'en_cours'), 0) AS nb_en_cours, "
+        "COALESCE(SUM(pp.Statut = 'validee'), 0) AS nb_validee, "
+        "COUNT(pp.Id) AS nb_total "
+        "FROM classe_professeur cp "
+        "JOIN classe c ON c.Id = cp.classe_id "
+        "JOIN eleve e ON e.classe_id = c.Id "
+        "JOIN progression_sequence pe ON pe.eleve_id = e.Id "
+        "JOIN progression_seance pp ON pp.progression_sequence_id = pe.Id "
+        "JOIN seance se ON se.Id = pp.seance_id "
+        "JOIN sequence sq ON sq.Id = se.sequence_id "
+        "WHERE cp.professeur_id = ? "
+        "GROUP BY se.Id, se.Titre, sq.Titre "
+        "ORDER BY nb_attente DESC, se.Titre",
+        (professeur_id,),
+    )
+
+
+def get_seance_suivi(seance_id: int) -> dict[str, Any] | None:
+    """En-tête d'une séance (titre + séquence) pour la lentille « séance »."""
+    return fetch_one(
+        "SELECT se.Id AS id, se.Titre AS seance_titre, sq.Titre AS sequence_titre "
+        "FROM seance se JOIN sequence sq ON sq.Id = se.sequence_id WHERE se.Id = ?",
+        (seance_id,),
+    )
+
+
+def eleves_pour_seance(seance_id: int, professeur_id: int) -> list[dict[str, Any]]:
+    """Élèves du prof concernés par une séance, avec leur statut (pour l'évaluation)."""
+    return fetch_all(
+        "SELECT pp.Id AS progression_seance_id, pe.Id AS progression_id, "
+        "e.Nom AS nom, e.Prenom AS prenom, c.Code AS classe_code, pp.Statut AS statut "
+        "FROM classe_professeur cp "
+        "JOIN classe c ON c.Id = cp.classe_id "
+        "JOIN eleve e ON e.classe_id = c.Id "
+        "JOIN progression_sequence pe ON pe.eleve_id = e.Id "
+        "JOIN progression_seance pp ON pp.progression_sequence_id = pe.Id AND pp.seance_id = ? "
+        "WHERE cp.professeur_id = ? "
+        "ORDER BY pp.Statut, e.Nom, e.Prenom",
+        (seance_id, professeur_id),
+    )
 
 
 def list_sequences(professeur_id: int) -> list[dict[str, Any]]:

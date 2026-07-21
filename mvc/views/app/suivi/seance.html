@@ -1,0 +1,37 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-2">
+        <h1 class="text-2xl font-bold text-gray-800">À évaluer — {{ seance.seance_titre }}</h1>
+        <a href="/suivi/seances" class="text-gray-600 hover:underline">← Séances à évaluer</a>
+    </div>
+    <p class="text-gray-600 mb-6">Séquence : {{ seance.sequence_titre }}. Élèves concernés et leur statut.</p>
+
+    {% if eleves %}
+    <table class="w-full text-sm bg-white shadow rounded overflow-hidden">
+        <thead class="bg-gray-100 text-left text-gray-700">
+            <tr>
+                <th class="px-4 py-2">Élève</th>
+                <th class="px-4 py-2">Classe</th>
+                <th class="px-4 py-2">Statut</th>
+                <th class="px-4 py-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in eleves %}
+            <tr class="border-t border-gray-100 {{ 'bg-orange-50' if e.statut == 'en_attente_validation' else '' }}">
+                <td class="px-4 py-2 font-medium">{{ e.nom }} {{ e.prenom }}</td>
+                <td class="px-4 py-2 text-gray-600">{{ e.classe_code }}</td>
+                <td class="px-4 py-2">{{ statut_labels.get(e.statut, e.statut) }}</td>
+                <td class="px-4 py-2 text-right">
+                    <a href="/evaluation/progression/{{ e.progression_id }}" class="text-blue-600 hover:underline">Évaluer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-500 italic">Aucun élève concerné par cette séance.</p>
+    {% endif %}
+</div>
+{% endblock %}

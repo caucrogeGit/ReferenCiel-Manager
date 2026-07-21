@@ -14,3 +14,5 @@ def register_suivi_routes(router: Router) -> None:
         g.add("GET", "/classe/{id}", SuiviController.classe, name="suivi-classe")
         g.add("GET", "/sequences", SuiviController.sequences, name="suivi-sequences")
         g.add("GET", "/sequence/{id}", SuiviController.sequence, name="suivi-sequence")
+        g.add("GET", "/seances", SuiviController.seances, name="suivi-seances")
+        g.add("GET", "/seance/{id}", SuiviController.seance, name="suivi-seance")
