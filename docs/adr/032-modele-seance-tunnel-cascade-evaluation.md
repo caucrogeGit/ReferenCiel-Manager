@@ -96,6 +96,18 @@ apportée. Détail et migration en phase C (possiblement un ADR dédié).
 - **Le QCM valide une compétence** : contraire à la règle métier (il vérifie la
   compréhension, il conditionne l'accès). Écartée.
 
+## Amendement (2026-07-21) — grille officielle CIEL
+
+La décision 6 mentionnait des niveaux « non acquis / en cours / acquis /
+maîtrisé » : **ce ne sont pas les intitulés officiels**. La grille CIEL retient
+**quatre niveaux** (1 Non réalisé 🔴, 2 Réalisation partielle 🟠, 3 Réalisation
+satisfaisante 🟩 clair, 4 Réalisation très satisfaisante 🟩 foncé), **plus** un
+état **« Non observé »** (gris) **distinct du rouge** — un critère jamais mis en
+situation ne pénalise pas l'élève. La donnée métier est le **niveau**, pas la
+couleur. Le positionnement peut être **suggéré** à partir du nombre **réel**
+d'indicateurs validés (sans seuils figés), mais le professeur **arbitre**.
+Référence : `mvc/services/niveaux_maitrise.py`.
+
 ## Références
 
 - SEQ-02 (attributs de la séance ; tables `seance_competence`/`seance_critere`).
