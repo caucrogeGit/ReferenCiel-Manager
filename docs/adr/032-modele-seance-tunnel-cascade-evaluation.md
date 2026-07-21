@@ -126,6 +126,19 @@ centrée sur la séance.
 - L'upsert de `evaluation_critere` est explicite (la table n'a pas de clé unique :
   l'ancien `ON DUPLICATE KEY` n'agissait jamais et dupliquait les lignes).
 
+**Suggestion par les indicateurs (décision 6).** Le professeur **coche**, dans la
+feuille, les indicateurs qu'il observe pour un critère. Ces coches sont
+mémorisées par observation dans le pivot `indicateur_observe` (migration
+`20260721232942`). Le nombre de coches sur le total **suggère** un niveau
+(`suggerer_niveau`, sans seuils figés) : la puce suggérée est signalée d'un liseré,
+mais **rien n'est verrouillé**, le professeur choisit le niveau qu'il retient. Tant
+qu'aucun indicateur n'est coché, aucune suggestion n'est affichée (suggérer « Non
+réalisé » avant toute observation serait trompeur). Cela n'exige aucun lien entre
+le travail de l'élève (QCM, checklist) et les indicateurs, lien qui n'existe pas au
+modèle : c'est **le professeur qui observe**, conformément à la décision 6. La
+feuille est passée en **HTMX auto-save** (coche, niveau, notes persistés au fil de
+l'eau), cohérente avec les autres tunnels de l'application.
+
 Le vocabulaire persisté passe de l'échelle héritée (« non_atteint … depasse »,
 antérieure à l'amendement du jour) aux codes CIEL, par la migration
 `20260721230126_remap_niveau_ciel`. Le bilan (`bilan_eleve_model`) agrège

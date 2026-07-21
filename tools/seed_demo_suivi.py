@@ -86,10 +86,16 @@ def seed() -> None:
         "FROM competence cp JOIN critere_observable c ON c.competence_id = cp.Id "
         "WHERE cp.referentiel_id = ? ORDER BY cp.Code LIMIT 2", (_REFERENTIEL_ID,))
     seance_ids: list[int] = []
+    indic_libs = ["Le mode opératoire est respecté.", "Le résultat obtenu est conforme à l'attendu."]
     for i, comp in enumerate(comps, start=1):
         criteres = fetch_all("SELECT Id FROM critere_observable WHERE competence_id = ? ORDER BY Id LIMIT 3", (comp["comp"],))
         for cr in criteres:
             execute("INSERT INTO scenario_critere (scenario_id, critere_observable_id) VALUES (?, ?)", (scid, cr["Id"]))
+            # Indicateurs de réussite (pour la suggestion de la feuille), si le critère n'en a pas.
+            if fetch_one("SELECT COUNT(*) AS n FROM indicateur_reussite WHERE critere_id = ?", (cr["Id"],))["n"] == 0:
+                for k, lib in enumerate(indic_libs, start=1):
+                    execute("INSERT INTO indicateur_reussite (Code, Libelle, critere_id, CreatedAt, UpdatedAt) "
+                            "VALUES (?, ?, ?, ?, ?)", (f"I{k}", lib, cr["Id"], now, now))
         seaid = insert("INSERT INTO seance (Ordre, Titre, sequence_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)",
                        (i, f"Séance {i} — {comp['intitule'][:40]}", sqid, now, now))
         execute("INSERT INTO seance_competence (seance_id, competence_id, Role, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?)",

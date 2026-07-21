@@ -12,6 +12,8 @@ from core.http.response import Response
 from core.mvc.controller import BaseController
 from core.security.session import get_flash, get_session_id
 
+from mvc.helpers.htmx import est_htmx
+from mvc.services.niveaux_maitrise import NIVEAUX
 from mvc.models.evaluation_prof_model import (
     STATUTS_SEANCE,
     enregistrer_coches_prof,
@@ -19,7 +21,15 @@ from mvc.models.evaluation_prof_model import (
     get_progression_detail,
     set_seance_statut,
 )
-from mvc.models.notation_critere_model import enregistrer_notation, get_grille
+from mvc.models.notation_critere_model import (
+    contexte_critere,
+    enregistrer_notes,
+    get_grille,
+    indicateurs_du_critere,
+    maj_indicateurs_observes,
+    positionner_niveau,
+    professeur_de_user,
+)
 
 
 class EvaluationProfController:
@@ -85,43 +95,84 @@ class EvaluationProfController:
         return BaseController.redirect_with_flash(request, cible, message, "success")
 
     @staticmethod
+    def _professeur_id(request: Request) -> "int | None":
+        user_id = get_authenticated_user_id(request)
+        return professeur_de_user(user_id) if user_id is not None else None
+
+    @staticmethod
     def activite(request: Request) -> Response:
-        """Grille de notation par critères (`GET /evaluation/activite/<progression_seance_id>`)."""
+        """Feuille de positionnement (`GET /evaluation/activite/<progression_seance_id>`)."""
         pp_id = int(request.route("id") or "0")
         data = get_grille(pp_id)
         if data is None:
             return BaseController.not_found()
         return BaseController.render(
             "app/evaluation/activite.html",
-            context={"grille": data, "flash": get_flash(get_session_id(request))},
+            context={
+                "grille": data,
+                "niveaux": NIVEAUX,
+                "base": f"/evaluation/activite/{pp_id}",
+                "peut_editer": EvaluationProfController._professeur_id(request) is not None,
+                "flash": get_flash(get_session_id(request)),
+            },
             request=request,
         )
 
     @staticmethod
-    def noter(request: Request) -> Response:
-        """Enregistre la notation (`POST /evaluation/activite/<progression_seance_id>`)."""
-        pp_id = int(request.route("id") or "0")
-        data = get_grille(pp_id)
-        if data is None:
+    def _rendre_critere(request: Request, pp_id: int, critere_id: int) -> Response:
+        """Re-rend le fragment d'un critère (HTMX) ou renvoie à la feuille (sans JS)."""
+        if not est_htmx(request):
+            return BaseController.redirect(f"/evaluation/activite/{pp_id}", request=request)
+        critere = contexte_critere(pp_id, critere_id)
+        if critere is None:
             return BaseController.not_found()
-        niveaux: dict[int, str] = {}
-        for competence in data["competences"]:
-            for critere in competence["criteres"]:
-                cid = int(critere["id"])
-                niveau = request.form(f"critere_{cid}", "")
-                if niveau:
-                    niveaux[cid] = niveau
-        resultat = enregistrer_notation(
-            pp_id,
-            niveaux,
-            get_authenticated_user_id(request),
-            production=(request.form("production", "") or "").strip() or None,
-            aide=(request.form("aide", "") or "").strip() or None,
-            appreciation=(request.form("appreciation", "") or "").strip() or None,
+        return BaseController.render(
+            "app/evaluation/_critere.html",
+            context={"c": critere, "niveaux": NIVEAUX, "base": f"/evaluation/activite/{pp_id}"},
+            request=request,
         )
-        if resultat is None:
-            return BaseController.not_found()
-        # On revient à la feuille : le positionnement se poursuit sur place.
-        cible = f"/evaluation/activite/{pp_id}"
-        message = f"Positionnement enregistré : {resultat['notes']} critère(s) positionné(s)."
-        return BaseController.redirect_with_flash(request, cible, message, "success")
+
+    @staticmethod
+    def positionner(request: Request) -> Response:
+        """Positionne un critère à un niveau (`POST /evaluation/activite/<id>/critere/<cid>/niveau`)."""
+        pp_id = int(request.route("id") or "0")
+        cid = int(request.route("cid") or "0")
+        prof_id = EvaluationProfController._professeur_id(request)
+        if prof_id is not None:
+            positionner_niveau(pp_id, prof_id, cid, request.form("niveau", ""))
+        return EvaluationProfController._rendre_critere(request, pp_id, cid)
+
+    @staticmethod
+    def cocher_indicateurs(request: Request) -> Response:
+        """Met à jour les indicateurs cochés d'un critère
+        (`POST /evaluation/activite/<id>/critere/<cid>/indicateurs`)."""
+        pp_id = int(request.route("id") or "0")
+        cid = int(request.route("cid") or "0")
+        prof_id = EvaluationProfController._professeur_id(request)
+        if prof_id is not None:
+            coches = {
+                int(ind["id"])
+                for ind in indicateurs_du_critere(cid)
+                if request.form(f"indicateur_{ind['id']}", "")
+            }
+            maj_indicateurs_observes(pp_id, prof_id, cid, coches)
+        return EvaluationProfController._rendre_critere(request, pp_id, cid)
+
+    @staticmethod
+    def notes(request: Request) -> Response:
+        """Enregistre production/aide/appréciation (`POST /evaluation/activite/<id>/notes`)."""
+        pp_id = int(request.route("id") or "0")
+        prof_id = EvaluationProfController._professeur_id(request)
+        if prof_id is not None:
+            enregistrer_notes(
+                pp_id,
+                prof_id,
+                (request.form("production", "") or "").strip() or None,
+                (request.form("aide", "") or "").strip() or None,
+                (request.form("appreciation", "") or "").strip() or None,
+            )
+        if est_htmx(request):
+            return BaseController.render(
+                "app/evaluation/_sauvegarde_oob.html", context={}, request=request
+            )
+        return BaseController.redirect(f"/evaluation/activite/{pp_id}", request=request)

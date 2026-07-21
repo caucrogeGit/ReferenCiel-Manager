@@ -37,6 +37,10 @@
 .niv-opt.c-vert_clair input:checked + label { background: #22c55e; color: #fff; border-color: #16a34a; }
 .niv-opt.c-vert_fonce input:checked + label { background: #15803d; color: #fff; border-color: #14532d; }
 
+/* Niveau suggéré (par le nombre d'indicateurs cochés) : liseré pointillé, que le
+ * niveau soit retenu ou non. Le professeur reste libre de choisir un autre niveau. */
+.niv-opt.is-suggere label { outline: 2px dashed #6b7280; outline-offset: 1px; }
+
 /* Pastille de rappel (légende, badge de niveau posé). */
 .niv-pastille {
   display: inline-block; width: .7rem; height: .7rem; border-radius: 9999px;

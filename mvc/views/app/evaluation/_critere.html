@@ -1,0 +1,54 @@
+{# Fragment d'un critère observé (feuille de positionnement, ADR-032).
+   Deux mini-formulaires HTMX auto-save (indicateurs cochés, niveau retenu), qui
+   re-rendent ce même bloc. Le professeur arbitre : la suggestion ne verrouille rien. #}
+<div id="critere-{{ c.id }}" class="rounded-lg border border-gray-100 p-3">
+    <p class="text-sm text-gray-700 mb-2">
+        {{ c.libelle }}
+        {% if c.savoir_etre %}<span class="text-xs text-gray-400">(savoir-être)</span>{% endif %}
+    </p>
+
+    {% if c.indicateurs %}
+    <form method="post" action="{{ base }}/critere/{{ c.id }}/indicateurs"
+          hx-post="{{ base }}/critere/{{ c.id }}/indicateurs" hx-trigger="change"
+          hx-target="#critere-{{ c.id }}" hx-swap="outerHTML" class="mb-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <p class="text-xs font-medium text-gray-500 mb-1">Indicateurs observés</p>
+        <div class="space-y-1">
+            {% for ind in c.indicateurs %}
+            <label class="flex items-start gap-2 text-xs text-gray-600">
+                <input type="checkbox" name="indicateur_{{ ind.id }}" value="1"
+                       {% if ind.coche %}checked{% endif %} class="mt-0.5">
+                <span>{{ ind.libelle }}</span>
+            </label>
+            {% endfor %}
+        </div>
+        <p class="text-xs text-gray-500 mt-1.5">
+            {% if c.suggestion != 'NON_OBSERVE' %}
+            Suggéré : <span class="niv-pastille c-{{ c.suggestion_descr.couleur }}"></span>
+            {{ c.suggestion_descr.niveau }}. {{ c.suggestion_descr.libelle }}
+            {% else %}
+            <span class="text-gray-400">Cochez les indicateurs observés pour obtenir une suggestion.</span>
+            {% endif %}
+        </p>
+        <noscript><button type="submit" class="text-xs text-blue-600 underline mt-1">Mettre à jour</button></noscript>
+    </form>
+    {% endif %}
+
+    <form method="post" action="{{ base }}/critere/{{ c.id }}/niveau"
+          hx-post="{{ base }}/critere/{{ c.id }}/niveau" hx-trigger="change"
+          hx-target="#critere-{{ c.id }}" hx-swap="outerHTML">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="niv-groupe" role="radiogroup" aria-label="Niveau — {{ c.libelle }}">
+            {% for n in niveaux %}
+            <span class="niv-opt c-{{ n.couleur }}{% if n.code == c.suggestion and c.suggestion != 'NON_OBSERVE' %} is-suggere{% endif %}">
+                <input type="radio" id="c{{ c.id }}-{{ n.code }}" name="niveau" value="{{ n.code }}"
+                       {% if n.code == c.niveau %}checked{% endif %}>
+                <label for="c{{ c.id }}-{{ n.code }}" title="{{ n.explication if n.explication else n.libelle }}">
+                    {% if n.niveau %}{{ n.niveau }}{% else %}N.O.{% endif %}<span class="hidden sm:inline"> · {{ n.libelle }}</span>
+                </label>
+            </span>
+            {% endfor %}
+        </div>
+        <noscript><button type="submit" class="text-xs text-blue-600 underline mt-1">Enregistrer</button></noscript>
+    </form>
+</div>
