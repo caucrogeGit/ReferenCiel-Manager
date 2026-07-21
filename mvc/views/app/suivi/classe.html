@@ -1,0 +1,45 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-2">
+        <h1 class="text-2xl font-bold text-gray-800">Suivi — {{ classe.classe_code }} {{ classe.classe_libelle }}</h1>
+        <a href="/suivi/classes" class="text-gray-600 hover:underline">← Toutes mes classes</a>
+    </div>
+    <p class="text-gray-600 mb-6">Niveau {{ classe.niveau_code }} — année {{ classe.annee_libelle }}.</p>
+
+    {% if eleves %}
+    <table class="w-full text-sm bg-white shadow rounded overflow-hidden">
+        <thead class="bg-gray-100 text-left text-gray-700">
+            <tr>
+                <th class="px-4 py-2">Élève</th>
+                <th class="px-4 py-2">Séquence</th>
+                <th class="px-4 py-2">Statut</th>
+                <th class="px-4 py-2 text-right">Validés</th>
+                <th class="px-4 py-2 text-right">En cours</th>
+                <th class="px-4 py-2 text-right">Bloqués</th>
+                <th class="px-4 py-2 text-right">Séances</th>
+                <th class="px-4 py-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in eleves %}
+            <tr class="border-t border-gray-100 {{ 'bg-red-50' if e.nb_bloque and e.nb_bloque > 0 else '' }}">
+                <td class="px-4 py-2 font-medium">{{ e.nom }} {{ e.prenom }}</td>
+                <td class="px-4 py-2 text-gray-600">{{ e.sequence_titre }}</td>
+                <td class="px-4 py-2">{{ e.statut }}</td>
+                <td class="px-4 py-2 text-right text-green-700">{{ e.nb_valide or 0 }}</td>
+                <td class="px-4 py-2 text-right">{{ e.nb_en_cours or 0 }}</td>
+                <td class="px-4 py-2 text-right text-red-700">{{ e.nb_bloque or 0 }}</td>
+                <td class="px-4 py-2 text-right text-gray-600">{{ e.nb_seances or 0 }}</td>
+                <td class="px-4 py-2 text-right">
+                    <a href="/evaluation/progression/{{ e.progression_id }}" class="text-blue-600 hover:underline">Évaluer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-500 italic">Aucun élève suivi pour cette classe.</p>
+    {% endif %}
+</div>
+{% endblock %}

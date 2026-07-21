@@ -1,0 +1,39 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold text-gray-800">Suivi par séquence</h1>
+        <a href="/suivi" class="text-gray-600 hover:underline">← Tableau de bord</a>
+    </div>
+    <p class="text-gray-600 mb-6">Choisissez une séquence pour voir les classes qui l'utilisent.</p>
+
+    {% if sequences %}
+    <table class="w-full text-sm bg-white shadow rounded overflow-hidden">
+        <thead class="bg-gray-100 text-left text-gray-700">
+            <tr>
+                <th class="px-4 py-2">Séquence</th>
+                <th class="px-4 py-2 text-right">Classes</th>
+                <th class="px-4 py-2 text-right">Élèves</th>
+                <th class="px-4 py-2 text-right">Progressions</th>
+                <th class="px-4 py-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in sequences %}
+            <tr class="border-t border-gray-100">
+                <td class="px-4 py-2 font-medium">{{ s.sequence_titre }}</td>
+                <td class="px-4 py-2 text-right">{{ s.nb_classes }}</td>
+                <td class="px-4 py-2 text-right">{{ s.nb_eleves }}</td>
+                <td class="px-4 py-2 text-right">{{ s.nb_progressions }}</td>
+                <td class="px-4 py-2 text-right">
+                    <a href="/suivi/sequence/{{ s.id }}" class="text-blue-600 hover:underline">Suivre →</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-500 italic">Aucune séquence suivie pour le moment.</p>
+    {% endif %}
+</div>
+{% endblock %}

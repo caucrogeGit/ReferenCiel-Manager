@@ -53,6 +53,67 @@ def get_classe(classe_id: int) -> dict[str, Any] | None:
     )
 
 
+def compter_lentilles(professeur_id: int) -> dict[str, int]:
+    """Compteurs pour les tuiles du tableau de bord (classes / séquences suivies)."""
+    row = fetch_one(
+        "SELECT COUNT(DISTINCT c.Id) AS nb_classes, COUNT(DISTINCT pe.sequence_id) AS nb_sequences "
+        "FROM classe_professeur cp "
+        "JOIN classe c ON c.Id = cp.classe_id "
+        "LEFT JOIN eleve e ON e.classe_id = c.Id "
+        "LEFT JOIN progression_sequence pe ON pe.eleve_id = e.Id "
+        "WHERE cp.professeur_id = ?",
+        (professeur_id,),
+    )
+    return {
+        "nb_classes": int(row["nb_classes"]) if row else 0,
+        "nb_sequences": int(row["nb_sequences"]) if row else 0,
+    }
+
+
+def list_sequences(professeur_id: int) -> list[dict[str, Any]]:
+    """Séquences suivies (une progression existe chez un élève du prof), avec le
+    nombre de classes, d'élèves et de progressions concernés — lentille « séquence »."""
+    return fetch_all(
+        "SELECT p.Id AS id, p.Titre AS sequence_titre, "
+        "COUNT(DISTINCT c.Id) AS nb_classes, "
+        "COUNT(DISTINCT e.Id) AS nb_eleves, "
+        "COUNT(DISTINCT pe.Id) AS nb_progressions "
+        "FROM classe_professeur cp "
+        "JOIN classe c ON c.Id = cp.classe_id "
+        "JOIN eleve e ON e.classe_id = c.Id "
+        "JOIN progression_sequence pe ON pe.eleve_id = e.Id "
+        "JOIN sequence p ON p.Id = pe.sequence_id "
+        "WHERE cp.professeur_id = ? "
+        "GROUP BY p.Id, p.Titre "
+        "ORDER BY p.Titre",
+        (professeur_id,),
+    )
+
+
+def get_sequence_suivi(sequence_id: int) -> dict[str, Any] | None:
+    """En-tête d'une séquence pour la lentille « séquence »."""
+    return fetch_one(
+        "SELECT Id AS id, Titre AS sequence_titre FROM sequence WHERE Id = ?", (sequence_id,)
+    )
+
+
+def classes_pour_sequence(sequence_id: int, professeur_id: int) -> list[dict[str, Any]]:
+    """Classes du professeur qui utilisent une séquence (progressions existantes)."""
+    return fetch_all(
+        "SELECT c.Id AS id, c.Code AS classe_code, c.Libelle AS classe_libelle, "
+        "COUNT(DISTINCT e.Id) AS nb_eleves, "
+        "COUNT(DISTINCT pe.Id) AS nb_progressions "
+        "FROM classe_professeur cp "
+        "JOIN classe c ON c.Id = cp.classe_id "
+        "JOIN eleve e ON e.classe_id = c.Id "
+        "JOIN progression_sequence pe ON pe.eleve_id = e.Id AND pe.sequence_id = ? "
+        "WHERE cp.professeur_id = ? "
+        "GROUP BY c.Id, c.Code, c.Libelle "
+        "ORDER BY c.Code",
+        (sequence_id, professeur_id),
+    )
+
+
 def suivi_eleves(classe_id: int) -> list[dict[str, Any]]:
     """Pour une classe : une ligne par progression d'élève (élève + sequence), avec
     l'avancement par seance agrégé (validés / en cours / bloqués / total) — de quoi

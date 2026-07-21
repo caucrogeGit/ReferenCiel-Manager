@@ -1,0 +1,27 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">Suivi &amp; évaluation</h1>
+    <p class="text-gray-600 mb-6">Choisissez une entrée pour accéder au suivi des élèves. Chaque entrée mène, au bout, à la même feuille d'évaluation.</p>
+
+    <div class="grid gap-4 md:grid-cols-2">
+        <a href="/suivi/classes" class="block bg-white shadow rounded-xl p-6 hover:ring-2 hover:ring-blue-500 transition">
+            <div class="flex items-center gap-3 mb-2">
+                <svg class="size-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <h2 class="text-lg font-semibold text-gray-800">Par classe</h2>
+            </div>
+            <p class="text-sm text-gray-500">Classe → élèves → avancement par séquence.</p>
+            <p class="text-xs text-gray-400 mt-2">{{ compteurs.nb_classes }} classe(s) suivie(s)</p>
+        </a>
+
+        <a href="/suivi/sequences" class="block bg-white shadow rounded-xl p-6 hover:ring-2 hover:ring-blue-500 transition">
+            <div class="flex items-center gap-3 mb-2">
+                <svg class="size-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                <h2 class="text-lg font-semibold text-gray-800">Par séquence</h2>
+            </div>
+            <p class="text-sm text-gray-500">Séquence → classes qui l'utilisent → élèves.</p>
+            <p class="text-xs text-gray-400 mt-2">{{ compteurs.nb_sequences }} séquence(s) suivie(s)</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

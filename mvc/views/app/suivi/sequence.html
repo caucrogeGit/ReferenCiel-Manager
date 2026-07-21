@@ -1,0 +1,37 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-2">
+        <h1 class="text-2xl font-bold text-gray-800">Suivi — {{ sequence.sequence_titre }}</h1>
+        <a href="/suivi/sequences" class="text-gray-600 hover:underline">← Toutes les séquences</a>
+    </div>
+    <p class="text-gray-600 mb-6">Classes qui utilisent cette séquence.</p>
+
+    {% if classes %}
+    <table class="w-full text-sm bg-white shadow rounded overflow-hidden">
+        <thead class="bg-gray-100 text-left text-gray-700">
+            <tr>
+                <th class="px-4 py-2">Classe</th>
+                <th class="px-4 py-2 text-right">Élèves</th>
+                <th class="px-4 py-2 text-right">Progressions</th>
+                <th class="px-4 py-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in classes %}
+            <tr class="border-t border-gray-100">
+                <td class="px-4 py-2 font-medium">{{ c.classe_code }} — {{ c.classe_libelle }}</td>
+                <td class="px-4 py-2 text-right">{{ c.nb_eleves }}</td>
+                <td class="px-4 py-2 text-right">{{ c.nb_progressions }}</td>
+                <td class="px-4 py-2 text-right">
+                    <a href="/suivi/classe/{{ c.id }}" class="text-blue-600 hover:underline">Voir les élèves →</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-500 italic">Aucune classe n'utilise encore cette séquence.</p>
+    {% endif %}
+</div>
+{% endblock %}
