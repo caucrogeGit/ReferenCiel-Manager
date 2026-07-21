@@ -20,7 +20,6 @@ from mvc.models.sequence_model import (
 )
 from mvc.models.scenario_editeur_model import creer_sequence_et_scenario, titre_existe
 from mvc.models.referentiel_atelier_model import list_referentiels
-from mvc.models.seance_model import count_seances, find_seances_paginated
 from mvc.models.sequence_connaissance_model import get_liens_by_sequence
 from mvc.controllers.sequence_connaissance_controller import contexte_connaissances
 
@@ -29,13 +28,11 @@ def _contexte_editeur(sequence: dict, etape: str) -> dict:
     """Contexte complet de l'éditeur (coquille + étape active)."""
     sid = sequence["Id"]
     nb_connaissances = len(get_liens_by_sequence(sid))
-    nb_seances = count_seances(filters={"sequence_id": sid})
     context = {
         "sequence": sequence,
         "base_url": f"/sequence/editeur/{sid}",
-        "steps": steps(sequence, nb_connaissances, nb_seances),
+        "steps": steps(sequence, nb_connaissances),
         "niveau_classe_id_choices": get_niveau_classe_choices(),
-        "seances": find_seances_paginated(filters={"sequence_id": sid}, limit=200),
     }
     context.update(navigation(etape))
     # Contexte de l'étape Connaissances (arbre, liens, compétence active…).

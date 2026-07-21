@@ -10,13 +10,12 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-ETAPES: tuple[str, ...] = ("titre", "cadre", "connaissances", "seances")
+ETAPES: tuple[str, ...] = ("titre", "cadre", "connaissances")
 
 LIBELLES: dict[str, str] = {
     "titre": "Titre",
     "cadre": "Cadre institutionnel",
     "connaissances": "Savoirs associés",
-    "seances": "Séances",
 }
 
 
@@ -36,7 +35,6 @@ def borner_etape(raw: str) -> str:
 def steps(
     sequence: dict[str, Any],
     nb_connaissances: int,
-    nb_seances: int,
 ) -> list[dict[str, Any]]:
     """Barre d'étapes : la complétion est DÉRIVÉE des données, jamais persistée.
 
@@ -45,7 +43,8 @@ def steps(
     - Savoirs associés : au moins une connaissance retenue. L'étape reste
       accessible même sans référentiel : on peut y en rattacher un (via le
       scénario appairé) pour débloquer la sélection.
-    - Séances : au moins une séance rattachée.
+
+    Les séances sont gérées à part (menu Conception → Séances), pas dans le tunnel.
     """
     return [
         {
@@ -65,12 +64,6 @@ def steps(
             "label": LIBELLES["connaissances"],
             "badge": str(nb_connaissances) if nb_connaissances else "",
             "done": nb_connaissances > 0,
-        },
-        {
-            "key": "seances",
-            "label": LIBELLES["seances"],
-            "badge": str(nb_seances) if nb_seances else "",
-            "done": nb_seances > 0,
         },
     ]
 
