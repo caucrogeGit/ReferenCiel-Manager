@@ -1,15 +1,11 @@
-{# Étape 2 — Compétences observées. Placeholder (phase A1) : le maître-détail
-   (sélection parmi la liaison du scénario appairé + rôle + critères + indicateurs)
-   est câblé en phase A2. #}
+{# Étape 2 — Compétences observées (ADR-032 A2). Réutilise le fragment
+   #competences-seance (maître-détail scopé sur la liaison du scénario). #}
 {% from "components/tunnel_macros.html" import tunnel_pager %}
 
 <section class="bg-surface border border-line rounded-card p-7">
-    <h2 class="text-base font-semibold text-ink">Compétences observées</h2>
-    <p class="mt-1 text-sm text-muted">
-        Ici, tu choisiras les compétences que cette séance observe — parmi celles
-        déjà liées par le scénario — leur rôle (travaillée / évaluée), les critères
-        retenus et leurs indicateurs. En cours de construction (ADR-032, phase A2).
-    </p>
+    <div id="competences-seance">
+        {% include "app/seance_editeur/_competences.html" %}
+    </div>
 </section>
 
 {{ tunnel_pager(prev, next, position, total, base_url) }}

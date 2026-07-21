@@ -1,0 +1,94 @@
+{# Compétences observées par la séance (ADR-032 A2) — contenu interne de
+   #competences-seance. Maître (compétences liées par le scénario) → détail
+   (observer la compétence + rôle, et cocher ses critères). HTMX, sans JS inline. #}
+{%- set base = "/seance/" ~ seance_id -%}
+<h2 class="text-sm font-semibold text-gray-700 mb-1">Compétences observées</h2>
+<p class="text-xs text-faint mb-3">Choisies parmi la liaison du scénario appairé (pas de double saisie).</p>
+
+{% if liaison_absente %}
+<p class="text-sm text-faint">
+    Cette séance n'a pas de liaison de référentiel : son scénario appairé n'a pas
+    encore lié de compétences/critères (ou il est hors référentiel). Faites la
+    liaison côté scénario d'abord.
+</p>
+{% else %}
+{%- set comp_active = (groupes | selectattr("Id", "equalto", competence_id) | first) -%}
+<div class="grid md:grid-cols-2 gap-4">
+
+    {# ── Colonne maître : compétences liées ── #}
+    <div class="flex flex-col gap-1">
+        {% for g in groupes %}
+        {%- set nb = (g.criteres | selectattr("Id", "in", criteres_observes) | list | length) -%}
+        <a href="{{ base }}/competences?competence={{ g.Id }}"
+           hx-get="{{ base }}/competences?competence={{ g.Id }}"
+           hx-target="#competences-seance" hx-swap="innerHTML"
+           class="flex items-center gap-2 px-3 py-2 rounded-[10px] text-sm transition
+                  {% if g.Id == competence_id %}bg-forge-soft text-ink font-semibold{% else %}text-subtle hover:bg-cream{% endif %}">
+            {% if g.Id in competences_observees %}<span class="shrink-0 size-2 rounded-full bg-forge" title="Observée"></span>{% else %}<span class="shrink-0 size-2 rounded-full border border-faint"></span>{% endif %}
+            <span class="font-mono text-xs text-faint">{{ g.Code }}</span>
+            <span class="flex-1 min-w-0 truncate">{{ g.Intitule }}</span>
+            {% if nb %}<span class="shrink-0 text-xs rounded-full bg-forge-border text-forge-dark px-1.5 py-0.5">{{ nb }}</span>{% endif %}
+        </a>
+        {% endfor %}
+    </div>
+
+    {# ── Colonne détail : observer la compétence + ses critères ── #}
+    <div>
+        {% if comp_active %}
+        {%- set observee = comp_active.Id in competences_observees -%}
+        <div class="rounded-[10px] border border-line bg-surface px-3 py-2.5 mb-2">
+            <form method="post" action="{{ base }}/competence/basculer"
+                  hx-post="{{ base }}/competence/basculer" hx-trigger="change"
+                  hx-target="#competences-seance" hx-swap="innerHTML" class="flex items-center gap-2.5">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="competence" value="{{ comp_active.Id }}">
+                <input type="checkbox" name="observee" value="1" {% if observee %}checked{% endif %} class="w-4 h-4 accent-forge shrink-0">
+                <span class="flex-1 text-sm text-ink"><span class="font-mono text-xs text-faint mr-1">{{ comp_active.Code }}</span>Observer cette compétence</span>
+                <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
+            </form>
+            {% if observee %}
+            <form method="post" action="{{ base }}/competence/role"
+                  hx-post="{{ base }}/competence/role" hx-trigger="change"
+                  hx-target="#competences-seance" hx-swap="innerHTML" class="flex items-center gap-2 mt-2 pl-6">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="competence" value="{{ comp_active.Id }}">
+                <label class="text-xs text-muted">Rôle</label>
+                <select name="role" class="text-xs py-1 px-2 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+                    {% for val, txt in roles %}
+                    <option value="{{ val }}"{% if val == competences_observees.get(comp_active.Id) %} selected{% endif %}>{{ txt }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            {% endif %}
+        </div>
+
+        <p class="text-xs text-muted mb-1.5">Critères observés</p>
+        <div class="flex flex-col gap-1.5">
+            {% for c in comp_active.criteres %}
+            <div class="rounded-[10px] border border-line px-3 py-2 {% if c.Id in criteres_observes %}bg-surface{% else %}bg-white{% endif %}">
+                <form method="post" action="{{ base }}/critere/basculer"
+                      hx-post="{{ base }}/critere/basculer" hx-trigger="change"
+                      hx-target="#competences-seance" hx-swap="innerHTML" class="flex items-start gap-2.5">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <input type="hidden" name="competence" value="{{ comp_active.Id }}">
+                    <input type="hidden" name="critere" value="{{ c.Id }}">
+                    <input type="checkbox" name="observe" value="1" {% if c.Id in criteres_observes %}checked{% endif %} class="mt-0.5 w-4 h-4 accent-forge shrink-0">
+                    <span class="flex-1 min-w-0 text-sm text-ink">{{ c.Libelle }}{% if c.SavoirEtre %} <span class="text-xs text-faint">(savoir-être)</span>{% endif %}</span>
+                    <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
+                </form>
+                {% if c.indicateurs %}
+                <ul class="mt-1 pl-8 flex flex-col gap-0.5">
+                    {% for ind in c.indicateurs %}
+                    <li class="text-xs text-muted flex items-start gap-1.5"><span class="mt-1 size-1 shrink-0 rounded-full bg-faint"></span>{{ ind.Libelle }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-faint">Sélectionnez une compétence.</p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
