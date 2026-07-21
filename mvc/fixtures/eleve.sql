@@ -1,6 +1,14 @@
 -- Fixtures pour eleve, générées par forge fixtures:generate.
 -- Relire avant de charger (forge fixtures:load).
 -- ADR-022 : l'élève est rattaché à une CLASSE (classe_id) ; le niveau se déduit de la classe.
+-- Neuf élèves répartis sur les trois classes (3 par classe). Deux ont un compte
+-- (dupont-marie, garcia-hugo) ; les autres n'en ont pas (UserId NULL).
 INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES ('Dupont', 'Marie', 'dupont-marie', '2009-05-15', (SELECT Id FROM users WHERE email = 'eleve@referenciel.local' LIMIT 1), (SELECT Id FROM classe WHERE Code = '2TNE-A' LIMIT 1), '2024-01-01 00:00:00', '2024-01-01 00:00:00');
 INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES ('Martin', 'Lucas', 'martin-lucas', '2009-03-10', NULL, (SELECT Id FROM classe WHERE Code = '2TNE-A' LIMIT 1), '2024-01-01 00:00:00', '2024-01-01 00:00:00');
 INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES ('Nguyen', 'Emma', 'nguyen-emma', '2009-07-22', NULL, (SELECT Id FROM classe WHERE Code = '2TNE-A' LIMIT 1), '2024-01-01 00:00:00', '2024-01-01 00:00:00');
+INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES ('Garcia', 'Hugo', 'garcia-hugo', '2009-02-18', (SELECT Id FROM users WHERE email = 'eleve2@referenciel.local' LIMIT 1), (SELECT Id FROM classe WHERE Code = '2TNE-B' LIMIT 1), '2024-01-01 00:00:00', '2024-01-01 00:00:00');
+INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES ('Leroy', 'Chloé', 'leroy-chloe', '2009-11-04', NULL, (SELECT Id FROM classe WHERE Code = '2TNE-B' LIMIT 1), '2024-01-01 00:00:00', '2024-01-01 00:00:00');
+INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES ('Roux', 'Nathan', 'roux-nathan', '2009-06-27', NULL, (SELECT Id FROM classe WHERE Code = '2TNE-B' LIMIT 1), '2024-01-01 00:00:00', '2024-01-01 00:00:00');
+INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES ('Fabre', 'Léa', 'fabre-lea', '2009-09-12', NULL, (SELECT Id FROM classe WHERE Code = '2TNE-C' LIMIT 1), '2024-01-01 00:00:00', '2024-01-01 00:00:00');
+INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES ('Blanc', 'Tom', 'blanc-tom', '2009-04-30', NULL, (SELECT Id FROM classe WHERE Code = '2TNE-C' LIMIT 1), '2024-01-01 00:00:00', '2024-01-01 00:00:00');
+INSERT INTO eleve (Nom, Prenom, Identifiant, DateNaissance, UserId, classe_id, CreatedAt, UpdatedAt) VALUES ('Girard', 'Inès', 'girard-ines', '2009-08-07', NULL, (SELECT Id FROM classe WHERE Code = '2TNE-C' LIMIT 1), '2024-01-01 00:00:00', '2024-01-01 00:00:00');
