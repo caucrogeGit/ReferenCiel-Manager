@@ -1,0 +1,10 @@
+{# Toast « ✓ Enregistré » hors-bande après chaque auto-save du tunnel séance.
+   Cible : le placeholder <span id="seance-sauvegarde"> de editeur.html. CSS partagé
+   (static/scenario-tunnel.css). À n'inclure QUE dans des réponses HTMX. #}
+<span id="seance-sauvegarde" hx-swap-oob="true" class="toast-enregistre" role="status" aria-live="polite">
+  <svg class="toast-enregistre__icone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+       fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+  Enregistré
+</span>

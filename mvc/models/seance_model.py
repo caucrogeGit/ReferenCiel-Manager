@@ -19,6 +19,17 @@ def get_seance_by_id(id):
     return fetch_one(SELECT_BY_ID, (id,))
 
 
+UPDATE_FICHE = ("UPDATE seance SET Ordre = ?, Titre = ?, Theme = ?, ProductionAttendue = ?, "
+                "ObjectifOperationnel = ?, ConsigneGenerale = ?, DureeEstimeeMinutes = ?, "
+                "ModalitePedagogique = ?, ConditionRealisation = ?, ConditionValidation = ?, "
+                "Remediation = ?, UpdatedAt = ? WHERE Id = ?")
+
+
+def update_fiche(id, data):
+    """Auto-save de l'étape Fiche du tunnel (champs de la séance, pas sequence_id)."""
+    execute(UPDATE_FICHE, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["objectif_operationnel"], data["consigne_generale"], data["duree_estimee_minutes"], data["modalite_pedagogique"], data["condition_realisation"], data["condition_validation"], data["remediation"], datetime.now(timezone.utc), id))
+
+
 def add_seance(data):
     return insert(INSERT, (data["ordre"], data["titre"], data["theme"], data["production_attendue"], data["objectif_operationnel"], data["consigne_generale"], data["duree_estimee_minutes"], data["modalite_pedagogique"], data["condition_realisation"], data["condition_validation"], data["remediation"], data["sequence_id"], datetime.now(timezone.utc), datetime.now(timezone.utc),))
 

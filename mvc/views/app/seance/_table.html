@@ -33,7 +33,7 @@
                 <td class="px-4 py-3 text-right space-x-2">
                     <a href="/seance/show/{{ seance.Id }}"
                        class="text-sm text-blue-600 hover:underline">Voir</a>
-                    <a href="/seance/edit/{{ seance.Id }}"
+                    <a href="/seance/editeur/{{ seance.Id }}"
                        class="text-sm text-blue-600 hover:underline">Modifier</a>
                     <form method="post" action="/seance/destroy/{{ seance.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}"
                           hx-post="/seance/destroy/{{ seance.Id }}?page={{ pagination.page }}{% if pagination.q %}&amp;q={{ pagination.q | urlencode }}{% endif %}{% if pagination.sort %}&amp;sort={{ pagination.sort | urlencode }}&amp;direction={{ pagination.direction }}{% endif %}{% for key, val in pagination.filters.items() %}{% if val is not none and val != '' %}&amp;{{ key }}={{ val | urlencode }}{% endif %}{% endfor %}" hx-target="#crud-results" hx-swap="innerHTML" hx-confirm="Confirmer la suppression ?"

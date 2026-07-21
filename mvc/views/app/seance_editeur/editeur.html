@@ -1,0 +1,27 @@
+{# Éditeur de séance — page maître du tunnel (ADR-032). On ne quitte jamais la
+   page : navigation d'étape et auto-save via HTMX ; sans JS, navigation classique. #}
+{% extends "layouts/base.html" %}
+{% from "components/ui.html" import flash_messages %}
+
+{% block title %}{{ seance.Titre or "Séance sans titre" }} — {{ app_name }}{% endblock %}
+
+{% block content %}
+{{ flash_messages(flash) }}
+
+<div class="mb-6 relative">
+    <span id="seance-sauvegarde"></span>
+    <div class="flex items-center gap-3">
+        <a href="/seance" class="text-sm text-muted hover:text-ink transition">← Séances</a>
+    </div>
+    <h1 class="mt-1 text-[28px] font-extrabold tracking-tight text-ink">
+        {{ seance.Titre or "Séance sans titre" }}
+    </h1>
+    <p class="mt-1 text-sm text-muted">
+        Séance {{ seance.Ordre }}{% if seance.sequence_id_label %} · {{ seance.sequence_id_label }}{% endif %}
+    </p>
+</div>
+
+<div id="tunnel-corps">
+    {% include "app/seance_editeur/_corps.html" %}
+</div>
+{% endblock %}
