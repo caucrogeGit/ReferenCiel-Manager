@@ -185,14 +185,20 @@ def import_referentiel(canonical: dict[str, Any]) -> ImportReport:
     """Importe un canonique validé en base. Retourne un rapport best-effort (ADR-011)."""
     rapport = ImportReport(identifiant=str(canonical.get("identifiant", "")))
 
-    # ADR-023 : le référentiel appartient à une formation (le niveau de classe
-    # n'en est plus une propriété). Le mapping formation/FormationNiveau depuis le
-    # canonique sera affiné avec la révision de la spec (phase 1d).
+    # ADR-023 : le référentiel appartient à une formation (le niveau de classe n'en
+    # est plus une propriété). On importe formation ET niveau_classe (tous deux au
+    # contrat, cf. schema-json-canonique-referentiel-niveau-classe.json), upsert par
+    # Code. Le PONT `formation_niveau` (formation × niveau, avec ordre) n'est PAS
+    # porté par le canonique : il reste une donnée d'établissement, construit hors
+    # import (phase 1d, cf. mvc/fixtures/structure.py).
     formation = canonical["formation"]
     formation_id = _upsert_par_code(
         "formation", str(formation["code"]), str(formation["intitule"]),
         type_=str(formation.get("type", "AUTRE")),
     )
+    niveau = canonical.get("niveau_classe")
+    if niveau is not None:
+        _upsert_par_code("niveau_classe", str(niveau["code"]), str(niveau["intitule"]))
 
     ref_id, remplacement = _upsert_referentiel(canonical, formation_id)
     rapport.referentiel_id = ref_id

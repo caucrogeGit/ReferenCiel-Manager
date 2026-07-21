@@ -98,6 +98,24 @@ def test_reimport_est_un_remplacement_avec_purge(monkeypatch: pytest.MonkeyPatch
     assert any(sql.strip().upper().startswith("DELETE") for sql in fake.executes)
 
 
+def test_import_du_niveau_classe(monkeypatch: pytest.MonkeyPatch, canonical: dict[str, Any]) -> None:
+    """Le niveau_classe du canonique (contrat requis) est upserté (ADR-023).
+
+    Régression : l'import ne lisait que `formation` et laissait tomber
+    `niveau_classe` en silence (le pont formation_niveau reste, lui, hors import)."""
+    fake = _FakeDb(referentiel_existe=False)
+    _brancher(monkeypatch, fake)
+
+    imp.import_referentiel(canonical)
+
+    niveau_inserts = [p for (sql, p) in fake.insert_params if "INSERT INTO niveau_classe" in sql]
+    assert len(niveau_inserts) == 1
+    # (Code, Intitule) repris tels quels du canonique.
+    attendu = canonical["niveau_classe"]
+    assert niveau_inserts[0][0] == attendu["code"]
+    assert niveau_inserts[0][1] == attendu["intitule"]
+
+
 def test_validateur_accepte_exemple_et_refuse_document_casse(canonical: dict[str, Any]) -> None:
     """Le validateur laisse passer l'exemple conforme et refuse un document incomplet."""
     assert validate_referentiel_canonical(canonical) == []
