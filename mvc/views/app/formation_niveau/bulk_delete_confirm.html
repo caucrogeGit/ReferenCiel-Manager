@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import flash_messages %}
+{{ flash_messages(flash) }}
+<div class="max-w-xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Confirmer la suppression</h1>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+        <p class="text-gray-800 mb-2">
+            Vous êtes sur le point de supprimer
+            <strong>{{ count }} élément{{ 's' if count > 1 else '' }}</strong>.
+        </p>
+        <p class="text-red-700 font-medium">Cette action est définitive et irréversible.</p>
+    </div>
+    <form method="post" action="/formation_niveau/bulk-delete-confirm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {% for id in ids %}
+        <input type="hidden" name="ids" value="{{ id }}">
+        {% endfor %}
+        <div class="flex gap-4">
+            <button type="submit"
+                    class="bg-red-600 text-white text-sm px-4 py-2 rounded font-medium hover:bg-red-700">
+                Confirmer la suppression
+            </button>
+            <a href="/formation_niveau"
+               class="bg-gray-100 text-gray-800 text-sm px-4 py-2 rounded font-medium hover:bg-gray-200">
+                Annuler
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

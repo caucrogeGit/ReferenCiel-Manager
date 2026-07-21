@@ -1,0 +1,27 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{% from "components/forms.html" import field, textarea_field, select_field, checkbox %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">{{ titre }}</h1>
+    <a href="/formation_niveau" class="text-gray-600 hover:underline">← Retour</a>
+</div>
+
+{% include "partials/form_errors.html" %}
+
+<div class="bg-white shadow rounded p-6">
+    <form method="post" action="{{ action }}" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {{ field(name='code', label='Code', type='text', value=form.value('code'), error=form.error('code')) }}
+        {{ field(name='libelle', label='Libelle', type='text', value=form.value('libelle'), error=form.error('libelle')) }}
+        {{ field(name='ordre_indicatif', label='Ordre indicatif', type='number', value=form.value('ordre_indicatif'), error=form.error('ordre_indicatif')) }}
+        {{ select_field(name='formation_id', label='Formation', options=form.options.formation_id_choices, selected=form.value('formation_id'), error=form.error('formation_id')) }}
+        {{ select_field(name='niveau_classe_id', label='Niveau classe', options=form.options.niveau_classe_id_choices, selected=form.value('niveau_classe_id'), error=form.error('niveau_classe_id')) }}
+        <div class="flex gap-4 pt-2">
+            {{ button(label='Enregistrer', variant='primary', type='submit') }}
+            {{ button(label='Annuler', variant='secondary', href='/formation_niveau') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

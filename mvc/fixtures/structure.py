@@ -1,9 +1,11 @@
-"""Fixture callable : le pont formation_niveau (ADR-023, phase 1d).
+"""Fixture callable : le pont formation_niveau pour la démo (ADR-023).
 
-La **formation** ET le **niveau_classe** viennent désormais du canonique importé
-(referentiel_importer). Le **pont** `formation_niveau` (formation × niveau, avec
-un ordre) n'est PAS porté par le canonique : c'est une donnée d'établissement, on
-la construit ici. `classe.formation_niveau_id` en dépend. SQL visible et paramétré.
+La **formation** ET le **niveau_classe** viennent du canonique importé
+(referentiel_importer). Le **pont** `formation_niveau` (formation × niveau, avec un
+ordre) n'est PAS porté par le canonique : c'est une donnée d'établissement. Dans
+l'application, elle se saisit via le **CRUD admin `/formation_niveau`** ; ici, on la
+sème simplement pour la démo (comme classe.sql sème des classes). `classe.formation_niveau_id`
+en dépend. SQL visible et paramétré.
 """
 from forge_mvc_fixtures import Fixture
 from core.database import db

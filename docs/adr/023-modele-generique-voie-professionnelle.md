@@ -210,6 +210,23 @@ Elle est donc découpée en incréments courts, l'application restant verte
   `migration:make`/`migration:apply`, `entity:validate`), aucun SQL généré édité à
   la main.
 
+## Réalisation (2026-07-22) — CRUD FormationNiveau (socle)
+
+Première brique concrète de ce modèle : `FormationNiveau` reçoit un CRUD admin
+(`/formation_niveau`, gardé par `socle.gerer`), généré par `forge make:crud`.
+
+Cela tranche une question restée ouverte : qui crée un `formation_niveau` dans
+l'application en marche. L'entité est obligatoire (`classe.formation_niveau_id`
+NOT NULL) et lue partout (classe, suivi, mes-classes), mais n'avait aucun chemin
+d'écriture hors fixtures. L'établissement compose désormais ses couples
+formation × niveau à la main, dans le socle.
+
+L'import du référentiel amène la `formation` et le `niveau_classe` (tous deux au
+contrat du canonique). Le pont `formation_niveau` n'est, lui, pas au canonique :
+il reste une donnée d'établissement, saisie via ce CRUD (ou semée par les fixtures
+pour la démo, cf. `mvc/fixtures/structure.py`). Le reste du modèle (Cursus,
+CursusEtape, TransitionCursus, Certification) demeure aux phases ultérieures.
+
 ### Alternatives écartées
 
 - **Réutiliser le `Parcours` existant pour le cursus académique** : rejeté, cela

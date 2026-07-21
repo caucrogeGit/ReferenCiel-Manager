@@ -30,6 +30,7 @@ from mvc.routes.groupe_routes import register_groupe_routes
 from mvc.routes.mes_classes_routes import register_mes_classes_routes
 from mvc.routes.ma_sequence_routes import register_ma_sequence_routes
 from mvc.routes.niveau_classe_routes import register_niveau_classe_routes
+from mvc.routes.formation_niveau_routes import register_formation_niveau_routes
 # CRUD des entités du référentiel (admin) — ADR-017
 from mvc.routes.formation_routes import register_formation_routes
 from mvc.routes.pole_activite_routes import register_pole_activite_routes
@@ -78,6 +79,8 @@ register_annee_scolaire_routes(router)
 
 # Routes appliquées pour : niveau_classe_controller
 register_niveau_classe_routes(router)
+# Structure org (ADR-023) : formation_niveau (formation × niveau), support des classes.
+register_formation_niveau_routes(router)
 # CRUD des entités du référentiel (admin)
 register_formation_routes(router)
 register_pole_activite_routes(router)
@@ -212,6 +215,9 @@ RBAC_PREFIX_RULES: dict[str, str] = {
     # Socle scolaire + référentiel + back-office admin : socle.gerer (admin).
     "/annee_scolaire": "socle.gerer",
     "/niveau_classe": "socle.gerer",
+    # Structure org (ADR-023) : composition formation × niveau. Préfixe plus spécifique
+    # que /formation (referentiel.gerer) → le plus spécifique gagne.
+    "/formation_niveau": "socle.gerer",
     "/classe": "socle.gerer",
     "/eleve": "socle.gerer",
     "/professeur": "socle.gerer",

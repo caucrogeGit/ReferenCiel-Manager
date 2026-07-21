@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% from "components/ui.html" import button, flash_messages %}
+{{ flash_messages(flash) }}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Détail formation_niveau</h1>
+    <div class="space-x-2">
+        {{ button(label='Modifier', variant='primary', href='/formation_niveau/edit/' ~ formation_niveau.Id) }}
+        <a href="/formation_niveau" class="text-gray-600 hover:underline">← Retour</a>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded p-6 space-y-4">
+    <div>
+        <p class="text-sm text-gray-500">Code</p>
+        <p class="text-gray-800">{{ formation_niveau.Code }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Libelle</p>
+        <p class="text-gray-800">{{ formation_niveau.Libelle }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Ordre indicatif</p>
+        <p class="text-gray-800">{{ formation_niveau.OrdreIndicatif }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Formation</p>
+        <p class="text-gray-800">{{ formation_niveau.formation_id_label }}</p>
+    </div>
+    <div>
+        <p class="text-sm text-gray-500">Niveau classe</p>
+        <p class="text-gray-800">{{ formation_niveau.niveau_classe_id_label }}</p>
+    </div>
+</div>
+
+<form method="post" action="/formation_niveau/destroy/{{ formation_niveau.Id }}" class="mt-4" onsubmit="return confirm('Confirmer la suppression ?')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {{ button(label='Supprimer', variant='danger', type='submit') }}
+</form>
+{% endblock %}
