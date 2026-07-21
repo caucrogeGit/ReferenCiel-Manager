@@ -16,9 +16,11 @@ from typing import Any
 
 from core.database.db import fetch_all, fetch_one, insert
 
-# Échelle ordinale des niveaux d'évaluation (`evaluation_critere.Niveau`).
-_ORDRE = {"non_atteint": 0, "partiellement_atteint": 1, "atteint": 2, "depasse": 3}
-_INVERSE = {0: "non_atteint", 1: "partiellement_atteint", 2: "atteint", 3: "depasse"}
+# Échelle ordinale des niveaux CIEL (`evaluation_critere.Niveau`, cf.
+# `niveaux_maitrise`). « NON_OBSERVE » n'est jamais stocké (pas de ligne) : il
+# n'entre donc pas dans l'agrégation.
+_ORDRE = {"NIVEAU_1": 0, "NIVEAU_2": 1, "NIVEAU_3": 2, "NIVEAU_4": 3}
+_INVERSE = {0: "NIVEAU_1", 1: "NIVEAU_2", 2: "NIVEAU_3", 3: "NIVEAU_4"}
 _NON_EVALUE = "non_evalue"
 
 

@@ -108,6 +108,30 @@ couleur. Le positionnement peut être **suggéré** à partir du nombre **réel*
 d'indicateurs validés (sans seuils figés), mais le professeur **arbitre**.
 Référence : `mvc/services/niveaux_maitrise.py`.
 
+## Réalisation (2026-07-21) — feuille de positionnement (phase C)
+
+La décision 7 est réalisée : l'écran de notation `/evaluation/activite/{id}` (un
+identifiant de `progression_seance`) devient la **feuille de positionnement**,
+centrée sur la séance.
+
+- La grille ne montre plus tout le référentiel mais **ce que la séance observe**
+  (`seance_competence` avec son rôle, `seance_critere` avec leurs indicateurs).
+- Elle n'exige plus d'`activite` : `evaluation_activite.activite_id` reste NULL.
+- Chaque critère se positionne sur la **grille CIEL** (`niveaux_maitrise`) au moyen
+  de puces radio sans JavaScript (`static/feuille-evaluation.css`, CSP).
+- « Non observé » n'écrit pas de ligne : positionner un critère à ce niveau
+  **efface** son `evaluation_critere` (l'élève n'est pas pénalisé).
+- L'observation porte désormais la **production/preuve**, l'**aide apportée** et
+  l'**appréciation**.
+- L'upsert de `evaluation_critere` est explicite (la table n'a pas de clé unique :
+  l'ancien `ON DUPLICATE KEY` n'agissait jamais et dupliquait les lignes).
+
+Le vocabulaire persisté passe de l'échelle héritée (« non_atteint … depasse »,
+antérieure à l'amendement du jour) aux codes CIEL, par la migration
+`20260721230126_remap_niveau_ciel`. Le bilan (`bilan_eleve_model`) agrège
+désormais ces mêmes codes. La suggestion automatique (`suggerer_niveau`) attend
+les indicateurs réellement validés par l'élève et reste différée.
+
 ## Références
 
 - SEQ-02 (attributs de la séance ; tables `seance_competence`/`seance_critere`).

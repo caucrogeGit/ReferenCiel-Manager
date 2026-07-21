@@ -16,21 +16,21 @@ from mvc.models import bilan_eleve_model as m
 
 
 def test_niveau_agrege_moyenne_ordinale() -> None:
-    assert m._niveau_agrege(["atteint", "atteint"]) == "atteint"
-    assert m._niveau_agrege(["non_atteint"]) == "non_atteint"
-    assert m._niveau_agrege(["depasse", "atteint"]) == "atteint"  # (3+2)/2 = 2.5 -> 2
+    assert m._niveau_agrege(["NIVEAU_3", "NIVEAU_3"]) == "NIVEAU_3"
+    assert m._niveau_agrege(["NIVEAU_1"]) == "NIVEAU_1"
+    assert m._niveau_agrege(["NIVEAU_4", "NIVEAU_3"]) == "NIVEAU_3"  # (3+2)/2 = 2.5 -> 2
     assert m._niveau_agrege([]) == "non_evalue"
-    assert m._niveau_agrege(["inconnu"]) == "non_evalue"  # hors échelle -> ignoré
+    assert m._niveau_agrege(["NON_OBSERVE"]) == "non_evalue"  # hors échelle -> ignoré
 
 
 def test_agreger_synthese_groupe_par_competence(monkeypatch: pytest.MonkeyPatch) -> None:
     lignes = [
         {"competence_id": 1, "competence_code": "C01", "competence_intitule": "Analyser",
-         "critere_code": "cr1", "critere_libelle": "…", "niveau": "atteint"},
+         "critere_code": "cr1", "critere_libelle": "…", "niveau": "NIVEAU_3"},
         {"competence_id": 1, "competence_code": "C01", "competence_intitule": "Analyser",
-         "critere_code": "cr2", "critere_libelle": "…", "niveau": "depasse"},
+         "critere_code": "cr2", "critere_libelle": "…", "niveau": "NIVEAU_4"},
         {"competence_id": 2, "competence_code": "C03", "competence_intitule": "Câbler",
-         "critere_code": "cr3", "critere_libelle": "…", "niveau": "non_atteint"},
+         "critere_code": "cr3", "critere_libelle": "…", "niveau": "NIVEAU_1"},
     ]
 
     def fake_fetch_all(sql: str, params: Sequence[Any] = ()) -> list[dict[str, Any]]:
@@ -42,9 +42,9 @@ def test_agreger_synthese_groupe_par_competence(monkeypatch: pytest.MonkeyPatch)
     assert len(synthese) == 2
     assert synthese[0]["competence_code"] == "C01"
     assert len(synthese[0]["criteres"]) == 2
-    assert synthese[0]["niveau_agrege"] == "atteint"  # (2+3)/2 = 2.5 -> 2
+    assert synthese[0]["niveau_agrege"] == "NIVEAU_3"  # (2+3)/2 = 2.5 -> 2
     assert synthese[1]["competence_code"] == "C03"
-    assert synthese[1]["niveau_agrege"] == "non_atteint"
+    assert synthese[1]["niveau_agrege"] == "NIVEAU_1"
 
 
 def test_creer_bilan_fige_la_synthese_et_deduit_l_eleve(monkeypatch: pytest.MonkeyPatch) -> None:

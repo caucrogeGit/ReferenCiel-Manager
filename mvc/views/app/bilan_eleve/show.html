@@ -2,15 +2,23 @@
 {% block title %}Bilan — {{ bilan.eleve_nom }} {{ bilan.eleve_prenom }}{% endblock %}
 
 {% macro niveau_badge(niveau) %}
+    {# Grille officielle CIEL (ADR-032). Repli pour les valeurs hors grille (ex. statut). #}
     {% set couleur = {
-        'depasse': 'bg-green-100 text-green-800',
-        'atteint': 'bg-emerald-100 text-emerald-800',
-        'partiellement_atteint': 'bg-amber-100 text-amber-800',
-        'non_atteint': 'bg-red-100 text-red-800',
+        'NIVEAU_4': 'bg-green-100 text-green-800',
+        'NIVEAU_3': 'bg-emerald-100 text-emerald-800',
+        'NIVEAU_2': 'bg-amber-100 text-amber-800',
+        'NIVEAU_1': 'bg-red-100 text-red-800',
         'non_evalue': 'bg-gray-100 text-gray-500'
     } %}
+    {% set libelle = {
+        'NIVEAU_4': 'Très satisfaisante',
+        'NIVEAU_3': 'Satisfaisante',
+        'NIVEAU_2': 'Partielle',
+        'NIVEAU_1': 'Non réalisé',
+        'non_evalue': 'Non évalué'
+    } %}
     <span class="text-xs font-medium px-2 py-0.5 rounded {{ couleur.get(niveau, 'bg-gray-100 text-gray-600') }}">
-        {{ niveau | replace('_', ' ') }}
+        {{ libelle.get(niveau, niveau | replace('_', ' ')) }}
     </span>
 {% endmacro %}
 

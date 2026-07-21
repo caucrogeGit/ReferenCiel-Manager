@@ -84,7 +84,7 @@ class BlocBFixture(Fixture):
             "VALUES (NOW(), 'Bon travail global', ?, ?, ?, NOW(), NOW())",
             (pp, act, prof),
         )
-        for crit_id, niv in zip(crit, ["atteint", "depasse", "atteint", "partiellement_atteint"]):
+        for crit_id, niv in zip(crit, ["NIVEAU_3", "NIVEAU_4", "NIVEAU_3", "NIVEAU_2"]):
             db.execute(
                 "INSERT INTO evaluation_critere (Niveau, evaluation_activite_id, critere_id, CreatedAt, UpdatedAt) VALUES (?, ?, ?, NOW(), NOW())",
                 (niv, ea, crit_id),

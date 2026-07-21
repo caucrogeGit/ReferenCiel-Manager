@@ -111,9 +111,17 @@ class EvaluationProfController:
                 niveau = request.form(f"critere_{cid}", "")
                 if niveau:
                     niveaux[cid] = niveau
-        resultat = enregistrer_notation(pp_id, niveaux, get_authenticated_user_id(request))
+        resultat = enregistrer_notation(
+            pp_id,
+            niveaux,
+            get_authenticated_user_id(request),
+            production=(request.form("production", "") or "").strip() or None,
+            aide=(request.form("aide", "") or "").strip() or None,
+            appreciation=(request.form("appreciation", "") or "").strip() or None,
+        )
         if resultat is None:
             return BaseController.not_found()
-        cible = f"/evaluation/progression/{data['progression_id']}"
-        message = f"Notation enregistrée : {resultat['notes']} critère(s) noté(s)."
+        # On revient à la feuille : le positionnement se poursuit sur place.
+        cible = f"/evaluation/activite/{pp_id}"
+        message = f"Positionnement enregistré : {resultat['notes']} critère(s) positionné(s)."
         return BaseController.redirect_with_flash(request, cible, message, "success")

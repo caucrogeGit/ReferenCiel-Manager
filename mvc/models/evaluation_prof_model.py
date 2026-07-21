@@ -39,6 +39,7 @@ def get_progression_detail(progression_id: int) -> dict[str, Any] | None:
         "(SELECT COUNT(*) FROM item_coche ic WHERE ic.progression_seance_id = pp.Id AND ic.CocheProfesseur = 1) AS coches_prof, "
         "(SELECT COUNT(*) FROM depot_eleve d WHERE d.progression_seance_id = pp.Id) AS nb_depots, "
         "(SELECT MIN(Id) FROM checklist c WHERE c.seance_id = pa.Id) AS checklist_id, "
+        "(SELECT COUNT(*) FROM seance_critere sk WHERE sk.seance_id = pa.Id) AS nb_criteres, "
         "(SELECT MIN(Id) FROM activite a WHERE a.seance_id = pa.Id) AS activite_id "
         "FROM progression_seance pp "
         "JOIN seance pa ON pa.Id = pp.seance_id "

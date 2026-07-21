@@ -41,9 +41,9 @@
                 </td>
                 <td class="px-3 py-2 text-right">
                     {{ seance.nb_depots }}
-                    {% if seance.activite_id %}
+                    {% if seance.nb_criteres and seance.nb_criteres > 0 %}
                     <br><a href="/evaluation/activite/{{ seance.progression_seance_id }}"
-                           class="text-blue-600 hover:underline text-xs">Noter</a>
+                           class="text-blue-600 hover:underline text-xs">Positionner</a>
                     {% endif %}
                 </td>
                 <td class="px-3 py-2">

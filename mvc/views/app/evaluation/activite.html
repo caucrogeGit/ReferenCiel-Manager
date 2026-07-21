@@ -1,50 +1,112 @@
 {% extends "layouts/base.html" %}
-{% block title %}Notation — {{ grille.seance_titre }}{% endblock %}
+{% from "components/ui.html" import flash_messages %}
+{% block title %}Positionnement — {{ grille.seance_titre }}{% endblock %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto">
+<div class="max-w-3xl mx-auto">
     <div class="flex items-center justify-between mb-1">
-        <h1 class="text-2xl font-bold text-gray-800">Notation par critères</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Feuille de positionnement</h1>
         <a href="/evaluation/progression/{{ grille.progression_id }}" class="text-gray-600 hover:underline">← Progression</a>
     </div>
-    <p class="text-gray-600 mb-6">{{ grille.eleve }} — séance : {{ grille.seance_titre }}</p>
+    <p class="text-gray-600 mb-4">
+        {{ grille.eleve }} — séance : {{ grille.seance_titre }}
+        <span class="text-gray-400">·</span> statut : {{ grille.statut | replace('_', ' ') }}
+    </p>
+
+    {{ flash_messages(flash) }}
+
+    {# Légende de la grille officielle CIEL (le professeur arbitre, ADR-032). #}
+    <div class="bg-white shadow-sm rounded border border-gray-100 p-3 mb-5 text-xs text-gray-600">
+        <p class="font-medium text-gray-700 mb-2">Grille de maîtrise (le professeur arbitre)</p>
+        <div class="flex flex-wrap gap-x-5 gap-y-1">
+            {% for n in grille.niveaux %}
+            <span class="inline-flex items-center gap-1.5">
+                <span class="niv-pastille c-{{ n.couleur }}"></span>
+                <span class="font-medium text-gray-700">{% if n.niveau %}{{ n.niveau }}. {% endif %}{{ n.libelle }}</span>
+            </span>
+            {% endfor %}
+        </div>
+    </div>
 
     {% if grille.competences %}
-    <form method="POST" action="/evaluation/activite/{{ grille.progression_seance_id }}" class="space-y-6">
+    <form method="POST" action="/evaluation/activite/{{ grille.progression_seance_id }}" class="space-y-5">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
         {% for competence in grille.competences %}
         <section class="bg-white shadow rounded p-4">
-            <h2 class="font-medium text-gray-800 mb-3">
+            <h2 class="font-medium text-gray-800 mb-3 flex items-center gap-2">
                 <span class="text-gray-500">{{ competence.code }}</span> — {{ competence.intitule }}
+                {% if competence.role %}
+                <span class="text-[11px] font-normal px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">{{ competence.role }}</span>
+                {% endif %}
             </h2>
             {% if competence.criteres %}
-            <div class="space-y-3">
+            <div class="space-y-4">
                 {% for critere in competence.criteres %}
-                <div class="flex items-start justify-between gap-4">
-                    <span class="text-sm text-gray-700">{{ critere.libelle }}</span>
-                    <select name="critere_{{ critere.id }}"
-                            class="rounded border border-gray-300 px-2 py-1 text-sm whitespace-nowrap">
-                        <option value="">— non noté —</option>
-                        {% for niveau in grille.niveaux %}
-                        <option value="{{ niveau }}"{% if niveau == critere.niveau %} selected{% endif %}>
-                            {{ niveau | replace('_', ' ') }}
-                        </option>
+                <div>
+                    <p class="text-sm text-gray-700">
+                        {{ critere.libelle }}
+                        {% if critere.savoir_etre %}<span class="text-xs text-gray-400">(savoir-être)</span>{% endif %}
+                    </p>
+                    {% if critere.indicateurs %}
+                    <ul class="mt-1 mb-2 pl-4 list-disc text-xs text-gray-500 space-y-0.5">
+                        {% for ind in critere.indicateurs %}
+                        <li>{{ ind.libelle }}</li>
                         {% endfor %}
-                    </select>
+                    </ul>
+                    {% endif %}
+                    <div class="niv-groupe mt-1.5" role="radiogroup" aria-label="Niveau — {{ critere.libelle }}">
+                        {% for n in grille.niveaux %}
+                        <span class="niv-opt c-{{ n.couleur }}">
+                            <input type="radio" id="c{{ critere.id }}-{{ n.code }}"
+                                   name="critere_{{ critere.id }}" value="{{ n.code }}"
+                                   {% if n.code == critere.niveau %}checked{% endif %}>
+                            <label for="c{{ critere.id }}-{{ n.code }}" title="{{ n.explication }}">
+                                {% if n.niveau %}{{ n.niveau }}{% else %}N.O.{% endif %}
+                                <span class="hidden sm:inline">· {{ n.libelle }}</span>
+                            </label>
+                        </span>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endfor %}
             </div>
             {% else %}
-            <p class="text-sm text-gray-400 italic">Aucun critère observable.</p>
+            <p class="text-sm text-gray-400 italic">Aucun critère observé pour cette compétence.</p>
             {% endif %}
         </section>
         {% endfor %}
+
+        {# Traces de l'observation (ADR-032, décision 7). #}
+        <section class="bg-white shadow rounded p-4 space-y-3">
+            <h2 class="font-medium text-gray-800">Observation</h2>
+            <div>
+                <label for="production" class="block text-xs font-medium text-gray-600 mb-1">Production / preuve</label>
+                <textarea id="production" name="production" rows="2"
+                          class="w-full rounded border border-gray-300 px-2 py-1 text-sm"
+                          placeholder="Ce que l'élève a produit, la preuve observée…">{{ grille.production or '' }}</textarea>
+            </div>
+            <div>
+                <label for="aide" class="block text-xs font-medium text-gray-600 mb-1">Aide apportée</label>
+                <textarea id="aide" name="aide" rows="2"
+                          class="w-full rounded border border-gray-300 px-2 py-1 text-sm"
+                          placeholder="Étayage, autonomie…">{{ grille.aide or '' }}</textarea>
+            </div>
+            <div>
+                <label for="appreciation" class="block text-xs font-medium text-gray-600 mb-1">Appréciation</label>
+                <textarea id="appreciation" name="appreciation" rows="2"
+                          class="w-full rounded border border-gray-300 px-2 py-1 text-sm"
+                          placeholder="Commentaire du professeur…">{{ grille.appreciation or '' }}</textarea>
+            </div>
+        </section>
+
         <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded">
-            Enregistrer la notation
+            Enregistrer le positionnement
         </button>
     </form>
     {% else %}
-    <p class="text-gray-500 italic">Aucune compétence à évaluer.</p>
+    <p class="text-gray-500 italic">Cette séance n'observe aucune compétence. Le positionnement se
+    fait dans le tunnel de la séance (étape « Compétences observées »).</p>
     {% endif %}
 </div>
 {% endblock %}
