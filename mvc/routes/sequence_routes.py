@@ -30,3 +30,6 @@ def register_sequence_routes(router: Router) -> None:
         g.add("POST", "/bulk-delete", SequenceController.bulk_delete, name="sequence-bulk_delete")
         g.add("POST", "/bulk-delete-confirm", SequenceController.bulk_delete_confirm, name="sequence-bulk_delete_confirm")
         g.add("GET", "/export-csv", SequenceController.export_csv, name="sequence-export_csv")
+        g.add("GET", "/{id}/pdf", SequenceController.telecharger_pdf, name="sequence-pdf")
+        g.add("GET", "/{id}/md", SequenceController.telecharger_md, name="sequence-md")
+        g.add("GET", "/{id}/json", SequenceController.telecharger_json, name="sequence-json")

@@ -12,6 +12,9 @@ from mvc.models.sequence_model import (
 from mvc.forms.sequence_form import SequenceForm
 from mvc.controllers.sequence_connaissance_controller import contexte_connaissances
 from mvc.models.referentiel_atelier_model import list_referentiels
+from mvc.services.sequence_pdf import construire_pdf
+from mvc.services.sequence_export import construire_json, construire_markdown
+from mvc.services.scenario_tunnel import slug
 from core.security.session import get_flash, get_session_id
 
 
@@ -208,6 +211,36 @@ class SequenceController(BaseController):
         update_sequence(id, form.cleaned_data)
         return BaseController.redirect_with_flash(
             request, f"/sequence/show/{id}", "Séquence mise à jour.")
+
+    @staticmethod
+    def _telecharger(request, extension, mime, construire):
+        """Télécharge un export de la séquence (PDF/MarkDown/JSON). Pas de verrou
+        de finalisation côté séquence (contrairement au scénario)."""
+        id = SequenceController._parse_id(request.route("id"))
+        if id is None:
+            return BaseController.not_found()
+        sequence = get_sequence_by_id(id)
+        if sequence is None:
+            return BaseController.not_found()
+        nom = slug(str(sequence.get("Titre") or "sequence"))
+        return Response(
+            200,
+            construire(id),
+            mime,
+            headers={"Content-Disposition": f'attachment; filename="sequence-{nom}.{extension}"'},
+        )
+
+    @staticmethod
+    def telecharger_pdf(request: Request) -> Response:
+        return SequenceController._telecharger(request, "pdf", "application/pdf", construire_pdf)
+
+    @staticmethod
+    def telecharger_md(request: Request) -> Response:
+        return SequenceController._telecharger(request, "md", "text/markdown; charset=utf-8", construire_markdown)
+
+    @staticmethod
+    def telecharger_json(request: Request) -> Response:
+        return SequenceController._telecharger(request, "json", "application/json; charset=utf-8", construire_json)
 
     @staticmethod
     def destroy(request: Request) -> Response:

@@ -41,9 +41,33 @@
       <h2 class="text-lg font-semibold text-gray-800">{{ s.Titre }}</h2>
       {{ statut_scenario(s.Statut) }}
     </div>
-    <p class="text-sm text-gray-500 mt-1">
-      {{ s.niveau_classe_id_label or "Niveau à préciser" }}
-    </p>
+    <div class="flex justify-between items-center gap-2 mt-1">
+      <p class="text-sm text-gray-500">
+        {{ s.niveau_classe_id_label or "Niveau à préciser" }}
+      </p>
+      {# Exports (PDF/MarkDown/JSON) du contenu de la séquence — au-dessus de
+         l'overlay (z-10) pour rester cliquables. #}
+      <div class="relative z-10 flex items-center gap-1.5">
+        <a href="/sequence/{{ s.Id }}/pdf"
+           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold btn-export transition"
+           title="Télécharger la séquence en PDF" aria-label="Télécharger le PDF de {{ s.Titre }}">
+          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          PDF
+        </a>
+        <a href="/sequence/{{ s.Id }}/md"
+           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold btn-export transition"
+           title="Télécharger la séquence en Markdown" aria-label="Télécharger le Markdown de {{ s.Titre }}">
+          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          MarkDown
+        </a>
+        <a href="/sequence/{{ s.Id }}/json"
+           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold btn-export transition"
+           title="Télécharger la séquence en JSON" aria-label="Télécharger le JSON de {{ s.Titre }}">
+          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          JSON
+        </a>
+      </div>
+    </div>
     <div class="mt-3">
       <form method="post" action="/sequence/destroy/{{ s.Id }}" class="relative z-10 inline-block"
             data-confirm="Supprimer définitivement la séquence « {{ s.Titre }} » ? Cette action est irréversible.">

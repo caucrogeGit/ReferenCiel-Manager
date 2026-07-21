@@ -102,6 +102,11 @@ def find_seances_for_export(q: str | None = None, sort: str | None = None, direc
 
 
 
+def get_seances_by_sequence(sequence_id):
+    """Séances d'une séquence, ordonnées, avec tout leur détail (pour l'export)."""
+    return fetch_all("SELECT * FROM seance WHERE sequence_id = ? ORDER BY Ordre, Id", (sequence_id,))
+
+
 def get_sequence_choices():
     rows = fetch_all("SELECT Id, Titre FROM sequence ORDER BY Titre")
     return [(row["Id"], row["Titre"]) for row in rows]
