@@ -95,6 +95,7 @@ nav:
       - ADR-030 — Savoirs libres hors référentiel: adr/030-savoirs-libres-hors-referentiel.md
       - ADR-031 — Suppression Scénario/Séquence (dissociation): adr/031-suppression-scenario-sequence-dissociation.md
       - ADR-032 — Modèle séance (tunnel, cascade, évaluation): adr/032-modele-seance-tunnel-cascade-evaluation.md
+      - ADR-033 — Suivi/évaluation (tableau de bord): adr/033-suivi-evaluation-tableau-de-bord.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md

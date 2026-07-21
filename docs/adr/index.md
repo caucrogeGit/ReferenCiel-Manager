@@ -117,6 +117,11 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   d'évaluation** (observations accumulées, le prof arbitre, pas d'auto-validation).
   Phases A→B→C.
 
+- `033-suivi-evaluation-tableau-de-bord.md` (**Accepté**) : le **suivi/évaluation**
+  devient un **tableau de bord multi-entrées** (tuiles Classe / Séquence…),
+  lentilles d'un même graphe, convergeant vers une **feuille de positionnement**
+  des critères (🔴🟠🟩, indicateur, production, aide). Étend `/suivi`.
+
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
 Le gabarit `000-template.md` n'est pas une décision : c'est la trame.
