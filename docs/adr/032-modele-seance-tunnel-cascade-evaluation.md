@@ -153,6 +153,13 @@ feuille est **retenue ou ajustée** par le professeur. La synthèse figée conse
 les deux valeurs (`niveau_suggere` et `niveau_arrete`) pour la traçabilité. Le
 choix des progressions est limité aux classes du professeur connecté.
 
+Côté **élève**, l'espace « Ma séquence » expose ses bilans en **lecture seule**
+(`/ma-sequence/bilans`), **uniquement ceux publiés** (`Statut = 'publie'` : les
+brouillons et archives restent invisibles) et **uniquement les siens** (sécurité
+au niveau ligne sur `eleve.UserId`). L'élève voit la maîtrise **arrêtée** par
+compétence et l'appréciation, pas la trace d'arbitrage (le « suggéré » reste côté
+professeur).
+
 ## Références
 
 - SEQ-02 (attributs de la séance ; tables `seance_competence`/`seance_critere`).

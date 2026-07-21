@@ -14,6 +14,8 @@ from mvc.controllers.passer_qcm_controller import PasserQcmController
 def register_ma_sequence_routes(router: Router) -> None:
     with router.group("/ma-sequence") as g:
         g.add("GET", "", MaSequenceController.index, name="ma_sequence-index")
+        g.add("GET", "/bilans", MaSequenceController.bilans, name="ma_sequence-bilans")
+        g.add("GET", "/bilan/{id}", MaSequenceController.bilan, name="ma_sequence-bilan")
         g.add("GET", "/qcm/{id}", PasserQcmController.show, name="ma_sequence-qcm")
         g.add("POST", "/qcm/{id}", PasserQcmController.submit, name="ma_sequence-qcm-submit")
         g.add("GET", "/checklist/{id}", ChecklistEleveController.show, name="ma_sequence-checklist")

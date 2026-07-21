@@ -67,3 +67,47 @@ def test_ma_sequence_compte_non_rattache_renvoie_none(monkeypatch: pytest.Monkey
     monkeypatch.setattr(m, "fetch_all", _should_not_be_called)
 
     assert m.ma_sequence(999) is None
+
+
+def test_mes_bilans_ne_liste_que_les_publies_de_l_eleve(monkeypatch: pytest.MonkeyPatch) -> None:
+    captured: dict[str, Any] = {}
+
+    def fake_fetch_all(sql: str, params: Sequence[Any] = ()) -> list[dict[str, Any]]:
+        captured["sql"] = sql
+        captured["params"] = tuple(params)
+        return []
+
+    monkeypatch.setattr(m, "fetch_all", fake_fetch_all)
+    m.mes_bilans(7)
+
+    assert "b.eleve_id = ?" in captured["sql"]  # sécurité au niveau ligne
+    assert "b.Statut = 'publie'" in captured["sql"]  # ni brouillon ni archive
+    assert captured["params"] == (7,)
+
+
+def test_get_mon_bilan_filtre_eleve_et_publie_et_deserialise(monkeypatch: pytest.MonkeyPatch) -> None:
+    captured: dict[str, Any] = {}
+
+    def fake_fetch_one(sql: str, params: Sequence[Any] = ()) -> dict[str, Any] | None:
+        captured["sql"] = sql
+        captured["params"] = tuple(params)
+        return {"id": 5, "appreciation": "ok", "date_bilan": "2026-07-21",
+                "synthese": '[{"competence_code": "C01", "niveau_arrete": "NIVEAU_3"}]',
+                "prof_nom": "Bernard", "prof_prenom": "Julie"}
+
+    monkeypatch.setattr(m, "fetch_one", fake_fetch_one)
+    bilan = m.get_mon_bilan(7, 5)
+
+    # Filtré sur le bilan, l'élève ET le statut publié (un élève ne lit pas le bilan d'un autre).
+    assert "b.Id = ?" in captured["sql"] and "b.eleve_id = ?" in captured["sql"]
+    assert "b.Statut = 'publie'" in captured["sql"]
+    assert captured["params"] == (5, 7)
+    # Synthèse désérialisée.
+    assert bilan is not None
+    assert isinstance(bilan["synthese"], list)
+    assert bilan["synthese"][0]["niveau_arrete"] == "NIVEAU_3"
+
+
+def test_get_mon_bilan_absent_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(m, "fetch_one", lambda sql, params=(): None)
+    assert m.get_mon_bilan(7, 999) is None

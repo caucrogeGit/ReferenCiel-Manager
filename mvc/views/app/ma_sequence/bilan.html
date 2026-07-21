@@ -1,0 +1,62 @@
+{% extends "layouts/base.html" %}
+{% block title %}Mon bilan de maîtrise{% endblock %}
+
+{% set couleur = {
+    'NIVEAU_4': 'bg-green-100 text-green-800', 'NIVEAU_3': 'bg-emerald-100 text-emerald-800',
+    'NIVEAU_2': 'bg-amber-100 text-amber-800', 'NIVEAU_1': 'bg-red-100 text-red-800',
+    'non_evalue': 'bg-gray-100 text-gray-500'
+} %}
+{% set libelle = {
+    'NIVEAU_4': 'Très satisfaisante', 'NIVEAU_3': 'Satisfaisante', 'NIVEAU_2': 'Partielle',
+    'NIVEAU_1': 'Non réalisé', 'non_evalue': 'Non évalué'
+} %}
+{% macro niveau_badge(niveau) %}
+<span class="text-xs font-medium px-2 py-0.5 rounded {{ couleur.get(niveau, 'bg-gray-100 text-gray-600') }}">
+    {{ libelle.get(niveau, niveau | replace('_', ' ')) }}
+</span>
+{% endmacro %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <a href="/ma-sequence/bilans" class="text-sm text-blue-600 hover:underline">← Mes bilans</a>
+    <h1 class="text-2xl font-bold text-gray-800 mt-2 mb-1">Mon bilan de maîtrise</h1>
+    <p class="text-gray-500 text-sm mb-6">Publié le {{ bilan.date_bilan }} par {{ bilan.prof_prenom }} {{ bilan.prof_nom }}</p>
+
+    <section class="bg-white shadow rounded p-5 mb-6">
+        <h2 class="font-semibold text-gray-800 mb-2">Appréciation de ton professeur</h2>
+        <p class="text-gray-700 whitespace-pre-line">{{ bilan.appreciation }}</p>
+    </section>
+
+    <section>
+        <h2 class="font-semibold text-gray-800 mb-3">Ta maîtrise par compétence</h2>
+        {% if bilan.synthese %}
+        <div class="space-y-2">
+            {% for comp in bilan.synthese %}
+            <details class="bg-white shadow rounded overflow-hidden">
+                <summary class="px-4 py-3 flex items-center justify-between gap-4 cursor-pointer">
+                    <span class="text-sm text-gray-800">
+                        <span class="font-mono text-gray-500 mr-2">{{ comp.competence_code }}</span>{{ comp.competence_intitule }}
+                    </span>
+                    {{ niveau_badge(comp.niveau_arrete or comp.niveau_agrege) }}
+                </summary>
+                {% if comp.criteres %}
+                <ol class="divide-y divide-gray-100 border-t border-gray-100">
+                    {% for crit in comp.criteres %}
+                    <li class="px-4 py-2 flex items-center justify-between gap-4">
+                        <span class="text-sm text-gray-700">
+                            <span class="font-mono text-gray-400 mr-2">{{ crit.critere_code }}</span>{{ crit.critere_libelle }}
+                        </span>
+                        {{ niveau_badge(crit.niveau) }}
+                    </li>
+                    {% endfor %}
+                </ol>
+                {% endif %}
+            </details>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 italic">Aucune évaluation par critères n'était saisie au moment du bilan.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

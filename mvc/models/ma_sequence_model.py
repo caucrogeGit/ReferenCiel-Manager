@@ -8,6 +8,7 @@ Aucune écriture : le premier incrément de l'espace élève est en consultation
 """
 from __future__ import annotations
 
+import json
 from typing import Any
 
 from core.database.db import fetch_all, fetch_one
@@ -68,3 +69,33 @@ def ma_sequence(user_id: int) -> dict[str, Any] | None:
     for prog in progressions:
         prog["seances"] = seances_progression(int(prog["progression_id"]))
     return {"eleve": eleve, "progressions": progressions}
+
+
+def mes_bilans(eleve_id: int) -> list[dict[str, Any]]:
+    """Bilans **publiés** de l'élève (les brouillons et archives restent cachés).
+
+    L'élève ne consulte que ce que le professeur a explicitement publié."""
+    return fetch_all(
+        "SELECT b.Id AS id, b.DateBilan AS date_bilan, "
+        "p.Nom AS prof_nom, p.Prenom AS prof_prenom "
+        "FROM bilan_eleve b JOIN professeur p ON p.Id = b.professeur_id "
+        "WHERE b.eleve_id = ? AND b.Statut = 'publie' "
+        "ORDER BY b.DateBilan DESC",
+        (eleve_id,),
+    )
+
+
+def get_mon_bilan(eleve_id: int, bilan_id: int) -> dict[str, Any] | None:
+    """Un bilan **publié appartenant à cet élève** (sécurité ligne), synthèse
+    désérialisée. None si le bilan n'existe pas, n'est pas publié, ou n'est pas
+    le sien : un élève ne peut pas lire le bilan d'un autre."""
+    row = fetch_one(
+        "SELECT b.Id AS id, b.AppreciationGlobale AS appreciation, b.DateBilan AS date_bilan, "
+        "b.Synthese AS synthese, p.Nom AS prof_nom, p.Prenom AS prof_prenom "
+        "FROM bilan_eleve b JOIN professeur p ON p.Id = b.professeur_id "
+        "WHERE b.Id = ? AND b.eleve_id = ? AND b.Statut = 'publie'",
+        (bilan_id, eleve_id),
+    )
+    if row is not None and row.get("synthese"):
+        row["synthese"] = json.loads(row["synthese"])
+    return row

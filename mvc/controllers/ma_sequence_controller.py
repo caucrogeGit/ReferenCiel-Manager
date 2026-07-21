@@ -13,7 +13,12 @@ from core.http.request import Request
 from core.http.response import Response
 from core.mvc.controller import BaseController
 
-from mvc.models.ma_sequence_model import ma_sequence
+from mvc.models.ma_sequence_model import (
+    get_eleve_by_user,
+    get_mon_bilan,
+    ma_sequence,
+    mes_bilans,
+)
 
 
 class MaSequenceController:
@@ -25,5 +30,37 @@ class MaSequenceController:
         return BaseController.render(
             "app/ma_sequence/index.html",
             context={"data": data},
+            request=request,
+        )
+
+    @staticmethod
+    def bilans(request: Request) -> Response:
+        """Bilans publiés de l'élève connecté (`GET /ma-sequence/bilans`)."""
+        user_id = get_authenticated_user_id(request)
+        eleve = get_eleve_by_user(user_id) if user_id is not None else None
+        bilans = mes_bilans(int(eleve["id"])) if eleve is not None else []
+        return BaseController.render(
+            "app/ma_sequence/bilans.html",
+            context={"eleve": eleve, "bilans": bilans},
+            request=request,
+        )
+
+    @staticmethod
+    def bilan(request: Request) -> Response:
+        """Lecture d'un bilan publié de l'élève connecté (`GET /ma-sequence/bilan/<id>`).
+
+        Sécurité au niveau ligne : `get_mon_bilan` filtre sur l'élève ET le statut
+        publié, donc un compte ne peut pas lire le bilan d'un autre, ni un brouillon."""
+        user_id = get_authenticated_user_id(request)
+        eleve = get_eleve_by_user(user_id) if user_id is not None else None
+        if eleve is None:
+            return BaseController.not_found()
+        bilan_id = int(request.route("id") or "0")
+        bilan = get_mon_bilan(int(eleve["id"]), bilan_id)
+        if bilan is None:
+            return BaseController.not_found()
+        return BaseController.render(
+            "app/ma_sequence/bilan.html",
+            context={"bilan": bilan},
             request=request,
         )

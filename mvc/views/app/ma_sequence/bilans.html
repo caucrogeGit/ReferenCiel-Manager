@@ -1,0 +1,30 @@
+{% extends "layouts/base.html" %}
+{% block title %}Mes bilans{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-1">Mes bilans de maîtrise</h1>
+    <p class="text-gray-600 mb-6">Les bilans que ton professeur a publiés.</p>
+
+    {% if eleve is none %}
+    <div class="bg-amber-50 border border-amber-200 text-amber-800 rounded p-4">
+        Ton compte n'est rattaché à aucun profil élève pour l'instant.
+        Rapproche-toi de l'administration pour l'associer à ta fiche.
+    </div>
+    {% elif bilans %}
+    <ul class="space-y-2">
+        {% for b in bilans %}
+        <li>
+            <a href="/ma-sequence/bilan/{{ b.id }}"
+               class="flex items-center justify-between gap-4 bg-white shadow rounded px-4 py-3 hover:bg-gray-50">
+                <span class="text-sm font-medium text-gray-800">Bilan du {{ b.date_bilan }}</span>
+                <span class="text-xs text-gray-500">{{ b.prof_prenom }} {{ b.prof_nom }}</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-gray-500 italic">Aucun bilan publié pour l'instant.</p>
+    {% endif %}
+</div>
+{% endblock %}
