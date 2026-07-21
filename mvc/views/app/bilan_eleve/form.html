@@ -1,13 +1,13 @@
 {% extends "layouts/base.html" %}
-{% from "components/forms.html" import form_errors %}
-{% block title %}Nouveau bilan{% endblock %}
+{% block title %}Nouveau bilan de maîtrise{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto">
-    <h1 class="text-2xl font-bold text-gray-800 mb-1">Nouveau bilan</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-1">Nouveau bilan de maîtrise</h1>
     <p class="text-gray-600 mb-6">
-        La synthèse par compétence est <strong>figée à la création</strong> à partir des
-        évaluations par critères de l'élève sur la progression choisie.
+        Choisissez une progression d'élève. L'écran suivant propose, par compétence, la
+        maîtrise <strong>suggérée</strong> à partir des critères positionnés dans la feuille ;
+        vous la <strong>retenez ou l'ajustez</strong> avant de figer le bilan.
     </p>
 
     {% if professeur is none %}
@@ -17,46 +17,26 @@
     </div>
     {% else %}
     <section class="bg-white shadow rounded p-5">
-        {% if erreurs %}{{ form_errors(erreurs) }}{% endif %}
-
-        <form method="POST" action="/bilan/create" class="space-y-4">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-
+        <form method="GET" action="/bilan/preparer" class="space-y-4">
             <div>
                 <label for="progression_id" class="block text-sm font-medium text-gray-700 mb-1">Progression de l'élève</label>
                 <select id="progression_id" name="progression_id" required
                         class="w-full rounded border border-gray-300 px-3 py-2 text-sm">
                     <option value="">— Choisir une progression —</option>
                     {% for p in progressions %}
-                    <option value="{{ p.progression_id }}" {{ 'selected' if valeurs.progression_id == p.progression_id|string else '' }}>
+                    <option value="{{ p.progression_id }}">
                         {{ p.eleve_nom }} {{ p.eleve_prenom }} — {{ p.sequence_titre }}
                     </option>
                     {% endfor %}
                 </select>
                 {% if not progressions %}
-                <p class="text-xs text-amber-700 mt-1">Aucune progression d'élève disponible.</p>
+                <p class="text-xs text-amber-700 mt-1">Aucune progression d'élève dans vos classes.</p>
                 {% endif %}
-            </div>
-
-            <div>
-                <label for="appreciation" class="block text-sm font-medium text-gray-700 mb-1">Appréciation globale</label>
-                <textarea id="appreciation" name="appreciation" rows="5" required
-                          class="w-full rounded border border-gray-300 px-3 py-2 text-sm">{{ valeurs.appreciation }}</textarea>
-            </div>
-
-            <div>
-                <label for="statut" class="block text-sm font-medium text-gray-700 mb-1">Statut</label>
-                <select id="statut" name="statut"
-                        class="w-full rounded border border-gray-300 px-3 py-2 text-sm">
-                    {% for s in statuts %}
-                    <option value="{{ s }}" {{ 'selected' if valeurs.statut == s else '' }}>{{ s }}</option>
-                    {% endfor %}
-                </select>
             </div>
 
             <div class="flex items-center gap-3 pt-2">
                 <button type="submit" class="rounded bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700">
-                    Créer le bilan
+                    Préparer le bilan
                 </button>
                 <a href="/bilan" class="text-sm text-gray-600 hover:underline">Annuler</a>
             </div>

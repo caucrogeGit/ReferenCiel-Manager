@@ -14,5 +14,6 @@ def register_bilan_eleve_routes(router: Router) -> None:
     with router.group("/bilan") as g:
         g.add("GET", "", BilanEleveController.index, name="bilan-index")
         g.add("GET", "/new", BilanEleveController.new, name="bilan-new")
+        g.add("GET", "/preparer", BilanEleveController.preparer, name="bilan-preparer")
         g.add("POST", "/create", BilanEleveController.create, name="bilan-create")
         g.add("GET", "/show/{id}", BilanEleveController.show, name="bilan-show")

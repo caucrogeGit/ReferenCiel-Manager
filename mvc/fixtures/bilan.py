@@ -20,5 +20,7 @@ class BilanFixture(Fixture):
             "SELECT pe.Id FROM progression_sequence pe JOIN eleve e ON e.Id = pe.eleve_id "
             "WHERE e.Identifiant = ?", ("dupont-marie",)))
         prof = _id(db.fetch_one("SELECT Id FROM professeur WHERE Nom = ?", ("Bernard",)))
+        # niveaux_arretes vide : la maîtrise suggérée par l'agrégat est retenue telle quelle.
         creer_bilan(progression_sequence_id=pe, professeur_id=prof,
-                    appreciation="Élève sérieux, bonne progression sur le câblage.", statut="publie")
+                    appreciation="Élève sérieux, bonne progression sur le câblage.",
+                    statut="publie", niveaux_arretes={})

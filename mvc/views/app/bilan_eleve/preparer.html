@@ -1,0 +1,101 @@
+{% extends "layouts/base.html" %}
+{% from "components/forms.html" import form_errors %}
+{% block title %}Arbitrer le bilan — {{ apercu.eleve_nom }} {{ apercu.eleve_prenom }}{% endblock %}
+
+{% set couleur = {
+    'NIVEAU_4': 'bg-green-100 text-green-800', 'NIVEAU_3': 'bg-emerald-100 text-emerald-800',
+    'NIVEAU_2': 'bg-amber-100 text-amber-800', 'NIVEAU_1': 'bg-red-100 text-red-800',
+    'non_evalue': 'bg-gray-100 text-gray-500'
+} %}
+{% set libelle = {
+    'NIVEAU_4': 'Très satisfaisante', 'NIVEAU_3': 'Satisfaisante', 'NIVEAU_2': 'Partielle',
+    'NIVEAU_1': 'Non réalisé', 'non_evalue': 'Non évalué'
+} %}
+{% macro niveau_badge(niveau) %}
+<span class="text-xs font-medium px-2 py-0.5 rounded {{ couleur.get(niveau, 'bg-gray-100 text-gray-600') }}">
+    {{ libelle.get(niveau, niveau | replace('_', ' ')) }}
+</span>
+{% endmacro %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="flex items-center justify-between mb-1">
+        <h1 class="text-2xl font-bold text-gray-800">Arbitrer le bilan de maîtrise</h1>
+        <a href="/bilan/new" class="text-gray-600 hover:underline">← Changer d'élève</a>
+    </div>
+    <p class="text-gray-600 mb-5">{{ apercu.eleve_nom }} {{ apercu.eleve_prenom }} — {{ apercu.sequence_titre }}</p>
+
+    {% if erreurs %}{{ form_errors(erreurs) }}{% endif %}
+
+    <form method="POST" action="/bilan/create" class="space-y-5">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="progression_id" value="{{ apercu.progression_id }}">
+
+        {% if apercu.synthese %}
+        <p class="text-xs text-gray-500">
+            La maîtrise <em>suggérée</em> agrège les critères positionnés dans la feuille.
+            Vous restez seul juge : ajustez le <strong>niveau retenu</strong> si besoin.
+        </p>
+        {% for comp in apercu.synthese %}
+        <section class="bg-white shadow rounded p-4">
+            <div class="flex items-start justify-between gap-4 mb-3">
+                <h2 class="font-medium text-gray-800">
+                    <span class="text-gray-500">{{ comp.competence_code }}</span> — {{ comp.competence_intitule }}
+                </h2>
+                <span class="shrink-0 text-xs text-gray-400">suggéré : {{ niveau_badge(comp.niveau_agrege) }}</span>
+            </div>
+
+            {% if comp.criteres %}
+            <ul class="mb-3 space-y-1">
+                {% for crit in comp.criteres %}
+                <li class="flex items-center justify-between gap-3 text-sm">
+                    <span class="text-gray-600">{{ crit.critere_libelle }}</span>
+                    {{ niveau_badge(crit.niveau) }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <div class="flex items-center gap-2">
+                <label for="niveau_{{ comp.competence_id }}" class="text-sm font-medium text-gray-700">Niveau retenu</label>
+                <select id="niveau_{{ comp.competence_id }}" name="niveau_{{ comp.competence_id }}"
+                        class="rounded border border-gray-300 px-2 py-1 text-sm">
+                    {% for n in niveaux_bilan %}
+                    <option value="{{ n.code }}"{% if n.code == comp.niveau_agrege %} selected{% endif %}>{{ n.libelle }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </section>
+        {% endfor %}
+        {% else %}
+        <div class="bg-amber-50 border border-amber-200 text-amber-800 rounded p-4 text-sm">
+            Aucun critère n'a encore été positionné pour cet élève (feuille de positionnement).
+            Vous pouvez tout de même arrêter un bilan sur la seule appréciation globale.
+        </div>
+        {% endif %}
+
+        <section class="bg-white shadow rounded p-4 space-y-3">
+            <div>
+                <label for="appreciation" class="block text-sm font-medium text-gray-700 mb-1">Appréciation globale</label>
+                <textarea id="appreciation" name="appreciation" rows="4" required
+                          class="w-full rounded border border-gray-300 px-3 py-2 text-sm">{{ valeurs.appreciation }}</textarea>
+            </div>
+            <div>
+                <label for="statut" class="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                <select id="statut" name="statut" class="rounded border border-gray-300 px-2 py-1 text-sm">
+                    {% for s in statuts %}
+                    <option value="{{ s }}"{% if valeurs.statut == s %} selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </section>
+
+        <div class="flex items-center gap-3">
+            <button type="submit" class="rounded bg-blue-600 text-white px-5 py-2 text-sm font-medium hover:bg-blue-700">
+                Arrêter le bilan
+            </button>
+            <a href="/bilan/new" class="text-sm text-gray-600 hover:underline">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

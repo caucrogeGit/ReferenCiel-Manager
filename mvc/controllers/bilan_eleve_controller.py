@@ -1,11 +1,12 @@
 # pyright: strict
-"""Bilan élève (ticket 21) : le professeur **arrête** une synthèse d'évaluation.
+"""Bilan de maîtrise (ADR-032/033) : le professeur **arrête** une synthèse d'évaluation.
 
-Le professeur **connecté** liste les bilans, en crée un nouveau (choix d'une
-progression → la synthèse par compétence est **figée** à la création → appréciation
-globale + statut), et consulte un bilan existant. Route protégée par `execution.gerer`
-(rôles `admin` et `professeur`) ; l'auteur est déduit du compte (`professeur.UserId`).
-Un compte non rattaché à un professeur voit un message explicite.
+Le professeur **connecté** liste les bilans, prépare un nouveau bilan (choix d'une
+progression de sa classe → écran d'**arbitrage** : la maîtrise de chaque compétence
+est **suggérée** par l'agrégat des critères de la feuille, le professeur la retient
+ou l'ajuste → appréciation globale + statut), puis fige la synthèse. Route protégée
+par `execution.gerer` (rôles `admin` et `professeur`) ; l'auteur est déduit du compte
+(`professeur.UserId`). Un compte non rattaché voit un message explicite.
 """
 from __future__ import annotations
 
@@ -17,6 +18,8 @@ from core.http.response import Response
 from core.mvc.controller import BaseController
 
 from mvc.models.bilan_eleve_model import (
+    NIVEAUX_BILAN,
+    apercu_synthese,
     creer_bilan,
     get_bilan,
     list_bilans,
@@ -44,81 +47,99 @@ class BilanEleveController:
 
     @staticmethod
     def new(request: Request) -> Response:
-        """Formulaire de création (`GET /bilan/new`)."""
+        """Choix d'une progression à évaluer (`GET /bilan/new`)."""
         professeur = _professeur_connecte(request)
+        progressions = progressions_evaluables(int(professeur["id"])) if professeur is not None else []
         return BaseController.render(
             "app/bilan_eleve/form.html",
+            context={"professeur": professeur, "progressions": progressions},
+            request=request,
+        )
+
+    @staticmethod
+    def preparer(request: Request) -> Response:
+        """Écran d'arbitrage : suggestions par compétence à retenir/ajuster
+        (`GET /bilan/preparer?progression_id=<id>`)."""
+        professeur = _professeur_connecte(request)
+        if professeur is None:
+            return BaseController.render(
+                "app/bilan_eleve/form.html",
+                context={"professeur": None, "progressions": []},
+                request=request,
+            )
+        progression_raw = request.query("progression_id", "")
+        apercu = apercu_synthese(int(progression_raw)) if progression_raw.isdigit() else None
+        if apercu is None:
+            return BaseController.redirect_with_flash(
+                request, "/bilan/new", "Sélectionnez une progression d'élève.", "error"
+            )
+        return BaseController.render(
+            "app/bilan_eleve/preparer.html",
             context={
-                "professeur": professeur,
-                "progressions": progressions_evaluables(),
+                "apercu": apercu,
                 "statuts": _STATUTS,
+                "niveaux_bilan": NIVEAUX_BILAN,
                 "erreurs": [],
-                "valeurs": {"progression_id": "", "appreciation": "", "statut": "brouillon"},
+                "valeurs": {"appreciation": "", "statut": "brouillon"},
             },
             request=request,
         )
 
     @staticmethod
     def create(request: Request) -> Response:
-        """Crée le bilan en figeant la synthèse (`POST /bilan/create`)."""
+        """Fige la synthèse arrêtée (`POST /bilan/create`)."""
         professeur = _professeur_connecte(request)
         progression_raw = request.form("progression_id", "")
         appreciation = request.form("appreciation", "").strip()
         statut = request.form("statut", "brouillon")
 
+        apercu = apercu_synthese(int(progression_raw)) if progression_raw.isdigit() else None
         erreurs: list[str] = []
         if professeur is None:
             erreurs.append("Votre compte n'est rattaché à aucune fiche professeur.")
-        if not progression_raw.isdigit():
-            erreurs.append("Sélectionnez une progression d'élève.")
         if not appreciation:
             erreurs.append("L'appréciation globale est obligatoire.")
         if statut not in _STATUTS:
             erreurs.append("Statut invalide.")
 
-        if erreurs or professeur is None:
+        if apercu is None or professeur is None:
+            return BaseController.redirect_with_flash(
+                request, "/bilan/new", "Sélectionnez une progression d'élève.", "error"
+            )
+        if erreurs:
             return BaseController.render(
-                "app/bilan_eleve/form.html",
+                "app/bilan_eleve/preparer.html",
                 status=422,
                 context={
-                    "professeur": professeur,
-                    "progressions": progressions_evaluables(),
+                    "apercu": apercu,
                     "statuts": _STATUTS,
+                    "niveaux_bilan": NIVEAUX_BILAN,
                     "erreurs": erreurs,
-                    "valeurs": {
-                        "progression_id": progression_raw,
-                        "appreciation": appreciation,
-                        "statut": statut,
-                    },
+                    "valeurs": {"appreciation": appreciation, "statut": statut},
                 },
                 request=request,
             )
+
+        niveaux_arretes: dict[int, str] = {}
+        for comp in apercu["synthese"]:
+            cid = int(comp["competence_id"])
+            val = request.form(f"niveau_{cid}", "")
+            if val:
+                niveaux_arretes[cid] = val
 
         bilan_id = creer_bilan(
             progression_sequence_id=int(progression_raw),
             professeur_id=int(professeur["id"]),
             appreciation=appreciation,
             statut=statut,
+            niveaux_arretes=niveaux_arretes,
         )
         if bilan_id is None:
-            return BaseController.render(
-                "app/bilan_eleve/form.html",
-                status=422,
-                context={
-                    "professeur": professeur,
-                    "progressions": progressions_evaluables(),
-                    "statuts": _STATUTS,
-                    "erreurs": ["Progression introuvable."],
-                    "valeurs": {
-                        "progression_id": progression_raw,
-                        "appreciation": appreciation,
-                        "statut": statut,
-                    },
-                },
-                request=request,
+            return BaseController.redirect_with_flash(
+                request, "/bilan/new", "Progression introuvable.", "error"
             )
         return BaseController.redirect_with_flash(
-            request, f"/bilan/show/{bilan_id}", "Bilan créé et synthèse figée.", "success"
+            request, f"/bilan/show/{bilan_id}", "Bilan de maîtrise arrêté.", "success"
         )
 
     @staticmethod

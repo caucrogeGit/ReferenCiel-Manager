@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from core.database.db import fetch_all, fetch_one, insert
+from mvc.services.niveaux_maitrise import NIVEAUX_POSITIONNABLES
 
 # Échelle ordinale des niveaux CIEL (`evaluation_critere.Niveau`, cf.
 # `niveaux_maitrise`). « NON_OBSERVE » n'est jamais stocké (pas de ligne) : il
@@ -22,6 +23,14 @@ from core.database.db import fetch_all, fetch_one, insert
 _ORDRE = {"NIVEAU_1": 0, "NIVEAU_2": 1, "NIVEAU_3": 2, "NIVEAU_4": 3}
 _INVERSE = {0: "NIVEAU_1", 1: "NIVEAU_2", 2: "NIVEAU_3", 3: "NIVEAU_4"}
 _NON_EVALUE = "non_evalue"
+
+# Niveaux de maîtrise que le professeur peut **arrêter** par compétence : les 4
+# niveaux CIEL, plus « non évalué » (compétence non tranchée). C'est un arbitrage,
+# pas un calcul : la moyenne des critères n'est qu'une suggestion (ADR-032).
+NIVEAUX_BILAN: list[dict[str, str]] = [
+    {"code": str(n["code"]), "libelle": f"{n['niveau']}. {n['libelle']}"} for n in NIVEAUX_POSITIONNABLES
+] + [{"code": _NON_EVALUE, "libelle": "Non évalué"}]
+_CODES_BILAN = {n["code"] for n in NIVEAUX_BILAN}
 
 
 def _niveau_agrege(niveaux: list[str]) -> str:
@@ -65,6 +74,7 @@ def agreger_synthese(progression_sequence_id: int) -> list[dict[str, Any]]:
         comp = par_competence.setdefault(
             cid,
             {
+                "competence_id": cid,
                 "competence_code": ligne["competence_code"],
                 "competence_intitule": ligne["competence_intitule"],
                 "criteres": [],
@@ -84,11 +94,28 @@ def agreger_synthese(progression_sequence_id: int) -> list[dict[str, Any]]:
     return synthese
 
 
+def synthese_arretee(
+    progression_sequence_id: int, niveaux_arretes: dict[int, str]
+) -> list[dict[str, Any]]:
+    """Synthèse à figer : pour chaque compétence, l'agrégat des critères (la
+    **suggestion**) et le niveau **arrêté** par le professeur. Sans arbitrage
+    explicite (ou valeur invalide), on retient la suggestion. C'est le professeur
+    qui décide : la moyenne ne fait que proposer (ADR-032)."""
+    synthese = agreger_synthese(progression_sequence_id)
+    for comp in synthese:
+        suggere = str(comp.pop("niveau_agrege", _NON_EVALUE))
+        comp["niveau_suggere"] = suggere
+        retenu = niveaux_arretes.get(int(comp["competence_id"]))
+        comp["niveau_arrete"] = retenu if retenu in _CODES_BILAN else suggere
+    return synthese
+
+
 def creer_bilan(
-    *, progression_sequence_id: int, professeur_id: int, appreciation: str, statut: str
+    *, progression_sequence_id: int, professeur_id: int, appreciation: str, statut: str,
+    niveaux_arretes: dict[int, str],
 ) -> int | None:
-    """Crée un bilan en **figeant** la synthèse agrégée. Retourne l'id, ou None si la
-    progression n'existe pas.
+    """Crée un bilan en **figeant** la synthèse **arrêtée par le professeur**.
+    Retourne l'id, ou None si la progression n'existe pas.
 
     L'`eleve_id` est **déduit** de la progression (cohérence : le bilan porte sur le
     sequence réellement suivi par cet élève).
@@ -99,7 +126,9 @@ def creer_bilan(
     if prog is None:
         return None
     eleve_id = int(prog["eleve_id"])
-    synthese = json.dumps(agreger_synthese(progression_sequence_id), ensure_ascii=False)
+    synthese = json.dumps(
+        synthese_arretee(progression_sequence_id, niveaux_arretes), ensure_ascii=False
+    )
     return insert(
         "INSERT INTO bilan_eleve (AppreciationGlobale, Statut, DateBilan, Synthese, "
         "eleve_id, professeur_id, progression_sequence_id, CreatedAt, UpdatedAt) "
@@ -137,13 +166,36 @@ def list_bilans() -> list[dict[str, Any]]:
     )
 
 
-def progressions_evaluables() -> list[dict[str, Any]]:
-    """Progressions d'élèves (élève + sequence) candidates à un bilan — pour le formulaire."""
+def progressions_evaluables(professeur_id: int) -> list[dict[str, Any]]:
+    """Progressions d'élèves (élève + sequence) candidates à un bilan, **limitées aux
+    classes du professeur** — pour le formulaire."""
     return fetch_all(
         "SELECT pe.Id AS progression_id, e.Nom AS eleve_nom, e.Prenom AS eleve_prenom, "
         "p.Titre AS sequence_titre "
         "FROM progression_sequence pe "
         "JOIN eleve e ON e.Id = pe.eleve_id "
+        "JOIN classe c ON c.Id = e.classe_id "
+        "JOIN classe_professeur cp ON cp.classe_id = c.Id "
         "JOIN sequence p ON p.Id = pe.sequence_id "
-        "ORDER BY e.Nom, e.Prenom"
+        "WHERE cp.professeur_id = ? "
+        "ORDER BY e.Nom, e.Prenom",
+        (professeur_id,),
     )
+
+
+def apercu_synthese(progression_sequence_id: int) -> dict[str, Any] | None:
+    """Aperçu (non figé) pour l'écran d'arbitrage : élève + séquence + synthèse
+    agrégée. None si la progression est introuvable."""
+    entete = fetch_one(
+        "SELECT pe.Id AS progression_id, e.Nom AS eleve_nom, e.Prenom AS eleve_prenom, "
+        "p.Titre AS sequence_titre "
+        "FROM progression_sequence pe "
+        "JOIN eleve e ON e.Id = pe.eleve_id "
+        "JOIN sequence p ON p.Id = pe.sequence_id "
+        "WHERE pe.Id = ?",
+        (progression_sequence_id,),
+    )
+    if entete is None:
+        return None
+    entete["synthese"] = agreger_synthese(progression_sequence_id)
+    return entete

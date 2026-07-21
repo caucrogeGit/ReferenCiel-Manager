@@ -132,6 +132,14 @@ antérieure à l'amendement du jour) aux codes CIEL, par la migration
 désormais ces mêmes codes. La suggestion automatique (`suggerer_niveau`) attend
 les indicateurs réellement validés par l'élève et reste différée.
 
+Le **bilan de maîtrise** applique enfin la décision 6 (« le système propose, le
+professeur décide »). Sa création n'est plus un figement automatique de la
+moyenne : c'est un écran d'**arbitrage** (`/bilan/preparer?progression_id=<id>`)
+où, par compétence, la maîtrise **suggérée** par l'agrégat des critères de la
+feuille est **retenue ou ajustée** par le professeur. La synthèse figée conserve
+les deux valeurs (`niveau_suggere` et `niveau_arrete`) pour la traçabilité. Le
+choix des progressions est limité aux classes du professeur connecté.
+
 ## Références
 
 - SEQ-02 (attributs de la séance ; tables `seance_competence`/`seance_critere`).
