@@ -48,8 +48,10 @@
 {# Badge du statut d'un scénario (ADR-019). Source unique du libellé et de la
    couleur : brouillon (gris) / finalisé (orange forge) / utilisé (vert). #}
 {% macro statut_scenario(statut) %}
-{%- set _labels = {"brouillon": "Brouillon", "finalise": "Finalisé", "utilise": "Utilisé"} -%}
-{%- set _tones = {"brouillon": "neutral", "finalise": "success", "utilise": "green"} -%}
+{# Séquence (ADR-034) : « Publié » et « Attribué » en vert, comme « Utilisé »
+   du scénario ; « Finalisé » garde le ton success (forge). #}
+{%- set _labels = {"brouillon": "Brouillon", "finalise": "Finalisé", "publie": "Publié", "attribue": "Attribué", "utilise": "Utilisé"} -%}
+{%- set _tones = {"brouillon": "neutral", "finalise": "success", "publie": "green", "attribue": "green", "utilise": "green"} -%}
 {{ badge(_labels.get(statut, statut), tone=_tones.get(statut, "neutral")) }}
 {% endmacro %}
 

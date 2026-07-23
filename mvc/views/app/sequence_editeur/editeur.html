@@ -8,28 +8,48 @@
 
 {% block title %}{{ sequence.Titre or "Séquence sans titre" }} — {{ app_name }}{% endblock %}
 
+{# Remonter le contenu : « Famille pédagogique » s'aligne sur la marque de la
+   barre latérale (py-4, comme son en-tête). #}
+{% block main_class %}flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-10{% endblock %}
+
 {% block content %}
 {{ flash_messages(flash) }}
 
-<div class="mb-6 relative">
-    {# Ancre du toast « ✓ Enregistré » (auto-save). Vide au chargement ; les
-       réponses HTMX y injectent le toast hors-bande. Hors de #tunnel-corps :
+{# Colonne du tunnel : même largeur que les cartouches de saisie (max-w-3xl),
+   centrée dans l'espace disponible (retour porteur). #}
+<div class="max-w-3xl mx-auto">
+
+<div class="mb-8 relative">
+    {# Ancre du toast « ✓ Enregistré » (auto-save). Hors de #tunnel-corps :
        persiste à travers les swaps de fragments. #}
     <span id="sequence-sauvegarde"></span>
-    <div class="flex items-center gap-3">
-        <a href="/sequence" class="text-sm text-muted hover:text-ink transition">← Séquences</a>
+    {# L'arbre « Famille pédagogique » EST l'en-tête du tunnel (titres, états,
+       nature, référentiel) ; cible du rafraîchissement hors-bande. #}
+    <div id="arbre-famille">
+    {% if scenario_lie %}
+    {% from "components/tunnel_macros.html" import arbre_famille %}
+    {{ arbre_famille(
+        scenario_lie.Titre,
+        "/conception/scenario/" ~ scenario_lie.Id,
+        sequence.Titre,
+        "",
+        seances,
+        actif="sequence",
+        sequence_nature=sequence.Nature,
+        scenario_statut=scenario_lie.Statut,
+        sequence_statut=sequence.Statut,
+        referentiel=referentiel_actuel,
+        sequence_id=sequence.Id,
+    csrf=csrf_token,
+) }}
+    {% endif %}
     </div>
-    <h1 class="mt-1 text-[28px] font-extrabold tracking-tight text-ink">
-        {{ sequence.Titre or "Séquence sans titre" }}
-    </h1>
-    <p class="mt-1 text-sm text-muted">
-        {{ sequence.niveau_classe_id_label or "Niveau à préciser" }}
-    </p>
 </div>
 
 {# Cible HTMX de la navigation d'étape : le stepper ET le contenu de l'étape sont
    régénérés ensemble. Le contrôleur renvoie ici le partial _corps.html seul. #}
 <div id="tunnel-corps">
     {% include "app/sequence_editeur/_corps.html" %}
+</div>
 </div>
 {% endblock %}

@@ -163,3 +163,25 @@ def maj_statut(sequence_id, connaissance_id, statut):
         "WHERE sequence_id = ? AND connaissance_id = ?",
         (statut, datetime.now(timezone.utc), sequence_id, connaissance_id),
     )
+
+
+def competences_retenues_au_scenario(sequence_id):
+    """Compétences retenues par le scénario appairé (critères cochés) : le
+    SCÉNARIO est la source canonique (ADR-036 révisé). Seules ces compétences
+    sont actives dans l'étape Savoirs associés."""
+    scenario_id = get_scenario_id_for_sequence(sequence_id)
+    if scenario_id is None:
+        return set()
+    rows = fetch_all(
+        "SELECT DISTINCT c.competence_id AS comp FROM scenario_critere sc "
+        "JOIN critere_observable c ON c.Id = sc.critere_observable_id "
+        "WHERE sc.scenario_id = ?",
+        (scenario_id,),
+    )
+    return {int(r["comp"]) for r in rows}
+
+
+def competence_de_connaissance(connaissance_id):
+    """Compétence porteuse d'une connaissance, ou None."""
+    row = fetch_one("SELECT competence_id FROM connaissance WHERE Id = ?", (connaissance_id,))
+    return int(row["competence_id"]) if row else None

@@ -1,9 +1,25 @@
-{# Badge de statut du scénario, émis HORS-BANDE (hx-swap-oob).
+{# Arbre « Famille pédagogique » émis HORS-BANDE (hx-swap-oob).
 
-   Rendu par les réponses HTMX qui recalculent le statut (saisie du contexte,
-   cochage d'une activité ou d'un critère), pour que le badge de l'en-tête
-   (<span id="scenario-statut"> dans editeur.html) passe en direct de
-   « Brouillon » à « Finalisé » sans recharger la page. À n'inclure QUE dans des
-   réponses HTMX (jamais au rendu complet : cela dupliquerait l'id). #}
-{% from "components/ui.html" import statut_scenario %}
-<span id="scenario-statut" hx-swap-oob="true">{{ statut_scenario(scenario.Statut) }}</span>
+   Remplace l'ancien badge de statut de l'en-tête : l'arbre (en tête du tunnel)
+   porte désormais le statut de chaque membre — il est re-rendu à chaque
+   écriture qui recalcule le statut (contexte, cochage d'activité/critère).
+   À n'inclure QUE dans des réponses HTMX (contexte : contexte_famille). #}
+{% if sequence_liee %}
+{% from "components/tunnel_macros.html" import arbre_famille %}
+<div id="arbre-famille" hx-swap-oob="true">
+{{ arbre_famille(
+    scenario.Titre,
+    "",
+    sequence_liee.Titre,
+    "/sequence/editeur/" ~ sequence_liee.Id,
+    seances_liees,
+    actif="scenario",
+    sequence_nature=sequence_liee.Nature,
+    scenario_statut=scenario.Statut,
+    sequence_statut=sequence_liee.Statut,
+    referentiel=referentiel_famille,
+    sequence_id=sequence_liee.Id,
+    csrf=csrf_token,
+) }}
+</div>
+{% endif %}

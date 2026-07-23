@@ -12,23 +12,20 @@ from typing import Any, cast
 
 # État du tunnel (ADR-021) : les 4 étapes et leurs libellés. La complétion
 # n'est jamais persistée, elle est dérivée des données (voir `steps`).
-ETAPES: tuple[str, ...] = ("titre", "contexte", "liaison", "ressources")
+ETAPES: tuple[str, ...] = ("titre", "contexte", "liaison", "gestion")
 
 LIBELLES: dict[str, str] = {
     "titre": "Titre",
     "contexte": "Contexte",
     "liaison": "Liaison référentiel",
-    "ressources": "Ressources",
+    "gestion": "Gestion",
 }
 
-# Les 5 champs cpro du contexte, tous obligatoires (d'où le all() de `steps`).
-_CHAMPS_CONTEXTE: tuple[str, ...] = (
-    "DescriptionContexte",
-    "Problematique",
-    "MaterielsLogiciels",
-    "LiensAssocies",
-    "EspacesFormation",
-)
+# Champs OBLIGATOIRES du contexte : seule la description / mise en situation
+# l'est ; les quatre autres champs cpro (problématique, matériels, liens,
+# espaces) sont facultatifs et ne bloquent ni l'étape ni la finalisation.
+# Tenir en phase avec le jumeau du modèle (scenario_editeur_model).
+_CHAMPS_CONTEXTE: tuple[str, ...] = ("DescriptionContexte",)
 
 
 def parse_id(raw: object) -> "int | None":
@@ -63,7 +60,12 @@ def parse_ids(raw: Any) -> list[int]:
 
 
 def borner_etape(raw: str) -> str:
-    """Étape demandée, bornée à la liste connue (défaut : titre)."""
+    """Étape demandée, bornée à la liste connue (défaut : titre).
+
+    « ressources » est l'ancien nom de l'étape terminale (ADR-038) : les URL
+    historiques retombent sur « Gestion », qui a absorbé les ressources."""
+    if raw == "ressources":
+        return "gestion"
     return raw if raw in ETAPES else "titre"
 
 
@@ -81,7 +83,7 @@ def steps(
     #  - Titre : rempli dès la création (obligatoire).
     #  - Contexte : les 5 champs cpro sont tous obligatoires (d'où all()).
     #  - Liaison : au moins une activité ET un critère (contribue à « finalisé »).
-    #  - Ressources : facultatives -> l'étape ne bloque jamais.
+    #  - Gestion : outillage (ADR-038), jamais bloquante.
     contexte_complet = all(scenario.get(champ) for champ in _CHAMPS_CONTEXTE)
     liaison_complete = len(activite_ids) > 0 and len(critere_ids) > 0
     # Scénario hors référentiel (ADR-027) : l'étape Liaison ne s'applique pas, on
@@ -110,10 +112,14 @@ def steps(
             "inactif": hors_referentiel,
         },
         {
-            "key": "ressources",
-            "label": LIBELLES["ressources"],
+            # Gestion (ADR-038) : opérations sur l'OBJET (ressources, exports,
+            # suppression). Étape d'outillage, hors complétude : ni coche ni
+            # cercle au stepper (drapeau `outil`).
+            "key": "gestion",
+            "label": LIBELLES["gestion"],
             "badge": "",
             "done": True,
+            "outil": True,
         },
     ]
 

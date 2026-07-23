@@ -1,8 +1,8 @@
 """Déroulé ordonné d'une séance : les ElementSeance (ADR-032, phase B).
 
 Éléments génériques (type, titre, contenu libre, durée, obligatoire, rôle
-pédagogique). Les colonnes qcm_id/checklist_id existent pour une future
-référence polymorphe, mais ne sont pas encore pilotées par l'UI.
+pédagogique). Les colonnes qcm_id/checklist_id référencent le QCM ou la
+checklist de la séance, pilotées depuis la carte de l'élément (ADR-035).
 """
 
 from datetime import datetime, timezone
@@ -51,12 +51,17 @@ def ajouter(seance_id, type_, titre, contenu, duree, obligatoire, role):
     )
 
 
-def maj(element_id, titre, contenu, duree, obligatoire, role):
-    """Met à jour un élément (pas son type ni son ordre)."""
+def maj(element_id, titre, contenu, duree, obligatoire, role, qcm_id=None, checklist_id=None):
+    """Met à jour un élément (pas son type ni son ordre).
+
+    qcm_id/checklist_id : référence de l'élément vers le QCM ou la checklist de
+    la séance (ADR-035) ; None pour les autres types ou si rien n'est choisi.
+    """
     execute(
         "UPDATE element_seance SET Titre = ?, Contenu = ?, DureeMinutes = ?, Obligatoire = ?, "
-        "RolePedagogique = ?, UpdatedAt = ? WHERE Id = ?",
-        (titre, contenu, duree, 1 if obligatoire else 0, role, datetime.now(timezone.utc), element_id),
+        "RolePedagogique = ?, qcm_id = ?, checklist_id = ?, UpdatedAt = ? WHERE Id = ?",
+        (titre, contenu, duree, 1 if obligatoire else 0, role, qcm_id, checklist_id,
+         datetime.now(timezone.utc), element_id),
     )
 
 

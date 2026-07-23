@@ -36,20 +36,14 @@
     <div>
         {% if comp_active %}
         {%- set observee = comp_active.Id in competences_observees -%}
+        {# Pas de case « Observer » : l'observation est DÉRIVÉE du cochage des
+           critères ci-dessous (premier critère coché = compétence observée,
+           dernier décoché = observation retirée). Seul le rôle se règle ici. #}
+        {% if observee %}
         <div class="rounded-[10px] border border-line bg-surface px-3 py-2.5 mb-2">
-            <form method="post" action="{{ base }}/competence/basculer"
-                  hx-post="{{ base }}/competence/basculer" hx-trigger="change"
-                  hx-target="#competences-seance" hx-swap="innerHTML" class="flex items-center gap-2.5">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <input type="hidden" name="competence" value="{{ comp_active.Id }}">
-                <input type="checkbox" name="observee" value="1" {% if observee %}checked{% endif %} class="w-4 h-4 accent-forge shrink-0">
-                <span class="flex-1 text-sm text-ink"><span class="font-mono text-xs text-faint mr-1">{{ comp_active.Code }}</span>Observer cette compétence</span>
-                <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
-            </form>
-            {% if observee %}
             <form method="post" action="{{ base }}/competence/role"
                   hx-post="{{ base }}/competence/role" hx-trigger="change"
-                  hx-target="#competences-seance" hx-swap="innerHTML" class="flex items-center gap-2 mt-2 pl-6">
+                  hx-target="#competences-seance" hx-swap="innerHTML" class="flex items-center gap-2">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <input type="hidden" name="competence" value="{{ comp_active.Id }}">
                 <label class="text-xs text-muted">Rôle</label>
@@ -58,11 +52,12 @@
                     <option value="{{ val }}"{% if val == competences_observees.get(comp_active.Id) %} selected{% endif %}>{{ txt }}</option>
                     {% endfor %}
                 </select>
+                <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
             </form>
-            {% endif %}
         </div>
+        {% endif %}
 
-        <p class="text-xs text-muted mb-1.5">Critères observés</p>
+        <p class="text-xs font-semibold text-muted mb-1.5">Critères observés</p>
         <div class="flex flex-col gap-1.5">
             {% for c in comp_active.criteres %}
             <div class="rounded-[10px] border border-line px-3 py-2 {% if c.Id in criteres_observes %}bg-surface{% else %}bg-white{% endif %}">
@@ -91,4 +86,11 @@
         {% endif %}
     </div>
 </div>
+{% endif %}
+
+{# Stepper recalculé, renvoyé HORS-BANDE avec le fragment (réponses HTMX
+   seulement : drapeau stepper_oob) — la complétion suit chaque écriture. #}
+{% if stepper_oob %}
+{% from "components/tunnel_macros.html" import stepper %}
+<div id="tunnel-stepper" hx-swap-oob="true">{{ stepper(steps, etape, base_url) }}</div>
 {% endif %}

@@ -2,10 +2,14 @@
    se sauvegarde à chaque « change » (hx-swap="none", toast hors-bande). #}
 {% from "components/tunnel_macros.html" import tunnel_pager %}
 {% from "components/ui.html" import button, obligation %}
+{# Les routes d'enregistrement vivent sous /sequence/{id}/…, PAS sous l'URL de
+   l'éditeur (base_url = /sequence/editeur/{id}) : poster sur base_url ferait un
+   404 silencieux et perdrait la saisie. #}
+{%- set base = "/sequence/" ~ sequence.Id -%}
 
 <section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
-    <form method="post" action="{{ base_url }}/identite" class="space-y-5"
-          hx-post="{{ base_url }}/identite" hx-trigger="change" hx-swap="none">
+    <form method="post" action="{{ base }}/identite" class="space-y-5"
+          hx-post="{{ base }}/identite" hx-trigger="change" hx-swap="none">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
         <div>
@@ -13,10 +17,16 @@
             <input id="titre" name="titre" type="text" required value="{{ sequence.Titre or '' }}"
                    class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
                           focus:outline-none focus:ring-2 focus:ring-forge">
+            <p class="mt-1 text-xs text-faint">Ce titre est partagé avec le scénario
+                pédagogique apparié (il est unique, le renommer ici le renomme aussi là-bas).</p>
         </div>
 
         <div>
-            <label for="niveau_classe_id" class="block text-sm text-muted mb-1">Niveau de classe {{ obligation(false) }}</label>
+            <label for="niveau_classe_id" class="block text-sm text-muted mb-1">Niveau de classe {{ obligation(true) }}</label>
+            {# Obligatoire, mais PAS de `required` HTML : HTMX valide le formulaire
+               avant chaque auto-save, et un champ invalide bloquerait silencieusement
+               l'enregistrement à la volée de toute l'étape. L'obligation est portée
+               par la complétude d'étape (stepper) et la garde serveur. #}
             <select id="niveau_classe_id" name="niveau_classe_id"
                     class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
                            focus:outline-none focus:ring-2 focus:ring-forge">
@@ -25,21 +35,74 @@
                 <option value="{{ value }}"{% if sequence.niveau_classe_id is not none and value|string == (sequence.niveau_classe_id|string) %} selected{% endif %}>{{ texte }}</option>
                 {% endfor %}
             </select>
+            {% if sequence.niveau_classe_id is none %}
+            <p class="mt-1 text-xs text-amber-700">Le niveau de classe est obligatoire :
+                choisissez-le pour compléter l'étape.</p>
+            {% endif %}
         </div>
 
-        <label class="flex items-center gap-2.5 bg-cream rounded-[10px] px-3 py-2.5 cursor-pointer">
-            <input id="activite_glissante" name="activite_glissante" type="checkbox" value="1"
-                   {% if sequence.ActiviteGlissante %}checked{% endif %}
-                   class="shrink-0 accent-forge rounded border-field">
-            <span class="text-sm text-ink">Activité glissante {{ obligation(false) }}</span>
-        </label>
+        {# Encadré « Nature » (ADR-036) : formative (défaut) ou certificative (CCF).
+           Contextualise les statuts attendus des savoirs et, à terme, les
+           signaux de cohérence savoirs <-> liaison du scénario. #}
+        <fieldset class="border border-line rounded-[10px] p-4">
+            <legend class="text-sm text-muted px-1">Nature</legend>
+            <div class="space-y-2">
+                <label class="flex items-start gap-2.5 bg-cream rounded-[10px] px-3 py-2.5 cursor-pointer">
+                    <input type="radio" name="nature" value="formative"
+                           {% if (sequence.Nature or 'formative') == 'formative' %}checked{% endif %}
+                           class="mt-0.5 shrink-0 accent-forge">
+                    <span class="text-sm text-ink">Formative
+                        <span class="block text-xs text-muted">Séquence d'apprentissage : les savoirs s'y apportent et s'y consolident.</span>
+                    </span>
+                </label>
+                <label class="flex items-start gap-2.5 bg-cream rounded-[10px] px-3 py-2.5 cursor-pointer">
+                    <input type="radio" name="nature" value="certificative"
+                           {% if sequence.Nature == 'certificative' %}checked{% endif %}
+                           class="mt-0.5 shrink-0 accent-forge">
+                    <span class="text-sm text-ink">Certificative (CCF)
+                        <span class="block text-xs text-muted">Épreuve en cours de formation : savoirs prérequis et mobilisés, évaluation pilotée par la grille d'épreuve.</span>
+                    </span>
+                </label>
+            </div>
+        </fieldset>
 
-        <label class="flex items-center gap-2.5 bg-cream rounded-[10px] px-3 py-2.5 cursor-pointer">
-            <input id="ordre_impose" name="ordre_impose" type="checkbox" value="1"
-                   {% if sequence.OrdreImpose %}checked{% endif %}
-                   class="shrink-0 accent-forge rounded border-field">
-            <span class="text-sm text-ink">Ordre imposé des séances {{ obligation(false) }}</span>
-        </label>
+        {# Encadré « Séances » : choix exclusif (radio) projeté côté serveur sur
+           les deux booléens (nullables) du contrat. AUCUN mode présélectionné :
+           le choix est conscient et obligatoire (complément ADR-034) — tant
+           qu'il manque, l'étape reste incomplète et la séquence en brouillon. #}
+        <fieldset class="border border-line rounded-[10px] p-4">
+            <legend class="text-sm text-muted px-1">Séances {{ obligation(true) }}</legend>
+            <div class="space-y-2">
+                <label class="flex items-start gap-2.5 bg-cream rounded-[10px] px-3 py-2.5 cursor-pointer">
+                    <input type="radio" name="organisation" value="libre"
+                           {% if organisation_actuelle == 'libre' %}checked{% endif %}
+                           class="mt-0.5 shrink-0 accent-forge">
+                    <span class="text-sm text-ink">Ordre libre
+                        <span class="block text-xs text-muted">Chaque élève aborde les séances dans l'ordre de son choix.</span>
+                    </span>
+                </label>
+                <label class="flex items-start gap-2.5 bg-cream rounded-[10px] px-3 py-2.5 cursor-pointer">
+                    <input type="radio" name="organisation" value="ordre_impose"
+                           {% if organisation_actuelle == 'ordre_impose' %}checked{% endif %}
+                           class="mt-0.5 shrink-0 accent-forge">
+                    <span class="text-sm text-ink">Ordre imposé
+                        <span class="block text-xs text-muted">Tous les élèves franchissent les séances dans le même ordre (1, 2, 3…), depuis le même point de départ.</span>
+                    </span>
+                </label>
+                <label class="flex items-start gap-2.5 bg-cream rounded-[10px] px-3 py-2.5 cursor-pointer">
+                    <input type="radio" name="organisation" value="glissante"
+                           {% if organisation_actuelle == 'glissante' %}checked{% endif %}
+                           class="mt-0.5 shrink-0 accent-forge">
+                    <span class="text-sm text-ink">Glissante
+                        <span class="block text-xs text-muted">Les séances forment une boucle imposée sur des postes limités : chaque élève démarre à un point différent puis suit la boucle dans l'ordre. Seul le point d'entrée change, pas l'ordre.</span>
+                    </span>
+                </label>
+            </div>
+            {% if organisation_actuelle is none %}
+            <p class="mt-2 text-xs text-amber-700">L'organisation des séances est
+                obligatoire : choisissez-la pour compléter l'étape.</p>
+            {% endif %}
+        </fieldset>
 
         <noscript><div class="pt-1">{{ button("Enregistrer", variant="primary", type="submit") }}</div></noscript>
     </form>

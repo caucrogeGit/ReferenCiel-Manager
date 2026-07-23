@@ -16,7 +16,7 @@ from mvc.services.scenario_tunnel import slug
 # niveau (nullable, renseigné ensuite dans le tunnel) ni cadre.
 _INSERT_SEQUENCE_JUMELLE = (
     "INSERT INTO sequence (Identifiant, Titre, Statut, ActiviteGlissante, OrdreImpose, "
-    "niveau_classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, 'brouillon', 0, 0, ?, NOW(), NOW())"
+    "niveau_classe_id, CreatedAt, UpdatedAt) VALUES (?, ?, 'brouillon', NULL, NULL, ?, NOW(), NOW())"
 )
 _INSERT_SCENARIO = (
     "INSERT INTO scenario (Titre, Intention, Statut, Version, CoIntervention, referentiel_id, "
@@ -43,12 +43,15 @@ def _identifiant_sequence_unique(base: str) -> str:
 
 
 def list_scenarios() -> list[dict[str, Any]]:
-    """Tous les scénarios, les plus récemment modifiés d'abord."""
+    """Tous les scénarios, classés par référentiel (hors référentiel en fin),
+    puis par titre : la liste de cartes se découpe en sections par référentiel."""
     return fetch_all(
         "SELECT s.Id, s.Titre, s.Statut, s.Version, s.CoIntervention, s.UpdatedAt, "
-        "r.Identifiant AS referentiel_identifiant "
-        "FROM scenario s LEFT JOIN referentiel_niveau_classe r ON r.Id = s.referentiel_id "
-        "ORDER BY s.UpdatedAt DESC, s.Id DESC"
+        "r.Identifiant AS referentiel_identifiant, f.Intitule AS formation_intitule "
+        "FROM scenario s "
+        "LEFT JOIN referentiel_niveau_classe r ON r.Id = s.referentiel_id "
+        "LEFT JOIN formation f ON f.Id = r.formation_id "
+        "ORDER BY (r.Identifiant IS NULL), r.Identifiant, s.Titre, s.Id"
     )
 
 
@@ -184,13 +187,10 @@ def enregistrer_contexte(
     )
 
 
-_CHAMPS_CONTEXTE = (
-    "DescriptionContexte",
-    "Problematique",
-    "MaterielsLogiciels",
-    "LiensAssocies",
-    "EspacesFormation",
-)
+# Champs OBLIGATOIRES du contexte : seule la description / mise en situation
+# l'est ; les autres champs cpro sont facultatifs. Tenir en phase avec le
+# jumeau du service (scenario_tunnel._CHAMPS_CONTEXTE).
+_CHAMPS_CONTEXTE = ("DescriptionContexte",)
 
 
 def recalculer_statut(scenario_id: int) -> None:
@@ -198,6 +198,8 @@ def recalculer_statut(scenario_id: int) -> None:
 
     Le statut est stocké en base (pas de calcul à la lecture) mais tenu à jour à
     chaque écriture qui peut le faire changer, donc jamais falsifiable.
+    « Contexte complet » = description du contexte renseignée (seul champ
+    obligatoire ; les autres champs cpro sont facultatifs).
       - avec référentiel : « finalise » = contexte complet ET au moins une activité
         ET au moins un critère (la compétence est impliquée par le critère) ;
       - **sans référentiel** (ADR-027, matière non adossée) : « finalise » = contexte
@@ -242,7 +244,28 @@ def enregistrer_referentiel(scenario_id: int, referentiel_id: int) -> None:
 # Statuts qui verrouillent le référentiel : dès qu'un objet est finalisé (ou
 # utilisé), changer le référentiel invaliderait compétences/critères/savoirs déjà
 # sélectionnés. Le verrou vaut des deux côtés de la paire (ADR-029).
-_STATUTS_VERROUILLES = ("finalise", "utilise")
+_STATUTS_VERROUILLES = ("finalise", "publie", "attribue", "utilise")
+
+
+def get_sequence_appairee(scenario_id: int) -> "dict[str, Any] | None":
+    """Séquence jumelle du scénario (1-1, ADR-029) : Id et Titre, ou None."""
+    return fetch_one(
+        "SELECT sq.Id, sq.Titre, sq.Nature, sq.Statut FROM scenario_sequence ss "
+        "JOIN sequence sq ON sq.Id = ss.sequence_id "
+        "WHERE ss.scenario_id = ? LIMIT 1",
+        (scenario_id,),
+    )
+
+
+def get_seances_appairees(scenario_id: int) -> list[dict[str, Any]]:
+    """Séances de la séquence appairée, dans l'ordre (arbre de navigation)."""
+    return fetch_all(
+        "SELECT se.Id, se.Ordre, se.Titre, se.DureeEstimeeMinutes "
+        "FROM scenario_sequence ss "
+        "JOIN seance se ON se.sequence_id = ss.sequence_id "
+        "WHERE ss.scenario_id = ? ORDER BY se.Ordre, se.Id",
+        (scenario_id,),
+    )
 
 
 def paire_est_finalisee(scenario_id: int) -> bool:
@@ -393,3 +416,40 @@ def supprimer_scenario(scenario_id: int) -> None:
     """Supprime un scénario. Ses pivots (activités, critères, ressources,
     co-auteurs, séquences) partent en CASCADE (FK ON DELETE CASCADE)."""
     execute("DELETE FROM scenario WHERE Id = ?", (scenario_id,))
+
+
+def critere_observe_par_seance(scenario_id: int, critere_id: int) -> bool:
+    """Vrai si une séance de la séquence appairée observe ce critère (ADR-036) :
+    son décochage au scénario est alors refusé (suppression encadrée)."""
+    return fetch_one(
+        "SELECT 1 AS x FROM seance_critere sk "
+        "JOIN seance se ON se.Id = sk.seance_id "
+        "JOIN scenario_sequence ss ON ss.sequence_id = se.sequence_id "
+        "WHERE ss.scenario_id = ? AND sk.critere_observable_id = ? LIMIT 1",
+        (scenario_id, critere_id),
+    ) is not None
+
+
+def competence_a_savoirs_en_sequence(scenario_id: int, competence_id: int) -> bool:
+    """Vrai si une SÉANCE de la séquence appairée a des savoirs sous cette
+    compétence (ADR-037) : décocher son DERNIER critère au scénario est alors
+    refusé (le scénario est la source canonique — retirer les savoirs d'abord)."""
+    return fetch_one(
+        "SELECT 1 AS x FROM seance_connaissance sk "
+        "JOIN connaissance k ON k.Id = sk.connaissance_id "
+        "JOIN seance se ON se.Id = sk.seance_id "
+        "JOIN scenario_sequence ss ON ss.sequence_id = se.sequence_id "
+        "WHERE ss.scenario_id = ? AND k.competence_id = ? LIMIT 1",
+        (scenario_id, competence_id),
+    ) is not None
+
+
+def nb_criteres_coches_de_competence(scenario_id: int, competence_id: int) -> int:
+    """Nombre de critères de cette compétence cochés au scénario."""
+    row = fetch_one(
+        "SELECT COUNT(*) AS n FROM scenario_critere sc "
+        "JOIN critere_observable c ON c.Id = sc.critere_observable_id "
+        "WHERE sc.scenario_id = ? AND c.competence_id = ?",
+        (scenario_id, competence_id),
+    )
+    return int(row["n"]) if row else 0

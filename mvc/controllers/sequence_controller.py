@@ -7,14 +7,17 @@ from core.mvc.view.pagination import Pagination
 from mvc.models.sequence_model import (
     get_sequences, get_sequence_by_id, add_sequence, update_sequence, delete_sequence, bulk_delete_sequences,
     count_sequences, find_sequences_paginated, find_sequences_for_export,
-    get_niveau_classe_choices,
+    get_niveau_classe_choices, motif_blocage_suppression,
 )
 from mvc.forms.sequence_form import SequenceForm
+from mvc.helpers.groupes import grouper, libelle_referentiel
 from mvc.controllers.sequence_connaissance_controller import contexte_connaissances
 from mvc.models.referentiel_atelier_model import list_referentiels
 from mvc.services.sequence_pdf import construire_pdf
 from mvc.services.sequence_export import construire_json, construire_markdown
 from mvc.services.scenario_tunnel import slug
+from mvc.services.sequence_tunnel import duree_lisible
+from mvc.models.seance_model import duree_cumulee_minutes, prerequis_par_seance
 from core.security.session import get_flash, get_session_id
 
 
@@ -129,11 +132,12 @@ class SequenceController(BaseController):
 
     @staticmethod
     def index(request: Request) -> Response:
-        # Grille de cartes (même design que la liste des scénarios) : toutes les
-        # séquences, création inline en tête. Le tri/filtre/CSV restent servis par
-        # leurs routes dédiées, mais ne surchargent plus cette page.
+        # Grille de cartes (même design que la liste des scénarios) : cartes
+        # classées par référentiel (sections), hors référentiel en fin, création
+        # inline en tête. Le tri/filtre/CSV restent servis par leurs routes
+        # dédiées, mais ne surchargent plus cette page.
         context = {
-            "sequences": get_sequences(),
+            "groupes": grouper(get_sequences(), libelle_referentiel, "Hors référentiel"),
             "referentiels": list_referentiels(),
             "flash": get_flash(get_session_id(request)),
         }
@@ -172,7 +176,13 @@ class SequenceController(BaseController):
         sequence = get_sequence_by_id(id)
         if sequence is None:
             return BaseController.not_found()
-        context = {"sequence": sequence, "flash": get_flash(get_session_id(request))}
+        context = {
+            "sequence": sequence,
+            # Valeurs DÉRIVÉES des séances rattachées : durée et prérequis.
+            "duree_cumulee": duree_lisible(duree_cumulee_minutes(id)),
+            "prerequis_derives": prerequis_par_seance(id),
+            "flash": get_flash(get_session_id(request)),
+        }
         context.update(contexte_connaissances(id))
         return BaseController.render("app/sequence/show.html",
             context=context,
@@ -247,6 +257,15 @@ class SequenceController(BaseController):
         id = SequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
+        # Garde avant suppression : séances liées et progressions d'élèves sont
+        # en RESTRICT au contrat — message clair plutôt qu'IntegrityError.
+        motif = motif_blocage_suppression(id)
+        if motif is not None:
+            return BaseController.redirect_with_flash(
+                request, "/sequence",
+                f"Suppression impossible : cette séquence porte {motif}. "
+                "Ordre de suppression : les progressions des élèves, puis les séances, puis la séquence.",
+                "error")
         delete_sequence(id)
         if _is_hx_request(request):
             context = SequenceController._list_context(request)
@@ -268,11 +287,15 @@ class SequenceController(BaseController):
         ids = SequenceController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/sequence", "Aucun élément sélectionné.")
-        bulk_delete_sequences(ids)
-        count = len(ids)
-        return BaseController.redirect_with_flash(
-            request, "/sequence",
-            f"{count} élément(s) supprimé(s).")
+        # Garde par élément (RESTRICT au contrat) : on supprime les libres, on
+        # rend compte des conservées.
+        supprimables = [i for i in ids if motif_blocage_suppression(i) is None]
+        bloquees = len(ids) - len(supprimables)
+        bulk_delete_sequences(supprimables)
+        message = f"{len(supprimables)} élément(s) supprimé(s)."
+        if bloquees:
+            message += f" {bloquees} conservé(s) : séances liées ou progressions d'élèves."
+        return BaseController.redirect_with_flash(request, "/sequence", message)
 
 
     @staticmethod

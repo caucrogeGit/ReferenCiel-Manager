@@ -64,3 +64,19 @@
   background: #ece5d8;       /* un cran plus soutenu */
   border-color: #d8cdba;
 }
+
+/* Variante ERREUR du toast (ex. titre refusé : vide ou déjà pris) : rouge,
+   affichée plus longtemps pour laisser lire le message. */
+.toast-erreur {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-color: #fca5a5;
+  animation-duration: 4.5s;
+}
+
+/* Création séquence/scénario : le sélecteur de référentiel ne s'affiche que
+   quand « rattaché(e) à un référentiel » est choisi. Sans JS (CSP) : :has().
+   Sans CSS, le sélecteur reste visible — dégradation sans perte. */
+[data-choix-referentiel]:has(input[name="mode_referentiel"][value="hors"]:checked) .champ-referentiel {
+    display: none;
+}

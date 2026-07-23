@@ -2,7 +2,9 @@
    bloc à chaque navigation d'étape (cible HTMX #tunnel-corps), pour que le stepper
    reflète l'étape sélectionnée. Sans JS, il est simplement inclus dans editeur.html. #}
 {% from "components/tunnel_macros.html" import stepper %}
-{{ stepper(steps, etape, base_url) }}
+{# Conteneur identifié : cible du rafraîchissement hors-bande après chaque
+   auto-save (la complétion des étapes suit la saisie sans navigation). #}
+<div id="tunnel-stepper">{{ stepper(steps, etape, base_url) }}</div>
 
 <div id="tunnel-etape">
     {% include "app/sequence_editeur/_etape_" ~ etape ~ ".html" %}

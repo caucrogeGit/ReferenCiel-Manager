@@ -2,6 +2,15 @@
    Cible : le placeholder <span id="sequence-sauvegarde"> de editeur.html. Apparition
    et disparition en CSS pur (static/scenario-tunnel.css, classe partagée). À n'inclure
    QUE dans des réponses HTMX (jamais au rendu complet). #}
+{% if message_erreur %}
+<span id="sequence-sauvegarde" hx-swap-oob="true" class="toast-enregistre toast-erreur" role="alert">
+  <svg class="toast-enregistre__icone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+       fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+  {{ message_erreur }}
+</span>
+{% else %}
 <span id="sequence-sauvegarde" hx-swap-oob="true" class="toast-enregistre" role="status" aria-live="polite">
   <svg class="toast-enregistre__icone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -9,3 +18,34 @@
   </svg>
   Enregistré
 </span>
+{% endif %}
+{# Si le contexte fournit les étapes recalculées, rafraîchir aussi le stepper
+   hors-bande : la coche « Titre » (ou le badge Savoirs) suit la saisie sans
+   attendre une navigation d'étape. #}
+{% if steps %}
+{% from "components/tunnel_macros.html" import stepper %}
+<div id="tunnel-stepper" hx-swap-oob="true">{{ stepper(steps, etape, base_url) }}</div>
+{% endif %}
+{# Arbre « Famille pédagogique » recalculé hors-bande : nature, titre et
+   séances suivent la saisie sans navigation. #}
+{% if arbre_oob %}
+{% from "components/tunnel_macros.html" import arbre_famille %}
+<div id="arbre-famille" hx-swap-oob="true">
+{% if scenario_lie %}
+{{ arbre_famille(
+    scenario_lie.Titre,
+    "/conception/scenario/" ~ scenario_lie.Id,
+    sequence.Titre,
+    "",
+    seances,
+    actif="sequence",
+    sequence_nature=sequence.Nature,
+    scenario_statut=scenario_lie.Statut,
+    sequence_statut=sequence.Statut,
+    referentiel=referentiel_actuel,
+    sequence_id=sequence.Id,
+    csrf=csrf_token,
+) }}
+{% endif %}
+</div>
+{% endif %}

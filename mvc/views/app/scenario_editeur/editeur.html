@@ -8,35 +8,44 @@
 
 {% block title %}{{ scenario.Titre or "Scénario sans titre" }} — {{ app_name }}{% endblock %}
 
+{# Remonter le contenu : « Famille pédagogique » s'aligne sur la marque de la
+   barre latérale (py-4, comme son en-tête). #}
+{% block main_class %}flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-10{% endblock %}
+
 {% block content %}
 {{ flash_messages(flash) }}
 
+{# Colonne du tunnel : même largeur que les cartouches de saisie (max-w-3xl),
+   centrée dans l'espace disponible (retour porteur). #}
+<div class="max-w-3xl mx-auto">
+
 {# `relative` : ancre le toast « ✓ Enregistré » en absolu, en haut à droite de
    l'en-tête, au niveau du badge de statut (voir _sauvegarde_oob.html). #}
-<div class="mb-6 relative">
-    {# Ancre du toast « ✓ Enregistré » (auto-save temps réel). Vide au chargement ;
-       les réponses HTMX y injectent le toast hors-bande. Hors de #tunnel-corps :
-       persiste à travers les swaps de fragments. #}
+<div class="mb-8 relative">
+    {# Ancre du toast « ✓ Enregistré » (auto-save temps réel). Hors de
+       #tunnel-corps : persiste à travers les swaps de fragments. #}
     <span id="scenario-sauvegarde"></span>
-    <div class="flex items-center gap-3">
-        <h1 class="text-[28px] font-extrabold tracking-tight text-ink">
-            {{ scenario.Titre or "Scénario sans titre" }}
-        </h1>
-        {# Cible du rafraîchissement hors-bande (hx-swap-oob) : le statut est
-           recalculé côté serveur à chaque écriture du tunnel (contexte, cochage),
-           et le badge suit sans recharger la page. Voir _statut_oob.html. #}
-        <span id="scenario-statut">{{ statut_scenario(scenario.Statut) }}</span>
-    </div>
-    {% if referentiel %}
-    {# Le référentiel appartient à une FORMATION (ADR-023) : ici la famille de
-       métiers 2TNE, tronc commun menant à plusieurs bacs pros, et non le diplôme
-       CIEL. On affiche donc la formation, pas un niveau de classe. #}
-    <p class="mt-1 text-sm text-muted">
-        Référentiel :
-        <span class="font-medium text-ink">{{ referentiel.formation_intitule }}</span>
-        <span class="font-medium text-ink">· {{ referentiel.Identifiant }}</span>
-    </p>
+    {# L'arbre « Famille pédagogique » EST l'en-tête du tunnel (titres, états,
+       nature, référentiel) ; cible du rafraîchissement hors-bande _statut_oob. #}
+    <div id="arbre-famille">
+    {% if sequence_liee %}
+    {% from "components/tunnel_macros.html" import arbre_famille %}
+    {{ arbre_famille(
+        scenario.Titre,
+        "",
+        sequence_liee.Titre,
+        "/sequence/editeur/" ~ sequence_liee.Id,
+        seances_liees,
+        actif="scenario",
+        sequence_nature=sequence_liee.Nature,
+        scenario_statut=scenario.Statut,
+        sequence_statut=sequence_liee.Statut,
+        referentiel=referentiel_famille,
+        sequence_id=sequence_liee.Id,
+    csrf=csrf_token,
+) }}
     {% endif %}
+    </div>
 </div>
 
 {# Cible HTMX de la navigation d'étape : le stepper ET le contenu de l'étape sont
@@ -44,5 +53,6 @@
    contrôleur renvoie ici le partial _corps.html seul, sans le layout. #}
 <div id="tunnel-corps">
     {% include "app/scenario_editeur/_corps.html" %}
+</div>
 </div>
 {% endblock %}

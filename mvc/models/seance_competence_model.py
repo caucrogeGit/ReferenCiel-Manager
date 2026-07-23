@@ -30,7 +30,9 @@ def get_scenario_id_for_seance(seance_id):
 def get_arbre_liaison(scenario_id):
     """Compétences → critères que le scénario a liés (avec leurs indicateurs).
 
-    C'est le périmètre dans lequel la séance choisit ce qu'elle observe.
+    Le SCÉNARIO est la source CANONIQUE des compétences (ADR-036 révisé) :
+    c'est ce périmètre, et lui seul, que la séquence (savoirs) et la séance
+    (observations) exploitent.
     """
     scenario = get_scenario(scenario_id)
     ref_id = scenario.get("referentiel_id") if scenario else None
@@ -65,23 +67,33 @@ def get_criteres_observes(seance_id):
     return {r["critere_observable_id"] for r in rows}
 
 
-def basculer_competence(seance_id, competence_id, role):
-    """Ajoute/retire une compétence observée (rôle par défaut : travaillée)."""
+def synchroniser_observation(seance_id, competence_id):
+    """L'observation d'une compétence est DÉRIVÉE de ses critères observés :
+    posée dès qu'au moins un critère de la compétence est coché, retirée quand
+    il n'y en a plus (le geste utilisateur unique est le cochage des critères).
+    Le rôle (défaut : travaillée) reste modifiable tant qu'elle est observée."""
+    row = fetch_one(
+        "SELECT COUNT(*) AS n FROM seance_critere sc "
+        "JOIN critere_observable co ON co.Id = sc.critere_observable_id "
+        "WHERE sc.seance_id = ? AND co.competence_id = ?",
+        (seance_id, competence_id),
+    )
+    nb_criteres = int(row["n"]) if row else 0
     existe = fetch_one(
         "SELECT Id FROM seance_competence WHERE seance_id = ? AND competence_id = ?",
         (seance_id, competence_id),
     )
-    if existe:
-        execute(
-            "DELETE FROM seance_competence WHERE seance_id = ? AND competence_id = ?",
-            (seance_id, competence_id),
-        )
-    else:
+    if nb_criteres > 0 and existe is None:
         now = datetime.now(timezone.utc)
         insert(
             "INSERT INTO seance_competence (seance_id, competence_id, Role, CreatedAt, UpdatedAt) "
             "VALUES (?, ?, ?, ?, ?)",
-            (seance_id, competence_id, role if role in ROLES else "travaillee", now, now),
+            (seance_id, competence_id, "travaillee", now, now),
+        )
+    elif nb_criteres == 0 and existe is not None:
+        execute(
+            "DELETE FROM seance_competence WHERE seance_id = ? AND competence_id = ?",
+            (seance_id, competence_id),
         )
 
 

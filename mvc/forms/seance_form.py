@@ -10,6 +10,7 @@ class SeanceForm(Form):
     objectif_operationnel = TextAreaField(label="Objectif opérationnel", required=False)
     consigne_generale = TextAreaField(label="Consigne générale", required=False)
     duree_estimee_minutes = IntegerField(label="Durée estimée (minutes)", required=False, min_value=0)
+    prerequis = TextAreaField(label="Prérequis", required=False)
     modalite_pedagogique = StringField(label="Modalité pédagogique", required=False)
     condition_realisation = TextAreaField(label="Conditions de réalisation", required=False)
     condition_validation = TextAreaField(label="Conditions de validation", required=False)

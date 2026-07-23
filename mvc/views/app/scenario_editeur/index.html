@@ -3,33 +3,63 @@
 {% from "components/ui.html" import flash_messages, obligation, button, statut_scenario %}
 {{ flash_messages(flash) }}
 
+{# Colonne centrée, même largeur que les tunnels (max-w-3xl) — retour porteur. #}
+<div class="max-w-3xl mx-auto">
+
 <h1 class="text-2xl font-bold text-gray-800 mb-6">Scénarios pédagogiques</h1>
 
-<form method="post" action="/conception/scenario/nouveau" class="bg-white shadow rounded p-4 mb-6 max-w-xl">
+<form method="post" action="/conception/scenario/nouveau" class="bg-white shadow rounded p-4 mb-6">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
   <div class="mb-3">
     <label class="block text-sm text-gray-600 mb-1" for="titre">Nouveau scénario {{ obligation(true) }}</label>
     <input id="titre" name="titre" type="text" required placeholder="Titre du scénario"
            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
   </div>
-  {# Référentiel FACULTATIF (ADR-027) : les matières non adossées à un référentiel
-     (enseignements généraux, PSE, chef-d'œuvre…) n'en ont pas. Laisser « Aucun »
-     crée un scénario hors référentiel, finalisable sur le seul contexte. #}
-  <div class="mb-3">
-    <label class="block text-sm text-gray-600 mb-1" for="referentiel_id">Référentiel {{ obligation(false) }}</label>
-    <select id="referentiel_id" name="referentiel_id"
-            class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <option value="">Aucun (matière hors référentiel)</option>
-      {% for r in referentiels %}
-      <option value="{{ r.Id }}">{{ r.Identifiant }}{% if r.formation_intitule %} — {{ r.formation_intitule }}{% endif %}</option>
-      {% endfor %}
-    </select>
-  </div>
-  {{ button("Créer", variant="primary", type="submit") }}
+  {# Référentiel FACULTATIF (ADR-027) : choix EXPLICITE rattaché / hors
+     référentiel (pas de « Aucun » par défaut choisi par inattention). #}
+  {% if referentiels %}
+  <fieldset class="mb-3" data-choix-referentiel>
+    <legend class="block text-sm text-gray-600 mb-1">Référentiel {{ obligation(false) }}</legend>
+    <div class="flex flex-col gap-1.5">
+      <label class="flex items-center gap-2 text-sm text-ink cursor-pointer">
+        <input type="radio" name="mode_referentiel" value="avec" checked class="accent-forge">
+        Scénario rattaché à un référentiel
+      </label>
+      <div class="champ-referentiel pl-6">
+        <select id="referentiel_id" name="referentiel_id" aria-label="Référentiel de rattachement"
+                class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          {% for r in referentiels %}
+          <option value="{{ r.Id }}">{{ r.Identifiant }}{% if r.formation_intitule %} — {{ r.formation_intitule }}{% endif %}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <label class="flex items-center gap-2 text-sm text-ink cursor-pointer">
+        <input type="radio" name="mode_referentiel" value="hors" class="accent-forge">
+        Scénario hors référentiel (enseignement général, PSE, projet…)
+      </label>
+    </div>
+  </fieldset>
+  {% else %}
+  <p class="mb-3 text-sm text-faint">Aucun référentiel importé : le scénario sera hors référentiel.</p>
+  <input type="hidden" name="mode_referentiel" value="hors">
+  {% endif %}
+  {{ button("Créer le scénario", variant="primary", type="submit") }}
+  <p class="mt-3 text-xs text-faint">Une séquence jumelle (même titre) sera créée
+    automatiquement et appariée à ce scénario.</p>
 </form>
 
-<div class="grid gap-3 md:grid-cols-2">
-  {% for s in scenarios %}
+{# Cartes classées par référentiel : une section par référentiel (hors
+   référentiel en fin), l'ordre vient du SQL. #}
+{% for groupe in groupes %}
+{# Repli natif <details>/<summary> : pas de JS (CSP script-src 'self'),
+   chevron pivoté via group-open. Groupes REPLIÉS par défaut. #}
+<details class="group mt-6 border border-forge-border rounded-lg p-4">
+<summary class="flex items-center gap-2 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+  <svg class="size-4 shrink-0 text-[#a15225] transition-transform group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  <h2 class="text-sm font-semibold uppercase tracking-wide text-[#a15225]">{{ groupe.label }}</h2>
+</summary>
+<div class="grid gap-3 md:grid-cols-2 mt-3">
+  {% for s in groupe.cartes %}
   <div class="relative bg-white shadow rounded p-4 hover:ring-2 hover:ring-blue-500 transition">
     {# Lien principal en overlay : toute la carte ouvre l'éditeur (motif
        stretched-link, sans <a> imbriqués). Le bouton PDF passe au-dessus (z-10). #}
@@ -46,55 +76,15 @@
         {%- if s.referentiel_identifiant %}{{ s.referentiel_identifiant }}{% endif -%}
         {%- if s.CoIntervention %} · co-intervention{% endif -%}
       </p>
-      {# Livrable fini : exports réservés aux scénarios finalisés (ou utilisés,
-         contenu figé) — ADR-024 (PDF) + Markdown et JSON. Au-dessus de l'overlay. #}
-      {% if s.Statut in ('finalise', 'utilise') %}
-      <div class="relative z-10 flex items-center gap-1.5">
-        <a href="/conception/scenario/{{ s.Id }}/pdf"
-           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
-                  btn-export transition"
-           title="Télécharger le scénario en PDF" aria-label="Télécharger le PDF de {{ s.Titre }}">
-          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          PDF
-        </a>
-        <a href="/conception/scenario/{{ s.Id }}/md"
-           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
-                  btn-export transition"
-           title="Télécharger le scénario en Markdown" aria-label="Télécharger le Markdown de {{ s.Titre }}">
-          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          MarkDown
-        </a>
-        <a href="/conception/scenario/{{ s.Id }}/json"
-           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
-                  btn-export transition"
-           title="Télécharger le scénario en JSON" aria-label="Télécharger le JSON de {{ s.Titre }}">
-          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          JSON
-        </a>
-      </div>
-      {% endif %}
     </div>
-    {# Suppression, SOUS le référentiel. Modale de confirmation partagée
-       (form[data-confirm], ui-behaviors.js). Interdite pour un scénario utilisé
-       (verrou côté serveur aussi). Au-dessus de l'overlay (z-10). #}
-    {% if s.Statut != 'utilise' %}
-    <div class="mt-3">
-      <form method="post" action="/conception/scenario/{{ s.Id }}/supprimer" class="relative z-10 inline-block"
-            data-confirm="Supprimer définitivement le scénario « {{ s.Titre }} » ? Cette action est irréversible.">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <button type="submit"
-                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
-                       text-white bg-red-600 hover:bg-red-700 transition"
-                title="Supprimer le scénario" aria-label="Supprimer le scénario {{ s.Titre }}">
-          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          Supprimer
-        </button>
-      </form>
-    </div>
-    {% endif %}
+    {# ADR-038 : exports et suppression vivent dans l'étape « Gestion » du
+       tunnel — la carte n'est plus qu'affichage + lien. #}
   </div>
-  {% else %}
-  <p class="text-gray-500">Aucun scénario. Créez-en un ci-dessus.</p>
   {% endfor %}
+</div>
+</details>
+{% else %}
+<p class="text-gray-500">Aucun scénario. Créez-en un ci-dessus.</p>
+{% endfor %}
 </div>
 {% endblock %}

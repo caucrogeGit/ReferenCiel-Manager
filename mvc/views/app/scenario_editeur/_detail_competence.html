@@ -1,18 +1,12 @@
 {# Colonne de détail : critères de la compétence active.
-   L'en-tête rappelle l'intitulé complet — la colonne maître n'affiche que le
-   code (C01, C03…), trop court pour se repérer seul. #}
+   Pas de rappel de la compétence ici : la colonne maître (à gauche) la
+   surligne déjà (retour porteur, aligné sur les savoirs de la séance). #}
 {% from "components/tunnel_macros.html" import checkbox_row %}
 {% from "components/ui.html" import empty_state %}
 
 {%- set comp_active = (arbre.competences | selectattr("Id", "equalto", competence_id) | first) if competence_id else none -%}
 
 {% if comp_active %}
-<div class="bg-cream rounded-[10px] px-3 py-2.5 mb-2">
-    <p class="text-sm font-semibold text-ink">
-        <span class="font-mono text-xs text-faint mr-1">{{ comp_active.Code }}</span>
-        {{ comp_active.Intitule }}
-    </p>
-</div>
 <div class="flex flex-col gap-0.5">
     {% for c in comp_active.criteres %}
     {# Pas de `code` : l'identifiant technique du critère (cr-c04-3) n'a pas à

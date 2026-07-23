@@ -21,6 +21,9 @@ from mvc.models.referentiel_atelier_model import (
     supprimer_indicateur as _supprimer_indicateur,
 )
 from mvc.models.scenario_editeur_model import (
+    competence_a_savoirs_en_sequence,
+    critere_observe_par_seance,
+    nb_criteres_coches_de_competence,
     delier_activite,
     delier_critere,
     elaguer_criteres_hors_activites,
@@ -32,6 +35,7 @@ from mvc.models.scenario_editeur_model import (
     recalculer_statut,
 )
 from mvc.services.scenario_tunnel import parse_id, selection_courante
+from mvc.controllers.scenario_editeur_controller import contexte_famille, contexte_stepper
 
 
 class ScenarioLiaisonController(BaseController):
@@ -68,6 +72,24 @@ class ScenarioLiaisonController(BaseController):
             elaguer_criteres_hors_activites(scenario_id)
         else:
             if cible_id in get_critere_ids(scenario_id):
+                # Suppression sévèrement encadrée (ADR-036 révisé) :
+                # 1) un critère observé par une séance ne se décoche pas ;
+                # 2) le DERNIER critère d'une compétence dont la séquence a des
+                #    savoirs ne se décoche pas (retirer les savoirs d'abord).
+                if critere_observe_par_seance(scenario_id, cible_id):
+                    return ScenarioLiaisonController._refus_decochage(
+                        request, scenario_id,
+                        "Décochage refusé : ce critère est observé par une séance. "
+                        "Retirez d'abord l'observation côté séance.")
+                critere = get_critere(cible_id)
+                comp_id = int(critere["competence_id"]) if critere else None
+                if (comp_id is not None
+                        and nb_criteres_coches_de_competence(scenario_id, comp_id) == 1
+                        and competence_a_savoirs_en_sequence(scenario_id, comp_id)):
+                    return ScenarioLiaisonController._refus_decochage(
+                        request, scenario_id,
+                        "Décochage refusé : dernier critère d'une compétence dont des "
+                        "séances portent des savoirs. Retirez d'abord ces savoirs côté séance.")
                 delier_critere(scenario_id, cible_id)
             else:
                 lier_critere(scenario_id, cible_id)
@@ -109,6 +131,8 @@ class ScenarioLiaisonController(BaseController):
                 competences_valides(int(referentiel_id), activite_ids)
                 if referentiel_id else set()
             ),
+            **contexte_famille(scenario),
+            **contexte_stepper(scenario, "liaison"),
         }
         # Basculer une ACTIVITÉ change la validité des compétences (relation n-n) :
         # on renvoie le bloc Pôles (cible du swap) ET le bloc Compétences rafraîchi
@@ -121,6 +145,40 @@ class ScenarioLiaisonController(BaseController):
             else "app/scenario_editeur/_basculer_critere.html"
         )
         return BaseController.render(template, context=context, request=request)
+
+    @staticmethod
+    def _refus_decochage(request: Request, scenario_id: int, message: str) -> Response:
+        """Réponse au décochage refusé d'un critère (suppression encadrée)."""
+        if not est_htmx(request):
+            return BaseController.redirect_with_flash(
+                request, f"/conception/scenario/{scenario_id}?etape=liaison", message, "error")
+        scenario = cast("dict[str, Any]", get_scenario(scenario_id))
+        referentiel_id = scenario.get("referentiel_id")
+        arbre = get_arbre(int(referentiel_id)) if referentiel_id else None
+        activite_ids = get_activite_ids(scenario_id)
+        pole_id, competence_id = selection_courante(
+            arbre,
+            request.query("pole") or request.form("pole", ""),
+            request.query("competence") or request.form("competence", ""),
+        )
+        context: dict[str, Any] = {
+            "scenario": scenario,
+            "arbre": arbre,
+            "activite_ids": activite_ids,
+            "critere_ids": get_critere_ids(scenario_id),
+            "pole_id": pole_id,
+            "competence_id": competence_id,
+            "base_url": f"/conception/scenario/{scenario_id}",
+            "competences_valides": (
+                competences_valides(int(referentiel_id), activite_ids)
+                if referentiel_id else set()
+            ),
+            **contexte_famille(scenario),
+            **contexte_stepper(scenario, "liaison"),
+            "message_garde": message,
+        }
+        return BaseController.render(
+            "app/scenario_editeur/_basculer_critere.html", context=context, request=request)
 
     @staticmethod
     def basculer_activite(request: Request) -> Response:

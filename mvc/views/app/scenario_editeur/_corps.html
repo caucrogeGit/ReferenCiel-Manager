@@ -2,7 +2,7 @@
    bloc à chaque navigation d'étape (cible HTMX #tunnel-corps), pour que le stepper
    reflète l'étape sélectionnée. Sans JS, il est simplement inclus dans editeur.html. #}
 {% from "components/tunnel_macros.html" import stepper %}
-{{ stepper(steps, etape, base_url) }}
+<div id="tunnel-stepper">{{ stepper(steps, etape, base_url) }}</div>
 
 {# Plus de bouton « Enregistrer le scénario » : le statut (brouillon/finalisé) est
    dérivé des données et recalculé à chaque saisie côté serveur, puis affiché en

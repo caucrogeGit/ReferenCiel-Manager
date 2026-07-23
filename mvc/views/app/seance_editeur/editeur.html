@@ -5,23 +5,44 @@
 
 {% block title %}{{ seance.Titre or "Séance sans titre" }} — {{ app_name }}{% endblock %}
 
+{# Remonter le contenu : « Famille pédagogique » s'aligne sur la marque de la
+   barre latérale (py-4, comme son en-tête). #}
+{% block main_class %}flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-10{% endblock %}
+
 {% block content %}
 {{ flash_messages(flash) }}
 
-<div class="mb-6 relative">
+{# Colonne du tunnel : même largeur que les cartouches de saisie (max-w-3xl),
+   centrée dans l'espace disponible (retour porteur). #}
+<div class="max-w-3xl mx-auto">
+
+<div class="mb-8 relative">
     <span id="seance-sauvegarde"></span>
-    <div class="flex items-center gap-3">
-        <a href="/seance" class="text-sm text-muted hover:text-ink transition">← Séances</a>
+    {# L'arbre « Famille pédagogique » EST l'en-tête du tunnel (titres, états,
+       nature, référentiel) ; cible du rafraîchissement hors-bande. #}
+    <div id="arbre-famille">
+    {% if scenario_lie %}
+    {% from "components/tunnel_macros.html" import arbre_famille %}
+    {{ arbre_famille(
+        scenario_lie.Titre,
+        "/conception/scenario/" ~ scenario_lie.Id,
+        seance.sequence_id_label or "Séquence",
+        "/sequence/editeur/" ~ seance.sequence_id,
+        seances_soeurs,
+        actif_seance_id=seance.Id,
+        sequence_nature=seance.sequence_nature,
+        scenario_statut=scenario_lie.Statut,
+        sequence_statut=seance.sequence_statut,
+        referentiel=referentiel_actuel,
+        sequence_id=seance.sequence_id,
+    csrf=csrf_token,
+) }}
+    {% endif %}
     </div>
-    <h1 class="mt-1 text-[28px] font-extrabold tracking-tight text-ink">
-        {{ seance.Titre or "Séance sans titre" }}
-    </h1>
-    <p class="mt-1 text-sm text-muted">
-        Séance {{ seance.Ordre }}{% if seance.sequence_id_label %} · {{ seance.sequence_id_label }}{% endif %}
-    </p>
 </div>
 
 <div id="tunnel-corps">
     {% include "app/seance_editeur/_corps.html" %}
+</div>
 </div>
 {% endblock %}

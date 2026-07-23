@@ -82,12 +82,22 @@ def test_steps_scenario_complet() -> None:
 
 def test_steps_contexte_incomplet_et_liaison_vide() -> None:
     scenario = _scenario_complet()
-    scenario["Problematique"] = ""  # un seul champ cpro manquant suffit
+    scenario["DescriptionContexte"] = ""  # seul champ obligatoire du contexte
     barre = steps(scenario, activite_ids=[], critere_ids=[2])
     done = {s["key"]: s["done"] for s in barre}
     assert done["contexte"] is False
     assert done["liaison"] is False  # il faut activité ET critère
-    assert done["ressources"] is True  # facultatives : ne bloque jamais
+    assert done["gestion"] is True  # outillage (ADR-038) : ne bloque jamais
+
+
+def test_steps_contexte_complet_avec_seule_la_description() -> None:
+    # Seule la description est obligatoire : les autres champs cpro vides
+    # (problématique, matériels, liens, espaces) ne bloquent plus l'étape.
+    scenario = _scenario_complet()
+    for champ in ("Problematique", "MaterielsLogiciels", "LiensAssocies", "EspacesFormation"):
+        scenario[champ] = ""
+    contexte = next(s for s in steps(scenario, activite_ids=[1], critere_ids=[2]) if s["key"] == "contexte")
+    assert contexte["done"] is True
 
 
 def test_steps_hors_referentiel_liaison_grisee() -> None:

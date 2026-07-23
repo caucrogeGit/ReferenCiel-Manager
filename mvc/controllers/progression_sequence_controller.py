@@ -10,6 +10,7 @@ from mvc.models.progression_sequence_model import (
     get_eleve_choices, get_sequence_choices,
 )
 from mvc.forms.progression_sequence_form import ProgressionSequenceForm
+from mvc.models.sequence_model import recalculer_statut as recalculer_statut_sequence
 from core.security.session import get_flash, get_session_id
 
 
@@ -155,6 +156,8 @@ class ProgressionSequenceController(BaseController):
                 },
                 request=request)
         add_progression_sequence(form.cleaned_data)
+        # L'attribution à un élève fait passer la séquence en « attribue » (ADR-034).
+        recalculer_statut_sequence(form.cleaned_data["sequence_id"])
         return BaseController.redirect_with_flash(request, "/progression_sequence", "Progression de séquence créée.")
 
     @staticmethod
@@ -190,6 +193,7 @@ class ProgressionSequenceController(BaseController):
         id = ProgressionSequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
+        avant = get_progression_sequence_by_id(id)
         form = ProgressionSequenceForm.from_request(request, **_progression_sequence_form_options())
         if not form.is_valid():
             return BaseController.validation_error("app/progression_sequence/form.html",
@@ -200,6 +204,10 @@ class ProgressionSequenceController(BaseController):
                 },
                 request=request)
         update_progression_sequence(id, form.cleaned_data)
+        # Un changement de séquence touche les DEUX séquences (ADR-034).
+        if avant is not None:
+            recalculer_statut_sequence(avant["sequence_id"])
+        recalculer_statut_sequence(form.cleaned_data["sequence_id"])
         return BaseController.redirect_with_flash(
             request, f"/progression_sequence/show/{id}", "Progression de séquence mise à jour.")
 
@@ -208,7 +216,11 @@ class ProgressionSequenceController(BaseController):
         id = ProgressionSequenceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
+        progression = get_progression_sequence_by_id(id)
         delete_progression_sequence(id)
+        # La dernière progression supprimée fait quitter « attribue » (ADR-034).
+        if progression is not None:
+            recalculer_statut_sequence(progression["sequence_id"])
         if _is_hx_request(request):
             context = ProgressionSequenceController._list_context(request)
             return BaseController.render("app/progression_sequence/_results.html", context=context, request=request)
@@ -229,7 +241,12 @@ class ProgressionSequenceController(BaseController):
         ids = ProgressionSequenceController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/progression_sequence", "Aucun élément sélectionné.")
+        sequences_touchees = {
+            p["sequence_id"] for p in (get_progression_sequence_by_id(i) for i in ids) if p is not None
+        }
         bulk_delete_progression_sequences(ids)
+        for sequence_id in sequences_touchees:
+            recalculer_statut_sequence(sequence_id)
         count = len(ids)
         return BaseController.redirect_with_flash(
             request, "/progression_sequence",

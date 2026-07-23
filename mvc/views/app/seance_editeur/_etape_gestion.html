@@ -1,0 +1,37 @@
+{# Étape Gestion (ADR-038) — opérations sur l'OBJET séance. Pour l'instant :
+   suppression (les exports de séance n'existent pas encore ; la séance est
+   couverte par les exports de sa séquence). #}
+{% from "components/tunnel_macros.html" import tunnel_pager %}
+
+<section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
+    <h3 class="text-sm font-semibold text-ink mb-3">Suppression</h3>
+    {# Prévention (RESTRICT au contrat) : les progressions d'élèves bloquent.
+       Bouton neutralisé + ordre en infobulle, garde serveur en plus. #}
+    {% if motif_suppression_seance %}
+    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+                 text-gray-400 bg-gray-100 cursor-not-allowed"
+          title="Cette séance porte {{ motif_suppression_seance }}. Ordre de suppression : d'abord les progressions des élèves, puis la séance."
+          aria-disabled="true">
+        <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        Supprimer la séance
+    </span>
+    <p class="mt-2 text-xs text-faint">Cette séance porte {{ motif_suppression_seance }} :
+        supprimez-les d'abord, puis la séance.</p>
+    {% else %}
+    <form method="post" action="/seance/destroy/{{ seance.Id }}" class="inline-block"
+          data-confirm="Supprimer définitivement la séance « {{ seance.Titre }} » ? Cette action est irréversible.">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+                       text-white bg-red-600 hover:bg-red-700 transition"
+                title="Supprimer la séance">
+            <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Supprimer la séance
+        </button>
+    </form>
+    <p class="mt-2 text-xs text-faint">La suppression retire aussi ses savoirs, compétences
+        observées et éléments de déroulé (la dernière séance fait redescendre la séquence).</p>
+    {% endif %}
+</section>
+
+{{ tunnel_pager(prev, next, position, total, base_url) }}

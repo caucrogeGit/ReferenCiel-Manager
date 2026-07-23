@@ -1,7 +1,9 @@
 {# Corps du tunnel séance : stepper + contenu de l'étape courante. Régénéré d'un
    bloc à chaque navigation (cible HTMX #tunnel-corps). #}
 {% from "components/tunnel_macros.html" import stepper %}
-{{ stepper(steps, etape, base_url) }}
+{# Conteneur identifié : cible du rafraîchissement hors-bande après l'auto-save
+   de la fiche (la complétion des étapes suit la saisie sans navigation). #}
+<div id="tunnel-stepper">{{ stepper(steps, etape, base_url) }}</div>
 
 <div id="tunnel-etape">
     {% include "app/seance_editeur/_etape_" ~ etape ~ ".html" %}

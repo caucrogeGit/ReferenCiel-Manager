@@ -10,7 +10,7 @@ référentiel (ADR-018).
 """
 import html
 from collections.abc import Callable
-from typing import Any
+from typing import Any, cast
 
 from core.http.request import Request
 from core.http.response import Response
@@ -21,9 +21,11 @@ from core.security.session import get_flash, get_session_id
 from forge_mvc_files import UploadError, delete_upload, save_upload
 
 from mvc.helpers.htmx import est_htmx
+from mvc.helpers.groupes import grouper, libelle_referentiel
 from mvc.models.referentiel_atelier_model import (
     competences_valides,
     get_arbre,
+    get_referentiel,
     list_referentiels,
 )
 from mvc.models.scenario_editeur_model import (
@@ -43,11 +45,14 @@ from mvc.models.scenario_editeur_model import (
     list_professeurs,
     recalculer_statut,
     list_ressources,
+    get_sequence_appairee,
     list_scenarios,
     paire_est_finalisee,
     supprimer_ressource,
     supprimer_scenario,
 )
+from mvc.models.seance_model import feuilles_famille
+from mvc.models.sequence_model import recalculer_statut as recalculer_statut_sequence
 from mvc.services.scenario_pdf import construire_pdf
 from mvc.services.scenario_export import construire_json, construire_markdown
 from mvc.services.scenario_tunnel import (
@@ -62,14 +67,45 @@ from mvc.services.scenario_tunnel import (
 )
 
 
+def contexte_stepper(scenario: "dict[str, Any]", etape: str) -> "dict[str, Any]":
+    """Stepper recalculé pour les réponses hors-bande : la complétion des
+    sections suit chaque écriture, sur toutes les sections du tunnel."""
+    scenario_id = int(scenario["Id"])
+    return {
+        "steps": steps(scenario, get_activite_ids(scenario_id), get_critere_ids(scenario_id)),
+        "etape": etape,
+        "base_url": f"/conception/scenario/{scenario_id}",
+        "stepper_oob": True,
+    }
+
+
+def contexte_famille(scenario: "dict[str, Any]") -> "dict[str, Any]":
+    """Contexte de l'arbre « Famille pédagogique » (en-tête des tunnels et
+    rafraîchissement hors-bande) : paire, séances et référentiel."""
+    scenario_id = int(scenario["Id"])
+    ref_id = scenario.get("referentiel_id")
+    sequence_liee = get_sequence_appairee(scenario_id)
+    return {
+        "scenario": scenario,
+        "sequence_liee": sequence_liee,
+        # Feuilles décorées d'un Finalise dérivé (coche de l'arbre, ADR-034/037).
+        "seances_liees": (
+            feuilles_famille(int(sequence_liee["Id"]), sequence_liee.get("Nature"))
+            if sequence_liee is not None else []
+        ),
+        "referentiel_famille": get_referentiel(int(ref_id)) if ref_id else None,
+    }
+
+
 class ScenarioEditeurController(BaseController):
 
     @staticmethod
     def index(request: Request) -> Response:
+        # Cartes classées par référentiel (sections), hors référentiel en fin.
         return BaseController.render(
             "app/scenario_editeur/index.html",
             context={
-                "scenarios": list_scenarios(),
+                "groupes": grouper(list_scenarios(), libelle_referentiel, "Hors référentiel"),
                 "referentiels": list_referentiels(),
                 "flash": get_flash(get_session_id(request)),
             },
@@ -83,6 +119,10 @@ class ScenarioEditeurController(BaseController):
         # laissé vide = scénario hors référentiel (finalisable sur le seul contexte).
         titre = request.form("titre", "").strip()
         referentiel_id = parse_id(request.form("referentiel_id", ""))
+        # Choix explicite rattaché / hors référentiel : « hors » ignore le
+        # sélecteur (qui reste soumis, simplement masqué par le CSS).
+        if request.form("mode_referentiel", "") == "hors":
+            referentiel_id = None
         refs_valides = {int(r["Id"]) for r in list_referentiels()}
         if not titre or (referentiel_id is not None and referentiel_id not in refs_valides):
             return BaseController.redirect(
@@ -135,6 +175,12 @@ class ScenarioEditeurController(BaseController):
         scenario = get_scenario(scenario_id)
         if scenario is None:
             return BaseController.not_found()
+        # Auto-réparation du statut de la séquence appariée (dérivé persisté) :
+        # l'arbre « Famille pédagogique » l'affiche et en dérive la ligne
+        # « Ajouter une séance » (garde ADR-034).
+        sequence_appairee = get_sequence_appairee(scenario_id)
+        if sequence_appairee is not None:
+            recalculer_statut_sequence(int(sequence_appairee["Id"]))
 
         referentiel_id = scenario.get("referentiel_id")
         arbre = get_arbre(int(referentiel_id)) if referentiel_id else None
@@ -173,6 +219,9 @@ class ScenarioEditeurController(BaseController):
             # Verrou du référentiel : plus de rattachement une fois la paire
             # (scénario ou séquence) finalisée.
             "referentiel_verrouille": paire_est_finalisee(scenario_id),
+            # Arbre de navigation (ADR-029) : séquence appairée (tronc) et ses
+            # séances (feuilles), affichés sous le corps du tunnel.
+            **contexte_famille(scenario),
             "arbre": arbre,
             "activite_ids": activite_ids,
             "critere_ids": critere_ids,
@@ -281,8 +330,11 @@ class ScenarioEditeurController(BaseController):
         # formulaire) — donc un message d'unicité précédent disparaît. Sans JS, le
         # <noscript> soumet le formulaire (redirection ci-dessous).
         if htmx:
+            frais = cast("dict[str, Any]", get_scenario(scenario_id))
             return BaseController.render(
-                "app/scenario_editeur/_sauvegarde_oob.html", context={}, request=request
+                "app/scenario_editeur/_feedback_ecriture.html",
+                context={**contexte_famille(frais), **contexte_stepper(frais, "titre")},
+                request=request,
             )
         return BaseController.redirect(
             f"/conception/scenario/{scenario_id}", request=request, flash="Section Titre enregistrée."
@@ -310,9 +362,10 @@ class ScenarioEditeurController(BaseController):
         # se met à jour, rien d'autre n'est touché. Sans JS, le <noscript> soumet
         # le formulaire et on retombe sur la redirection ci-dessous.
         if est_htmx(request):
+            frais = cast("dict[str, Any]", get_scenario(scenario_id))
             return BaseController.render(
                 "app/scenario_editeur/_feedback_ecriture.html",
-                context={"scenario": get_scenario(scenario_id)},
+                context={**contexte_famille(frais), **contexte_stepper(frais, "contexte")},
                 request=request,
             )
         return BaseController.redirect(

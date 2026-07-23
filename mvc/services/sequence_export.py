@@ -24,6 +24,7 @@ _CADRE: tuple[tuple[str, str], ...] = (
 # Champs d'une séance affichés dans l'export (colonne -> libellé), dans l'ordre.
 _SEANCE: tuple[tuple[str, str], ...] = (
     ("Theme", "Thème"),
+    ("Prerequis", "Prérequis"),
     ("ObjectifOperationnel", "Objectif opérationnel"),
     ("ConsigneGenerale", "Consigne générale"),
     ("ModalitePedagogique", "Modalité pédagogique"),
@@ -127,8 +128,9 @@ def rendre_markdown(data: dict[str, Any]) -> str:
                 suffixe = f" — {', '.join(details)}" if details else ""
                 out.append(f"- {k['libelle']}{suffixe}")
             out.append("")
-    elif e["savoirs_libres"]:
-        out += ["## Savoirs associés", ""]
+    if e["savoirs_libres"]:
+        titre_libres = "## Savoirs complémentaires (hors référentiel)" if e["connaissances"] else "## Savoirs associés"
+        out += [titre_libres, ""]
         for s in e["savoirs_libres"]:
             out.append(f"- {s}")
         out.append("")

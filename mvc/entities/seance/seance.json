@@ -56,6 +56,13 @@
       "unique": false
     },
     {
+      "name": "prerequis",
+      "type": "text",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
       "name": "modalite_pedagogique",
       "type": "string",
       "max_length": 100,

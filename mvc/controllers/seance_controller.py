@@ -5,11 +5,14 @@ from core.http.response import Response
 from core.mvc.controller import BaseController
 from core.mvc.view.pagination import Pagination
 from mvc.models.seance_model import (
-    get_seance_by_id, add_seance, update_seance, delete_seance, bulk_delete_seances,
+    get_seances, get_seance_by_id, add_seance, update_seance, delete_seance, bulk_delete_seances,
     count_seances, find_seances_paginated, find_seances_for_export,
-    get_sequence_choices,
+    get_sequence_choices, get_sequence_choices_liables,
+    motif_blocage_suppression,
 )
 from mvc.forms.seance_form import SeanceForm
+from mvc.helpers.groupes import grouper
+from mvc.models.sequence_model import recalculer_statut as recalculer_statut_sequence
 from core.security.session import get_flash, get_session_id
 
 
@@ -23,6 +26,7 @@ def _form_data_from_seance(record: dict) -> dict:
         "objectif_operationnel": record.get("ObjectifOperationnel"),
         "consigne_generale": record.get("ConsigneGenerale"),
         "duree_estimee_minutes": record.get("DureeEstimeeMinutes"),
+        "prerequis": record.get("Prerequis"),
         "modalite_pedagogique": record.get("ModalitePedagogique"),
         "condition_realisation": record.get("ConditionRealisation"),
         "condition_validation": record.get("ConditionValidation"),
@@ -125,9 +129,20 @@ class SeanceController(BaseController):
 
     @staticmethod
     def index(request: Request) -> Response:
-        context = SeanceController._list_context(request)
-        template = "app/seance/_results.html" if _is_hx_request(request) else "app/seance/index.html"
-        return BaseController.render(template, context=context, request=request)
+        # Grille de cartes (même design que les listes de séquences et de
+        # scénarios) : toutes les séances, création inline en tête. Le
+        # tri/filtre/CSV restent servis par leurs routes dédiées, mais ne
+        # surchargent plus cette page.
+        context = {
+            # Cartes classées par séquence de rattachement (sections).
+            "groupes": grouper(
+                get_seances(), lambda s: s.get("sequence_id_label"), "Sans séquence"
+            ),
+            # Une séance se lie dès que la séquence est FINALISÉE (ADR-034).
+            "sequences": get_sequence_choices_liables(),
+            "flash": get_flash(get_session_id(request)),
+        }
+        return BaseController.render("app/seance/index.html", context=context, request=request)
 
     @staticmethod
     def new(request: Request) -> Response:
@@ -152,6 +167,8 @@ class SeanceController(BaseController):
                 },
                 request=request)
         add_seance(form.cleaned_data)
+        # Le nombre de séances conditionne le statut de la séquence (ADR-034).
+        recalculer_statut_sequence(form.cleaned_data["sequence_id"])
         return BaseController.redirect_with_flash(request, "/seance", "Séance créée.")
 
     @staticmethod
@@ -187,6 +204,7 @@ class SeanceController(BaseController):
         id = SeanceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
+        avant = get_seance_by_id(id)
         form = SeanceForm.from_request(request, **_seance_form_options())
         if not form.is_valid():
             return BaseController.validation_error("app/seance/form.html",
@@ -197,6 +215,10 @@ class SeanceController(BaseController):
                 },
                 request=request)
         update_seance(id, form.cleaned_data)
+        # Un changement de séquence de rattachement touche les DEUX séquences (ADR-034).
+        if avant is not None:
+            recalculer_statut_sequence(avant["sequence_id"])
+        recalculer_statut_sequence(form.cleaned_data["sequence_id"])
         return BaseController.redirect_with_flash(
             request, f"/seance/show/{id}", "Séance mise à jour.")
 
@@ -205,11 +227,28 @@ class SeanceController(BaseController):
         id = SeanceController._parse_id(request.route("id"))
         if id is None:
             return BaseController.not_found()
+        seance = get_seance_by_id(id)
+        # Garde avant suppression : le contrat protège en RESTRICT les données
+        # liées (progressions d'élèves…) — message clair plutôt qu'IntegrityError.
+        motif = motif_blocage_suppression(id)
+        if motif is not None:
+            # Retour au tunnel (étape Gestion, ADR-038) : c'est de là qu'on
+            # supprime désormais, le menu Séances ayant disparu.
+            return BaseController.redirect_with_flash(
+                request, f"/seance/editeur/{id}?etape=gestion",
+                f"Suppression impossible : cette séance porte {motif}. "
+                "Ordre de suppression : d'abord les progressions des élèves, puis la séance.",
+                "error")
         delete_seance(id)
+        # La dernière séance supprimée fait redescendre la séquence (ADR-034).
+        if seance is not None:
+            recalculer_statut_sequence(seance["sequence_id"])
         if _is_hx_request(request):
             context = SeanceController._list_context(request)
             return BaseController.render("app/seance/_results.html", context=context, request=request)
-        return BaseController.redirect_with_flash(request, "/seance", "Séance supprimée.")
+        # Retour au PARENT : le tunnel de la séquence, arbre famille à jour.
+        parent = f"/sequence/editeur/{seance['sequence_id']}" if seance is not None else "/sequence"
+        return BaseController.redirect_with_flash(request, parent, "Séance supprimée.")
 
 
     @staticmethod
@@ -226,11 +265,20 @@ class SeanceController(BaseController):
         ids = SeanceController._parse_bulk_ids(request)
         if not ids:
             return BaseController.redirect_with_flash(request, "/seance", "Aucun élément sélectionné.")
-        bulk_delete_seances(ids)
-        count = len(ids)
-        return BaseController.redirect_with_flash(
-            request, "/seance",
-            f"{count} élément(s) supprimé(s).")
+        # Garde par élément : on ne supprime que les séances libres de données
+        # liées (RESTRICT au contrat) et on rend compte de ce qui est conservé.
+        supprimables = [i for i in ids if motif_blocage_suppression(i) is None]
+        bloquees = len(ids) - len(supprimables)
+        sequences_touchees = {
+            s["sequence_id"] for s in (get_seance_by_id(i) for i in supprimables) if s is not None
+        }
+        bulk_delete_seances(supprimables)
+        for sequence_id in sequences_touchees:
+            recalculer_statut_sequence(sequence_id)
+        message = f"{len(supprimables)} élément(s) supprimé(s)."
+        if bloquees:
+            message += f" {bloquees} conservé(s) : progressions d'élèves ou contenus liés."
+        return BaseController.redirect_with_flash(request, "/seance", message)
 
 
     @staticmethod

@@ -3,8 +3,12 @@
    compétence active), avec case « retenue », niveau cible et statut.
    Tout passe par HTMX (hx-post/hx-get), sans JS inline (CSP script-src 'self').
    Chaque interaction re-rend ce fragment dans #connaissances-sequence. #}
+{% from "components/ui.html" import empty_state %}
 {%- set base = "/sequence/" ~ sequence_id -%}
 <h2 class="text-sm font-semibold text-gray-700 mb-3">Savoirs associés</h2>
+{% if message_garde %}
+<p class="mb-3 px-3 py-2 rounded-[10px] bg-red-50 border border-red-200 text-sm text-red-700">{{ message_garde }}</p>
+{% endif %}
 
 {% if ref_absent %}
 {# Séquence hors référentiel (ADR-030) : le professeur saisit ses savoirs
@@ -70,104 +74,39 @@
     </form>
 </div>
 {% endif %}
-{% elif not competences %}
-<p class="text-sm text-faint">Ce référentiel ne contient aucune compétence.</p>
 {% else %}
-{%- set comp_active = (competences | selectattr("Id", "equalto", competence_id) | first) -%}
-<div class="grid md:grid-cols-2 gap-4">
-
-    {# ── Colonne maître : compétences ── #}
-    <div class="flex flex-col gap-1">
-        {% for c in competences %}
-        {%- set nb = (c.connaissances | selectattr("Id", "in", liens) | list | length) -%}
-        <a href="{{ base }}/connaissances?competence={{ c.Id }}"
-           hx-get="{{ base }}/connaissances?competence={{ c.Id }}"
-           hx-target="#connaissances-sequence" hx-swap="innerHTML"
-           class="flex items-center gap-2 px-3 py-2 rounded-[10px] text-sm transition
-                  {% if c.Id == competence_id %}bg-forge-soft text-ink font-semibold{% else %}text-subtle hover:bg-cream{% endif %}">
-            <span class="font-mono text-xs text-faint">{{ c.Code }}</span>
-            <span class="flex-1 min-w-0 truncate">{{ c.Intitule }}</span>
-            {% if nb %}<span class="shrink-0 text-xs rounded-full bg-forge-border text-forge-dark px-1.5 py-0.5">{{ nb }}</span>{% endif %}
-        </a>
-        {% endfor %}
+{# ADR-037 : synthèse DÉRIVÉE des savoirs portés par les séances, groupée par
+   compétence — la saisie vit dans le tunnel de chaque séance. #}
+{% if synthese %}
+{%- set ns = namespace(courante=none) -%}
+<div class="flex flex-col gap-1.5">
+    {% for ligne in synthese %}
+    {% if ns.courante != ligne.competence_code %}
+    {%- set ns.courante = ligne.competence_code -%}
+    <p class="mt-2 first:mt-0 text-sm font-semibold text-ink">
+        <span class="font-mono text-xs text-faint">{{ ligne.competence_code }}</span>
+        {{ ligne.competence_intitule }}</p>
+    {% endif %}
+    <div class="ml-4 pl-3 border-l border-forge-border flex items-center gap-2 text-sm text-ink">
+        <span class="min-w-0 flex-1">{{ ligne.savoir }}</span>
+        <span class="shrink-0 text-xs text-muted">Séance {{ ligne.seance_ordre }}
+            {%- if ligne.Statut %} · {{ statut_labels.get(ligne.Statut, ligne.Statut) }}{% endif %}
+            {%- if ligne.NiveauCible is not none %} · cible {{ ligne.NiveauCible }}{% endif %}</span>
     </div>
-
-    {# ── Colonne détail : connaissances de la compétence active ──
-       Pas de rappel de la compétence ici : la colonne maître (à gauche) la
-       surligne déjà. #}
-    <div>
-        {% if comp_active %}
-        {% if comp_active.connaissances %}
-        <div class="flex flex-col gap-1.5">
-            {% for k in comp_active.connaissances %}
-            {%- set lien = liens.get(k.Id) -%}
-            <div class="rounded-[10px] border border-line px-3 py-2 {% if lien %}bg-surface{% else %}bg-white{% endif %}">
-                <form method="post" action="{{ base }}/connaissance/basculer"
-                      hx-post="{{ base }}/connaissance/basculer" hx-trigger="change"
-                      hx-target="#connaissances-sequence" hx-swap="innerHTML"
-                      class="flex items-start gap-2.5">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                    <input type="hidden" name="competence" value="{{ competence_id }}">
-                    <input type="hidden" name="connaissance" value="{{ k.Id }}">
-                    <input type="checkbox" name="retenue" value="1" {% if lien %}checked{% endif %}
-                           class="mt-0.5 w-4 h-4 accent-forge shrink-0">
-                    <span class="flex-1 min-w-0 text-sm text-ink">{{ k.Libelle }}</span>
-                    {% if k.NiveauTaxonomique is not none %}
-                    <span class="shrink-0 grid place-items-center size-5 rounded-full bg-forge-soft text-forge-dark text-[11px] font-semibold"
-                          title="Niveau officiel {{ k.NiveauTaxonomique }} — {{ niveaux_taxonomie.get(k.NiveauTaxonomique, '') }}">{{ k.NiveauTaxonomique }}</span>
-                    {% endif %}
-                    <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
-                </form>
-                {% if lien %}
-                <div class="flex flex-wrap items-center gap-3 mt-2 pl-6">
-                    <form method="post" action="{{ base }}/connaissance/niveau"
-                          hx-post="{{ base }}/connaissance/niveau" hx-trigger="change"
-                          hx-target="#connaissances-sequence" hx-swap="innerHTML"
-                          class="flex items-center gap-1.5">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <input type="hidden" name="competence" value="{{ competence_id }}">
-                        <input type="hidden" name="connaissance" value="{{ k.Id }}">
-                        <label class="text-xs text-muted">Niveau cible</label>
-                        <select name="niveau" class="text-xs py-1 px-2 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
-                            {% for val, txt in niveaux %}
-                            <option value="{{ val }}"{% if val|string == (lien.NiveauCible|string if lien.NiveauCible is not none else "") %} selected{% endif %}>{{ txt }}</option>
-                            {% endfor %}
-                        </select>
-                        <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
-                    </form>
-                    <form method="post" action="{{ base }}/connaissance/statut"
-                          hx-post="{{ base }}/connaissance/statut" hx-trigger="change"
-                          hx-target="#connaissances-sequence" hx-swap="innerHTML"
-                          class="flex items-center gap-1.5">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <input type="hidden" name="competence" value="{{ competence_id }}">
-                        <input type="hidden" name="connaissance" value="{{ k.Id }}">
-                        <label class="text-xs text-muted">Statut</label>
-                        <select name="statut" class="text-xs py-1 px-2 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
-                            {% for val, txt in statuts %}
-                            <option value="{{ val }}"{% if val == (lien.Statut or "") %} selected{% endif %}>{{ txt }}</option>
-                            {% endfor %}
-                        </select>
-                        <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
-                    </form>
-                </div>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <p class="text-sm text-faint">Aucune connaissance pour cette compétence dans le référentiel.</p>
-        {% endif %}
-        {% else %}
-        <p class="text-sm text-faint">Sélectionnez une compétence.</p>
-        {% endif %}
-    </div>
+    {% endfor %}
 </div>
-<p class="mt-4 text-xs text-faint">
-    La pastille indique le <strong>niveau taxonomique officiel</strong> du référentiel :
-    <span class="text-forge-dark font-semibold">1</span> Information ·
-    <span class="text-forge-dark font-semibold">2</span> Expression ·
-    <span class="text-forge-dark font-semibold">3</span> Maîtrise d'outils ·
-    <span class="text-forge-dark font-semibold">4</span> Maîtrise méthodologique.
+{% else %}
+<p class="text-sm text-muted">
+    Aucun savoir associé pour le moment : les savoirs se saisissent dans le
+    tunnel de chaque séance (étape « Savoirs associés »).
 </p>
+{% endif %}
+{% endif %}
+
+{# Stepper recalculé, renvoyé HORS-BANDE — UNIQUEMENT quand ce partial est la
+   réponse HTMX autonome (drapeau stepper_oob posé par _rendre). Jamais quand il
+   est inclus dans la page du tunnel ou la fiche : il s'afficherait en double. #}
+{% if stepper_oob %}
+{% from "components/tunnel_macros.html" import stepper %}
+<div id="tunnel-stepper" hx-swap-oob="true">{{ stepper(steps, etape, base_url) }}</div>
 {% endif %}

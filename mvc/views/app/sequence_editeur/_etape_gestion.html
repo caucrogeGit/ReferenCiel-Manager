@@ -1,0 +1,67 @@
+{# Étape Gestion (ADR-038) — opérations sur l'OBJET séquence : attributions,
+   exports, suppression. Les cartes de la liste ne portent plus ces commandes. #}
+{% from "components/tunnel_macros.html" import tunnel_pager %}
+
+<section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
+    {# ── Attributions (ADR-035) ─────────────────────────────────────────── #}
+    <h3 class="text-sm font-semibold text-ink mb-3">Attributions</h3>
+    {% if sequence.Statut in ('publie', 'attribue') %}
+    <a href="/sequence/{{ sequence.Id }}/attributions"
+       class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+              text-forge bg-forge-soft border border-forge-border hover:bg-forge-border transition"
+       title="Attribuer la séquence à une classe ou à des élèves">
+        Attribuer la séquence
+    </a>
+    {% else %}
+    <p class="text-sm text-faint">Disponibles quand la séquence est publiée
+        (au moins une séance ouvrante).</p>
+    {% endif %}
+
+    {# ── Exports ────────────────────────────────────────────────────────── #}
+    <div class="border-t border-line mt-6 pt-4">
+        <h3 class="text-sm font-semibold text-ink mb-3">Exports</h3>
+        <div class="flex items-center gap-1.5">
+            {% for fmt, libelle in [("pdf", "PDF"), ("md", "MarkDown"), ("json", "JSON")] %}
+            <a href="/sequence/{{ sequence.Id }}/{{ fmt }}"
+               class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold btn-export transition"
+               title="Télécharger la séquence en {{ libelle }}">
+                <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                {{ libelle }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {# ── Suppression ────────────────────────────────────────────────────── #}
+    <div class="border-t border-line mt-6 pt-4">
+        <h3 class="text-sm font-semibold text-ink mb-3">Suppression</h3>
+        {# Prévention (RESTRICT au contrat) : publiée = séances liées, attribuée =
+           progressions d'élèves — bouton neutralisé + ordre en infobulle,
+           garde serveur en plus. #}
+        {% if sequence.Statut in ('publie', 'attribue') %}
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+                     text-gray-400 bg-gray-100 cursor-not-allowed"
+              title="{% if sequence.Statut == 'attribue' %}Séquence attribuée : supprimez d'abord les progressions des élèves, puis ses séances, puis la séquence.{% else %}Cette séquence a des séances liées : supprimez-les d'abord (étape Gestion de chaque séance), puis la séquence.{% endif %}"
+              aria-disabled="true">
+            <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Supprimer la séquence
+        </span>
+        <p class="mt-2 text-xs text-faint">Ordre de suppression : les progressions des élèves,
+            puis les séances, puis la séquence.</p>
+        {% else %}
+        <form method="post" action="/sequence/destroy/{{ sequence.Id }}" class="inline-block"
+              data-confirm="Supprimer définitivement la séquence « {{ sequence.Titre }} » ? Cette action est irréversible.">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit"
+                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+                           text-white bg-red-600 hover:bg-red-700 transition"
+                    title="Supprimer la séquence">
+                <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                Supprimer la séquence
+            </button>
+        </form>
+        {% endif %}
+    </div>
+</section>
+
+{{ tunnel_pager(prev, next, position, total, base_url) }}

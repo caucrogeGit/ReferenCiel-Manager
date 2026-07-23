@@ -1,0 +1,159 @@
+{# Savoirs associés d'une SÉANCE (ADR-037) — contenu interne de
+   #savoirs-seance. Maître (compétences retenues au scénario) → détail
+   (connaissances), avec case « retenue », niveau cible et statut.
+   HTMX sans JS inline (CSP) ; chaque interaction re-rend ce fragment. #}
+{% from "components/ui.html" import empty_state %}
+{%- set base = "/seance/" ~ seance_id -%}
+<h2 class="text-sm font-semibold text-gray-700 mb-3">Savoirs associés</h2>
+{% if message_garde %}
+<p class="mb-3 px-3 py-2 rounded-[10px] bg-red-50 border border-red-200 text-sm text-red-700">{{ message_garde }}</p>
+{% endif %}
+
+{% if ref_absent %}
+{# Séquence hors référentiel : les savoirs libres se saisissent au niveau de la
+   SÉQUENCE (ADR-030/037) — rien à saisir ici. #}
+<p class="text-sm text-muted">
+    La séquence de cette séance n'est pas adossée à un référentiel : ses savoirs
+    libres se saisissent dans le tunnel de la séquence.
+</p>
+{% elif not competences %}
+{# Seules les compétences RETENUES AU SCÉNARIO sont présentées (ADR-036/037). #}
+<p class="text-sm text-faint">
+    Aucune compétence retenue au scénario appairé pour le moment. Faites la
+    liaison côté scénario d'abord (cochez ses critères) : les compétences
+    validées apparaîtront ici.
+</p>
+{% else %}
+{%- set comp_active = (competences | selectattr("Id", "equalto", competence_id) | first) -%}
+<div class="grid md:grid-cols-2 gap-4">
+
+    {# ── Colonne maître : compétences ── #}
+    <div class="flex flex-col gap-1">
+        {% for c in competences %}
+        {%- set nb = (c.connaissances | selectattr("Id", "in", liens) | list | length) -%}
+        {%- set active = c.Id in competences_actives -%}
+        {# Le SCÉNARIO est la source canonique (ADR-036 révisé) : une compétence
+           non retenue au scénario est INACTIVE ici (grisée, non cliquable —
+           sauf nettoyage de savoirs hérités). Compétences actives : même
+           fonctionnement visuel que la liaison du scénario — bordure gauche
+           orange toujours, fond orange pastel dès que des savoirs sont saisis,
+           compteur toujours affiché. #}
+        <a href="{{ base }}/savoirs?competence={{ c.Id }}"
+           hx-get="{{ base }}/savoirs?competence={{ c.Id }}"
+           hx-target="#savoirs-seance" hx-swap="innerHTML"
+           class="flex items-center gap-2 px-3 py-2 rounded-[10px] text-sm transition
+                  {% if active %}border-l-2 border-forge {% endif %}{% if nb %}bg-forge-soft {% endif %}
+                  {% if c.Id == competence_id %}font-semibold text-ink
+                  {% else %}text-muted hover:bg-cream hover:text-ink{% endif %}">
+            <span class="font-mono text-xs text-faint">{{ c.Code }}</span>
+            <span class="flex-1 min-w-0 truncate">{{ c.Intitule }}</span>
+            {% if not active %}<span class="shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200" title="Compétence plus retenue au scénario : savoirs à nettoyer">hors scénario</span>{% endif %}
+            {% if active %}<span class="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full {% if nb %}bg-forge text-white{% else %}bg-cream text-faint{% endif %}">{{ nb }}</span>
+            {% elif nb %}<span class="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full bg-cream text-subtle border border-line">{{ nb }}</span>{% endif %}
+        </a>
+        {% endfor %}
+    </div>
+
+    {# ── Colonne détail : connaissances de la compétence active ──
+       Pas de rappel de la compétence ici : la colonne maître (à gauche) la
+       surligne déjà. #}
+    <div>
+        {% if comp_active %}
+        {% if comp_active.connaissances %}
+        <div class="flex flex-col gap-1.5">
+            {% for k in comp_active.connaissances %}
+            {%- set lien = liens.get(k.Id) -%}
+            <div class="rounded-[10px] border border-line px-3 py-2 {% if lien %}bg-surface{% else %}bg-white{% endif %}">
+                <form method="post" action="{{ base }}/savoir/basculer"
+                      hx-post="{{ base }}/savoir/basculer" hx-trigger="change"
+                      hx-target="#savoirs-seance" hx-swap="innerHTML"
+                      class="flex items-start gap-2.5">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <input type="hidden" name="competence" value="{{ competence_id }}">
+                    <input type="hidden" name="connaissance" value="{{ k.Id }}">
+                    <input type="checkbox" name="retenue" value="1" {% if lien %}checked{% endif %}
+                           class="mt-0.5 w-4 h-4 accent-forge shrink-0">
+                    <span class="flex-1 min-w-0 text-sm text-ink">{{ k.Libelle }}</span>
+                    {% if k.NiveauTaxonomique is not none %}
+                    <span class="shrink-0 grid place-items-center size-5 rounded-full bg-blue-100 text-blue-700 text-[11px] font-semibold"
+                          title="Niveau officiel {{ k.NiveauTaxonomique }} — {{ niveaux_taxonomie.get(k.NiveauTaxonomique, '') }}">{{ k.NiveauTaxonomique }}</span>
+                    {% endif %}
+                    <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
+                </form>
+                {% if lien %}
+                <div class="flex flex-wrap items-center gap-3 mt-2 pl-6">
+                    <form method="post" action="{{ base }}/savoir/niveau"
+                          hx-post="{{ base }}/savoir/niveau" hx-trigger="change"
+                          hx-target="#savoirs-seance" hx-swap="innerHTML"
+                          class="flex items-center gap-1.5">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="competence" value="{{ competence_id }}">
+                        <input type="hidden" name="connaissance" value="{{ k.Id }}">
+                        <label class="text-xs text-muted">Niveau cible</label>
+                        <select name="niveau" class="text-xs py-1 px-2 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+                            {% for val, txt in niveaux %}
+                            <option value="{{ val }}"{% if val|string == (lien.NiveauCible|string if lien.NiveauCible is not none else "") %} selected{% endif %}>{{ txt }}</option>
+                            {% endfor %}
+                        </select>
+                        <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
+                    </form>
+                    <form method="post" action="{{ base }}/savoir/statut"
+                          hx-post="{{ base }}/savoir/statut" hx-trigger="change"
+                          hx-target="#savoirs-seance" hx-swap="innerHTML"
+                          class="flex items-center gap-1.5">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="competence" value="{{ competence_id }}">
+                        <input type="hidden" name="connaissance" value="{{ k.Id }}">
+                        <label class="text-xs text-muted">Statut</label>
+                        <select name="statut" class="text-xs py-1 px-2 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+                            {% for val, txt in statuts %}
+                            <option value="{{ val }}"{% if val == (lien.Statut or "") %} selected{% endif %}>{{ txt }}</option>
+                            {% endfor %}
+                            {# Statut saisi avant un changement de nature : conservé et signalé. #}
+                            {% if lien.Statut and lien.Statut not in statuts_nature_codes %}
+                            <option value="{{ lien.Statut }}" selected>{{ statut_labels.get(lien.Statut, lien.Statut) }} (hors nature)</option>
+                            {% endif %}
+                        </select>
+                        <noscript><button type="submit" class="text-xs text-forge-dark underline">ok</button></noscript>
+                    </form>
+                </div>
+                {# Validation (ADR-036 révisé) : un savoir coché ne compte dans la
+                   complétude et la finalisation que si niveau cible ET statut
+                   sont saisis. #}
+                {% if lien.NiveauCible is none or not lien.Statut %}
+                <p class="mt-1 pl-6 text-xs text-amber-700">
+                    À compléter : le niveau cible et le statut sont requis pour
+                    que ce savoir soit validé.</p>
+                {% elif lien.Statut not in statuts_nature_codes %}
+                <p class="mt-1 pl-6 text-xs text-amber-700">
+                    Statut hors nature de la séquence : choisissez un statut
+                    proposé.</p>
+                {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        {{ empty_state("Aucun savoir pour cette compétence dans le référentiel.") }}
+        {% endif %}
+        {% else %}
+        {{ empty_state("Sélectionnez une compétence.", hint="Ses savoirs s'afficheront ici.") }}
+        {% endif %}
+    </div>
+</div>
+<p class="mt-4 text-xs text-blue-700">
+    La pastille indique le niveau taxonomique officiel du référentiel :
+    <span class="font-semibold">1</span> Information ·
+    <span class="font-semibold">2</span> Expression ·
+    <span class="font-semibold">3</span> Maîtrise d'outils ·
+    <span class="font-semibold">4</span> Maîtrise méthodologique.
+</p>
+{% endif %}
+
+{# Stepper recalculé, renvoyé HORS-BANDE — UNIQUEMENT quand ce partial est la
+   réponse HTMX autonome (drapeau stepper_oob posé par _rendre). Jamais quand il
+   est inclus dans la page du tunnel ou la fiche : il s'afficherait en double. #}
+{% if stepper_oob %}
+{% from "components/tunnel_macros.html" import stepper %}
+<div id="tunnel-stepper" hx-swap-oob="true">{{ stepper(steps, etape, base_url) }}</div>
+{% endif %}

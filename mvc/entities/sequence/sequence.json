@@ -37,13 +37,21 @@
     {
       "name": "activite_glissante",
       "type": "boolean",
-      "required": true,
-      "nullable": false,
+      "required": false,
+      "nullable": true,
       "unique": false
     },
     {
       "name": "ordre_impose",
       "type": "boolean",
+      "required": false,
+      "nullable": true,
+      "unique": false
+    },
+    {
+      "name": "nature",
+      "type": "string",
+      "max_length": 20,
       "required": true,
       "nullable": false,
       "unique": false

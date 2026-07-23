@@ -9,12 +9,14 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-ETAPES: tuple[str, ...] = ("fiche", "competences", "deroule")
+ETAPES: tuple[str, ...] = ("fiche", "savoirs", "competences", "deroule", "gestion")
 
 LIBELLES: dict[str, str] = {
     "fiche": "Fiche",
+    "savoirs": "Savoirs associés",
     "competences": "Compétences observées",
     "deroule": "Déroulé",
+    "gestion": "Gestion",
 }
 
 
@@ -31,10 +33,12 @@ def borner_etape(raw: str) -> str:
     return raw if raw in ETAPES else "fiche"
 
 
-def steps(seance: dict[str, Any], nb_competences: int, nb_elements: int) -> list[dict[str, Any]]:
+def steps(seance: dict[str, Any], nb_savoirs_ouvrants: int, nb_competences: int, nb_elements: int) -> list[dict[str, Any]]:
     """Barre d'étapes : la complétion est DÉRIVÉE des données, jamais persistée.
 
     - Fiche : titre rempli (obligatoire à la création).
+    - Savoirs associés (ADR-037) : au moins un savoir OUVRANT (validé, statut
+      ouvrant pour la nature de la séquence) — c'est lui qui publie la séquence.
     - Compétences observées : au moins une compétence retenue. L'étape reste
       accessible même sans liaison de référentiel (elle invite alors à en poser
       une côté scénario).
@@ -48,6 +52,12 @@ def steps(seance: dict[str, Any], nb_competences: int, nb_elements: int) -> list
             "done": bool(seance.get("Titre")),
         },
         {
+            "key": "savoirs",
+            "label": LIBELLES["savoirs"],
+            "badge": str(nb_savoirs_ouvrants) if nb_savoirs_ouvrants else "",
+            "done": nb_savoirs_ouvrants > 0,
+        },
+        {
             "key": "competences",
             "label": LIBELLES["competences"],
             "badge": str(nb_competences) if nb_competences else "",
@@ -58,6 +68,15 @@ def steps(seance: dict[str, Any], nb_competences: int, nb_elements: int) -> list
             "label": LIBELLES["deroule"],
             "badge": str(nb_elements) if nb_elements else "",
             "done": nb_elements > 0,
+        },
+        {
+            # Gestion (ADR-038) : suppression (et futurs exports). Étape
+            # d'outillage, hors complétude (drapeau `outil` : ni coche ni cercle).
+            "key": "gestion",
+            "label": LIBELLES["gestion"],
+            "badge": "",
+            "done": True,
+            "outil": True,
         },
     ]
 

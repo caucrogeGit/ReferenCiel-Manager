@@ -2,15 +2,17 @@
    chaque « change » (hx-swap="none", toast hors-bande). #}
 {% from "components/tunnel_macros.html" import tunnel_pager %}
 {% from "components/ui.html" import button, obligation %}
+{# Routes d'enregistrement sous /seance/{id}/…, pas sous base_url (éditeur). #}
+{%- set base = "/seance/" ~ seance.Id -%}
 
 <section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
-    <form method="post" action="{{ base_url }}/fiche" class="space-y-5"
-          hx-post="{{ base_url }}/fiche" hx-trigger="change" hx-swap="none">
+    <form method="post" action="{{ base }}/fiche" class="space-y-5"
+          hx-post="{{ base }}/fiche" hx-trigger="change" hx-swap="none">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
         <div class="flex gap-4">
-            <div class="w-24">
-                <label for="ordre" class="block text-sm text-muted mb-1">Ordre {{ obligation(true) }}</label>
+            <div class="w-36 shrink-0">
+                <label for="ordre" class="block text-sm text-muted mb-1 whitespace-nowrap">Ordre {{ obligation(true) }}</label>
                 <input id="ordre" name="ordre" type="number" min="1" value="{{ seance.Ordre or 1 }}"
                        class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-forge">
             </div>
@@ -40,6 +42,12 @@
                 <input id="duree_estimee_minutes" name="duree_estimee_minutes" type="number" min="0" value="{{ seance.DureeEstimeeMinutes if seance.DureeEstimeeMinutes is not none else '' }}"
                        class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-forge">
             </div>
+        </div>
+
+        <div>
+            <label for="prerequis" class="block text-sm text-muted mb-1">Prérequis {{ obligation(false) }}</label>
+            <textarea id="prerequis" name="prerequis" rows="2"
+                      class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-forge">{{ seance.Prerequis or "" }}</textarea>
         </div>
 
         <div>

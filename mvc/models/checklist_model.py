@@ -105,3 +105,20 @@ def find_checklists_for_export(q: str | None = None, sort: str | None = None, di
 def get_seance_choices():
     rows = fetch_all("SELECT Id, Titre FROM seance ORDER BY Titre")
     return [(row["Id"], row["Titre"]) for row in rows]
+
+
+def checklists_pour_seance(seance_id):
+    """Checklists de la séance, pour la référence d'un élément de déroulé de
+    type « checklist » (ADR-035).
+
+    La checklist n'a pas de titre propre au contrat : on l'étiquette par son
+    numéro et le titre de sa première section (à défaut, son seul numéro).
+    """
+    return fetch_all(
+        "SELECT c.Id, "
+        "CONCAT('Checklist ', c.Id, COALESCE(CONCAT(' — ', "
+        "  (SELECT s.titre FROM section_checklist s WHERE s.checklist_id = c.Id "
+        "   ORDER BY s.numero, s.Id LIMIT 1)), '')) AS Titre "
+        "FROM checklist c WHERE c.seance_id = ? ORDER BY c.Id",
+        (seance_id,),
+    )

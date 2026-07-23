@@ -3,87 +3,74 @@
 {% from "components/ui.html" import flash_messages, obligation, button, statut_scenario %}
 {{ flash_messages(flash) }}
 
+{# Colonne centrée, même largeur que les tunnels (max-w-3xl) — retour porteur. #}
+<div class="max-w-3xl mx-auto">
+
 <h1 class="text-2xl font-bold text-gray-800 mb-6">Séquences pédagogiques</h1>
 
 {# Création inline (même motif que la liste des scénarios) : à la création, on
    ouvre directement l'éditeur tunnel de la séquence. #}
-<form method="post" action="/sequence/nouveau" class="bg-white shadow rounded p-4 mb-6 max-w-xl">
+<form method="post" action="/sequence/nouveau" class="bg-white shadow rounded p-4 mb-6">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
   <div class="mb-3">
     <label class="block text-sm text-gray-600 mb-1" for="titre">Titre {{ obligation(true) }}</label>
     <input id="titre" name="titre" type="text" required placeholder="Titre de la séquence"
            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
   </div>
-  {# Référentiel FACULTATIF (ADR-027), comme à la création d'un scénario : le
-     choix se pose sur le scénario jumeau. « Aucun » crée une paire hors
-     référentiel ; le référentiel se rattache aussi plus tard (étape Savoirs). #}
-  <div class="mb-3">
-    <label class="block text-sm text-gray-600 mb-1" for="referentiel_id">Référentiel {{ obligation(false) }}</label>
-    <select id="referentiel_id" name="referentiel_id"
-            class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <option value="">Aucun (matière hors référentiel)</option>
-      {% for r in referentiels %}
-      <option value="{{ r.Id }}">{{ r.Identifiant }}{% if r.formation_intitule %} — {{ r.formation_intitule }}{% endif %}</option>
-      {% endfor %}
-    </select>
-  </div>
-  {{ button("Créer", variant="primary", type="submit") }}
+  {# Référentiel FACULTATIF (ADR-027) : choix EXPLICITE rattachée / hors
+     référentiel (pas de « Aucun » par défaut choisi par inattention). Le
+     sélecteur ne s'affiche que pour « rattachée » (CSS :has, sans JS — CSP). #}
+  {% if referentiels %}
+  <fieldset class="mb-3" data-choix-referentiel>
+    <legend class="block text-sm text-gray-600 mb-1">Référentiel {{ obligation(false) }}</legend>
+    <div class="flex flex-col gap-1.5">
+      <label class="flex items-center gap-2 text-sm text-ink cursor-pointer">
+        <input type="radio" name="mode_referentiel" value="avec" checked class="accent-forge">
+        Séquence rattachée à un référentiel
+      </label>
+      <div class="champ-referentiel pl-6">
+        <select id="referentiel_id" name="referentiel_id" aria-label="Référentiel de rattachement"
+                class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          {% for r in referentiels %}
+          <option value="{{ r.Id }}">{{ r.Identifiant }}{% if r.formation_intitule %} — {{ r.formation_intitule }}{% endif %}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <label class="flex items-center gap-2 text-sm text-ink cursor-pointer">
+        <input type="radio" name="mode_referentiel" value="hors" class="accent-forge">
+        Séquence hors référentiel (enseignement général, PSE, projet…)
+      </label>
+    </div>
+  </fieldset>
+  {% else %}
+  <p class="mb-3 text-sm text-faint">Aucun référentiel importé : la séquence sera hors référentiel.</p>
+  <input type="hidden" name="mode_referentiel" value="hors">
+  {% endif %}
+  {{ button("Créer la séquence", variant="primary", type="submit") }}
+  {# Création automatique de la paire (ADR-029) : l'annoncer évite de découvrir
+     plus tard un scénario « jamais créé ». #}
+  <p class="mt-3 text-xs text-faint">Un scénario pédagogique minimal (même titre) sera créé
+    automatiquement et apparié à cette séquence.</p>
 </form>
 
-<div class="grid gap-3 md:grid-cols-2">
-  {% for s in sequences %}
-  <div class="relative bg-white shadow rounded p-4 hover:ring-2 hover:ring-blue-500 transition">
-    {# Toute la carte ouvre l'éditeur tunnel (stretched-link, sans <a> imbriqués).
-       Le bouton Supprimer passe au-dessus (z-10). #}
-    <a href="/sequence/editeur/{{ s.Id }}" class="absolute inset-0"
-       aria-label="Ouvrir la séquence {{ s.Titre }}"></a>
-    <div class="flex justify-between items-center gap-2">
-      <h2 class="text-lg font-semibold text-gray-800">{{ s.Titre }}</h2>
-      {{ statut_scenario(s.Statut) }}
-    </div>
-    <div class="flex justify-between items-center gap-2 mt-1">
-      <p class="text-sm text-gray-500">
-        {{ s.niveau_classe_id_label or "Niveau à préciser" }}
-      </p>
-      {# Exports (PDF/MarkDown/JSON) du contenu de la séquence — au-dessus de
-         l'overlay (z-10) pour rester cliquables. #}
-      <div class="relative z-10 flex items-center gap-1.5">
-        <a href="/sequence/{{ s.Id }}/pdf"
-           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold btn-export transition"
-           title="Télécharger la séquence en PDF" aria-label="Télécharger le PDF de {{ s.Titre }}">
-          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          PDF
-        </a>
-        <a href="/sequence/{{ s.Id }}/md"
-           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold btn-export transition"
-           title="Télécharger la séquence en Markdown" aria-label="Télécharger le Markdown de {{ s.Titre }}">
-          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          MarkDown
-        </a>
-        <a href="/sequence/{{ s.Id }}/json"
-           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold btn-export transition"
-           title="Télécharger la séquence en JSON" aria-label="Télécharger le JSON de {{ s.Titre }}">
-          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          JSON
-        </a>
-      </div>
-    </div>
-    <div class="mt-3">
-      <form method="post" action="/sequence/destroy/{{ s.Id }}" class="relative z-10 inline-block"
-            data-confirm="Supprimer définitivement la séquence « {{ s.Titre }} » ? Cette action est irréversible.">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <button type="submit"
-                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
-                       text-white bg-red-600 hover:bg-red-700 transition"
-                title="Supprimer la séquence" aria-label="Supprimer la séquence {{ s.Titre }}">
-          <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          Supprimer
-        </button>
-      </form>
-    </div>
-  </div>
-  {% else %}
-  <p class="text-gray-500">Aucune séquence. Créez-en une ci-dessus.</p>
+{# Cartes classées par référentiel : une section par référentiel (hors
+   référentiel en fin), l'ordre vient du SQL. #}
+{% for groupe in groupes %}
+{# Repli natif <details>/<summary> : pas de JS (CSP script-src 'self'),
+   chevron pivoté via group-open. Groupes REPLIÉS par défaut. #}
+<details class="group mt-6 border border-forge-border rounded-lg p-4">
+<summary class="flex items-center gap-2 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+  <svg class="size-4 shrink-0 text-[#a15225] transition-transform group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  <h2 class="text-sm font-semibold uppercase tracking-wide text-[#a15225]">{{ groupe.label }}</h2>
+</summary>
+<div class="grid gap-3 md:grid-cols-2 mt-3">
+  {% for s in groupe.cartes %}
+  {% include "app/sequence/_carte.html" %}
   {% endfor %}
+</div>
+</details>
+{% else %}
+<p class="text-gray-500">Aucune séquence. Créez-en une ci-dessus.</p>
+{% endfor %}
 </div>
 {% endblock %}

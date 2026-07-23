@@ -13,3 +13,10 @@
   </svg>
   Enregistré
 </span>
+
+{# Stepper recalculé, renvoyé HORS-BANDE avec le fragment (réponses HTMX
+   seulement : drapeau stepper_oob) — la complétion suit chaque écriture. #}
+{% if stepper_oob %}
+{% from "components/tunnel_macros.html" import stepper %}
+<div id="tunnel-stepper" hx-swap-oob="true">{{ stepper(steps, etape, base_url) }}</div>
+{% endif %}

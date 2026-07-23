@@ -8,3 +8,31 @@
   </svg>
   Enregistré
 </span>
+{# Stepper recalculé hors-bande : la complétion suit la saisie de la fiche. #}
+{% if steps %}
+{% from "components/tunnel_macros.html" import stepper %}
+<div id="tunnel-stepper" hx-swap-oob="true">{{ stepper(steps, etape, base_url) }}</div>
+{% endif %}
+{# Arbre « Famille pédagogique » recalculé hors-bande : le titre de la séance
+   suit la saisie dans les feuilles. #}
+{% if arbre_oob %}
+{% from "components/tunnel_macros.html" import arbre_famille %}
+<div id="arbre-famille" hx-swap-oob="true">
+{% if scenario_lie %}
+{{ arbre_famille(
+    scenario_lie.Titre,
+    "/conception/scenario/" ~ scenario_lie.Id,
+    seance.sequence_id_label or "Séquence",
+    "/sequence/editeur/" ~ seance.sequence_id,
+    seances_soeurs,
+    actif_seance_id=seance.Id,
+    sequence_nature=seance.sequence_nature,
+    scenario_statut=scenario_lie.Statut,
+    sequence_statut=seance.sequence_statut,
+    referentiel=referentiel_actuel,
+    sequence_id=seance.sequence_id,
+    csrf=csrf_token,
+) }}
+{% endif %}
+</div>
+{% endif %}

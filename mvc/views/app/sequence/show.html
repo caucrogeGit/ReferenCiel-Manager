@@ -35,24 +35,30 @@
         <p class="text-sm text-gray-500">Ordre impose</p>
         <p class="text-gray-800">{{ sequence.OrdreImpose }}</p>
     </div>
-    {% if sequence.Prerequis %}
+    {# Prérequis DÉRIVÉS des séances rattachées (jamais saisis). #}
     <div>
-        <p class="text-sm text-gray-500">Prérequis</p>
-        <p class="text-gray-800 whitespace-pre-line">{{ sequence.Prerequis }}</p>
+        <p class="text-sm text-gray-500">Prérequis (agrégés depuis les séances)</p>
+        {% if prerequis_derives %}
+        <ul class="text-gray-800 space-y-0.5">
+            {% for p in prerequis_derives %}
+            <li><span class="text-gray-500">Séance {{ p.Ordre }} :</span> {{ p.Prerequis }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-800">Non définis</p>
+        {% endif %}
     </div>
-    {% endif %}
     {% if sequence.PositionnementProgression %}
     <div>
         <p class="text-sm text-gray-500">Positionnement dans la progression</p>
         <p class="text-gray-800 whitespace-pre-line">{{ sequence.PositionnementProgression }}</p>
     </div>
     {% endif %}
-    {% if sequence.DureeEstimee %}
+    {# Durée DÉRIVÉE du cumul des séances rattachées (jamais saisie). #}
     <div>
-        <p class="text-sm text-gray-500">Durée estimée</p>
-        <p class="text-gray-800">{{ sequence.DureeEstimee }}</p>
+        <p class="text-sm text-gray-500">Durée estimée (cumul des séances)</p>
+        <p class="text-gray-800">{{ duree_cumulee or "Non définie" }}</p>
     </div>
-    {% endif %}
     {% if sequence.ModalitesEvaluation %}
     <div>
         <p class="text-sm text-gray-500">Modalités d'évaluation</p>

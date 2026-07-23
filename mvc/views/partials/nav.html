@@ -89,26 +89,23 @@
                 {% call nav_group('conception', 'Conception', icon='pen') %}
                     <li>{{ nav_sublink('/conception/scenario', 'Scénarios') }}</li>
                     <li>{{ nav_sublink('/sequence', 'Séquences') }}</li>
-                    <li>{{ nav_sublink('/seance', 'Séances') }}</li>
                 {% endcall %}
                 {% endif %}
 
                 {% if can('execution.gerer') %}
-                {% call nav_group('execution', 'Exécution', icon='play') %}
-                    <li>{{ nav_sublink('/progression_sequence', 'Progressions') }}</li>
-                    <li>{{ nav_sublink('/qcm', 'QCM') }}</li>
-                    <li>{{ nav_sublink('/tentative_qcm', 'Tentatives QCM') }}</li>
-                    <li>{{ nav_sublink('/checklist', 'Checklists') }}</li>
-                    <li>{{ nav_sublink('/activite', 'Activités') }}</li>
-                    <li>{{ nav_sublink('/depot_eleve', 'Dépôts élève') }}</li>
-                    <li>{{ nav_sublink('/evaluation_activite', 'Évaluations') }}</li>
-                    <li>{{ nav_sublink('/bilan', 'Bilans élève') }}</li>
-                {% endcall %}
+                {# Menu Exécution supprimé (ADR-035) : l'attribution passe par la
+                   carte de la séquence (bouton Attribuer), les QCM/checklists se
+                   référencent depuis le déroulé (liens contextuels vers leurs
+                   ateliers), le reste est couvert par le Suivi et la feuille de
+                   positionnement. Les routes CRUD restent actives (dépannage). #}
                 {% endif %}
 
                 {% if can('suivi.voir') %}
                 <li>{{ nav_link('/mes-classes', 'Mes classes', icon='users') }}</li>
                 <li>{{ nav_link('/suivi', 'Suivi', icon='chart') }}</li>
+                {% endif %}
+                {% if can('execution.gerer') %}
+                <li>{{ nav_link('/bilan', 'Bilans élève', icon='chart') }}</li>
                 {% endif %}
 
                 {% if can('espace_eleve.voir') %}

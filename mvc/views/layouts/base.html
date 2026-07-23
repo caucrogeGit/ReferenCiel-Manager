@@ -21,6 +21,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    {# Anti-flash sidebar : synchrone AVANT le premier rendu (voir le fichier). #}
+    <script src="/static/sidebar-state-early.js"></script>
     <link rel="stylesheet" href="/static/tailwind.css">
     <link rel="stylesheet" href="/static/sidebar.css">
     <link rel="stylesheet" href="/static/scenario-tunnel.css">
@@ -86,6 +88,9 @@
     <script src="/static/vendor/preline.js"></script>
     {# Surlignage de la rubrique active — après Preline (accordéons déjà initialisés). #}
     <script src="/static/nav-active.js"></script>
+    {# Persistance du repli de la sidebar (localStorage) : l'utilisateur garde
+       la main, la navigation ne rouvre plus le panneau. #}
+    <script src="/static/sidebar-state.js" defer></script>
     {# Tunnel de scénario — bascule d'affichage (co-auteurs / co-intervention). Après HTMX. #}
     <script src="/static/scenario-tunnel.js" defer></script>
     {# Comportements UI globaux (confirmations de suppression, ouverture de modale) —

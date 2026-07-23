@@ -66,9 +66,12 @@
       </div>
     </div>
     {% endfor %}
-  {% elif savoirs_libres %}
+  {% endif %}
+  {% if savoirs_libres %}
+    {% if connaissances %}<p class="pole">Savoirs complémentaires (hors référentiel)</p>{% endif %}
     <ul>{% for s in savoirs_libres %}<li>{{ s }}</li>{% endfor %}</ul>
-  {% else %}
+  {% endif %}
+  {% if not connaissances and not savoirs_libres %}
     <p class="empty">Aucun savoir associé.</p>
   {% endif %}
 
@@ -77,6 +80,7 @@
     {% for se in seances %}
     {%- set champs = [
         ("Thème", se.Theme),
+        ("Prérequis", se.Prerequis),
         ("Objectif opérationnel", se.ObjectifOperationnel),
         ("Consigne générale", se.ConsigneGenerale),
         ("Modalité pédagogique", se.ModalitePedagogique),

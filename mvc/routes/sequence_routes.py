@@ -1,5 +1,6 @@
 """Routes du contrôleur SequenceController (ADR-068)."""
 from core.http.router import Router
+from mvc.controllers.sequence_attribution_controller import SequenceAttributionController
 from mvc.controllers.sequence_controller import SequenceController
 from mvc.controllers.sequence_connaissance_controller import SequenceConnaissanceController
 from mvc.controllers.sequence_editeur_controller import SequenceEditeurController
@@ -17,15 +18,16 @@ def register_sequence_routes(router: Router) -> None:
         g.add("GET", "/editeur/{id}", SequenceEditeurController.editeur, name="sequence-editeur")
         g.add("POST", "/{id}/identite", SequenceEditeurController.enregistrer_identite, name="sequence-identite")
         g.add("POST", "/{id}/cadre", SequenceEditeurController.enregistrer_cadre, name="sequence-cadre")
+        g.add("GET", "/{id}/attributions", SequenceAttributionController.index, name="sequence-attributions")
+        g.add("POST", "/{id}/attributions/classe", SequenceAttributionController.attribuer_a_classe, name="sequence-attributions-classe")
+        g.add("POST", "/{id}/attributions/eleve", SequenceAttributionController.attribuer_a_eleve, name="sequence-attributions-eleve")
+        g.add("POST", "/{id}/attributions/{pid}/retirer", SequenceAttributionController.retirer_attribution, name="sequence-attributions-retirer")
         g.add("GET", "/edit/{id}", SequenceController.edit, name="sequence-edit")
         g.add("POST", "/update/{id}", SequenceController.update, name="sequence-update")
         g.add("GET", "/{id}/connaissances", SequenceConnaissanceController.afficher, name="sequence-connaissances")
         g.add("POST", "/{id}/referentiel", SequenceConnaissanceController.rattacher_referentiel, name="sequence-referentiel")
         g.add("POST", "/{id}/savoir-libre/ajouter", SequenceConnaissanceController.ajouter_savoir, name="sequence-savoir-libre-ajouter")
         g.add("POST", "/savoir-libre/{sid}/supprimer", SequenceConnaissanceController.supprimer_savoir, name="sequence-savoir-libre-supprimer")
-        g.add("POST", "/{id}/connaissance/basculer", SequenceConnaissanceController.basculer, name="sequence-connaissance-basculer")
-        g.add("POST", "/{id}/connaissance/niveau", SequenceConnaissanceController.niveau, name="sequence-connaissance-niveau")
-        g.add("POST", "/{id}/connaissance/statut", SequenceConnaissanceController.statut, name="sequence-connaissance-statut")
         g.add("POST", "/destroy/{id}", SequenceController.destroy, name="sequence-destroy")
         g.add("POST", "/bulk-delete", SequenceController.bulk_delete, name="sequence-bulk_delete")
         g.add("POST", "/bulk-delete-confirm", SequenceController.bulk_delete_confirm, name="sequence-bulk_delete_confirm")

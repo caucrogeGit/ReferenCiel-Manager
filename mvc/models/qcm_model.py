@@ -105,3 +105,14 @@ def find_qcms_for_export(q: str | None = None, sort: str | None = None, directio
 def get_dossier_technique_choices():
     rows = fetch_all("SELECT Id, Titre FROM dossier_technique ORDER BY Titre")
     return [(row["Id"], row["Titre"]) for row in rows]
+
+
+def qcms_pour_seance(seance_id):
+    """QCM rattachés à la séance (via son dossier technique), pour la référence
+    d'un élément de déroulé de type « qcm » (ADR-035)."""
+    return fetch_all(
+        "SELECT q.Id, dt.Titre AS Titre FROM qcm q "
+        "JOIN dossier_technique dt ON dt.Id = q.dossier_technique_id "
+        "WHERE dt.seance_id = ? ORDER BY dt.Titre, q.Id",
+        (seance_id,),
+    )

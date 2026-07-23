@@ -1,0 +1,22 @@
+{# Carte d'une séquence (variable `s`). Le statut (badge) est ENTIÈREMENT dérivé
+   des données (ADR-034) : aucune commande de publication ici. #}
+{% from "components/ui.html" import statut_scenario %}
+<div id="sequence-carte-{{ s.Id }}" class="relative bg-white shadow rounded p-4 hover:ring-2 hover:ring-blue-500 transition">
+  {# Toute la carte ouvre l'éditeur tunnel (stretched-link, sans <a> imbriqués).
+     Les commandes passent au-dessus (z-10). #}
+  <a href="/sequence/editeur/{{ s.Id }}" class="absolute inset-0"
+     aria-label="Ouvrir la séquence {{ s.Titre }}"></a>
+  <div class="flex justify-between items-center gap-2">
+    <h2 class="text-lg font-semibold text-gray-800">{{ s.Titre }}</h2>
+    <span class="shrink-0 flex items-center gap-1.5">
+      {# Nature (ADR-036) : badge toujours affiché, ton neutre commun. #}
+      <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full text-subtle bg-cream border border-line">{{ 'Certificative (CCF)' if s.Nature == 'certificative' else 'Formative' }}</span>
+      {{ statut_scenario(s.Statut) }}
+    </span>
+  </div>
+  <p class="text-sm text-gray-500 mt-1">
+    {{ s.niveau_classe_id_label or "Niveau à préciser" }}
+  </p>
+  {# ADR-038 : les commandes (attribution, exports, suppression) vivent dans
+     l'étape « Gestion » du tunnel — la carte n'est plus qu'affichage + lien. #}
+</div>

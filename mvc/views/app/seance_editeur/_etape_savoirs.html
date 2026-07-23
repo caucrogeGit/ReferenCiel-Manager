@@ -1,0 +1,11 @@
+{# Étape 2 — Savoirs associés de la séance (ADR-037). Le maître-détail vit dans
+   #savoirs-seance et se re-rend seul via HTMX. #}
+{% from "components/tunnel_macros.html" import tunnel_pager %}
+
+<section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
+    <div id="savoirs-seance">
+        {% include "app/seance_editeur/_savoirs.html" %}
+    </div>
+</section>
+
+{{ tunnel_pager(prev, next, position, total, base_url) }}

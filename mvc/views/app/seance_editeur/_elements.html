@@ -38,6 +38,26 @@
                 <input type="text" name="role_pedagogique" value="{{ el.RolePedagogique or '' }}" placeholder="Rôle pédagogique" class="flex-1 text-xs py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
                 <label class="flex items-center gap-1.5 text-xs text-muted"><input type="checkbox" name="obligatoire" value="1" {% if el.Obligatoire %}checked{% endif %} class="w-4 h-4 accent-forge"> Obligatoire</label>
             </div>
+            {# Référence de l'élément vers un objet de la séance (ADR-035) :
+               QCM ou checklist selon le type. L'atelier reste accessible par
+               lien contextuel (l'entrée de menu Exécution disparaît). #}
+            {% if el.Type == 'qcm' %}
+            <div class="flex items-center gap-2">
+                <select name="qcm_id" class="flex-1 text-xs py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+                    <option value="">— QCM à référencer…</option>
+                    {% for q in qcms %}<option value="{{ q.Id }}" {% if el.qcm_id == q.Id %}selected{% endif %}>{{ q.Titre }}</option>{% endfor %}
+                </select>
+                <a href="/qcm" class="shrink-0 text-xs text-forge-dark hover:underline">Gérer les QCM</a>
+            </div>
+            {% elif el.Type == 'checklist' %}
+            <div class="flex items-center gap-2">
+                <select name="checklist_id" class="flex-1 text-xs py-1.5 px-2.5 rounded-md border border-field bg-white focus:outline-none focus:border-forge">
+                    <option value="">— Checklist à référencer…</option>
+                    {% for c in checklists %}<option value="{{ c.Id }}" {% if el.checklist_id == c.Id %}selected{% endif %}>{{ c.Titre }}</option>{% endfor %}
+                </select>
+                <a href="/checklist" class="shrink-0 text-xs text-forge-dark hover:underline">Gérer les checklists</a>
+            </div>
+            {% endif %}
             <noscript><button type="submit" class="text-xs text-forge-dark underline">Enregistrer</button></noscript>
         </form>
     </div>
@@ -60,3 +80,10 @@
         <button type="submit" class="shrink-0 px-3 py-1.5 rounded-md text-sm font-semibold bg-forge-soft text-forge-dark hover:bg-forge-border transition">Ajouter</button>
     </div>
 </form>
+
+{# Stepper recalculé, renvoyé HORS-BANDE avec le fragment (réponses HTMX
+   seulement : drapeau stepper_oob) — la complétion suit chaque écriture. #}
+{% if stepper_oob %}
+{% from "components/tunnel_macros.html" import stepper %}
+<div id="tunnel-stepper" hx-swap-oob="true">{{ stepper(steps, etape, base_url) }}</div>
+{% endif %}

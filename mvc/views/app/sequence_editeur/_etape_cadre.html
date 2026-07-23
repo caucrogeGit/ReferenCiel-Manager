@@ -2,23 +2,45 @@
    Auto-save à chaque « change » (hx-swap="none", toast hors-bande). #}
 {% from "components/tunnel_macros.html" import tunnel_pager %}
 {% from "components/ui.html" import button, obligation %}
+{# Routes d'enregistrement sous /sequence/{id}/…, pas sous base_url (éditeur). #}
+{%- set base = "/sequence/" ~ sequence.Id -%}
 
 {%- set champs = [
-    ("prerequis",                  "Prérequis",                              sequence.Prerequis,                  3),
     ("positionnement_progression", "Positionnement dans la progression",     sequence.PositionnementProgression,  3),
     ("modalites_evaluation",       "Modalités d'évaluation",                 sequence.ModalitesEvaluation,        3),
 ] -%}
 
 <section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
-    <form method="post" action="{{ base_url }}/cadre" class="space-y-5"
-          hx-post="{{ base_url }}/cadre" hx-trigger="change" hx-swap="none">
+    <form method="post" action="{{ base }}/cadre" class="space-y-5"
+          hx-post="{{ base }}/cadre" hx-trigger="change" hx-swap="none">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
+        {# Durée DÉRIVÉE : cumul des durées des séances rattachées, jamais saisie
+           ici (les durées se renseignent sur la fiche de chaque séance). #}
         <div>
-            <label for="duree_estimee" class="block text-sm text-muted mb-1">Durée estimée {{ obligation(false) }}</label>
-            <input id="duree_estimee" name="duree_estimee" type="text" value="{{ sequence.DureeEstimee or '' }}"
-                   class="w-full border border-field rounded-[10px] px-3 py-2 bg-surface text-ink
-                          focus:outline-none focus:ring-2 focus:ring-forge">
+            <label class="block text-sm text-muted mb-1">Durée estimée
+                <span class="ml-1 text-xs font-normal text-faint">(cumul des séances rattachées)</span></label>
+            <p class="px-3 py-2 rounded-[10px] bg-cream text-sm text-ink">
+                {{ duree_cumulee or "Non définie : aucune séance rattachée, ou durées non renseignées." }}
+            </p>
+        </div>
+
+        {# Prérequis DÉRIVÉS : agrégation des prérequis renseignés sur les fiches
+           des séances rattachées, jamais saisis ici. #}
+        <div>
+            <label class="block text-sm text-muted mb-1">Prérequis
+                <span class="ml-1 text-xs font-normal text-faint">(agrégés depuis les séances rattachées)</span></label>
+            {% if prerequis_derives %}
+            <ul class="px-3 py-2 rounded-[10px] bg-cream text-sm text-ink space-y-1">
+                {% for p in prerequis_derives %}
+                <li><span class="text-muted">Séance {{ p.Ordre }} :</span> {{ p.Prerequis }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="px-3 py-2 rounded-[10px] bg-cream text-sm text-ink">
+                Non définis : aucun prérequis renseigné sur les séances rattachées.
+            </p>
+            {% endif %}
         </div>
 
         {% for nom, libelle, valeur, lignes in champs %}
@@ -32,6 +54,17 @@
 
         <noscript><div class="pt-1">{{ button("Enregistrer", variant="primary", type="submit") }}</div></noscript>
     </form>
+
+    {# Séquence HORS référentiel (ADR-030/037) : les savoirs libres se saisissent
+       ici (l'étape dédiée a disparu, les savoirs référentiels vivant désormais
+       sur les séances). Avec référentiel : rien à afficher. #}
+    {% if ref_absent %}
+    <div class="border-t border-line mt-6 pt-4">
+        <div id="connaissances-sequence">
+            {% include "app/sequence/_connaissances.html" %}
+        </div>
+    </div>
+    {% endif %}
 </section>
 
 {{ tunnel_pager(prev, next, position, total, base_url) }}

@@ -1,0 +1,96 @@
+{# Étape Gestion (ADR-038) — opérations sur l'OBJET scénario : ressources,
+   exports, suppression. Les cartes de la liste ne portent plus ces commandes.
+   L'explorateur à dossiers de cpro reste hors périmètre (ticket 23). #}
+{% from "components/tunnel_macros.html" import tunnel_pager %}
+{% from "components/ui.html" import button, empty_state, obligation %}
+
+<section class="bg-surface border border-line rounded-card p-7 max-w-3xl">
+    {# ── Ressources ─────────────────────────────────────────────────────── #}
+    <h3 class="text-sm font-semibold text-ink mb-3">Ressources</h3>
+    <form method="post" action="{{ base_url }}/ressources" enctype="multipart/form-data"
+          class="flex gap-3 items-end mb-2">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="flex-1">
+            <label for="fichier" class="block text-sm text-muted mb-1">Ajouter un fichier {{ obligation(false) }}</label>
+            <input id="fichier" name="fichier" type="file" required
+                   class="w-full text-sm text-ink file:mr-3 file:py-1.5 file:px-3 file:rounded-[10px]
+                          file:border file:border-forge-border file:bg-forge-soft file:text-forge
+                          file:text-sm file:font-semibold hover:file:bg-forge-border">
+        </div>
+        {{ button("Déposer", variant="primary", type="submit") }}
+    </form>
+    <p class="mb-5 text-xs text-faint">Types acceptés : images et PDF (selon la configuration).</p>
+
+    {% if ressources %}
+    <ul class="divide-y divide-line border-t border-line">
+        {% for r in ressources %}
+        <li class="flex items-center justify-between gap-3 py-2.5 text-sm">
+            <a href="/media/{{ r.CheminMedia }}" target="_blank" rel="noopener"
+               class="text-forge hover:text-forge-dark hover:underline truncate">{{ r.NomOriginal }}</a>
+            <span class="flex shrink-0 items-center gap-3">
+                <span class="text-faint">{{ (r.Taille / 1024) | round(1) }} Ko</span>
+                <form method="post" action="{{ base_url }}/ressources/{{ r.Id }}/supprimer"
+                      data-confirm="Supprimer cette ressource ?">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button type="submit" class="font-semibold text-red-600 hover:text-red-700">Supprimer</button>
+                </form>
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    {{ empty_state("Aucune ressource.", hint="Déposez un premier fichier ci-dessus.") }}
+    {% endif %}
+
+    {# ── Exports ────────────────────────────────────────────────────────── #}
+    <div class="border-t border-line mt-6 pt-4">
+        <h3 class="text-sm font-semibold text-ink mb-3">Exports</h3>
+        {# Livrable fini : exports réservés aux scénarios finalisés (ou utilisés,
+           contenu figé) — ADR-024. #}
+        {% if scenario.Statut in ('finalise', 'utilise') %}
+        <div class="flex items-center gap-1.5">
+            {% for fmt, libelle in [("pdf", "PDF"), ("md", "MarkDown"), ("json", "JSON")] %}
+            <a href="{{ base_url }}/{{ fmt }}"
+               class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold btn-export transition"
+               title="Télécharger le scénario en {{ libelle }}">
+                <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                {{ libelle }}
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-faint">Disponibles quand le scénario est finalisé
+            (contexte saisi et liaison faite, s'il a un référentiel).</p>
+        {% endif %}
+    </div>
+
+    {# ── Suppression ────────────────────────────────────────────────────── #}
+    <div class="border-t border-line mt-6 pt-4">
+        <h3 class="text-sm font-semibold text-ink mb-3">Suppression</h3>
+        {% if scenario.Statut == 'utilise' %}
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+                     text-gray-400 bg-gray-100 cursor-not-allowed"
+              title="Ce scénario est utilisé par des élèves : il ne peut pas être supprimé."
+              aria-disabled="true">
+            <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Supprimer le scénario
+        </span>
+        <p class="mt-2 text-xs text-faint">Ce scénario est utilisé par des élèves : suppression impossible.</p>
+        {% else %}
+        <form method="post" action="{{ base_url }}/supprimer" class="inline-block"
+              data-confirm="Supprimer définitivement le scénario « {{ scenario.Titre }} » ? Cette action est irréversible.">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit"
+                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-semibold
+                           text-white bg-red-600 hover:bg-red-700 transition"
+                    title="Supprimer le scénario">
+                <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                Supprimer le scénario
+            </button>
+        </form>
+        <p class="mt-2 text-xs text-faint">La séquence appariée et ses séances ne sont pas supprimées par cette action.</p>
+        {% endif %}
+    </div>
+</section>
+
+{{ tunnel_pager(prev, next, position, total, base_url) }}

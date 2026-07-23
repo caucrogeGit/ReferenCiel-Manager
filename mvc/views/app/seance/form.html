@@ -22,6 +22,7 @@
         {{ textarea_field(name='objectif_operationnel', label='Objectif opérationnel', value=form.value('objectif_operationnel'), error=form.error('objectif_operationnel'), rows=3) }}
         {{ textarea_field(name='consigne_generale', label='Consigne générale', value=form.value('consigne_generale'), error=form.error('consigne_generale'), rows=3) }}
         {{ field(name='duree_estimee_minutes', label='Durée estimée (minutes)', type='number', value=form.value('duree_estimee_minutes'), error=form.error('duree_estimee_minutes')) }}
+        {{ textarea_field(name='prerequis', label='Prérequis', value=form.value('prerequis'), error=form.error('prerequis'), rows=2) }}
         {{ field(name='modalite_pedagogique', label='Modalité pédagogique', type='text', value=form.value('modalite_pedagogique'), error=form.error('modalite_pedagogique')) }}
         {{ textarea_field(name='condition_realisation', label='Conditions de réalisation', value=form.value('condition_realisation'), error=form.error('condition_realisation'), rows=3) }}
         {{ textarea_field(name='condition_validation', label='Conditions de validation', value=form.value('condition_validation'), error=form.error('condition_validation'), rows=3) }}
