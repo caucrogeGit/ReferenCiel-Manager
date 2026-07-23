@@ -43,7 +43,7 @@ repris porte `source_ids`.
 | `niveau_classe` | object `{code, intitule}` | oui | niveau visé (ex. `2TNE`), stable inter-années |
 | `titre` | string | oui | ex. « Semaine réseau et virtualisation » |
 | `presentation` | string \| ref | non | texte d'accueil (par ref de fichier possible) |
-| `statut` | string | non | `brouillon` \| `publie` (défaut `brouillon`) |
+| `statut` | string | non | `brouillon` \| `finalise` \| `publie` \| `attribue` (défaut `brouillon`, ADR-034) |
 | `organisation` | object | oui | `{ activite_glissante: bool, ordre_impose: bool }` |
 | `seances` | array | oui | voir §4 |
 

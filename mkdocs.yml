@@ -96,6 +96,11 @@ nav:
       - ADR-031 — Suppression Scénario/Séquence (dissociation): adr/031-suppression-scenario-sequence-dissociation.md
       - ADR-032 — Modèle séance (tunnel, cascade, évaluation): adr/032-modele-seance-tunnel-cascade-evaluation.md
       - ADR-033 — Suivi/évaluation (tableau de bord): adr/033-suivi-evaluation-tableau-de-bord.md
+      - ADR-034 — Cycle de statut séquence & publication: adr/034-cycle-statut-sequence-publication-explicite.md
+      - ADR-035 — Suppression du menu Exécution: adr/035-suppression-menu-execution-absorption-parcours.md
+      - ADR-036 — Statuts des savoirs & suggestion d'évaluation: adr/036-statuts-savoirs-declencheurs-evaluation.md
+      - ADR-037 — Savoirs associés portés par la séance: adr/037-savoirs-associes-portes-par-la-seance.md
+      - ADR-038 — Étape Gestion des tunnels: adr/038-etape-gestion-des-tunnels.md
   - Trajectoire:
       - Roadmap: roadmap/roadmap-referenciel-manager.md
       - Tickets: tickets/README.md
@@ -103,6 +108,7 @@ nav:
       - Ticket 22 — Bac à sable outils pédagogiques: tickets/ticket-22-bac-a-sable-outils-pedagogiques.md
       - Ticket SEQ-02 — Enrichissement institutionnel séquence/séance: tickets/seq-02-enrichissement-institutionnel-sequence-seance.md
   - Spécifications:
+      - Les trois projections du référentiel: specs/projections-referentiel.md
       - JSON canonique: specs/json-canonique/README.md
       - Contrat — référentiel niveau-classe: specs/json-canonique/contrat-referentiel-niveau-classe.md
       - Contrat — Séquence: specs/json-canonique/contrat-sequence.md

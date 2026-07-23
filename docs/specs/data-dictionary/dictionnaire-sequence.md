@@ -32,9 +32,10 @@ L'**objet canonique** du domaine pédagogique.
 | `identifiant` | string | oui | code stable, **unique** (ex. `welcome-reseau`) |
 | `titre` | string | oui | nom de la séquence |
 | `presentation` | text | non | présentation libre |
-| `statut` | string | oui | `brouillon` \| `publie` \| … (publication) |
-| `activite_glissante` | boolean | oui | l'ordre des activités n'est pas imposé |
-| `ordre_impose` | boolean | oui | les séances doivent être franchis dans l'ordre |
+| `statut` | string | oui | `brouillon` \| `finalise` \| `publie` \| `attribue` (ADR-034/037 : dérivé — titre+niveau, séance ouvrante, progression élève) |
+| `nature` | string | oui | `formative` (défaut) \| `certificative` (CCF) — ADR-036 : contextualise les statuts attendus des savoirs |
+| `activite_glissante` | boolean | oui | boucle imposée sur postes limités : chaque élève entre à un point différent puis suit la boucle dans l'ordre (le point d'entrée glisse, pas l'ordre) |
+| `ordre_impose` | boolean | oui | tous les élèves franchissent les séances dans le même ordre, depuis le même point de départ |
 | `niveau_classe_id` | many_to_one → NiveauClasse | oui | niveau visé (stable inter-années) |
 | `prerequis` | text | non | prérequis attendus (peut être explicitement vide) |
 | `positionnement_progression` | text | non | place dans la progression annuelle |

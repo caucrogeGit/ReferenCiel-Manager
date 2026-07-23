@@ -122,6 +122,40 @@ Contexte, Décision, Conséquences, Alternatives écartées.
   lentilles d'un même graphe, convergeant vers une **feuille de positionnement**
   des critères (🔴🟠🟩, indicateur, production, aide). Étend `/suivi`.
 
+- `034-cycle-statut-sequence-publication-explicite.md` (**Accepté**) : la séquence
+  suit le cycle **brouillon → finalisé → publié → attribué**, entièrement
+  **dérivé des données** : tunnel complet = finalisé, une séance liée = publié,
+  une progression élève = attribué.
+  Les **séances se lient dès « finalisé »**.
+
+- `035-suppression-menu-execution-absorption-parcours.md` (**Accepté**) : le menu
+  **Exécution disparaît**, absorbé par les parcours.
+  L'**attribution** se fait depuis la carte de la séquence
+  (`/sequence/{id}/attributions`, par classe ou par élève, retrait gardé), le
+  **déroulé référence** les QCM/checklists de la séance (`qcm_id`/`checklist_id`),
+  les routes CRUD restent actives pour le dépannage.
+
+- `036-statuts-savoirs-declencheurs-evaluation.md` (**Accepté**) : les **statuts
+  des savoirs** (ADR-028) deviennent la **charnière entre l'axe des contenus et
+  l'axe évaluatif**.
+  Séquence formative : savoirs **Apportée/Consolidée** = compétence à évaluer
+  au scénario ; **CCF** : statuts attendus **Prérequis/Mobilisée**, évaluation
+  pilotée par la grille d'épreuve.
+  Signaux et suggestions, jamais de contrainte ; champ « nature » de séquence à
+  introduire.
+
+- `037-savoirs-associes-portes-par-la-seance.md` (**Accepté**) : les **savoirs
+  associés descendent à la séance** (`seance_connaissance`), la séquence les
+  **agrège** (comme durée et prérequis).
+  Cascade ADR-036 inchangée d'un cran plus bas ; cycle ADR-034 révisé :
+  finalisé = titre + niveau, **publié = une séance ouvrante**.
+
+- `038-etape-gestion-des-tunnels.md` (**Accepté**) : chaque tunnel se termine
+  par une étape **« Gestion »** (ressources, exports, attributions,
+  suppression), **hors complétude** (engrenage au stepper).
+  Les cartes redeviennent lecture + lien ; l'entrée **Séances** du menu
+  disparaît.
+
 Numérotez les décisions suivantes `013`, `014`, etc., et ajoutez-les à ce
 journal.
 Le gabarit `000-template.md` n'est pas une décision : c'est la trame.
